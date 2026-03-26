@@ -3,7 +3,7 @@
     <!-- Logo and Title Group -->
     <div class="flex flex-col items-center mb-10 w-full relative">
       <!-- Logo -->
-      <div class="mb-4">
+      <div class="mb-[73px]">
         <img src="/images/logo.svg" alt="Medaltea Logo" class="h-9 w-auto" />
       </div>
       
@@ -13,24 +13,22 @@
       </h2>
     </div>
 
-    <!-- Interface Wrapper (Input + Mascot + Chips) -->
-    <div class="w-full relative">
-      <!-- Panda Mascot (Overlap border) -->
-      <div class="absolute -right-4 -top-24 md:-right-8 md:-top-32 w-28 md:w-36 h-auto z-20 pointer-events-none">
-        <img 
-          src="/images/panda-standing.png" 
-          alt="Medaltea Panda Mascot" 
-          class="w-full h-auto drop-shadow-2xl"
-        />
-      </div>
-
       <!-- Main Search Box (Input + Chips) -->
-      <div class="relative w-full min-h-[177px] p-[3px] rounded-[20px] isolate flex flex-col">
+      <div class="relative w-full min-h-[177px] p-[3px] rounded-[20px] isolate flex flex-col mt-[31px]">
         <!-- 3px Gradient Border Layer -->
         <div 
           class="absolute inset-0 rounded-[20px] -z-10"
           style="background: linear-gradient(90deg, #EC7F7A 0%, #FFFFFF 47%, #90BAD1 100%)"
         ></div>
+
+        <!-- Panda Mascot (Standing on border) -->
+        <div class="absolute right-4 bottom-full mb-[-3px] w-[148px] h-[175px] z-20 pointer-events-none">
+          <img 
+            src="/images/panda-standing.png" 
+            alt="Medaltea Panda Mascot" 
+            class="w-full h-full object-contain"
+          />
+        </div>
         
         <!-- White Inner Container -->
         <div class="flex-1 bg-white rounded-[17.5px] p-6 flex flex-col justify-between shadow-xl">
@@ -48,19 +46,18 @@
           </div>
 
           <!-- Integrated Suggestion Chips -->
-          <div class="flex flex-wrap gap-2.5 mt-4">
+          <div class="flex flex-wrap gap-3 mt-auto">
             <button 
               v-for="chip in suggestions" 
               :key="chip.text"
-              class="px-4 py-2 bg-[#f4f7f9] hover:bg-[#ebf1f5] rounded-xl text-[13px] font-bold text-[#012828] transition-all flex items-center gap-2 border border-gray-100"
+              class="h-[42px] px-4 bg-white/70 backdrop-blur-sm hover:bg-white rounded-[14px] text-[14px] font-medium text-black transition-all flex items-center gap-2 border border-[#D9D9D9] shadow-sm"
             >
-              <span>{{ chip.emoji }}</span>
-              {{ chip.text }}
+              <span class="text-lg">{{ chip.emoji }}</span>
+              <span class="font-sans">{{ chip.text }}</span>
             </button>
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>
 

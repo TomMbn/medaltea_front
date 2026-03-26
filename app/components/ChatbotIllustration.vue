@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-full min-h-[400px] md:min-h-full overflow-hidden rounded-[20px] shadow-2xl group bg-white">
+  <div class="relative h-full min-h-[400px] overflow-hidden rounded-[20px] shadow-2xl group bg-white">
     <!-- Background Image -->
     <img 
       src="/images/landscape.png" 
@@ -17,12 +17,12 @@
     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
     
     <!-- Content -->
-    <div class="absolute bottom-6 left-10 right-10 flex items-start gap-4">
-      <!-- Vertical White Bar -->
-      <div class="w-1.5 h-14 bg-white rounded-full mt-1.5 shrink-0 shadow-glow"></div>
+    <div class="absolute bottom-12 left-10 right-10 flex items-stretch gap-5">
+      <!-- Vertical White Bar (Adaptive height) -->
+      <div class="w-[1px] bg-white shrink-0"></div>
       
-      <h2 class="text-3xl lg:text-4xl font-semibold text-white leading-[1.1] tracking-tight font-unbounded">
-        Explique-nous ce que tu ressens, on te guide !
+      <h2 class="text-[32px] font-normal text-white leading-[1.2] tracking-tight font-unbounded">
+        Explique-nous ce <br /> que tu ressens, on <br /> te guide !
       </h2>
     </div>
   </div>

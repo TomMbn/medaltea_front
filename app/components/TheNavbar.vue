@@ -19,8 +19,6 @@
             <MapPin :size="18" class="text-[#01211e]" />
             Trouver un praticien
           </a>
-          <a href="#" class="hover:text-[#1c6c63] transition-colors text-nowrap">Rechercher un produit</a>
-          <a href="#" class="hover:text-[#1c6c63] transition-colors">Le Forum</a>
         </div>
 
         <!-- CTA Buttons -->
@@ -59,8 +57,6 @@
             <MapPin :size="20" />
             Trouver un praticien
           </a>
-          <a href="#" class="px-4 py-3 font-semibold text-[#012828] hover:bg-gray-50 rounded-xl">Rechercher un produit</a>
-          <a href="#" class="px-4 py-3 font-semibold text-[#012828] hover:bg-gray-50 rounded-xl">Le Forum</a>
           <hr class="border-gray-100 my-2" />
           <div class="flex flex-col gap-3">
             <button class="w-full btn-dark text-white px-6 py-3 rounded-[10px] font-bold text-center border-2 border-transparent">

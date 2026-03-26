@@ -1,0 +1,16 @@
+/* app/assets/css/main.css */
+@import url('https://use.typekit.net/your-id.css'); /* Placeholder for Adobe Fonts if needed */
+
+:root {
+  --font-family: "Futura PT", "Futura", "Jost", system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-style: normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}

@@ -6,14 +6,14 @@
       <!-- Left Zone: Logo -->
       <div class="flex items-center shrink-0">
         <NuxtLink to="/" class="flex items-center">
-            <img src="/images/logo.svg" alt="Medaltea Logo" class="h-9 w-auto" />
+            <img src="/images/logo.svg" alt="Medaltea Logo" class="h-7 w-auto" />
         </NuxtLink>
       </div>
 
       <!-- Right Group: Navigation + Buttons (Desktop) -->
       <div class="hidden lg:flex items-center gap-12">
         <!-- Navigation Links -->
-        <div class="flex items-center gap-8 text-[15px] font-semibold text-[#01211e]">
+        <div class="flex items-center gap-8 text-[15px] font-semibold text-[#012828]">
           <a href="#" class="hover:text-[#1c6c63] transition-colors">Les Médecines</a>
           <a href="#" class="flex items-center gap-1.5 hover:text-[#1c6c63] transition-colors text-nowrap">
             <MapPin :size="18" class="text-[#01211e]" />
@@ -25,10 +25,10 @@
 
         <!-- CTA Buttons -->
         <div class="flex items-center gap-2">
-          <button class="bg-[#0b2121] text-white px-6 py-2.5 rounded-xl font-bold text-[14px] hover:opacity-90 transition-all shadow-md">
+          <button class="btn-dark text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] shadow-md">
             M'inscrire
           </button>
-          <button class="bg-[#f5a5a1] text-white px-6 py-2.5 rounded-xl font-bold text-[14px] hover:opacity-90 transition-all shadow-md">
+          <button class="btn-chatbot text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] shadow-md">
             Chatbot
           </button>
         </div>
@@ -36,7 +36,7 @@
 
       <!-- Mobile Menu Button -->
       <div class="lg:hidden flex items-center">
-        <button @click="isMenuOpen = !isMenuOpen" class="text-[#0b2121] hover:text-[#1c6c63] focus:outline-none p-1">
+        <button @click="isMenuOpen = !isMenuOpen" class="text-[#012828] hover:text-[#1c6c63] focus:outline-none p-1">
           <Menu v-if="!isMenuOpen" :size="32" />
           <X v-else :size="32" />
         </button>
@@ -54,19 +54,19 @@
     >
       <div v-if="isMenuOpen" class="mx-auto w-11/12 mt-4 bg-white rounded-[20px] shadow-2xl border border-gray-100 overflow-hidden pointer-events-auto">
         <div class="flex flex-col p-6 gap-4">
-          <a href="#" class="px-4 py-3 font-semibold text-[#0b2121] hover:bg-gray-50 rounded-xl">Les Médecines</a>
-          <a href="#" class="px-4 py-3 font-semibold text-[#0b2121] hover:bg-gray-50 rounded-xl flex items-center gap-3">
+          <a href="#" class="px-4 py-3 font-semibold text-[#012828] hover:bg-gray-50 rounded-xl">Les Médecines</a>
+          <a href="#" class="px-4 py-3 font-semibold text-[#012828] hover:bg-gray-50 rounded-xl flex items-center gap-3">
             <MapPin :size="20" />
             Trouver un praticien
           </a>
-          <a href="#" class="px-4 py-3 font-semibold text-[#0b2121] hover:bg-gray-50 rounded-xl">Rechercher un produit</a>
-          <a href="#" class="px-4 py-3 font-semibold text-[#0b2121] hover:bg-gray-50 rounded-xl">Le Forum</a>
+          <a href="#" class="px-4 py-3 font-semibold text-[#012828] hover:bg-gray-50 rounded-xl">Rechercher un produit</a>
+          <a href="#" class="px-4 py-3 font-semibold text-[#012828] hover:bg-gray-50 rounded-xl">Le Forum</a>
           <hr class="border-gray-100 my-2" />
           <div class="flex flex-col gap-3">
-            <button class="w-full bg-[#0b2121] text-white px-6 py-4 rounded-2xl font-bold text-center">
+            <button class="w-full btn-dark text-white px-6 py-3 rounded-[10px] font-bold text-center border-2 border-transparent">
               M'inscrire
             </button>
-            <button class="w-full bg-[#f5a5a1] text-white px-6 py-4 rounded-2xl font-bold text-center">
+            <button class="w-full btn-chatbot text-white px-6 py-3 rounded-[10px] font-bold text-center">
               Chatbot
             </button>
           </div>
@@ -84,11 +84,16 @@ const isMenuOpen = ref(false)
 </script>
 
 <style scoped>
-/* Any custom styles matching the layout's unique aesthetics */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+.btn-dark {
+  background-color: #012828;
+  border: 2px solid transparent;
+}
 
-/* Matching the "medaitéa" font as requested */
-.text-3xl {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+.btn-chatbot {
+  /* Inner (fill) gradient: #EC7F7A to #F1AEAB */
+  /* Outer (border) gradient: Gray (#90BAD1) to Rose (#EC7F7A) */
+  background: linear-gradient(135deg, #EC7F7A 0%, #F1AEAB 100%) padding-box,
+              linear-gradient(135deg, #90BAD1 0%, #EC7F7A 100%) border-box;
+  border: 2px solid transparent;
 }
 </style>

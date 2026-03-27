@@ -10,26 +10,14 @@
         </NuxtLink>
       </div>
 
-      <!-- Right Group: Navigation + Buttons (Desktop) -->
-      <div class="hidden lg:flex items-center gap-12">
-        <!-- Navigation Links -->
-        <div class="flex items-center gap-8 text-[15px] font-semibold text-[#012828]">
-          <a href="#" class="hover:text-[#1c6c63] transition-colors">Les Médecines</a>
-          <a href="#" class="flex items-center gap-1.5 hover:text-[#1c6c63] transition-colors text-nowrap">
-            <MapPin :size="18" class="text-[#01211e]" />
-            Trouver un praticien
-          </a>
-        </div>
-
-        <!-- CTA Buttons -->
-        <div class="flex items-center gap-2">
-          <button class="btn-dark text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] shadow-md">
-            M'inscrire
-          </button>
-          <button class="btn-chatbot text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] shadow-md">
-            Chatbot
-          </button>
-        </div>
+      <!-- Right Group: Buttons (Desktop) -->
+      <div class="hidden lg:flex items-center gap-2">
+        <NuxtLink to="/register" class="btn-dark text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] shadow-md transition-all hover:scale-105 active:scale-95 text-nowrap">
+          M'inscrire
+        </NuxtLink>
+        <NuxtLink to="/" class="btn-chatbot text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] shadow-md transition-all hover:scale-105 active:scale-95">
+          Chatbot
+        </NuxtLink>
       </div>
 
       <!-- Mobile Menu Button -->
@@ -51,21 +39,13 @@
       leave-to-class="transform scale-95 opacity-0"
     >
       <div v-if="isMenuOpen" class="mx-auto w-11/12 mt-4 bg-white rounded-[20px] shadow-2xl border border-gray-100 overflow-hidden pointer-events-auto">
-        <div class="flex flex-col p-6 gap-4">
-          <a href="#" class="px-4 py-3 font-semibold text-[#012828] hover:bg-gray-50 rounded-xl">Les Médecines</a>
-          <a href="#" class="px-4 py-3 font-semibold text-[#012828] hover:bg-gray-50 rounded-xl flex items-center gap-3">
-            <MapPin :size="20" />
-            Trouver un praticien
-          </a>
-          <hr class="border-gray-100 my-2" />
-          <div class="flex flex-col gap-3">
-            <button class="w-full btn-dark text-white px-6 py-3 rounded-[10px] font-bold text-center border-2 border-transparent">
-              M'inscrire
-            </button>
-            <button class="w-full btn-chatbot text-white px-6 py-3 rounded-[10px] font-bold text-center">
-              Chatbot
-            </button>
-          </div>
+        <div class="flex flex-col p-6 gap-3">
+          <NuxtLink to="/register" class="w-full btn-dark text-white px-6 py-3 rounded-[10px] font-bold text-center border-2 border-transparent" @click="isMenuOpen = false">
+            M'inscrire
+          </NuxtLink>
+          <NuxtLink to="/" class="w-full btn-chatbot text-white px-6 py-3 rounded-[10px] font-bold text-center" @click="isMenuOpen = false">
+            Chatbot
+          </NuxtLink>
         </div>
       </div>
     </transition>

@@ -10,8 +10,8 @@
         </div>
 
         <!-- Chat Interface (Right Panel - Main focus) -->
-        <div class="col-span-1 lg:col-span-8 flex flex-col h-full min-h-0 overflow-y-auto lg:overflow-visible">
-          <ChatbotInterface class="my-auto" />
+        <div class="col-span-1 lg:col-span-8 flex flex-col h-full min-h-0 pb-8">
+          <ChatbotInterface class="h-full" />
         </div>
       </div>
     </main>

@@ -29,7 +29,10 @@ export default defineNuxtConfig({
         { name: 'description', content: 'Medaltea vous accompagne dans votre parcours de santé naturelle avec des conseils d\'experts et un chatbot intelligent.' }
       ],
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/Favicon.svg' }
+        { rel: 'icon', type: 'image/svg+xml', href: '/Favicon.svg' },
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' },
+        { rel: 'apple-touch-icon', href: '/favicon.png' },
+        { rel: 'mask-icon', href: '/Favicon.svg', color: '#177070' }
       ]
     },
     pageTransition: { name: 'page', mode: 'out-in' }

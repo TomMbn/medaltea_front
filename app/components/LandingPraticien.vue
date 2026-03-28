@@ -1,33 +1,44 @@
 <template>
-  <section class="landing-praticien py-24 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto relative rounded-[40px] overflow-hidden min-h-[500px] flex items-center shadow-2xl">
-      <!-- Background Image -->
-      <img src="/images/AdobeStock_336398199.jpeg" alt="Practitioner background" class="absolute inset-0 w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-[#014949]/70"></div>
-
-      <div class="relative z-10 p-12 lg:p-20 max-w-[600px] text-white">
-        <h2 class="text-[40px] font-bold font-unbounded leading-tight mb-8">
-          Trouvez un praticien près de chez vous
+  <section class="landing-praticien py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1200px] mx-auto relative rounded-[20px] overflow-hidden shadow-2xl flex flex-col lg:flex-row bg-[#156F71]">
+      
+      <!-- Left: Content Area (Teal) -->
+      <div class="lg:w-1/2 p-10 lg:p-20 text-white flex flex-col justify-center">
+        <h2 class="text-[32px] lg:text-[44px] font-normal font-unbounded leading-tight mb-6">
+          Trouvez un praticien <br class="hidden lg:block"/> près de chez vous
         </h2>
-        <p class="text-white/80 text-[18px] mb-12 font-sans">
-          Consultez des centaines de praticiens fiables et partagés par notre bien-être ?
+        <p class="text-white/90 text-[16px] lg:text-[18px] mb-12 font-sans max-w-[480px]">
+          Consultez des professionnels certifiés, triés par spécialité et localisation.
         </p>
-        <button class="px-10 py-5 rounded-[20px] border-2 border-white text-white font-bold text-[18px] transition-all hover:bg-white hover:text-[#014949] flex items-center gap-3 group">
-          <span>Voir tous les praticiens</span>
-          <ArrowUpRight :size="24" class="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+        <button class="px-8 py-3.5 rounded-[30px] border-2 border-white text-white font-bold text-[16px] lg:text-[17px] transition-all hover:bg-white/10 flex items-center gap-3 self-start group">
+          <span class="font-sans">Voir tous les praticiens</span>
+          <ArrowUpRight :size="20" stroke-width="3" class="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
         </button>
       </div>
 
-      <!-- Floating Profile Card -->
-      <div class="absolute right-12 bottom-12 hidden lg:flex bg-white rounded-[20px] p-4 shadow-2xl items-center gap-4 animate-bounce-slow">
-        <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
-           <img src="/images/AdobeStock_550036958.jpeg" class="w-full h-full object-cover" alt="Profile" />
-        </div>
-        <div>
-          <div class="text-[#012828] font-bold text-[16px]">Emma Grant</div>
-          <div class="text-[#012828]/40 text-[12px]">Psychologue</div>
-          <div class="flex gap-1 mt-1 text-yellow-400">
-            <Star :size="12" v-for="i in 5" :key="i" fill="currentColor" />
+      <!-- Right: Main Image Area -->
+      <div class="lg:w-1/2 relative min-h-[400px]">
+        <img 
+          src="/images/women-hypno.jpg" 
+          alt="Séance d'hypnothérapie" 
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+        
+        <!-- Floating Profile Card: Fabrice Desuet -->
+        <div class="absolute left-6 bottom-6 lg:left-10 lg:bottom-10 bg-white rounded-[20px] p-5 shadow-2xl flex items-center gap-4 min-w-[320px] animate-float z-20">
+          <div class="w-16 h-16 rounded-[15px] overflow-hidden bg-gray-100 flex-shrink-0">
+             <img src="/images/praticien-landing.jpg" class="w-full h-full object-cover" alt="Fabrice Desuet Avatar" />
+          </div>
+          <div class="flex-grow">
+            <div class="text-[#012828] font-bold text-[18px]">Fabrice Desuet</div>
+            <div class="text-[#EC7F7A] text-[14px] font-medium leading-none mb-2">Hypnothérapeute</div>
+            <div class="flex items-center gap-2 mt-2">
+              <span class="text-[#012828] font-bold text-[14px]">5/5</span>
+              <div class="flex gap-0.5 text-yellow-400">
+                <Star v-for="i in 5" :key="i" :size="14" fill="currentColor" />
+              </div>
+              <span class="text-[#012828]/40 text-[13px]">(32 avis)</span>
+            </div>
           </div>
         </div>
       </div>
@@ -43,11 +54,13 @@ import { ArrowUpRight, Star } from 'lucide-vue-next'
 .font-unbounded {
   font-family: 'Unbounded', cursive;
 }
-.animate-bounce-slow {
-  animation: bounce-slow 4s infinite ease-in-out;
-}
-@keyframes bounce-slow {
+
+@keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 5s infinite ease-in-out;
 }
 </style>

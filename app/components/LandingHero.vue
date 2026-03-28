@@ -17,10 +17,12 @@
             <NuxtImg 
               src="/images/panda-2.png" 
               alt="Medaltea Panda Mascot" 
-              class="w-full h-full object-contain drop-shadow-lg"
+              class="w-full h-full object-contain"
               width="140"
               height="120"
               format="webp"
+              quality="80"
+              loading="lazy"
             />
           </div>
 
@@ -81,8 +83,10 @@
             height="626"
             format="webp"
             quality="80"
-            loading="eager"
             fetchpriority="high"
+            preload
+            placeholder
+            sizes="sm:100vw md:80vw lg:800px"
           />
         </div>
         
@@ -96,8 +100,10 @@
             height="393"
             format="webp"
             quality="80"
-            loading="eager"
             fetchpriority="high"
+            preload
+            placeholder
+            sizes="sm:60vw md:50vw lg:600px"
           />
         </div>
       </div>

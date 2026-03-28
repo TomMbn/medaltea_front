@@ -27,6 +27,8 @@
           format="webp"
           quality="80"
           loading="lazy"
+          placeholder
+          sizes="sm:100vw md:50vw lg:600px"
         />
         
         <!-- Floating Profile Card: Fabrice Desuet -->
@@ -41,6 +43,7 @@
               format="webp"
               quality="90"
               loading="lazy"
+              placeholder
             />
           </div>
           <div class="flex-grow">

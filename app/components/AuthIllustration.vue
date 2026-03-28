@@ -10,6 +10,7 @@
       format="webp"
       quality="80"
       loading="eager"
+      placeholder
     />
     
     <!-- Gradient Overlay for Text Readability -->

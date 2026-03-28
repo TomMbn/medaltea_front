@@ -17,6 +17,8 @@
             format="webp"
             quality="80"
             loading="lazy"
+            placeholder
+            sizes="sm:100vw md:500px"
           />
         </div>
       </div>

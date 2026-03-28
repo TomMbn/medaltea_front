@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-illustration relative w-full h-full overflow-hidden rounded-[40px] bg-[#f4f7f9]">
+  <div class="auth-illustration relative w-full h-full overflow-hidden rounded-[40px] bg-[#e0ecf2]">
     <!-- Background Image -->
     <img 
       src="/images/landscape.png" 

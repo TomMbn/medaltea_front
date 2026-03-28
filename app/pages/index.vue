@@ -1,5 +1,5 @@
 <template>
-  <div class="landing-page overflow-x-hidden bg-[#f4f7f9] min-h-screen">
+  <div class="landing-page overflow-x-hidden bg-[#e0ecf2] min-h-screen">
     <!-- Hero Boxed to Navbar Width -->
     <div class="w-11/12 max-w-[1440px] mx-auto pt-6">
       <LandingHero class="rounded-[20px] overflow-hidden shadow-sm" />
@@ -22,7 +22,7 @@
     </div>
 
     <!-- 2. Subsequent Sections on Grey Background -->
-    <div class="w-full flex flex-col items-center bg-[#f4f7f9]">
+    <div class="w-full flex flex-col items-center bg-[#e0ecf2]">
       <div class="w-11/12 max-w-[1440px]">
         <LandingBenefits />
         <LandingPraticien />

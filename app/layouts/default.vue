@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-[#f4f7f9] font-sans antialiased selection:bg-[#EC7F7A]/30 overflow-x-hidden">
+  <div class="min-h-screen flex flex-col bg-[#e0ecf2] font-sans antialiased selection:bg-[#EC7F7A]/30 overflow-x-hidden">
     <!-- Navbar (Hidden on Auth pages) -->
     <TheNavbar v-if="!isAuthPage" />
     

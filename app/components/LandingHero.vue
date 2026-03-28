@@ -131,7 +131,7 @@ const handleSuggestion = (text) => {
 .hero-section {
   padding-top: 124px;
   padding-bottom: 80px;
-  background-color: #f4f7f9;
+  background-color: #e0ecf2;
   min-height: 100vh;
   display: flex;
   align-items: center;

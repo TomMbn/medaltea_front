@@ -154,7 +154,7 @@ async function handleRegister() {
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
-  background-color: #f4f7f9;
+  background-color: #2596be;
   color: #012828;
 }
 
@@ -333,7 +333,7 @@ async function handleRegister() {
 
 .separator-group .label-or {
   position: absolute;
-  background-color: #f4f7f9;
+  background-color: #e0ecf2;
   padding: 0 20px;
   color: rgba(1, 40, 40, 0.3);
   font-size: 15px;

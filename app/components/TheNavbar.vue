@@ -1,7 +1,7 @@
 <template>
   <!-- Floating Wrapper -->
   <div class="fixed top-0 inset-x-0 z-50 pt-6 pointer-events-none">
-    <nav class="mx-auto w-11/12 max-w-[1440px] bg-white rounded-[20px] shadow-lg border border-gray-100 px-8 py-2.5 flex items-center justify-between pointer-events-auto">
+    <nav class="mx-auto w-11/12 max-w-[1440px] bg-white rounded-[20px] shadow-sm border border-gray-100 px-8 py-2.5 flex items-center justify-between pointer-events-auto">
       
       <!-- Left Zone: Logo -->
       <div class="flex items-center shrink-0">

@@ -126,10 +126,12 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, onMounted } from 'vue'
 import { ArrowUp } from 'lucide-vue-next'
 import { marked } from 'marked'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const isChatActive = ref(false)
 const isTyping = ref(false)
 const userInput = ref('')
@@ -195,6 +197,18 @@ const formatMessage = (text) => {
   if (!text) return ''
   return marked.parse(text, { breaks: true })
 }
+
+onMounted(() => {
+  if (route.query.q) {
+    userInput.value = route.query.q
+    sendMessage()
+    
+    // Clean up URL without redirecting/reloading (Nuxt 3)
+    const url = new URL(window.location.href)
+    url.searchParams.delete('q')
+    window.history.replaceState({}, '', url.pathname)
+  }
+})
 </script>
 
 <style scoped>

@@ -1,5 +1,5 @@
 <template>
-  <section class="hero-section">
+  <section class="hero-section" :class="{ 'opacity-0 scale-95 pointer-events-none transition-all duration-500': isSubmitting }">
     <div class="hero-container">
       
       <!-- Left Content -->
@@ -36,11 +36,13 @@
                 <textarea 
                   v-model="userInput"
                   :rows="1"
+                  @keydown.enter.prevent="handleSubmit"
                   class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans w-full"
                   placeholder="Je n'arrives plus à m'endormir, qui consulter ?"
                 ></textarea>
                 
                 <button 
+                  @click="handleSubmit"
                   class="w-10 h-10 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0"
                 >
                   <ArrowUp :size="20" stroke-width="3" />
@@ -52,6 +54,7 @@
                 <button 
                   v-for="chip in suggestions" 
                   :key="chip.text"
+                  @click="handleSuggestion(chip.text)"
                   class="h-[42px] px-4 bg-white shadow-sm border border-[#D9D9D9] hover:bg-gray-50 rounded-[14px] text-[14px] font-medium text-black transition-all flex items-center gap-2"
                 >
                   <span class="text-lg">{{ chip.emoji }}</span>
@@ -92,11 +95,36 @@ import { ref } from 'vue'
 import { ArrowUp } from 'lucide-vue-next'
 
 const userInput = ref('')
+const isSubmitting = ref(false)
 const suggestions = [
   { text: 'Soulager mon stress', emoji: '🌿' },
   { text: 'Mieux dormir', emoji: '😴' },
   { text: 'Comprendre une douleur', emoji: '🤕' }
 ]
+
+const handleSubmit = () => {
+  if (!userInput.value.trim() || isSubmitting.value) return
+  isSubmitting.value = true
+  
+  setTimeout(() => {
+    navigateTo({
+      path: '/chatbot',
+      query: { q: userInput.value.trim() }
+    })
+  }, 400)
+}
+
+const handleSuggestion = (text) => {
+  if (isSubmitting.value) return
+  isSubmitting.value = true
+  
+  setTimeout(() => {
+    navigateTo({
+      path: '/chatbot',
+      query: { q: text }
+    })
+  }, 400)
+}
 </script>
 
 <style scoped>

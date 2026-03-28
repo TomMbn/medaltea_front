@@ -6,5 +6,8 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss'],
   runtimeConfig: {
     geminiApiKey: '' // Overridden by NUXT_GEMINI_API_KEY env var
+  },
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' }
   }
 })

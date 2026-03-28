@@ -8,7 +8,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Row 1 -->
         <div class="benefit-card image-card rounded-[30px] overflow-hidden shadow-lg h-[280px]">
-          <img src="/images/AdobeStock_550036958.jpeg" alt="Happy Customer" class="w-full h-full object-cover" />
+          <img src="/images/benefits.jpg" alt="Benefits" class="w-full h-full object-cover" />
         </div>
         
         <div class="benefit-card text-card bg-[#90BAD1] p-8 rounded-[30px] shadow-lg flex flex-col justify-center h-[280px]">

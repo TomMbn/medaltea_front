@@ -11,7 +11,7 @@
           <div class="step-number text-[#EC7F7A] font-unbounded text-[80px] lg:text-[120px] leading-none mb-6">
             1
           </div>
-          <h3 class="text-[20px] lg:text-[24px] font-bold text-[#012828] mb-4 font-unbounded">
+          <h3 class="text-[20px] lg:text-[24px] font-bold text-[#012828] mb-4 font-unbounded min-h-[60px] lg:min-h-[84px] flex items-start">
             Partagez vos besoins
           </h3>
           <p class="text-[#012828] text-[16px] lg:text-[17px] leading-relaxed font-sans opacity-80">
@@ -24,7 +24,7 @@
           <div class="step-number text-[#EC7F7A] font-unbounded text-[80px] lg:text-[120px] leading-none mb-6">
             2
           </div>
-          <h3 class="text-[20px] lg:text-[24px] font-bold text-[#012828] mb-4 font-unbounded">
+          <h3 class="text-[20px] lg:text-[24px] font-bold text-[#012828] mb-4 font-unbounded min-h-[60px] lg:min-h-[84px] flex items-start">
             Recevez des recommandations
           </h3>
           <p class="text-[#012828] text-[16px] lg:text-[17px] leading-relaxed font-sans opacity-80">
@@ -37,7 +37,7 @@
           <div class="step-number text-[#EC7F7A] font-unbounded text-[80px] lg:text-[120px] leading-none mb-6">
             3
           </div>
-          <h3 class="text-[20px] lg:text-[24px] font-bold text-[#012828] mb-4 font-unbounded">
+          <h3 class="text-[20px] lg:text-[24px] font-bold text-[#012828] mb-4 font-unbounded min-h-[60px] lg:min-h-[84px] flex items-start">
             Réservez et avancez vers le mieux-être
           </h3>
           <p class="text-[#012828] text-[16px] lg:text-[17px] leading-relaxed font-sans opacity-80">

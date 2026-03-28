@@ -338,7 +338,7 @@ async function handleRegister() {
   color: rgba(1, 40, 40, 0.3);
   font-size: 15px;
   font-weight: 600;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Futura PT', sans-serif;
 }
 
 .social-row {

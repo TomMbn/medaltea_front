@@ -1,12 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-  --font-sans: "Futura PT", "Futura", "Jost", system-ui, sans-serif;
-  --font-unbounded: "Unbounded", system-ui, sans-serif;
+  --font-sans: "Futura PT", "Futura", "Jost", sans-serif;
+  --font-unbounded: "Unbounded", sans-serif;
+}
+
+/* Force override for ALL sans-serif usage */
+html, body, .font-sans {
+  font-family: var(--font-sans) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: var(--font-sans);
   font-weight: 400;
   font-style: normal;
 }

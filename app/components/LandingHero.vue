@@ -14,10 +14,13 @@
         <div class="search-bar-wrapper">
           <!-- Panda Mascot -->
           <div class="absolute z-20 pointer-events-none right-4 bottom-full mb-[-8px] w-[140px] h-[120px]">
-            <img 
+            <NuxtImg 
               src="/images/panda-2.png" 
               alt="Medaltea Panda Mascot" 
               class="w-full h-full object-contain drop-shadow-lg"
+              width="140"
+              height="120"
+              format="webp"
             />
           </div>
 
@@ -70,19 +73,31 @@
       <div class="images-stack">
         <!-- Main Large Image (Background/Physically Top) -->
         <div class="image-card main-card">
-          <img 
+          <NuxtImg 
             src="/images/hero-section-2.jpeg" 
             alt="Wellness Experience" 
             class="full-img"
+            width="800"
+            height="626"
+            format="webp"
+            quality="80"
+            loading="eager"
+            fetchpriority="high"
           />
         </div>
         
         <!-- Overlapping Top Left Image (Physically Bottom/Layered on top) -->
         <div class="image-card overlay-card">
-          <img 
+          <NuxtImg 
             src="/images/hero-section.jpeg" 
             alt="Natural Therapy" 
             class="full-img"
+            width="600"
+            height="393"
+            format="webp"
+            quality="80"
+            loading="eager"
+            fetchpriority="high"
           />
         </div>
       </div>
@@ -182,7 +197,6 @@ const handleSuggestion = (text) => {
 .image-card {
   border-radius: 40px;
   overflow: hidden;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.1);
 }
 
 .main-card {

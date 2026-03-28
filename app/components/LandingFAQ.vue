@@ -8,10 +8,15 @@
           FAQ
         </h2>
         <div class="rounded-[20px] overflow-hidden shadow-lg aspect-video lg:aspect-auto lg:h-[320px]">
-          <img 
+          <NuxtImg 
             src="/images/women-phone.jpeg" 
             alt="Consultation d'expert" 
-            class="w-full h-full object-cover" 
+            class="w-full h-full object-cover"
+            width="800"
+            height="320"
+            format="webp"
+            quality="80"
+            loading="lazy"
           />
         </div>
       </div>
@@ -24,7 +29,7 @@
               @click="toggle(index)"
               class="w-full flex items-center justify-between text-left py-7 group"
             >
-              <span class="text-[18px] lg:text-[20px] font-bold text-[#012828] font-sans group-hover:text-[#156F71] transition-colors leading-tight">
+              <span class="text-[18px] lg:text-[20px] font-bold text-[#012828] font-unbounded group-hover:text-[#156F71] transition-colors leading-tight">
                 {{ item.question }}
               </span>
               <div class="flex-shrink-0 ml-4 relative w-6 h-6 flex items-center justify-center">

@@ -18,16 +18,30 @@
 
       <!-- Right: Main Image Area -->
       <div class="lg:w-1/2 relative min-h-[400px]">
-        <img 
+        <NuxtImg 
           src="/images/women-hypno.jpg" 
           alt="Séance d'hypnothérapie" 
           class="absolute inset-0 w-full h-full object-cover"
+          width="800"
+          height="600"
+          format="webp"
+          quality="80"
+          loading="lazy"
         />
         
         <!-- Floating Profile Card: Fabrice Desuet -->
         <div class="absolute left-6 bottom-6 lg:left-10 lg:bottom-10 bg-white rounded-[20px] p-5 shadow-2xl flex items-center gap-4 min-w-[320px] animate-float z-20">
           <div class="w-16 h-16 rounded-[15px] overflow-hidden bg-gray-100 flex-shrink-0">
-             <img src="/images/praticien-landing.jpg" class="w-full h-full object-cover" alt="Fabrice Desuet Avatar" />
+             <NuxtImg 
+              src="/images/praticien-landing.jpg" 
+              class="w-full h-full object-cover" 
+              alt="Fabrice Desuet Avatar" 
+              width="128"
+              height="128"
+              format="webp"
+              quality="90"
+              loading="lazy"
+            />
           </div>
           <div class="flex-grow">
             <div class="text-[#012828] font-bold text-[18px]">Fabrice Desuet</div>

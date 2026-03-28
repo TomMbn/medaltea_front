@@ -40,7 +40,7 @@
       <!-- Loading / Typing State -->
       <div v-if="isTyping" class="w-full max-w-[1078px] mx-auto px-8 animate-fade-in opacity-50 pb-6">
         <div class="text-[#012828] text-[15px] font-sans leading-relaxed flex items-center gap-2">
-          <span class="italic">Medaltea réfléchit...</span>
+          <span class="italic">Altea réfléchit...</span>
           <div class="flex gap-1">
             <span class="w-1 h-1 bg-[#012828] rounded-full animate-bounce"></span>
             <span class="w-1 h-1 bg-[#012828] rounded-full animate-bounce [animation-delay:0.2s]"></span>

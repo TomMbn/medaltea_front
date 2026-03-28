@@ -2,7 +2,7 @@
   <div class="landing-page overflow-x-hidden bg-[#e0ecf2] min-h-screen">
     <!-- Hero Boxed to Navbar Width -->
     <div class="w-11/12 max-w-[1440px] mx-auto pt-6">
-      <LandingHero class="rounded-[20px] overflow-hidden shadow-sm" />
+      <LandingHero class="rounded-[20px] overflow-hidden" />
     </div>
     
     <!-- 1. The Floating White Sheet (Intro + Steps) -->

@@ -6,10 +6,15 @@
         <!-- Left: Image Wrapper -->
         <div class="relative w-full h-full">
           <div class="w-full h-full aspect-[4/3] lg:aspect-auto rounded-[40px] overflow-hidden shadow-xl">
-            <img 
+            <NuxtImg 
               src="/images/women-phone.jpeg" 
               alt="Femme utilisant l'application Medaltea" 
               class="w-full h-full object-cover"
+              width="1000"
+              height="800"
+              format="webp"
+              quality="80"
+              loading="lazy"
             />
           </div>
           
@@ -27,7 +32,7 @@
         <div class="bg-[#156F71] rounded-[40px] p-8 lg:p-14 text-white shadow-xl flex flex-col justify-between">
           <div>
             <h2 class="text-[32px] lg:text-[44px] font-normal font-unbounded mb-6 leading-tight">
-              Qu'est-ce que Medaltea
+              Qu'est-ce que Medaltea ?
             </h2>
             
             <p class="text-white text-[16px] lg:text-[18px] leading-relaxed mb-8 font-sans opacity-95">
@@ -37,7 +42,11 @@
             <ul class="space-y-4 mb-10">
               <li v-for="item in features" :key="item" class="flex items-center gap-4">
                 <div class="w-6 h-6 flex items-center justify-center shrink-0">
-                  <Check :size="20" stroke-width="3" class="text-white" />
+                  <NuxtImg 
+                    src="/images/landing-intro.svg" 
+                    alt="Check Icon" 
+                    class="w-full h-full object-contain"
+                  />
                 </div>
                 <span class="text-[16px] lg:text-[17px] font-sans font-medium">{{ item }}</span>
               </li>
@@ -60,7 +69,7 @@
 </template>
 
 <script setup>
-import { Check, ArrowUpRight } from 'lucide-vue-next'
+import { ArrowUpRight } from 'lucide-vue-next'
 
 const features = [
   "Conseils personnalisés en médecine douce",

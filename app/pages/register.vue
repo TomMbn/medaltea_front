@@ -154,7 +154,7 @@ async function handleRegister() {
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
-  background-color: #2596be;
+  background-color: #e0ecf2;
   color: #012828;
 }
 

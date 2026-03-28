@@ -12,10 +12,10 @@
 
       <!-- Right Group: Buttons (Desktop) -->
       <div class="hidden lg:flex items-center gap-2">
-        <NuxtLink to="/register" class="btn-dark text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] shadow-md transition-all hover:scale-105 active:scale-95 text-nowrap">
+        <NuxtLink to="/register" class="btn-dark text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] transition-all hover:scale-105 active:scale-95 text-nowrap">
           M'inscrire
         </NuxtLink>
-        <NuxtLink to="/chatbot" class="btn-chatbot text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] shadow-md transition-all hover:scale-105 active:scale-95">
+        <NuxtLink to="/chatbot" class="btn-chatbot text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] transition-all hover:scale-105 active:scale-95">
           Chatbot
         </NuxtLink>
       </div>

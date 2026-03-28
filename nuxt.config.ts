@@ -21,6 +21,17 @@ export default defineNuxtConfig({
     geminiApiKey: '' // Overridden by NUXT_GEMINI_API_KEY env var
   },
   app: {
+    head: {
+      title: 'Medaltea - Votre expert en santé naturelle',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: 'Medaltea vous accompagne dans votre parcours de santé naturelle avec des conseils d\'experts et un chatbot intelligent.' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/Favicon.svg' }
+      ]
+    },
     pageTransition: { name: 'page', mode: 'out-in' }
   }
 })

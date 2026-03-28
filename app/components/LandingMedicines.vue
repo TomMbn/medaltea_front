@@ -1,5 +1,5 @@
 <template>
-  <section class="landing-medicines py-24 px-4 sm:px-6 lg:px-8 bg-white">
+  <section class="landing-medicines py-24 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto text-center">
       <h2 class="text-[34px] font-bold font-unbounded text-[#012828] mb-16">
         Recherche la médecine qui vous convient

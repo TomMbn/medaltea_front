@@ -1,5 +1,5 @@
 <template>
-  <section class="landing-faq py-24 px-4 sm:px-6 lg:px-8 bg-white">
+  <section class="landing-faq py-24 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 lg:gap-24">
       
       <!-- Left: Imagery -->

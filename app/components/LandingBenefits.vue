@@ -1,5 +1,5 @@
 <template>
-  <section class="landing-benefits py-24 px-4 sm:px-6 lg:px-8 bg-[#f4f7f9]">
+  <section class="landing-benefits py-24 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
       <h2 class="text-[34px] font-bold font-unbounded text-[#012828] text-center mb-20">
         Pourquoi choisir un praticien sur Medaltea ?

@@ -59,7 +59,7 @@
       <div 
         :class="[
           'absolute z-20 pointer-events-none transition-all duration-500',
-          isChatActive ? 'right-0 bottom-full mb-[-18px] w-[140px] h-[120px]' : 'right-4 bottom-full mb-[-31px] w-[80px] h-[95px]'
+          isChatActive ? 'right-4 bottom-full mb-[-8px] w-[140px] h-[120px]' : 'right-4 bottom-full mb-[-31px] w-[80px] h-[95px]'
         ]"
       >
         <img 

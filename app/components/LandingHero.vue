@@ -138,10 +138,8 @@ const handleSuggestion = (text) => {
 }
 
 .hero-container {
-  width: 91.66%;
-  max-width: 1440px;
+  width: 100%;
   margin: 0 auto;
-  padding: 0 32px;
   display: flex;
   flex-direction: column;
   gap: 60px;

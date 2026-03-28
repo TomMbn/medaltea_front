@@ -1,6 +1,9 @@
 <template>
   <div class="landing-page overflow-x-hidden bg-[#f4f7f9] min-h-screen">
-    <LandingHero />
+    <!-- Hero Boxed to Navbar Width -->
+    <div class="w-11/12 max-w-[1440px] mx-auto pt-6">
+      <LandingHero class="rounded-[20px] overflow-hidden shadow-sm" />
+    </div>
     
     <!-- 1. The Floating White Sheet (Intro + Steps) -->
     <div class="relative w-full flex flex-col items-center">

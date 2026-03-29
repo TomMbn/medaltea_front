@@ -43,7 +43,7 @@
                   :rows="1"
                   @keydown.enter.prevent="handleSubmit"
                   class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans w-full overflow-hidden"
-                  placeholder="Je n'arrives plus à m'endormir, qui consulter ?"
+                  placeholder="Demander à Altea"
                 ></textarea>
                 
                 <button 

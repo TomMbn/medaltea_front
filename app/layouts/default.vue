@@ -9,7 +9,7 @@
     <TheNavbar v-if="!isAuthPage" />
     
     <!-- MODE: Chat (Constrained Grid with Sidebar) -->
-    <main v-if="isChatPage" class="mx-auto w-11/12 max-w-[1440px] pt-28 pb-10 flex-1 flex flex-col min-h-0 overflow-hidden transition-all duration-500">
+    <main v-if="isChatPage" class="mx-auto w-11/12 max-w-[1440px] pt-28 pb-10 flex-1 flex flex-col min-h-0 overflow-hidden">
       <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-[112px] min-h-0 overflow-hidden">
         <!-- Sidebar Illustration -->
         <div class="hidden lg:block lg:col-span-4 flex flex-col min-h-0 overflow-hidden">

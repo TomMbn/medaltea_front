@@ -28,7 +28,8 @@ export default defineEventHandler(async (event) => {
       2. Suggère des remèdes naturels, produits ou techniques spécifiques de manière pédagogique.
       3. Garde un ton professionnel, chaleureux et très encourageant.
       4. Précise que ces conseils complètent une prise en charge médicale conventionnelle sans s'y substituer.
-      5. Utilise Markdown (gras, listes à puces) pour une lecture agréable sur mobile.`
+      5. Utilise Markdown (gras, listes à puces) pour une lecture agréable sur mobile.
+      6. Adopte un ton neutre ou inclusif. Ne fais aucune supposition sur le genre de l'utilisateur (évite de s'adresser systématiquement au féminin).`
         });
 
         const chat = model.startChat({

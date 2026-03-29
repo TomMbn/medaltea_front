@@ -30,7 +30,7 @@
         </div>
 
         <!-- Bot Response -->
-        <div v-else class="w-full max-w-[1078px] mx-auto px-8 animate-fade-in overflow-hidden">
+        <div v-else class="w-full max-w-[1078px] mx-auto px-8 overflow-hidden">
           <div class="text-[#012828] text-[16px] font-sans leading-relaxed">
              <div v-html="formatMessage(msg.parts[0].text)" class="markdown-content"></div>
           </div>
@@ -68,7 +68,7 @@
         <div 
           :class="[
             'absolute z-20 pointer-events-none transition-all duration-500',
-            isChatActive ? 'right-4 bottom-full mb-[-8px] w-[140px] h-[120px]' : 'right-4 bottom-full mb-[0px] lg:mb-[-1px] w-[75px] lg:w-[80px] h-[90px] lg:h-[95px]'
+            isChatActive ? 'right-4 bottom-full mb-[-8px] w-[100px] md:w-[140px] h-[86px] md:h-[120px]' : 'right-4 bottom-full mb-[0px] lg:mb-[-1px] w-[75px] lg:w-[80px] h-[90px] lg:h-[95px]'
           ]"
         >
           <img 
@@ -96,7 +96,7 @@
               @keydown.enter.prevent="sendMessage"
               :disabled="isTyping"
               class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans disabled:opacity-50 overflow-hidden"
-              placeholder="Je n'arrives plus à m'endormir, qui consulter ?"
+              placeholder="Demander à Altea"
             ></textarea>
             
             <button 
@@ -168,29 +168,33 @@ const sendMessage = async () => {
   isTyping.value = true
   
   await scrollToBottom()
-
+  
+  let aiResponse = null
   try {
     const response = await $fetch('/api/chat', {
       method: 'POST',
       body: {
         message: text,
-        history: messages.value.slice(0, -1) // Send history excluding the last message
+        history: messages.value.slice(0, -1)
       }
     })
-
-    messages.value.push({
-      role: 'model',
-      parts: [{ text: response.text }]
-    })
+    aiResponse = response.text
   } catch (err) {
     console.error('Chat Error:', err)
-    messages.value.push({
-      role: 'model',
-      parts: [{ text: "Désolé, j'ai rencontré un problème technique. Peux-tu réessayer ?" }]
-    })
+    aiResponse = "Désolé, j'ai rencontré un problème technique. Peux-tu réessayer ?"
   } finally {
     isTyping.value = false
-    await scrollToBottom()
+    
+    // Add AI message back (was missing!)
+    if (aiResponse) {
+      messages.value.push({
+        role: 'model',
+        parts: [{ text: aiResponse }]
+      })
+    }
+
+    // No more forced scroll here! The browser will maintain the current position.
+    await nextTick()
   }
 }
 

@@ -3,11 +3,11 @@
     <div class="max-w-[1200px] mx-auto relative rounded-[20px] overflow-hidden shadow-2xl flex flex-col lg:flex-row bg-[#156F71]">
       
       <!-- Left: Content Area (Teal) -->
-      <div class="lg:w-1/2 p-10 lg:p-20 text-white flex flex-col justify-center">
-        <h2 class="text-[32px] lg:text-[44px] font-normal font-unbounded leading-tight mb-6">
+      <div class="lg:w-1/2 p-6 sm:p-10 lg:p-20 text-white flex flex-col justify-center">
+        <h2 class="text-2xl sm:text-[32px] lg:text-[44px] font-normal font-unbounded leading-tight mb-6">
           Trouvez un praticien <br class="hidden lg:block"/> près de chez vous
         </h2>
-        <p class="text-white/90 text-[16px] lg:text-[18px] mb-12 font-sans max-w-[480px]">
+        <p class="text-white/90 text-[16px] lg:text-[18px] mb-8 lg:mb-12 font-sans max-w-[480px]">
           Consultez des professionnels certifiés, triés par spécialité et localisation.
         </p>
         <button class="px-8 py-3.5 rounded-[30px] border-2 border-white text-white font-bold text-[16px] lg:text-[17px] transition-all hover:bg-white/10 flex items-center gap-3 self-start group">
@@ -32,7 +32,7 @@
         />
         
         <!-- Floating Profile Card: Fabrice Desuet -->
-        <div class="absolute left-6 bottom-6 lg:left-10 lg:bottom-10 bg-white rounded-[20px] p-5 shadow-2xl flex items-center gap-4 min-w-[320px] animate-float z-20">
+        <div class="absolute left-4 bottom-4 lg:left-10 lg:bottom-10 bg-white rounded-[20px] p-4 lg:p-5 shadow-2xl flex items-center gap-4 min-w-[260px] sm:min-w-[320px] animate-float z-20">
           <div class="w-16 h-16 rounded-[15px] overflow-hidden bg-gray-100 flex-shrink-0">
              <NuxtImg 
               src="/images/praticien-landing.jpg" 

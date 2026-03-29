@@ -13,7 +13,7 @@
         <!-- Search Bar Area Wrapper -->
         <div class="search-bar-wrapper">
           <!-- Panda Mascot -->
-          <div class="absolute z-20 pointer-events-none right-4 bottom-full mb-[-8px] w-[140px] h-[120px]">
+          <div class="absolute z-20 pointer-events-none right-4 bottom-full mb-[-4px] lg:mb-[-8px] w-[80px] h-[70px] lg:w-[140px] lg:h-[120px]">
             <NuxtImg 
               src="/images/panda-2.png" 
               alt="Medaltea Panda Mascot" 
@@ -27,7 +27,7 @@
           </div>
 
           <!-- Main Search/Input Box Wrapper (Gradient Border) -->
-          <div class="relative w-full p-[3px] rounded-[20px] isolate flex flex-col min-h-[177px]">
+          <div class="relative w-full p-[3px] rounded-[20px] isolate flex flex-col min-h-[140px] lg:min-h-[177px]">
             <!-- 3px Gradient Border Layer -->
             <div 
               class="absolute inset-0 rounded-[20px] -z-10"
@@ -42,7 +42,7 @@
                   v-model="userInput"
                   :rows="1"
                   @keydown.enter.prevent="handleSubmit"
-                  class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans w-full"
+                  class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans w-full overflow-hidden"
                   placeholder="Je n'arrives plus à m'endormir, qui consulter ?"
                 ></textarea>
                 
@@ -172,11 +172,18 @@ const handleSuggestion = (text) => {
 
 .hero-title {
   font-family: 'Unbounded', cursive;
-  font-size: 38px;
+  font-size: 28px;
   font-weight: 400;
   line-height: 1.1;
   color: #012828;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 640px) {
+  .hero-title {
+    font-size: 38px;
+    margin-bottom: 40px;
+  }
 }
 
 .text-rose {

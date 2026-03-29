@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-full min-h-[400px] overflow-hidden rounded-[20px] shadow-2xl group bg-white">
+  <div class="relative h-full min-h-[400px] overflow-hidden rounded-[20px] shadow-lg group bg-white">
     <!-- Background Image -->
     <img 
       src="/images/landscape.png" 

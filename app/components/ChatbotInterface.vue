@@ -1,14 +1,14 @@
 <template>
-  <div class="flex flex-col w-full max-w-[970px] mx-auto min-h-0">
+  <div class="flex flex-col w-full max-w-[1440px] mx-auto min-h-0 h-full flex-1 overflow-hidden">
     <!-- Initial View: Logo and Title (Centered) -->
-    <div v-if="!isChatActive" class="flex flex-col items-center w-full relative pt-[127px]">
+    <div v-if="!isChatActive" class="flex flex-col items-center w-full relative pt-8 lg:pt-[127px]">
       <!-- Logo -->
-      <div class="mb-[73px]">
-        <img src="/images/logo.svg" alt="Medaltea Logo" class="h-12 w-auto" />
+      <div class="mb-8 lg:mb-[73px]">
+        <img src="/images/logo.svg" alt="Medaltea Logo" class="h-8 lg:h-12 w-auto" />
       </div>
       
       <!-- Title -->
-      <h2 class="text-[34px] font-bold text-[#012828] text-center leading-tight whitespace-nowrap font-unbounded">
+      <h2 class="text-2xl lg:text-[34px] font-bold text-[#012828] text-center leading-tight font-unbounded">
         Demandes moi <span class="text-[#EC7F7A]">quelque chose</span>
       </h2>
     </div>
@@ -52,30 +52,31 @@
 
     <!-- Interface Wrapper (Input Bar) -->
     <div 
-      class="w-full relative px-4 sm:px-0"
-      :class="isChatActive ? 'mt-auto pb-4 overflow-visible' : ''"
+      class="w-full relative flex-none"
+      :class="isChatActive ? 'mt-auto pb-4 overflow-visible px-4 sm:px-0' : ''"
     >
-      <!-- Panda Mascot -->
-      <div 
-        :class="[
-          'absolute z-20 pointer-events-none transition-all duration-500',
-          isChatActive ? 'right-4 bottom-full mb-[-8px] w-[140px] h-[120px]' : 'right-4 bottom-full mb-[-31px] w-[80px] h-[95px]'
-        ]"
-      >
-        <img 
-          :src="isChatActive ? '/images/panda-2.png' : '/images/panda-standing.png'" 
-          alt="Medaltea Panda Mascot" 
-          class="w-full h-full object-contain drop-shadow-lg"
-        />
-      </div>
+      <!-- Mascot is moved inside the search box container below -->
 
       <!-- Main Search/Input Box -->
       <div 
         class="relative w-full p-[3px] rounded-[20px] isolate flex flex-col transition-all duration-300 mx-auto"
         :class="[
-          isChatActive ? 'h-[87px] mt-0 max-w-[1078px]' : 'min-h-[177px] mt-[31px] max-w-[970px]'
+          isChatActive ? 'h-[87px] mt-0 max-w-[1078px]' : 'min-h-[150px] lg:min-h-[177px] mt-16 lg:mt-[31px] w-full'
         ]"
       >
+        <!-- Panda Mascot (Moved here) -->
+        <div 
+          :class="[
+            'absolute z-20 pointer-events-none transition-all duration-500',
+            isChatActive ? 'right-4 bottom-full mb-[-8px] w-[140px] h-[120px]' : 'right-4 bottom-full mb-[0px] lg:mb-[-1px] w-[75px] lg:w-[80px] h-[90px] lg:h-[95px]'
+          ]"
+        >
+          <img 
+            :src="isChatActive ? '/images/panda-2.png' : '/images/panda-standing.png'" 
+            alt="Medaltea Panda Mascot" 
+            class="w-full h-full object-contain drop-shadow-lg"
+          />
+        </div>
         <!-- 3px Gradient Border Layer -->
         <div 
           class="absolute inset-0 rounded-[20px] -z-10"
@@ -85,7 +86,7 @@
         <!-- White Inner Container -->
         <div 
           class="flex-1 bg-white rounded-[17.5px] flex flex-col transition-all duration-300"
-          :class="isChatActive ? 'px-8 justify-center shadow-md' : 'p-6 justify-between shadow-xl'"
+          :class="isChatActive ? 'px-8 justify-center shadow-sm' : 'p-6 justify-between shadow-lg'"
         >
           <!-- Input Row -->
           <div class="flex items-center gap-4">
@@ -94,7 +95,7 @@
               :rows="1"
               @keydown.enter.prevent="sendMessage"
               :disabled="isTyping"
-              class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans disabled:opacity-50"
+              class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans disabled:opacity-50 overflow-hidden"
               placeholder="Je n'arrives plus à m'endormir, qui consulter ?"
             ></textarea>
             
@@ -108,7 +109,7 @@
           </div>
 
           <!-- Integrated Suggestion Chips (Visible only on initial state) -->
-          <div v-if="!isChatActive" class="flex flex-wrap gap-2 mt-auto">
+          <div v-if="!isChatActive" class="flex flex-wrap gap-2 mt-auto pt-4 lg:pt-0">
             <button 
               v-for="chip in suggestions" 
               :key="chip.text"

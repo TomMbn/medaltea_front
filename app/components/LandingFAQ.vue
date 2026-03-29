@@ -1,10 +1,10 @@
 <template>
   <section class="landing-faq py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-[1200px] mx-auto bg-white rounded-[20px] shadow-sm p-10 lg:p-20 flex flex-col lg:flex-row items-start gap-12 lg:gap-24">
+    <div class="max-w-[1200px] mx-auto bg-white rounded-[20px] shadow-sm p-6 sm:p-10 lg:p-20 flex flex-col lg:flex-row items-start gap-12 lg:gap-24">
       
       <!-- Left: Title & Image -->
-      <div class="lg:w-1/2">
-        <h2 class="text-[32px] lg:text-[44px] font-normal font-unbounded text-[#012828] mb-12">
+      <div class="lg:w-1/2 w-full">
+        <h2 class="text-2xl sm:text-[32px] lg:text-[44px] font-normal font-unbounded text-[#012828] mb-8 lg:mb-12">
           FAQ
         </h2>
         <div class="rounded-[20px] overflow-hidden shadow-lg aspect-video lg:aspect-auto lg:h-[320px]">

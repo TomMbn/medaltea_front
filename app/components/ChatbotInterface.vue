@@ -38,7 +38,7 @@
       </div>
 
       <!-- Loading / Typing State -->
-      <div v-if="isTyping" class="w-full max-w-[1078px] mx-auto px-8 animate-fade-in opacity-50 pb-6">
+      <div v-if="isTyping" class="w-full max-w-[1078px] mx-auto px-8 opacity-50 pb-6">
         <div class="text-[#012828] text-[15px] font-sans leading-relaxed flex items-center gap-2">
           <span class="italic">Altea réfléchit...</span>
           <div class="flex gap-1">
@@ -48,6 +48,9 @@
           </div>
         </div>
       </div>
+      
+      <!-- Mobile Spacer to prevent mascot from covering text -->
+      <div class="h-28 md:hidden flex-none" aria-hidden="true"></div>
     </div>
 
     <!-- Interface Wrapper (Input Bar) -->

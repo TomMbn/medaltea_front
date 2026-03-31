@@ -17,7 +17,7 @@
           M'inscrire
         </NuxtLink>
 -->
-        <NuxtLink to="/chatbot" class="btn-chatbot text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] transition-all hover:scale-105 active:scale-95">
+        <NuxtLink v-if="route.path !== '/chatbot'" to="/chatbot" class="btn-chatbot text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] transition-all hover:scale-105 active:scale-95">
           Chatbot
         </NuxtLink>
       </div>
@@ -47,7 +47,7 @@
             M'inscrire
           </NuxtLink>
 -->
-          <NuxtLink to="/chatbot" class="w-full btn-chatbot text-white px-6 py-3 rounded-[10px] font-bold text-center" @click="isMenuOpen = false">
+          <NuxtLink v-if="route.path !== '/chatbot'" to="/chatbot" class="w-full btn-chatbot text-white px-6 py-3 rounded-[10px] font-bold text-center" @click="isMenuOpen = false">
             Chatbot
           </NuxtLink>
         </div>
@@ -58,8 +58,10 @@
 
 <script setup>
 import { ref } from 'vue'
-import { MapPin, Menu, X } from 'lucide-vue-next'
+import { Menu, X } from 'lucide-vue-next'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const isMenuOpen = ref(false)
 </script>
 

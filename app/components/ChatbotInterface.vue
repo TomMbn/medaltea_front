@@ -97,17 +97,18 @@
               v-model="userInput"
               :rows="1"
               @keydown.enter.prevent="sendMessage"
-              :disabled="isTyping"
+              :disabled="isTyping || isLimitReached"
               class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans disabled:opacity-50 overflow-hidden"
-              placeholder="Demander à Altea"
+              :placeholder="isLimitReached ? 'Limite quotidienne atteinte (10/10)' : 'Demander à Altea'"
             ></textarea>
             
             <button 
               @click="sendMessage"
-              :disabled="isTyping || !userInput.trim()"
+              :disabled="isTyping || !userInput.trim() || isLimitReached"
               class="w-10 h-10 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 disabled:grayscale disabled:opacity-50"
             >
-              <ArrowUp :size="20" stroke-width="3" />
+              <ArrowUp v-if="!isLimitReached" :size="20" stroke-width="3" />
+              <Ban v-else :size="20" stroke-width="3" />
             </button>
           </div>
 
@@ -130,8 +131,8 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted } from 'vue'
-import { ArrowUp } from 'lucide-vue-next'
+import { ref, nextTick, onMounted, computed } from 'vue'
+import { ArrowUp, Ban } from 'lucide-vue-next'
 import { marked } from 'marked'
 import { useRoute } from 'vue-router'
 
@@ -142,6 +143,40 @@ const userInput = ref('')
 const chatHistoryRef = ref(null)
 
 const messages = ref([])
+
+// --- RATE LIMITING / USAGE (CLIENT SIDE) ---
+const MAX_DAILY_MESSAGES = 10
+const userUsage = ref({ count: 0, lastReset: '' })
+
+const isLimitReached = computed(() => {
+  const today = new Date().toLocaleDateString()
+  if (userUsage.value.lastReset !== today) return false
+  return userUsage.value.count >= MAX_DAILY_MESSAGES
+})
+
+const loadUsage = () => {
+  const stored = localStorage.getItem('medaltea_chat_usage')
+  if (stored) {
+    const data = JSON.parse(stored)
+    const today = new Date().toLocaleDateString()
+    if (data.lastReset === today) {
+      userUsage.value = data
+    } else {
+      userUsage.value = { count: 0, lastReset: today }
+    }
+  } else {
+    userUsage.value.lastReset = new Date().toLocaleDateString()
+  }
+}
+
+const saveUsage = () => {
+  localStorage.setItem('medaltea_chat_usage', JSON.stringify(userUsage.value))
+}
+
+const incrementUsage = () => {
+  userUsage.value.count++
+  saveUsage()
+}
 
 const suggestions = [
   { text: 'Soulager mon stress', emoji: '🌿' },
@@ -158,7 +193,7 @@ const scrollToBottom = async () => {
 
 const sendMessage = async () => {
   const text = userInput.value.trim()
-  if (!text || isTyping.value) return
+  if (!text || isTyping.value || isLimitReached.value) return
 
   // Add user message
   messages.value.push({
@@ -182,19 +217,19 @@ const sendMessage = async () => {
       }
     })
     aiResponse = response.text
-  } catch (err) {
-    console.error('Chat Error:', err)
-    aiResponse = "Désolé, j'ai rencontré un problème technique. Peux-tu réessayer ?"
   } finally {
     isTyping.value = false
     
-    // Add AI message back (was missing!)
+    // Add AI message back
     if (aiResponse) {
       messages.value.push({
         role: 'model',
         parts: [{ text: aiResponse }]
       })
     }
+
+    // Increment usage (Client side)
+    incrementUsage()
 
     // No more forced scroll here! The browser will maintain the current position.
     await nextTick()
@@ -207,6 +242,8 @@ const formatMessage = (text) => {
 }
 
 onMounted(() => {
+  loadUsage()
+  
   if (route.query.q) {
     userInput.value = route.query.q
     sendMessage()

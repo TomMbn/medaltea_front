@@ -7,6 +7,35 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
     const apiKey = config.geminiApiKey;
 
+    // --- RATE LIMITING PROTECTION (IP BASED) ---
+    // On Vercel, the IP is in x-forwarded-for. Otherwise, we fallback to event.node.req.socket.remoteAddress
+    const ip = getHeader(event, 'x-forwarded-for')?.split(',')[0] || event.node.req.socket.remoteAddress || 'unknown';
+    const storage = useStorage('cache');
+    const rateLimitKey = `rate-limit:${ip}`;
+    const limit = 10; // Messages per day
+    const timeframe = 24 * 60 * 60 * 1000; // 24h in ms
+
+    // Get current usage from Nitro Storage
+    const usage: any = await storage.getItem(rateLimitKey) || { count: 0, firstRequest: Date.now() };
+    const now = Date.now();
+
+    // Reset if period is over (24h)
+    if (now - (usage.firstRequest || 0) > timeframe) {
+        usage.count = 0;
+        usage.firstRequest = now;
+    }
+
+    if (usage.count >= limit) {
+        throw createError({
+            statusCode: 429,
+            statusMessage: "Limite quotidienne atteinte. Reviens demain pour discuter avec Altea !",
+        });
+    }
+
+    // Increment usage
+    usage.count++;
+    await storage.setItem(rateLimitKey, usage);
+    
     if (!apiKey) {
         throw createError({
             statusCode: 500,

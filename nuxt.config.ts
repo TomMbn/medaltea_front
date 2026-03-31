@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     }
   },
   runtimeConfig: {
-    geminiApiKey: '' // Overridden by NUXT_GEMINI_API_KEY env var
+    geminiApiKey: process.env.GEMINI_API_KEY || ''
   },
   app: {
     head: {

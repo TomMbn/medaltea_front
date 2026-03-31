@@ -12,9 +12,11 @@
 
       <!-- Right Group: Buttons (Desktop) -->
       <div class="hidden lg:flex items-center gap-2">
+<!-- 
         <NuxtLink to="/register" class="btn-dark text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] transition-all hover:scale-105 active:scale-95 text-nowrap">
           M'inscrire
         </NuxtLink>
+-->
         <NuxtLink to="/chatbot" class="btn-chatbot text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] transition-all hover:scale-105 active:scale-95">
           Chatbot
         </NuxtLink>
@@ -40,9 +42,11 @@
     >
       <div v-if="isMenuOpen" class="mx-auto w-11/12 mt-4 bg-white rounded-[20px] shadow-2xl border border-gray-100 overflow-hidden pointer-events-auto">
         <div class="flex flex-col p-6 gap-3">
+<!-- 
           <NuxtLink to="/register" class="w-full btn-dark text-white px-6 py-3 rounded-[10px] font-bold text-center border-2 border-transparent" @click="isMenuOpen = false">
             M'inscrire
           </NuxtLink>
+-->
           <NuxtLink to="/chatbot" class="w-full btn-chatbot text-white px-6 py-3 rounded-[10px] font-bold text-center" @click="isMenuOpen = false">
             Chatbot
           </NuxtLink>

@@ -29,10 +29,9 @@
           </div>
         </div>
 
-        <!-- Bot Response -->
         <div v-else class="w-full max-w-[1078px] mx-auto px-8 overflow-hidden">
           <div class="text-[#012828] text-[16px] font-sans leading-relaxed">
-             <div v-html="formatMessage(msg.parts[0].text)" class="markdown-content"></div>
+             <div class="inline markdown-content" v-html="msg.html || formatMessage(msg.parts?.[0]?.text || '')"></div>
           </div>
         </div>
       </div>
@@ -49,8 +48,8 @@
         </div>
       </div>
       
-      <!-- Mobile Spacer to prevent mascot from covering text -->
-      <div class="h-28 md:hidden flex-none" aria-hidden="true"></div>
+      <!-- Spacer to prevent mascot from covering text -->
+      <div class="h-16 md:h-24 flex-none" aria-hidden="true"></div>
     </div>
 
     <!-- Interface Wrapper (Input Bar) -->
@@ -207,31 +206,91 @@ const sendMessage = async () => {
   
   await scrollToBottom()
   
-  let aiResponse = null
   try {
-    const response = await $fetch('/api/chat', {
+    const response = await fetch('/api/chat', {
       method: 'POST',
-      body: {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
         message: text,
         history: messages.value.slice(0, -1)
-      }
-    })
-    aiResponse = response.text
-  } finally {
-    isTyping.value = false
-    
-    // Add AI message back
-    if (aiResponse) {
-      messages.value.push({
-        role: 'model',
-        parts: [{ text: aiResponse }]
       })
+    })
+
+    if (!response.ok) throw new Error('Network response was not ok')
+    if (!response.body) throw new Error('No response body')
+
+    // Prepare AI message bubble
+    const aiMsgIndex = messages.value.length
+    messages.value.push({
+      role: 'model',
+      parts: [{ text: '' }],
+      isStreaming: true
+    })
+
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder()
+    
+    isTyping.value = false // Stop thinking animation as soon as we start receiving
+    
+    let currentText = ''
+    let displayedLength = 0
+    let typingInterval = null
+
+    // Typing Animation logic
+    const startTyping = () => {
+      if (typingInterval) return
+      typingInterval = setInterval(() => {
+        const diff = currentText.length - displayedLength
+        if (diff > 0) {
+          // Dynamic catch-up: Jump faster if we are lagging far behind
+          const increment = diff > 300 ? 50 : diff > 100 ? 15 : 4
+          displayedLength += increment
+          
+          if (displayedLength >= currentText.length) {
+            displayedLength = currentText.length
+          } else {
+             // Look ahead to find the next "natural" break point (space or marker) 
+             // to avoid cutting in the middle of a markdown tag or word
+             const nextSpace = currentText.indexOf(' ', displayedLength)
+             if (nextSpace !== -1 && nextSpace - displayedLength < 10) {
+               displayedLength = nextSpace + 1
+             }
+          }
+          
+          const textToParse = currentText.substring(0, displayedLength)
+          messages.value[aiMsgIndex].html = formatMessage(textToParse)
+        } else if (!messages.value[aiMsgIndex].isStreaming) {
+          clearInterval(typingInterval)
+          typingInterval = null
+        }
+      }, 15) // Slightly faster pulse
     }
 
+    startTyping()
+
+    while (true) {
+      const { value, done } = await reader.read()
+      if (done) break
+      
+      const chunk = decoder.decode(value, { stream: true })
+      currentText += chunk
+      messages.value[aiMsgIndex].parts[0].text = currentText
+    }
+
+    messages.value[aiMsgIndex].isStreaming = false
+
+  } catch (error) {
+    console.error('Chat Error:', error)
+    isTyping.value = false
+    messages.value.push({
+      role: 'model',
+      parts: [{ text: 'Désolée, une erreur est survenue lors de la communication avec Altea. Veuillez réessayer.' }]
+    })
+  } finally {
     // Increment usage (Client side)
     incrementUsage()
-
-    // No more forced scroll here! The browser will maintain the current position.
     await nextTick()
   }
 }

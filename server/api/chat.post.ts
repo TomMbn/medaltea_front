@@ -46,6 +46,14 @@ export default defineEventHandler(async (event) => {
     try {
         const genAI = new GoogleGenerativeAI(apiKey);
 
+        // --- DISABLE BUFFERING ---
+        setResponseHeaders(event, {
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+            'X-Content-Type-Options': 'nosniff',
+        });
+
         // Configured for alternative medicine expertise
         const model = genAI.getGenerativeModel({
             model: "gemini-2.5-flash",
@@ -65,11 +73,18 @@ export default defineEventHandler(async (event) => {
             history: history || [],
         });
 
-        const result = await chat.sendMessage(message);
-        const response = await result.response;
-        const text = response.text();
+        const result = await chat.sendMessageStream(message);
 
-        return { text };
+        // We use sendIterable to stream the response chunks back to the client
+        return sendIterable(event, (async function* () {
+            for await (const chunk of result.stream) {
+                const chunkText = chunk.text();
+                if (chunkText) {
+                    yield chunkText;
+                }
+            }
+        })());
+
     } catch (error: any) {
         console.error("Gemini API Error:", error);
         throw createError({

@@ -2,7 +2,7 @@
   <div 
     :class="[
       'flex flex-col bg-[#e0ecf2] font-sans antialiased selection:bg-[#EC7F7A]/30 overflow-x-hidden',
-      isChatPage || isAuthPage ? 'h-[100dvh] overflow-hidden' : 'min-h-screen overflow-y-auto'
+      isChatPage ? 'h-[100dvh] overflow-hidden' : 'min-h-screen overflow-y-auto'
     ]"
   >
     <!-- Navbar (Hidden on Auth pages) -->
@@ -23,7 +23,7 @@
     </main>
 
     <!-- MODE: Auth (Clean 50/50 Layout - Slot is full-page) -->
-    <main v-else-if="isAuthPage" class="flex-1 flex flex-col w-full h-screen min-h-0 overflow-hidden">
+    <main v-else-if="isAuthPage" class="flex-1 flex flex-col w-full min-h-0 overflow-y-auto">
       <slot />
     </main>
 

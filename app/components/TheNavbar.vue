@@ -11,13 +11,23 @@
       </div>
 
       <!-- Right Group: Buttons (Desktop) -->
-      <div class="hidden lg:flex items-center gap-2">
-<!-- 
-        <NuxtLink to="/register" class="btn-dark text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] transition-all hover:scale-105 active:scale-95 text-nowrap">
-          M'inscrire
-        </NuxtLink>
--->
-        <NuxtLink v-if="route.path !== '/chatbot'" to="/chatbot" class="btn-chatbot text-white px-7 py-1.5 rounded-[10px] font-bold text-[14px] transition-all hover:scale-105 active:scale-95">
+      <div class="hidden lg:flex items-center gap-4">
+        <!-- Auth Buttons -->
+        <template v-if="!isLoggedIn">
+          <NuxtLink v-if="route.path !== '/login' && route.path !== '/register'" to="/login" class="btn-signup text-white px-7 py-2 rounded-[12px] font-bold text-[14px] transition-all hover:shadow-md active:scale-95 text-nowrap">
+            Connexion
+          </NuxtLink>
+        </template>
+        
+        <!-- User Handlers (when logged in) -->
+        <template v-else>
+          <button @click="handleLogout" class="btn-signup text-white px-7 py-2 rounded-[12px] font-bold text-[14px] transition-all hover:shadow-md active:scale-95 text-nowrap">
+            Déconnexion
+          </button>
+        </template>
+
+        <!-- Chatbot Button -->
+        <NuxtLink v-if="route.path !== '/chatbot'" to="/chatbot" class="btn-chatbot text-white px-7 py-2 rounded-[12px] font-bold text-[14px] transition-all hover:scale-110 active:scale-95">
           Chatbot
         </NuxtLink>
       </div>
@@ -41,13 +51,19 @@
       leave-to-class="transform scale-95 opacity-0"
     >
       <div v-if="isMenuOpen" class="mx-auto w-11/12 mt-4 bg-white rounded-[20px] shadow-2xl border border-gray-100 overflow-hidden pointer-events-auto">
-        <div class="flex flex-col p-6 gap-3">
-<!-- 
-          <NuxtLink to="/register" class="w-full btn-dark text-white px-6 py-3 rounded-[10px] font-bold text-center border-2 border-transparent" @click="isMenuOpen = false">
-            M'inscrire
-          </NuxtLink>
--->
-          <NuxtLink v-if="route.path !== '/chatbot'" to="/chatbot" class="w-full btn-chatbot text-white px-6 py-3 rounded-[10px] font-bold text-center" @click="isMenuOpen = false">
+        <div class="flex flex-col p-6 gap-4">
+          <template v-if="!isLoggedIn">
+            <NuxtLink to="/login" class="w-full btn-signup text-white py-3 rounded-[12px] font-bold text-center" @click="isMenuOpen = false">
+              Connexion
+            </NuxtLink>
+          </template>
+          <template v-else>
+            <button @click="handleLogout" class="w-full btn-signup text-white py-3 rounded-[12px] font-bold text-center">
+              Déconnexion
+            </button>
+          </template>
+
+          <NuxtLink v-if="route.path !== '/chatbot'" to="/chatbot" class="w-full btn-chatbot text-white py-3 rounded-[12px] font-bold text-center" @click="isMenuOpen = false">
             Chatbot
           </NuxtLink>
         </div>
@@ -57,16 +73,31 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Menu, X } from 'lucide-vue-next'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useCookie } from '#app'
 
 const route = useRoute()
+const router = useRouter()
 const isMenuOpen = ref(false)
+
+const token = useCookie('token')
+const accessToken = useCookie('accessToken')
+const sbAccessToken = useCookie('sb-access-token')
+const isLoggedIn = computed(() => !!token.value || !!accessToken.value || !!sbAccessToken.value)
+
+function handleLogout() {
+  token.value = null
+  accessToken.value = null
+  sbAccessToken.value = null
+  isMenuOpen.value = false
+  router.push('/')
+}
 </script>
 
 <style scoped>
-.btn-dark {
+.btn-signup {
   background-color: #012828;
   border: 2px solid transparent;
 }

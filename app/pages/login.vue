@@ -1,5 +1,5 @@
 <template>
-  <div class="registration-page-v2">
+  <div class="auth-page-v2">
     <!-- Left Pane: Illustration -->
     <div class="pane-left">
       <AuthIllustration />
@@ -18,15 +18,15 @@
             />
           </NuxtLink>
           <h1 class="auth-title mb-4">
-            Créer un compte
+            Bon retour !
           </h1>
           <p class="auth-subtitle">
-            Rejoignez Medaltea pour un accompagnement personnalisé.
+            Ravi de vous revoir. Connectez-vous pour continuer.
           </p>
         </div>
 
-        <!-- Registration Form -->
-        <form @submit.prevent="handleRegister" class="auth-form">
+        <!-- Login Form -->
+        <form @submit.prevent="handleLogin" class="auth-form">
           <div class="field-group">
             <label class="input-label">Adresse mail</label>
             <input 
@@ -40,7 +40,12 @@
           </div>
 
           <div class="field-group">
-            <label class="input-label">Mot de passe</label>
+            <div class="flex justify-between items-center mb-1">
+              <label class="input-label mb-0">Mot de passe</label>
+              <NuxtLink to="/forgot-password" class="text-sm font-semibold text-[#012828] hover:underline opacity-60">
+                Oublié ?
+              </NuxtLink>
+            </div>
             <input 
               v-model="password"
               type="password" 
@@ -56,11 +61,6 @@
             {{ errorMsg }}
           </div>
 
-          <!-- Success Message -->
-          <div v-if="successMsg" class="success-box">
-            {{ successMsg }}
-          </div>
-
           <!-- Submit Button -->
           <div class="submit-wrapper">
             <button 
@@ -68,10 +68,10 @@
               class="btn-submit"
               :disabled="isLoading"
             >
-              <span v-if="!isLoading">Créer un compte</span>
+              <span v-if="!isLoading">Se connecter</span>
               <span v-else class="loading-state">
                 <Loader2 class="spinner" :size="20" />
-                Création...
+                Connexion...
               </span>
             </button>
           </div>
@@ -83,6 +83,7 @@
           <div class="label-or">ou</div>
         </div>
 
+        <!-- Social Login -->
         <div class="social-row mb-8">
           <button class="social-btn" :disabled="isLoading">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="logo-icon">
@@ -100,8 +101,8 @@
         </div>
 
         <p class="text-center font-semibold mb-0 font-futura text-[#012828]">
-          Déjà un compte ? 
-          <NuxtLink to="/login" class="text-rose-500 hover:underline">Se connecter</NuxtLink>
+          Pas encore de compte ? 
+          <NuxtLink to="/register" class="text-rose-500 hover:underline">S'inscrire</NuxtLink>
         </p>
       </div>
     </div>
@@ -110,7 +111,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Apple, Loader2 } from 'lucide-vue-next'
+import { Loader2 } from 'lucide-vue-next'
 import { useRouter } from '#app'
 
 const router = useRouter()
@@ -118,17 +119,17 @@ const mail = ref('')
 const password = ref('')
 const isLoading = ref(false)
 const errorMsg = ref('')
-const successMsg = ref('')
 
-async function handleRegister() {
+async function handleLogin() {
   if (isLoading.value) return
   
   isLoading.value = true
   errorMsg.value = ''
-  successMsg.value = ''
 
   try {
-    const response = await $fetch('/api/register', {
+    // Note: Assuming /api/login endpoint exists or will be implemented
+    // In a real scenario, this would authenticate with Supabase or another provider
+    const response = await $fetch('/api/login', {
       method: 'POST',
       body: {
         mail: mail.value,
@@ -137,27 +138,26 @@ async function handleRegister() {
     })
 
     // On success
+    console.log('Login successful, response:', response)
     const tokenValue = response?.token || response?.accessToken || response?.access_token || response?.data?.token
+    
     if (tokenValue) {
       const tokenCookie = useCookie('token', { maxAge: 60 * 60 * 24 * 7, path: '/' })
       const accessTokenCookie = useCookie('accessToken', { maxAge: 60 * 60 * 24 * 7, path: '/' })
       tokenCookie.value = tokenValue
       accessTokenCookie.value = tokenValue
+      console.log('Token stored in cookies')
     }
-    successMsg.value = 'Compte créé avec succès !'
     
-    // Smooth redirect after a delay
-    setTimeout(() => {
-      router.push('/')
-    }, 1500)
+    router.push('/chatbot')
 
   } catch (error) {
-    if (error.status === 400) {
-      errorMsg.value = 'Données invalides. Veuillez vérifier vos informations.'
+    if (error.status === 401) {
+      errorMsg.value = 'Identifiants incorrects.'
     } else {
-      errorMsg.value = 'Une erreur est survenue lors de la connexion au serveur.'
+      errorMsg.value = 'Une erreur est survenue lors de la connexion.'
     }
-    console.error('Registration Error:', error)
+    console.error('Login Error:', error)
   } finally {
     isLoading.value = false
   }
@@ -165,7 +165,7 @@ async function handleRegister() {
 </script>
 
 <style scoped>
-.registration-page-v2 {
+.auth-page-v2 {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -193,7 +193,7 @@ async function handleRegister() {
 
 /* Desktop styles */
 @media (min-width: 1024px) {
-  .registration-page-v2 {
+  .auth-page-v2 {
     flex-direction: row;
   }
   
@@ -215,12 +215,13 @@ async function handleRegister() {
 }
 
 .header-section {
-  margin-bottom: 24px;
+  margin-bottom: 30px;
 }
 
 .logo-img {
   width: 120px;
   height: auto;
+  margin-bottom: 20px;
 }
 
 .auth-title {
@@ -228,7 +229,6 @@ async function handleRegister() {
   font-size: 36px;
   font-weight: 700;
   line-height: 1.05;
-  margin-top: 24px;
 }
 
 .auth-subtitle {
@@ -269,6 +269,7 @@ async function handleRegister() {
 
 .form-input:focus {
   border-color: #012828;
+  box-shadow: 0 0 0 4px rgba(1, 40, 40, 0.05);
 }
 
 .btn-submit {
@@ -292,6 +293,10 @@ async function handleRegister() {
 .btn-submit:hover:not(:disabled) {
   background-color: #023a3a;
   transform: translateY(-1px);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
 }
 
 .btn-submit:disabled {
@@ -322,16 +327,6 @@ async function handleRegister() {
   font-size: 14px;
   font-weight: 600;
   border: 1px solid #fed7d7;
-}
-
-.success-box {
-  background-color: #f0fff4;
-  color: #2f855a;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  border: 1px solid #c6f6d5;
 }
 
 .separator-group {

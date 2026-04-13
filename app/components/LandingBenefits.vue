@@ -12,9 +12,9 @@
         </div>
         
         <div class="benefit-card text-card bg-[#90BAD1] p-8 rounded-[30px] shadow-lg flex flex-col justify-center h-[280px]">
-          <h4 class="font-unbounded font-bold text-[18px] mb-4">Sélection Rigoureuse</h4>
+          <h4 class="font-unbounded font-bold text-[18px] mb-4">Transparence Totale</h4>
           <p class="text-[14px] leading-relaxed opacity-80 font-sans">
-            Nous vérifions les diplômes et l'expérience de chaque praticien pour vous garantir des soins de qualité et une éthique irréprochable.
+            Explorez les profils détaillés et les retours d'expérience de la communauté pour choisir le praticien qui vous correspond en toute confiance.
           </p>
         </div>
 

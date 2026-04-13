@@ -1,36 +1,37 @@
 <template>
-  <div class="min-h-screen bg-[#e0ecf2] flex flex-col items-center px-4 relative overflow-hidden pt-20 lg:pt-0 lg:justify-center">
-    <!-- Animated Background Orbs -->
-    <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#90BAD1] blur-[120px] opacity-30 rounded-full animate-pulse"></div>
-    <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#EC7F7A] blur-[120px] opacity-20 rounded-full animate-pulse [animation-delay:2s]"></div>
+  <div class="min-h-screen bg-[#e0ecf2] relative overflow-hidden flex flex-col">
+    <!-- Background Elements -->
+    <div class="absolute top-[-5%] left-[-5%] w-[30%] h-[30%] bg-[#90BAD1] blur-[100px] opacity-25 rounded-full"></div>
+    <div class="absolute bottom-[-5%] right-[-5%] w-[30%] h-[30%] bg-[#EC7F7A] blur-[100px] opacity-15 rounded-full"></div>
 
-    <div class="max-w-[1200px] w-full flex flex-col items-center text-center relative z-10">
-      <!-- Panda Mascot -->
-      <div class="mb-8 lg:mb-12 animate-float">
-        <NuxtImg 
-          src="/images/panda-standing.png" 
-          alt="Medaltea Panda" 
-          class="w-40 lg:w-64 h-auto drop-shadow-2xl"
-          width="256"
-          height="256"
-        />
-      </div>
+    <div class="flex-1 flex flex-col items-center justify-center px-6 py-12 relative z-10">
+      <div class="max-w-[800px] w-full flex flex-col items-center text-center">
+        <!-- Mascot -->
+        <div class="mb-10 lg:mb-16 animate-float">
+          <NuxtImg 
+            src="/images/panda-standing.png" 
+            alt="Medaltea Panda" 
+            class="w-36 lg:w-56 h-auto drop-shadow-xl"
+            width="256"
+            height="256"
+          />
+        </div>
 
-      <!-- Content -->
-      <div class="flex flex-col items-center">
-        <h1 class="text-4xl lg:text-7xl font-normal font-unbounded text-[#012828] mb-6 lg:mb-8 leading-tight">
-          Cette fonctionnalité <br />
-          <span class="text-[#EC7F7A]">arrive bientôt</span>
+        <!-- Heading -->
+        <h1 class="text-3xl lg:text-6xl font-normal font-unbounded text-[#012828] mb-6 leading-tight">
+          Un peu de patience... <br />
+          <span class="text-[#EC7F7A]">C'est pour bientôt !</span>
         </h1>
         
-        <p class="text-lg lg:text-xl text-[#012828]/70 font-sans max-w-[600px] mb-10 lg:mb-12">
-          Nos équipes travaillent d'arrache-pied pour vous proposer les meilleurs praticiens certifiés et une expérience de consultation simplifiée.
+        <!-- Description -->
+        <p class="text-base lg:text-xl text-[#012828]/70 font-sans max-w-[540px] mb-12">
+          Nous préparons une sélection de praticiens passionnés pour vous accompagner. Cette fonctionnalité sera disponible très prochainement.
         </p>
 
-        <!-- CTA (Below the text as requested) -->
+        <!-- Button (Positioned clearly at the bottom of the stack) -->
         <NuxtLink 
           to="/"
-          class="group flex items-center gap-3 bg-[#012828] text-white px-8 py-4 rounded-[20px] font-bold text-lg hover:bg-[#012828]/90 transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95"
+          class="group inline-flex items-center gap-3 bg-[#012828] text-white px-8 py-4 rounded-[20px] font-bold text-lg hover:bg-[#012828]/90 transition-all shadow-xl hover:scale-[1.05] active:scale-95"
         >
           <span class="font-sans">Retour à l'accueil</span>
           <ArrowLeft :size="20" stroke-width="3" class="transition-transform group-hover:-translate-x-1" />
@@ -38,9 +39,9 @@
       </div>
     </div>
 
-    <!-- Footer Status -->
-    <div class="absolute bottom-8 text-[#012828]/40 font-medium text-sm lg:text-base">
-      © 2026 Medaltea — L'expertise santé au naturel
+    <!-- Footer -->
+    <div class="p-8 text-center text-[#012828]/30 font-medium text-xs lg:text-sm">
+      © 2026 Medaltea — L’expertise des médecines douces
     </div>
   </div>
 </template>

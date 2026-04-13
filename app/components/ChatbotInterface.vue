@@ -214,11 +214,18 @@ const sendMessage = async () => {
       },
       body: JSON.stringify({
         message: text,
-        history: messages.value.slice(0, -1)
+        history: messages.value.slice(0, -1).map(m => ({
+          role: m.role,
+          parts: m.parts
+        }))
       })
     })
 
-    if (!response.ok) throw new Error('Network response was not ok')
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.statusMessage || 'Network response was not ok');
+    }
+
     if (!response.body) throw new Error('No response body')
 
     // Prepare AI message bubble
@@ -226,7 +233,8 @@ const sendMessage = async () => {
     messages.value.push({
       role: 'model',
       parts: [{ text: '' }],
-      isStreaming: true
+      isStreaming: true,
+      html: ''
     })
 
     const reader = response.body.getReader()
@@ -244,15 +252,12 @@ const sendMessage = async () => {
       typingInterval = setInterval(() => {
         const diff = currentText.length - displayedLength
         if (diff > 0) {
-          // Dynamic catch-up: Jump faster if we are lagging far behind
           const increment = diff > 300 ? 50 : diff > 100 ? 15 : 4
           displayedLength += increment
           
           if (displayedLength >= currentText.length) {
             displayedLength = currentText.length
           } else {
-             // Look ahead to find the next "natural" break point (space or marker) 
-             // to avoid cutting in the middle of a markdown tag or word
              const nextSpace = currentText.indexOf(' ', displayedLength)
              if (nextSpace !== -1 && nextSpace - displayedLength < 10) {
                displayedLength = nextSpace + 1
@@ -265,7 +270,7 @@ const sendMessage = async () => {
           clearInterval(typingInterval)
           typingInterval = null
         }
-      }, 15) // Slightly faster pulse
+      }, 15)
     }
 
     startTyping()
@@ -284,14 +289,20 @@ const sendMessage = async () => {
   } catch (error) {
     console.error('Chat Error:', error)
     isTyping.value = false
+    
+    let errorText = 'Désolée, une erreur est survenue lors de la communication avec Altea. Veuillez réessayer.'
+    if (error.message && (error.message.includes('journalière') || error.message.includes('limite'))) {
+      errorText = error.message
+    }
+    
     messages.value.push({
       role: 'model',
-      parts: [{ text: 'Désolée, une erreur est survenue lors de la communication avec Altea. Veuillez réessayer.' }]
+      parts: [{ text: errorText }]
     })
   } finally {
-    // Increment usage (Client side)
     incrementUsage()
     await nextTick()
+    await scrollToBottom()
   }
 }
 

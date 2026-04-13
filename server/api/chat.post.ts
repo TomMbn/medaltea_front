@@ -12,41 +12,48 @@ export default defineEventHandler(async (event) => {
     const accessToken = getCookie(event, 'accessToken');
     const sbAccessToken = getCookie(event, 'sb-access-token');
 
-    if (!token && !accessToken && !sbAccessToken) {
+    const tokenValue = token || accessToken || sbAccessToken;
+    if (!tokenValue) {
         throw createError({
             statusCode: 401,
             statusMessage: "Désolé, vous devez être connecté pour discuter avec Altea.",
         });
     }
 
-    // --- RATE LIMITING PROTECTION (IP BASED) ---
-    // On Vercel, the IP is in x-forwarded-for. Otherwise, we fallback to event.node.req.socket.remoteAddress
-    const ip = getHeader(event, 'x-forwarded-for')?.split(',')[0] || event.node.req.socket.remoteAddress || 'unknown';
-    const storage = useStorage('cache');
-    const rateLimitKey = `rate-limit:${ip}`;
-    const limit = 10; // Messages per day
-    const timeframe = 24 * 60 * 60 * 1000; // 24h in ms
+    // --- DAILY USAGE LIMIT (SERVER SIDE) ---
+    const MAX_DAILY = 10;
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    // Use a simplified hash or slice of the token as a unique identifier for the user
+    // We use common session identifiers from Supabase or custom auth
+    const userId = tokenValue.substring(tokenValue.length - 12); 
+    const storageKey = `usage:${today}:${userId}`;
+    
+    const storage = useStorage('cache'); // Using memory/cache storage context
+    const currentUsage: any = (await storage.getItem(storageKey)) || 0;
 
-    // Get current usage from Nitro Storage
-    const usage: any = await storage.getItem(rateLimitKey) || { count: 0, firstRequest: Date.now() };
-    const now = Date.now();
-
-    // Reset if period is over (24h)
-    if (now - (usage.firstRequest || 0) > timeframe) {
-        usage.count = 0;
-        usage.firstRequest = now;
-    }
-
-    if (usage.count >= limit) {
+    if (currentUsage >= MAX_DAILY) {
         throw createError({
             statusCode: 429,
-            statusMessage: "Limite quotidienne atteinte. Reviens demain pour discuter avec Altea !",
+            statusMessage: `Limite journalière atteinte (${MAX_DAILY}/${MAX_DAILY}). Revenez demain pour discuter avec Altea !`,
         });
     }
 
-    // Increment usage
-    usage.count++;
-    await storage.setItem(rateLimitKey, usage);
+    // Increment usage immediately or later? 
+    // Usually better to increment before calling the AI to prevent race conditions or abuse during long streams
+    await storage.setItem(storageKey, currentUsage + 1);
+
+    // --- IP BASED RATE LIMIT (ADDITIONAL PROTECTION) ---
+    const ip = getHeader(event, 'x-forwarded-for')?.split(',')[0] || event.node.req.socket.remoteAddress || 'unknown';
+    const rateLimitKey = `rate-limit:ip:${today}:${ip}`;
+    const ipUsage : any = await storage.getItem(rateLimitKey) || 0;
+    
+    if (ipUsage >= 30) { // Safety limit for IPs to prevent bot storms even if authenticated
+        throw createError({
+            statusCode: 429,
+            statusMessage: "Trop de requêtes depuis votre adresse IP. Reviens demain !",
+        });
+    }
+    await storage.setItem(rateLimitKey, ipUsage + 1);
     
     if (!apiKey) {
         throw createError({
@@ -82,7 +89,10 @@ export default defineEventHandler(async (event) => {
         });
 
         const chat = model.startChat({
-            history: history || [],
+            history: (history || []).map((m: any) => ({
+                role: m.role,
+                parts: m.parts
+            })),
         });
 
         const result = await chat.sendMessageStream(message);

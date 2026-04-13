@@ -24,7 +24,7 @@
         </h1>
         
         <p class="text-base lg:text-lg text-[#012828]/70 font-sans max-w-[480px] mx-auto">
-          Nous préparons une sélection de praticiens passionnés pour vous accompagner. Cette fonctionnalité arrive bientôt.
+          Notre équipe travaille d'arrache-pied pour vous proposer une expérience unique et complète. Cette fonctionnalité arrive bientôt.
         </p>
       </div>
 

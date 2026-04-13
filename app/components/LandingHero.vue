@@ -1,9 +1,6 @@
 <template>
-  <section class="hero-section relative overflow-hidden" :class="{ 'opacity-0 scale-95 pointer-events-none transition-all duration-500': isSubmitting }">
-    <!-- Full-width Left side glow effect -->
-    <div class="absolute top-0 left-[-15%] w-[40%] h-full bg-gradient-to-r from-[#EC7F7A]/25 to-transparent blur-[140px] pointer-events-none z-0"></div>
-    
-    <div class="hero-container relative z-10">
+  <section class="hero-section" :class="{ 'opacity-0 scale-95 pointer-events-none transition-all duration-500': isSubmitting }">
+    <div class="hero-container">
       
       <!-- Left Content -->
       <div class="hero-content">

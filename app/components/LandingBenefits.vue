@@ -12,35 +12,35 @@
         </div>
         
         <div class="benefit-card text-card bg-[#90BAD1] p-8 rounded-[30px] shadow-lg flex flex-col justify-center h-[280px]">
-          <h4 class="font-unbounded font-bold text-[18px] mb-4">Lorem ipsum</h4>
+          <h4 class="font-unbounded font-bold text-[18px] mb-4">Sélection Rigoureuse</h4>
           <p class="text-[14px] leading-relaxed opacity-80 font-sans">
-            Sed aliquam, metus nec finibus consectetur, nisi quam sollicitudin elit, ac aliquam massa metus id ex.
+            Nous vérifions les diplômes et l'expérience de chaque praticien pour vous garantir des soins de qualité et une éthique irréprochable.
           </p>
         </div>
 
         <div class="benefit-card bg-[#D9D9D9] rounded-[30px] h-[280px]"></div>
 
         <div class="benefit-card text-card bg-[#156F71] p-8 rounded-[30px] shadow-lg flex flex-col justify-center text-white h-[280px]">
-          <h4 class="font-unbounded font-bold text-[18px] mb-4">Lorem ipsum</h4>
+          <h4 class="font-unbounded font-bold text-[18px] mb-4">Orientation Altea</h4>
           <p class="text-[14px] leading-relaxed opacity-80 font-sans">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque.
+            Profitez de notre IA spécialisée pour identifier la discipline naturelle (naturopathie, sophrologie, etc.) la plus adaptée à vos besoins.
           </p>
         </div>
 
         <!-- Row 2 -->
         <div class="benefit-card text-card bg-[#156F71] p-8 rounded-[30px] shadow-lg flex flex-col justify-center text-white h-[280px]">
-          <h4 class="font-unbounded font-bold text-[18px] mb-4">Lorem ipsum</h4>
+          <h4 class="font-unbounded font-bold text-[18px] mb-4">Accès Instantané</h4>
           <p class="text-[14px] leading-relaxed opacity-80 font-sans">
-            Sed aliquam, metus nec finibus consectetur, nisi quam sollicitudin elit, ac aliquam massa.
+            Trouvez une solution ou un praticien en quelques secondes. Plus besoin de chercher pendant des heures, Medaltea centralise le meilleur du bien-être.
           </p>
         </div>
 
         <div class="benefit-card bg-[#D9D9D9] rounded-[30px] h-[280px]"></div>
 
         <div class="benefit-card text-card bg-[#90BAD1] p-8 rounded-[30px] shadow-lg flex flex-col justify-center h-[280px]">
-          <h4 class="font-unbounded font-bold text-[18px] mb-4">Lorem ipsum</h4>
+          <h4 class="font-unbounded font-bold text-[18px] mb-4">Confidentialité</h4>
           <p class="text-[14px] leading-relaxed opacity-80 font-sans">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+            Vos échanges et données de santé sont protégés. Nous utilisons des protocoles de sécurité avancés pour garantir votre vie privée.
           </p>
         </div>
 

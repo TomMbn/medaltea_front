@@ -10,10 +10,10 @@
         <p class="text-white/90 text-[16px] lg:text-[18px] mb-8 lg:mb-12 font-sans max-w-[480px]">
           Consultez des professionnels certifiés, triés par spécialité et localisation.
         </p>
-        <button class="px-8 py-3.5 rounded-[30px] border-2 border-white text-white font-bold text-[16px] lg:text-[17px] transition-all hover:bg-white/10 flex items-center gap-3 self-start group">
+        <NuxtLink to="/coming-soon" class="px-8 py-3.5 rounded-[30px] border-2 border-white text-white font-bold text-[16px] lg:text-[17px] transition-all hover:bg-white/10 flex items-center gap-3 self-start group">
           <span class="font-sans">Voir tous les praticiens</span>
           <ArrowUpRight :size="20" stroke-width="3" class="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-        </button>
+        </NuxtLink>
       </div>
 
       <!-- Right: Main Image Area -->

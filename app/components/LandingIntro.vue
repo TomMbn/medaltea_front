@@ -56,7 +56,7 @@
           </div>
 
           <button 
-            @click="navigateTo('/chatbot')"
+            @click="navigateTo('/coming-soon')"
             class="group inline-flex items-center justify-center gap-3 bg-white text-[#012828] font-bold px-8 py-4 rounded-[20px] transition-all hover:bg-gray-100 self-start text-[17px]"
           >
             <span class="font-sans">Je consulte</span>

@@ -1,7 +1,7 @@
 <template>
   <section class="hero-section relative overflow-hidden" :class="{ 'opacity-0 scale-95 pointer-events-none transition-all duration-500': isSubmitting }">
-    <!-- Left decorative glow -->
-    <div class="absolute top-[20%] -left-[10%] w-[30%] h-[40%] bg-[#EC7F7A] blur-[120px] opacity-15 rounded-full pointer-events-none z-0"></div>
+    <!-- Full-width Left side glow effect -->
+    <div class="absolute top-0 left-[-15%] w-[40%] h-full bg-gradient-to-r from-[#EC7F7A]/25 to-transparent blur-[140px] pointer-events-none z-0"></div>
     
     <div class="hero-container relative z-10">
       

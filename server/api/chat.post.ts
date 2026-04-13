@@ -7,6 +7,18 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
     const apiKey = config.geminiApiKey;
 
+    // --- AUTHENTICATION CHECK ---
+    const token = getCookie(event, 'token');
+    const accessToken = getCookie(event, 'accessToken');
+    const sbAccessToken = getCookie(event, 'sb-access-token');
+
+    if (!token && !accessToken && !sbAccessToken) {
+        throw createError({
+            statusCode: 401,
+            statusMessage: "Désolé, vous devez être connecté pour discuter avec Altea.",
+        });
+    }
+
     // --- RATE LIMITING PROTECTION (IP BASED) ---
     // On Vercel, the IP is in x-forwarded-for. Otherwise, we fallback to event.node.req.socket.remoteAddress
     const ip = getHeader(event, 'x-forwarded-for')?.split(',')[0] || event.node.req.socket.remoteAddress || 'unknown';

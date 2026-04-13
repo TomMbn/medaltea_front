@@ -42,9 +42,11 @@
           <div class="field-group">
             <div class="flex justify-between items-center mb-1">
               <label class="input-label mb-0">Mot de passe</label>
+<!--
               <NuxtLink to="/forgot-password" class="text-sm font-semibold text-[#012828] hover:underline opacity-60">
                 Oublié ?
               </NuxtLink>
+-->
             </div>
             <input 
               v-model="password"
@@ -77,13 +79,12 @@
           </div>
         </form>
 
-        <!-- Separator -->
+<!--
         <div class="separator-group">
           <div class="line"></div>
           <div class="label-or">ou</div>
         </div>
 
-        <!-- Social Login -->
         <div class="social-row mb-8">
           <button class="social-btn" :disabled="isLoading">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="logo-icon">
@@ -99,6 +100,7 @@
             </svg>
           </button>
         </div>
+-->
 
         <p class="text-center font-semibold mb-0 font-futura text-[#012828]">
           Pas encore de compte ? 

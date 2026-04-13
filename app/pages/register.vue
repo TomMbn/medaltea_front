@@ -77,7 +77,7 @@
           </div>
         </form>
 
-        <!-- Separator -->
+<!--
         <div class="separator-group">
           <div class="line"></div>
           <div class="label-or">ou</div>
@@ -98,6 +98,7 @@
             </svg>
           </button>
         </div>
+-->
 
         <p class="text-center font-semibold mb-0 font-futura text-[#012828]">
           Déjà un compte ? 

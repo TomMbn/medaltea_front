@@ -32,7 +32,7 @@
         <!-- Footer -->
         <footer class="py-12 border-t border-gray-200">
           <div class="flex flex-col items-center gap-6">
-            <div class="flex items-center gap-6">
+            <div class="flex items-center gap-8">
               <a href="https://www.facebook.com/people/Medaltea-Medaltea/61584876630055/" target="_blank" rel="noopener noreferrer" class="text-[#012828] opacity-60 hover:opacity-100 transition-opacity">
                 <Facebook :size="24" />
               </a>
@@ -41,6 +41,9 @@
               </a>
               <a href="https://www.linkedin.com/company/medaltea" target="_blank" rel="noopener noreferrer" class="text-[#012828] opacity-60 hover:opacity-100 transition-opacity">
                 <Linkedin :size="24" />
+              </a>
+              <a href="mailto:contact.medaltea@gmail.com" class="text-[#012828] opacity-60 hover:opacity-100 transition-opacity flex items-center gap-2">
+                <Mail :size="24" />
               </a>
             </div>
             <div class="text-center opacity-40 text-sm font-sans">
@@ -54,6 +57,6 @@
 </template>
 
 <script setup>
-import { Facebook, Instagram, Linkedin } from 'lucide-vue-next'
+import { Facebook, Instagram, Linkedin, Mail } from 'lucide-vue-next'
 // Full Landing Page Composition
 </script>

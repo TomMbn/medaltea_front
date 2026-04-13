@@ -48,7 +48,7 @@
                 
                 <button 
                   @click="handleSubmit"
-                  class="w-10 h-10 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0"
+                  class="w-10 h-10 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 cursor-pointer"
                 >
                   <ArrowUp :size="20" stroke-width="3" />
                 </button>
@@ -60,7 +60,7 @@
                   v-for="chip in suggestions" 
                   :key="chip.text"
                   @click="handleSuggestion(chip.text)"
-                  class="h-[42px] px-4 bg-white shadow-sm border border-[#D9D9D9] hover:bg-gray-50 rounded-[14px] text-[14px] font-medium text-black transition-all flex items-center gap-2"
+                  class="h-[42px] px-4 bg-white shadow-sm border border-[#D9D9D9] hover:bg-gray-50 rounded-[14px] text-[14px] font-medium text-black transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <span class="text-lg">{{ chip.emoji }}</span>
                   <span class="font-sans">{{ chip.text }}</span>
@@ -194,7 +194,7 @@ const handleSuggestion = (text) => {
   width: 100%;
   position: relative;
   margin-top: 64px;
-  z-index: 10;
+  z-index: 30;
 }
 
 /* CSS below is mostly for the hero layout, specific search styling is now handled by Tailwind classes in the template */

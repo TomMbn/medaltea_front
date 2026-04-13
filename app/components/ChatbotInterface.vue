@@ -104,7 +104,7 @@
             <button 
               @click="sendMessage"
               :disabled="isTyping || !userInput.trim() || isLimitReached"
-              class="w-10 h-10 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 disabled:grayscale disabled:opacity-50"
+              class="w-10 h-10 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 disabled:grayscale disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
             >
               <ArrowUp v-if="!isLimitReached" :size="20" stroke-width="3" />
               <Ban v-else :size="20" stroke-width="3" />
@@ -117,7 +117,7 @@
               v-for="chip in suggestions" 
               :key="chip.text"
               @click="userInput = chip.text; sendMessage()"
-              class="h-[42px] px-4 bg-white/70 backdrop-blur-sm hover:bg-white rounded-[14px] text-[14px] font-medium text-black transition-all flex items-center gap-2 border border-[#D9D9D9] shadow-sm"
+              class="h-[42px] px-4 bg-white/70 backdrop-blur-sm hover:bg-white rounded-[14px] text-[14px] font-medium text-black transition-all flex items-center gap-2 border border-[#D9D9D9] shadow-sm cursor-pointer"
             >
               <span class="text-lg">{{ chip.emoji }}</span>
               <span class="font-sans">{{ chip.text }}</span>

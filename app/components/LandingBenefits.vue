@@ -18,7 +18,9 @@
           </p>
         </div>
 
-        <div class="benefit-card bg-[#D9D9D9] rounded-[30px] h-[280px]"></div>
+        <div class="benefit-card image-card rounded-[30px] overflow-hidden shadow-lg h-[280px]">
+          <img src="/images/Rectangle 200.jpg" alt="Transparence" class="w-full h-full object-cover" />
+        </div>
 
         <div class="benefit-card text-card bg-[#156F71] p-8 rounded-[30px] shadow-lg flex flex-col justify-center text-white h-[280px]">
           <h4 class="font-unbounded font-bold text-[18px] mb-4">Orientation Altea</h4>
@@ -35,7 +37,9 @@
           </p>
         </div>
 
-        <div class="benefit-card bg-[#D9D9D9] rounded-[30px] h-[280px]"></div>
+        <div class="benefit-card image-card rounded-[30px] overflow-hidden shadow-lg h-[280px]">
+          <img src="/images/Rectangle 203.jpg" alt="Accès instantané" class="w-full h-full object-cover" />
+        </div>
 
         <div class="benefit-card text-card bg-[#90BAD1] p-8 rounded-[30px] shadow-lg flex flex-col justify-center h-[280px]">
           <h4 class="font-unbounded font-bold text-[18px] mb-4">Confidentialité</h4>
@@ -44,7 +48,9 @@
           </p>
         </div>
 
-        <div class="benefit-card bg-[#D9D9D9] rounded-[30px] h-[280px]"></div>
+        <div class="benefit-card image-card rounded-[30px] overflow-hidden shadow-lg h-[280px]">
+          <img src="/images/Rectangle 205.jpg" alt="Confidentialité" class="w-full h-full object-cover" />
+        </div>
       </div>
     </div>
   </section>

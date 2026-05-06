@@ -13,7 +13,7 @@
           <NuxtLink to="/">
             <img 
               src="/images/logo.svg" 
-              alt="Medaltea" 
+              alt="Léya"
               class="logo-img"
             />
           </NuxtLink>
@@ -114,6 +114,8 @@
 <script setup>
 import { ref } from 'vue'
 import { Loader2 } from 'lucide-vue-next'
+
+useSeoMeta({ title: 'Connexion — Léya', robots: 'noindex, nofollow' })
 import { useRouter } from '#app'
 
 const router = useRouter()

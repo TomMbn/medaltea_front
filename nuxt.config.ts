@@ -35,11 +35,21 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'Medaltea - Votre expert en santé naturelle',
+      title: 'Léya — La médecine alternative, intelligente et accessible',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Medaltea vous accompagne dans votre parcours de santé naturelle avec des conseils d\'experts et un chatbot intelligent.' }
+        { name: 'description', content: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:site_name', content: 'Léya' },
+        { property: 'og:title', content: 'Léya — La médecine alternative, intelligente et accessible' },
+        { property: 'og:description', content: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.' },
+        { property: 'og:url', content: 'https://leya-sante.fr' },
+        { property: 'og:image', content: 'https://leya-sante.fr/og-image.png' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: 'Léya — La médecine alternative, intelligente et accessible' },
+        { name: 'twitter:description', content: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.' },
+        { name: 'twitter:image', content: 'https://leya-sante.fr/og-image.png' },
       ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/Favicon.svg' },

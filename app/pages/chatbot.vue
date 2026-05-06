@@ -5,8 +5,6 @@
 </template>
 
 <script setup>
-definePageMeta({
-  middleware: 'auth'
-})
-// Dedicated Chatbot Page (Moved from index.vue)
+definePageMeta({ middleware: 'auth' })
+useSeoMeta({ robots: 'noindex, nofollow' })
 </script>

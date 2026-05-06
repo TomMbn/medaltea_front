@@ -9,7 +9,7 @@
       <div class="mb-6 lg:mb-10 animate-float translate-y-0">
         <NuxtImg 
           src="/images/panda-standing.png" 
-          alt="Medaltea Panda" 
+          alt="Léya Panda"
           class="w-32 lg:w-48 h-auto drop-shadow-xl"
           width="256"
           height="256"
@@ -42,7 +42,7 @@
 
     <!-- Footer - Absolute to not take space in layout flow -->
     <div class="absolute bottom-6 w-full text-center text-[#012828]/30 font-medium text-[10px] lg:text-xs">
-      © 2026 Medaltea — L’expertise des médecines douces
+      © 2026 Léya — L’expertise des médecines douces
     </div>
   </div>
 </template>
@@ -50,9 +50,8 @@
 <script setup>
 import { ArrowLeft } from 'lucide-vue-next'
 
-definePageMeta({
-  layout: false
-})
+definePageMeta({ layout: false })
+useSeoMeta({ title: 'Bientôt disponible — Léya', robots: 'noindex, nofollow' })
 </script>
 
 <style scoped>

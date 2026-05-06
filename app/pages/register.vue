@@ -13,7 +13,7 @@
           <NuxtLink to="/">
             <img 
               src="/images/logo.svg" 
-              alt="Medaltea" 
+              alt="Léya"
               class="logo-img"
             />
           </NuxtLink>
@@ -21,7 +21,7 @@
             Créer un compte
           </h1>
           <p class="auth-subtitle">
-            Rejoignez Medaltea pour un accompagnement personnalisé.
+            Rejoignez Léya pour un accompagnement personnalisé.
           </p>
         </div>
 
@@ -112,6 +112,8 @@
 <script setup>
 import { ref } from 'vue'
 import { Apple, Loader2 } from 'lucide-vue-next'
+
+useSeoMeta({ title: 'Créer un compte — Léya', robots: 'noindex, nofollow' })
 import { useRouter } from '#app'
 
 const router = useRouter()

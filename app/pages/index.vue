@@ -47,7 +47,7 @@
               </a>
             </div>
             <div class="text-center opacity-40 text-sm font-sans">
-              © 2026 Medaltea - Tous droits réservés.
+              © 2026 Léya - Tous droits réservés.
             </div>
           </div>
         </footer>
@@ -58,5 +58,18 @@
 
 <script setup>
 import { Facebook, Instagram, Linkedin, Mail } from 'lucide-vue-next'
-// Full Landing Page Composition
+
+useSeoMeta({
+  title: 'Léya — La médecine alternative, intelligente et accessible',
+  description: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.',
+  ogTitle: 'Léya — La médecine alternative, intelligente et accessible',
+  ogDescription: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.',
+  ogImage: 'https://leya-sante.fr/og-image.png',
+  ogUrl: 'https://leya-sante.fr',
+  ogType: 'website',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Léya — La médecine alternative, intelligente et accessible',
+  twitterDescription: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.',
+  twitterImage: 'https://leya-sante.fr/og-image.png',
+})
 </script>

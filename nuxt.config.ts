@@ -3,7 +3,20 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/image'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@nuxtjs/sitemap'],
+
+  site: {
+    url: 'https://leya-sante.fr',
+    name: 'Léya'
+  },
+
+  sitemap: {
+    excludeAppSources: true,
+    urls: [
+      { loc: '/', priority: 1.0, changefreq: 'weekly' },
+      { loc: '/chatbot', priority: 0.8, changefreq: 'monthly' },
+    ]
+  },
   image: {
     provider: 'vercel',
     format: ['webp', 'avif', 'jpeg', 'png'],

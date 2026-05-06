@@ -4,7 +4,7 @@
     <div v-if="!isChatActive" class="flex flex-col items-center w-full relative pt-8 lg:pt-[127px]">
       <!-- Logo -->
       <div class="mb-8 lg:mb-[73px]">
-        <img src="/images/logo.svg" alt="Medaltea Logo" class="h-8 lg:h-12 w-auto" />
+        <img src="/images/logo.svg" alt="Léya" class="h-8 lg:h-12 w-auto" />
       </div>
       
       <!-- Title -->
@@ -39,7 +39,7 @@
       <!-- Loading / Typing State -->
       <div v-if="isTyping" class="w-full max-w-[1078px] mx-auto px-8 opacity-50 pb-6">
         <div class="text-[#012828] text-[15px] font-sans leading-relaxed flex items-center gap-2">
-          <span class="italic">Altea réfléchit...</span>
+          <span class="italic">Léya réfléchit...</span>
           <div class="flex gap-1">
             <span class="w-1 h-1 bg-[#012828] rounded-full animate-bounce"></span>
             <span class="w-1 h-1 bg-[#012828] rounded-full animate-bounce [animation-delay:0.2s]"></span>
@@ -75,7 +75,7 @@
         >
           <img 
             :src="isChatActive ? '/images/panda-2.png' : '/images/panda-standing.png'" 
-            alt="Medaltea Panda Mascot" 
+            alt="Léya Panda Mascot"
             class="w-full h-full object-contain drop-shadow-lg"
           />
         </div>
@@ -98,7 +98,7 @@
               @keydown.enter.prevent="sendMessage"
               :disabled="isTyping || isLimitReached"
               class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans disabled:opacity-50 overflow-hidden"
-              :placeholder="isLimitReached ? 'Limite quotidienne atteinte (10/10)' : 'Demander à Altea'"
+              :placeholder="isLimitReached ? 'Limite quotidienne atteinte (10/10)' : 'Demander à Léya'"
             ></textarea>
             
             <button 
@@ -154,7 +154,7 @@ const isLimitReached = computed(() => {
 })
 
 const loadUsage = () => {
-  const stored = localStorage.getItem('medaltea_chat_usage')
+  const stored = localStorage.getItem('leya_chat_usage')
   if (stored) {
     const data = JSON.parse(stored)
     const today = new Date().toLocaleDateString()
@@ -169,7 +169,7 @@ const loadUsage = () => {
 }
 
 const saveUsage = () => {
-  localStorage.setItem('medaltea_chat_usage', JSON.stringify(userUsage.value))
+  localStorage.setItem('leya_chat_usage', JSON.stringify(userUsage.value))
 }
 
 const incrementUsage = () => {
@@ -290,7 +290,7 @@ const sendMessage = async () => {
     console.error('Chat Error:', error)
     isTyping.value = false
     
-    let errorText = 'Désolée, une erreur est survenue lors de la communication avec Altea. Veuillez réessayer.'
+    let errorText = 'Désolée, une erreur est survenue lors de la communication avec Léya. Veuillez réessayer.'
     if (error.message && (error.message.includes('journalière') || error.message.includes('limite'))) {
       errorText = error.message
     }

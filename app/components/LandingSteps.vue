@@ -15,7 +15,7 @@
             Partagez vos besoins
           </h3>
           <p class="text-[#012828] text-[16px] lg:text-[17px] leading-relaxed font-sans opacity-80">
-            Expliquez à Altéa, notre chatbot IA vos préoccupations de santé, vos symptômes ou vos objectifs de bien-être, avec vos propres mots.
+            Expliquez à Léya, notre chatbot IA vos préoccupations de santé, vos symptômes ou vos objectifs de bien-être, avec vos propres mots.
           </p>
         </div>
 

@@ -8,7 +8,7 @@
           <div class="w-full h-full aspect-[4/3] lg:aspect-auto rounded-[40px] overflow-hidden shadow-xl">
             <NuxtImg 
               src="/images/women-phone.jpeg" 
-              alt="Femme utilisant l'application Medaltea" 
+              alt="Femme utilisant l'application Léya"
               class="w-full h-full object-cover"
               width="1000"
               height="800"
@@ -34,7 +34,7 @@
         <div class="bg-[#156F71] rounded-[40px] p-8 lg:p-14 text-white shadow-xl flex flex-col justify-between">
           <div>
             <h2 class="text-[32px] lg:text-[44px] font-normal font-unbounded mb-6 leading-tight">
-              Qu'est-ce que Medaltea ?
+              Qu'est-ce que Léya ?
             </h2>
             
             <p class="text-white text-[16px] lg:text-[18px] leading-relaxed mb-8 font-sans opacity-95">

@@ -77,7 +77,7 @@ const toggle = (index) => {
 const faqs = [
   {
     question: "Comment choisir le bon praticien ?",
-    answer: "Medaltea vous guide à travers une sélection rigoureuse de professionnels certifiés. Vous pouvez filtrer par spécialité, localisation et consulter les avis pour trouver l'expert qui correspond le mieux à vos besoins de santé naturelle."
+    answer: "Léya vous guide à travers une sélection rigoureuse de professionnels certifiés. Vous pouvez filtrer par spécialité, localisation et consulter les avis pour trouver l'expert qui correspond le mieux à vos besoins de santé naturelle."
   },
   {
     question: "Quels sont les délais de prise de rendez-vous ?",

@@ -2,7 +2,7 @@
   <section class="landing-benefits py-24 px-4 sm:px-6 lg:px-8">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-[34px] font-bold font-unbounded text-[#012828] text-center mb-20">
-        Pourquoi choisir un praticien sur Medaltea ?
+        Pourquoi choisir un praticien sur Léya ?
       </h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -23,7 +23,7 @@
         </div>
 
         <div class="benefit-card text-card bg-[#156F71] p-8 rounded-[30px] shadow-lg flex flex-col justify-center text-white h-[280px]">
-          <h4 class="font-unbounded font-bold text-[18px] mb-4">Orientation Altea</h4>
+          <h4 class="font-unbounded font-bold text-[18px] mb-4">Orientation Léya</h4>
           <p class="text-[14px] leading-relaxed opacity-80 font-sans">
             Profitez de notre IA spécialisée pour identifier la discipline naturelle (naturopathie, sophrologie, etc.) la plus adaptée à vos besoins.
           </p>
@@ -33,7 +33,7 @@
         <div class="benefit-card text-card bg-[#156F71] p-8 rounded-[30px] shadow-lg flex flex-col justify-center text-white h-[280px]">
           <h4 class="font-unbounded font-bold text-[18px] mb-4">Accès Instantané</h4>
           <p class="text-[14px] leading-relaxed opacity-80 font-sans">
-            Trouvez une solution ou un praticien en quelques secondes. Plus besoin de chercher pendant des heures, Medaltea centralise le meilleur du bien-être.
+            Trouvez une solution ou un praticien en quelques secondes. Plus besoin de chercher pendant des heures, Léya centralise le meilleur du bien-être.
           </p>
         </div>
 

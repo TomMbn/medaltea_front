@@ -16,7 +16,7 @@
           <div class="absolute z-20 pointer-events-none right-4 bottom-full mb-[-4px] lg:mb-[-8px] w-[80px] h-[70px] lg:w-[140px] lg:h-[120px]">
             <NuxtImg 
               src="/images/panda-2.png" 
-              alt="Medaltea Panda Mascot" 
+              alt="Léya Panda Mascot"
               class="w-full h-full object-contain"
               width="140"
               height="120"
@@ -43,7 +43,7 @@
                   :rows="1"
                   @keydown.enter.prevent="handleSubmit"
                   class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans w-full overflow-hidden"
-                  placeholder="Demander à Altea"
+                  placeholder="Demander à Léya"
                 ></textarea>
                 
                 <button 

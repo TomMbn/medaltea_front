@@ -68,7 +68,7 @@
 import { ref } from 'vue'
 import { Plus } from 'lucide-vue-next'
 
-const openIndex = ref(null)
+const openIndex = ref(0)
 
 const toggle = (index) => {
   openIndex.value = openIndex.value === index ? null : index

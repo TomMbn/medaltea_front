@@ -1,0 +1,3 @@
+leya-sante.fr, www.leya-sante.fr {
+    reverse_proxy frontend:3000
+}

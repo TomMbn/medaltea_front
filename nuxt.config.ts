@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   modules: ['@nuxtjs/tailwindcss', '@nuxt/image'],
   image: {
-    provider: 'vercel',
+    provider: 'ipx',
     format: ['webp', 'avif', 'jpeg', 'png'],
     screens: {
       xs: 320,

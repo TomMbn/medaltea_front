@@ -153,13 +153,13 @@ const handleSuggestion = (text) => {
   padding-top: 124px;
   padding-bottom: 80px;
   background-color: #e0ecf2;
-  min-height: 100vh;
   display: flex;
   align-items: center;
 }
 
 .hero-container {
-  width: 100%;
+  width: 91.666%;
+  max-width: 1440px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -201,10 +201,7 @@ const handleSuggestion = (text) => {
 
 /* Images Stack */
 .images-stack {
-  flex: 0 0 100%;
-  position: relative;
-  min-height: 400px;
-  z-index: 20;
+  display: none;
 }
 
 .image-card {
@@ -240,12 +237,53 @@ const handleSuggestion = (text) => {
   display: none;
 }
 
+/* lg (1024px) : row layout, images proportionnelles */
 @media (min-width: 1024px) {
+  .hero-section {
+    min-height: 100vh;
+  }
+
+  .images-stack {
+    display: block;
+    position: relative;
+    flex: 0 0 36%;
+    aspect-ratio: 11 / 10;
+    align-self: flex-start;
+    z-index: 20;
+    overflow: hidden;
+  }
+
   .hero-container {
     flex-direction: row;
+    gap: 40px;
+  }
+
+  .hero-title {
+    font-size: clamp(36px, 3.6vw, 54px);
+  }
+
+  .hero-content {
+    flex: 1;
+    min-width: 0;
+    padding-top: 60px;
+  }
+
+  .lg-br {
+    display: block;
+  }
+
+  .search-bar-wrapper {
+    width: min(900px, calc(100% + 80px));
+    margin-right: -80px;
+  }
+}
+
+/* xl (1280px) : design complet */
+@media (min-width: 1280px) {
+  .hero-container {
     gap: 60px;
   }
-  
+
   .hero-title {
     font-size: 54px;
   }
@@ -253,25 +291,22 @@ const handleSuggestion = (text) => {
   .hero-content {
     padding-top: 81px;
   }
-  
-  .lg-br {
-    display: block;
-  }
 
   .search-bar-wrapper {
     width: 900px;
     margin-right: -150px;
   }
-  
+
   .images-stack {
     flex: 0 0 550px;
-    min-height: 500px;
+    align-self: flex-start;
+    /* aspect-ratio 11/10 → height = 550 / 1.1 = 500px */
   }
-  
+
   .main-card {
     width: 72%;
   }
-  
+
   .overlay-card {
     width: 54%;
   }

@@ -42,7 +42,7 @@
               <a href="https://www.linkedin.com/company/medaltea" target="_blank" rel="noopener noreferrer" class="text-[#012828] opacity-60 hover:opacity-100 transition-opacity">
                 <Linkedin :size="24" />
               </a>
-              <a href="mailto:contact.medaltea@gmail.com" class="text-[#012828] opacity-60 hover:opacity-100 transition-opacity flex items-center gap-2">
+              <a href="mailto:contact@leya-sante.fr" class="text-[#012828] opacity-60 hover:opacity-100 transition-opacity flex items-center gap-2">
                 <Mail :size="24" />
               </a>
             </div>

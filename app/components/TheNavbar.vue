@@ -6,7 +6,7 @@
       <!-- Left Zone: Logo -->
       <div class="flex items-center shrink-0">
         <NuxtLink to="/" class="flex items-center">
-            <img src="/images/logo.svg" alt="Léya" class="h-7 w-auto" />
+            <img src="/images/logo.svg" alt="Léya" class="h-10 w-auto" />
         </NuxtLink>
       </div>
 

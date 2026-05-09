@@ -82,7 +82,7 @@
               <Clock :size="15" />
               <span class="text-sm font-medium">Temps moyen d'une séance</span>
             </div>
-            <div class="font-unbounded font-bold text-2xl text-[#012828]">{{ medicine.duration }}</div>
+            <div class="font-unbounded font-semibold text-2xl text-[#012828]">{{ medicine.duration }}</div>
           </div>
         </div>
 

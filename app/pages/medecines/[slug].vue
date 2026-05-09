@@ -197,7 +197,7 @@
       </div>
 
       <!-- Carousel -->
-      <div class="relative">
+      <div class="relative max-w-[1080px] mx-auto">
 
         <!-- Flèche gauche : absolute pour ne pas décaler les cards -->
         <button
@@ -225,9 +225,9 @@
                 {{ initials(p.name) }}
               </div>
               <div>
-                <div class="font-bold text-[#012828] text-base">{{ p.name }}</div>
+                <div class="font-unbounded font-bold text-[#012828] text-base">{{ p.name }}</div>
                 <div class="text-[#EC7F7A] text-sm font-medium">{{ medicine.name }}</div>
-                <div class="flex items-center gap-1 text-[#012828]/50 text-xs mt-0.5">
+                <div class="flex items-center gap-1 text-[#012828]/50 text-sm mt-0.5">
                   <MapPin :size="11" />
                   <span>{{ p.city }}</span>
                 </div>

@@ -6,30 +6,40 @@
       </h2>
 
       <div class="flex flex-wrap lg:flex-nowrap gap-4 justify-center">
-        <!-- Medicine 1 -->
-        <div class="medicine-card group relative aspect-[11/15] w-full sm:w-[calc(50%-8px)] lg:w-1/5 rounded-[20px] overflow-hidden shadow-lg cursor-pointer">
+        <!-- Massage -->
+        <NuxtLink to="/medecines/massage" class="medicine-card group relative aspect-[11/15] w-full sm:w-[calc(50%-8px)] lg:w-1/5 rounded-[20px] overflow-hidden shadow-lg cursor-pointer">
           <NuxtImg src="/images/medicines-1.jpeg" alt="Massage" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width="400" height="545" format="webp" quality="80" loading="lazy" placeholder sizes="sm:50vw lg:250px" />
-        </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <span class="absolute bottom-4 left-0 right-0 text-center text-white font-unbounded font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">Massage</span>
+        </NuxtLink>
 
-        <!-- Medicine 2 -->
+        <!-- Herboristerie (page à venir) -->
         <div class="medicine-card group relative aspect-[11/15] w-full sm:w-[calc(50%-8px)] lg:w-1/5 rounded-[20px] overflow-hidden shadow-lg cursor-pointer">
           <NuxtImg src="/images/medicine-2.jpeg" alt="Herboristerie" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width="400" height="545" format="webp" quality="80" loading="lazy" placeholder sizes="sm:50vw lg:250px" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <span class="absolute bottom-4 left-0 right-0 text-center text-white font-unbounded font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">Herboristerie</span>
         </div>
 
-        <!-- Medicine 3 -->
-        <div class="medicine-card group relative aspect-[11/15] w-full sm:w-[calc(50%-8px)] lg:w-1/5 rounded-[20px] overflow-hidden shadow-lg cursor-pointer">
+        <!-- Acupuncture -->
+        <NuxtLink to="/medecines/acupuncture" class="medicine-card group relative aspect-[11/15] w-full sm:w-[calc(50%-8px)] lg:w-1/5 rounded-[20px] overflow-hidden shadow-lg cursor-pointer">
           <NuxtImg src="/images/medicine-3.jpeg" alt="Acupuncture" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width="400" height="545" format="webp" quality="80" loading="lazy" placeholder sizes="sm:50vw lg:250px" />
-        </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <span class="absolute bottom-4 left-0 right-0 text-center text-white font-unbounded font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">Acupuncture</span>
+        </NuxtLink>
 
-        <!-- Medicine 4 -->
+        <!-- Yoga (page à venir) -->
         <div class="medicine-card group relative aspect-[11/15] w-full sm:w-[calc(50%-8px)] lg:w-1/5 rounded-[20px] overflow-hidden shadow-lg cursor-pointer">
           <NuxtImg src="/images/medicine-4.jpeg" alt="Yoga" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width="400" height="545" format="webp" quality="80" loading="lazy" placeholder sizes="sm:50vw lg:250px" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <span class="absolute bottom-4 left-0 right-0 text-center text-white font-unbounded font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">Yoga</span>
         </div>
 
-        <!-- Medicine 5 -->
-        <div class="medicine-card group relative aspect-[11/15] w-full sm:w-[calc(50%-8px)] lg:w-1/5 rounded-[20px] overflow-hidden shadow-lg cursor-pointer">
+        <!-- Ostéopathie -->
+        <NuxtLink to="/medecines/osteopathie" class="medicine-card group relative aspect-[11/15] w-full sm:w-[calc(50%-8px)] lg:w-1/5 rounded-[20px] overflow-hidden shadow-lg cursor-pointer">
           <NuxtImg src="/images/medicine-5.jpeg" alt="Ostéopathie" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width="400" height="545" format="webp" quality="80" loading="lazy" placeholder sizes="sm:50vw lg:250px" />
-        </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <span class="absolute bottom-4 left-0 right-0 text-center text-white font-unbounded font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">Ostéopathie</span>
+        </NuxtLink>
       </div>
     </div>
   </section>

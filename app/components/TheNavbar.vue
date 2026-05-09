@@ -10,6 +10,23 @@
         </NuxtLink>
       </div>
 
+      <!-- Center Nav Links (Desktop) -->
+      <div class="hidden lg:flex items-center gap-7">
+        <NuxtLink
+          to="/medecines"
+          class="text-[#012828] font-semibold text-[14px] opacity-60 hover:opacity-100 transition-opacity"
+          active-class="!opacity-100"
+        >
+          Les Médecines
+        </NuxtLink>
+        <NuxtLink
+          to="/coming-soon"
+          class="text-[#012828] font-semibold text-[14px] opacity-60 hover:opacity-100 transition-opacity"
+        >
+          Trouver un praticien
+        </NuxtLink>
+      </div>
+
       <!-- Right Group: Buttons (Desktop) -->
       <div class="hidden lg:flex items-center gap-4">
         <!-- Auth Buttons -->
@@ -52,6 +69,12 @@
     >
       <div v-if="isMenuOpen" class="mx-auto w-11/12 mt-4 bg-white rounded-[20px] shadow-2xl border border-gray-100 overflow-hidden pointer-events-auto">
         <div class="flex flex-col p-6 gap-4">
+          <NuxtLink to="/medecines" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">
+            Les Médecines
+          </NuxtLink>
+          <NuxtLink to="/coming-soon" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">
+            Trouver un praticien
+          </NuxtLink>
           <template v-if="!isLoggedIn">
             <NuxtLink to="/login" class="w-full btn-signup text-white py-3 rounded-[12px] font-bold text-center" @click="isMenuOpen = false">
               Connexion

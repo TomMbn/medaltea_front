@@ -62,8 +62,6 @@ h5,
 h6,
 .font-unbounded {
   font-family: var(--font-unbounded);
-  font-weight: 400;
-  /* Default starting weight for Unbounded */
 }
 
 /* Page Transitions */

@@ -1,9 +1,7 @@
 <template>
   <div class="landing-page overflow-x-hidden bg-[#e0ecf2] min-h-screen">
-    <!-- Hero Boxed to Navbar Width -->
-    <div class="w-11/12 max-w-[1440px] mx-auto pt-6">
-      <LandingHero class="rounded-[20px] overflow-hidden" />
-    </div>
+    <!-- Hero -->
+    <LandingHero />
     
     <!-- 1. The Floating White Sheet (Intro + Steps) -->
     <div class="relative w-full flex flex-col items-center">
@@ -30,34 +28,13 @@
         <LandingFAQ class="pb-16" />
 
         <!-- Footer -->
-        <footer class="py-12 border-t border-gray-200">
-          <div class="flex flex-col items-center gap-6">
-            <div class="flex items-center gap-8">
-              <a href="https://www.facebook.com/people/Medaltea-Medaltea/61584876630055/" target="_blank" rel="noopener noreferrer" class="text-[#012828] opacity-60 hover:opacity-100 transition-opacity">
-                <Facebook :size="24" />
-              </a>
-              <a href="https://www.instagram.com/medaltea.france/" target="_blank" rel="noopener noreferrer" class="text-[#012828] opacity-60 hover:opacity-100 transition-opacity">
-                <Instagram :size="24" />
-              </a>
-              <a href="https://www.linkedin.com/company/medaltea" target="_blank" rel="noopener noreferrer" class="text-[#012828] opacity-60 hover:opacity-100 transition-opacity">
-                <Linkedin :size="24" />
-              </a>
-              <a href="mailto:contact@leya-sante.fr" class="text-[#012828] opacity-60 hover:opacity-100 transition-opacity flex items-center gap-2">
-                <Mail :size="24" />
-              </a>
-            </div>
-            <div class="text-center opacity-40 text-sm font-sans">
-              © 2026 Léya - Tous droits réservés.
-            </div>
-          </div>
-        </footer>
+        <TheFooter />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { Facebook, Instagram, Linkedin, Mail } from 'lucide-vue-next'
 
 useSeoMeta({
   title: 'Léya — La médecine alternative, intelligente et accessible',

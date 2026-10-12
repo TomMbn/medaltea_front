@@ -14,7 +14,13 @@ export default defineNuxtConfig({
     excludeAppSources: true,
     urls: [
       { loc: '/', priority: 1.0, changefreq: 'weekly' },
-      { loc: '/chatbot', priority: 0.8, changefreq: 'monthly' },
+      { loc: '/medecines', priority: 0.9, changefreq: 'weekly' },
+      { loc: '/medecines/osteopathie', priority: 0.8, changefreq: 'monthly' },
+      { loc: '/medecines/naturopathie', priority: 0.8, changefreq: 'monthly' },
+      { loc: '/medecines/sophrologie', priority: 0.8, changefreq: 'monthly' },
+      { loc: '/medecines/acupuncture', priority: 0.8, changefreq: 'monthly' },
+      { loc: '/medecines/hypnotherapie', priority: 0.8, changefreq: 'monthly' },
+      { loc: '/medecines/massage', priority: 0.8, changefreq: 'monthly' },
     ]
   },
   image: {

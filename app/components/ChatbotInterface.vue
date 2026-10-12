@@ -74,7 +74,7 @@
           ]"
         >
           <img 
-            :src="isChatActive ? '/images/panda-2.png' : '/images/panda-standing.png'" 
+            :src="isChatActive ? '/images/panda-2.webp' : '/images/panda-standing.webp'" 
             alt="Léya Panda Mascot"
             class="w-full h-full object-contain drop-shadow-lg"
           />

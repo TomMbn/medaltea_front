@@ -2,7 +2,7 @@
   <div class="auth-illustration relative w-full h-full overflow-hidden rounded-[40px] bg-[#e0ecf2]">
     <!-- Background Image -->
     <NuxtImg 
-      src="/images/landscape.png" 
+      src="/images/landscape.webp" 
       alt="Paysage apaisant" 
       class="absolute inset-0 w-full h-full object-cover"
       width="1000"

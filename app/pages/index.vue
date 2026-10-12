@@ -41,13 +41,13 @@ useSeoMeta({
   description: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.',
   ogTitle: 'Léya — La médecine alternative, intelligente et accessible',
   ogDescription: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.',
-  ogImage: 'https://leya-sante.fr/og-image.png',
+  ogImage: 'https://leya-sante.fr/og-image.jpg',
   ogUrl: 'https://leya-sante.fr',
   ogType: 'website',
   twitterCard: 'summary_large_image',
   twitterTitle: 'Léya — La médecine alternative, intelligente et accessible',
   twitterDescription: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.',
-  twitterImage: 'https://leya-sante.fr/og-image.png',
+  twitterImage: 'https://leya-sante.fr/og-image.jpg',
 })
 
 useHead({
@@ -61,7 +61,7 @@ useHead({
           '@id': 'https://leya-sante.fr/#organization',
           name: 'Léya',
           url: 'https://leya-sante.fr',
-          logo: 'https://leya-sante.fr/Favicon.png',
+          logo: 'https://leya-sante.fr/favicon.png',
           email: 'contact@leya-sante.fr',
           sameAs: [
             'https://www.facebook.com/people/Medaltea-Medaltea/61584876630055/',

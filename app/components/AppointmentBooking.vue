@@ -13,8 +13,9 @@
         </p>
         <p class="text-sm mt-2">
           {{ selectedType?.name }} le {{ formatLongDate(booked.startAt || selectedSlot) }}.
-          <template v-if="booked.status !== 'confirmed'">Le praticien doit encore l'accepter, vous serez informé de sa réponse.</template>
+          <template v-if="booked.status !== 'confirmed'">Le praticien doit encore l'accepter ; suivez sa réponse dans « Mes rendez-vous ».</template>
         </p>
+        <NuxtLink to="/mes-rendez-vous" class="inline-block mt-3 text-sm underline text-[#156F71]">Voir mes rendez-vous</NuxtLink>
       </div>
 
       <template v-else>

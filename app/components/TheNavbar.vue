@@ -26,6 +26,14 @@
         >
           Trouver un praticien
         </NuxtLink>
+        <NuxtLink
+          v-if="isLoggedIn"
+          to="/mes-rendez-vous"
+          class="text-[#012828] font-semibold text-[14px] opacity-60 hover:opacity-100 transition-opacity"
+          active-class="!opacity-100"
+        >
+          Mes rendez-vous
+        </NuxtLink>
       </div>
 
       <!-- Right Group: Buttons (Desktop) -->
@@ -76,6 +84,7 @@
           <NuxtLink to="/trouver-un-praticien" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">
             Trouver un praticien
           </NuxtLink>
+          <NuxtLink v-if="isLoggedIn" to="/mes-rendez-vous" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">Mes rendez-vous</NuxtLink>
           <template v-if="!isLoggedIn">
             <NuxtLink to="/login" class="w-full btn-signup text-white py-3 rounded-[12px] font-bold text-center" @click="isMenuOpen = false">
               Connexion

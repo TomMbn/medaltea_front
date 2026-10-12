@@ -28,8 +28,16 @@ export function extractToken(payload: any): string | undefined {
 }
 
 /** Appelle le backend d'authentification et pose la session si un token est renvoyé. */
-export async function authenticate(event: H3Event, path: 'login' | 'register') {
-    const body = await readBody(event)
+const AUTH_FIELDS: Record<'login' | 'register' | 'register-pro', string[]> = {
+    login: ['mail', 'password'],
+    register: ['mail', 'password'],
+    'register-pro': ['mail', 'password', 'lastName', 'firstName', 'address', 'country', 'city', 'postalCode', 'phoneNumber', 'schedules', 'price', 'specialityIds'],
+}
+
+export async function authenticate(event: H3Event, path: 'login' | 'register' | 'register-pro') {
+    const raw = (await readBody(event)) ?? {}
+    const body: Record<string, any> = {}
+    for (const key of AUTH_FIELDS[path]) if (raw[key] !== undefined && raw[key] !== '') body[key] = raw[key]
     const { apiBase } = useRuntimeConfig()
 
     let response: any

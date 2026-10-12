@@ -22,6 +22,23 @@ const RULES: Rule[] = [
     { method: 'GET', pattern: /^appointments\/me$/, auth: true, query: ['from', 'to', 'status'] },
     { method: 'POST', pattern: /^appointments$/, auth: true, body: ['praticienId', 'consultationTypeId', 'startAt', 'userNote'] },
     { method: 'PATCH', pattern: /^appointments\/\d+\/status$/, auth: true, body: ['status', 'reason'] },
+
+    // Profil
+    { method: 'GET', pattern: /^users\/me$/, auth: true },
+
+    // Espace praticien
+    { method: 'GET', pattern: /^praticiens\/me\/appointments$/, auth: true, query: ['from', 'to', 'status'] },
+    { method: 'PATCH', pattern: /^praticiens\/me\/settings$/, auth: true, body: ['autoConfirm'] },
+    { method: 'GET', pattern: /^praticiens\/me\/consultation-types$/, auth: true },
+    { method: 'POST', pattern: /^praticiens\/me\/consultation-types$/, auth: true, body: ['name', 'durationMin', 'price', 'mode'] },
+    { method: 'PATCH', pattern: /^praticiens\/me\/consultation-types\/\d+$/, auth: true, body: ['name', 'durationMin', 'price', 'mode'] },
+    { method: 'DELETE', pattern: /^praticiens\/me\/consultation-types\/\d+$/, auth: true },
+    { method: 'GET', pattern: /^praticiens\/me\/availabilities$/, auth: true },
+    { method: 'POST', pattern: /^praticiens\/me\/availabilities$/, auth: true, body: ['dayOfWeek', 'startTime', 'endTime'] },
+    { method: 'DELETE', pattern: /^praticiens\/me\/availabilities\/\d+$/, auth: true },
+    { method: 'GET', pattern: /^praticiens\/me\/unavailabilities$/, auth: true },
+    { method: 'POST', pattern: /^praticiens\/me\/unavailabilities$/, auth: true, body: ['startAt', 'endAt', 'reason'] },
+    { method: 'DELETE', pattern: /^praticiens\/me\/unavailabilities\/\d+$/, auth: true },
 ]
 
 const PRIVATE_FIELDS = ['mail', 'userId']
@@ -100,5 +117,6 @@ export default defineEventHandler(async (event) => {
         ? 'public, s-maxage=15, stale-while-revalidate=30'
         : 'no-store')
 
+    if (response.status === 204) return sendNoContent(event)
     return stripPrivate(response._data)
 })

@@ -1,2 +1,8 @@
 User-Agent: *
-Disallow:
+Disallow: /chatbot
+Disallow: /login
+Disallow: /register
+Disallow: /coming-soon
+Disallow: /api/
+
+Sitemap: https://leya-sante.fr/sitemap.xml

@@ -21,6 +21,10 @@ export default defineNuxtConfig({
       { loc: '/medecines/acupuncture', priority: 0.8, changefreq: 'monthly' },
       { loc: '/medecines/hypnotherapie', priority: 0.8, changefreq: 'monthly' },
       { loc: '/medecines/massage', priority: 0.8, changefreq: 'monthly' },
+      { loc: '/trouver-un-praticien', priority: 0.8, changefreq: 'monthly' },
+      { loc: '/mentions-legales', priority: 0.2, changefreq: 'yearly' },
+      { loc: '/politique-de-confidentialite', priority: 0.2, changefreq: 'yearly' },
+      { loc: '/cgu', priority: 0.2, changefreq: 'yearly' },
     ]
   },
   image: {

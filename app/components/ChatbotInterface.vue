@@ -125,6 +125,10 @@
           </div>
         </div>
       </div>
+      <p class="mt-3 text-center text-xs text-[#012828]/60 font-sans">
+        Léya ne remplace pas un avis médical. En cas d'urgence, appelez le 15. Évitez de saisir des informations qui vous identifient.
+        <NuxtLink to="/politique-de-confidentialite" class="underline">Confidentialité</NuxtLink>
+      </p>
     </div>
   </div>
 </template>

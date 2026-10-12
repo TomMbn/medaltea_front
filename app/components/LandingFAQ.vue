@@ -88,6 +88,21 @@ const faqs = [
     answer: "Oui, vous pouvez annuler ou reporter votre consultation directement depuis votre espace personnel jusqu'à 24 heures avant le rendez-vous sans frais supplémentaires."
   }
 ]
+
+useHead({
+  script: [{
+    type: 'application/ld+json',
+    innerHTML: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(f => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: { '@type': 'Answer', text: f.answer },
+      })),
+    }),
+  }],
+})
 </script>
 
 <style scoped>

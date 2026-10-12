@@ -13,8 +13,20 @@
 </template>
 
 <script setup>
+const title = 'Trouver un praticien — Léya'
+const description = 'Trouvez facilement des praticiens en médecines alternatives près de chez vous. Comparez les profils, consultez les avis et prenez rendez-vous en ligne.'
+
 useSeoMeta({
-  title: 'Trouver un praticien — Léya',
-  description: 'Trouvez facilement des praticiens en médecines alternatives près de chez vous. Comparez les profils, consultez les avis et prenez rendez-vous en ligne.',
+  title,
+  description,
+  ogTitle: title,
+  ogDescription: description,
+  ogImage: 'https://leya-sante.fr/og-image.png',
+  ogUrl: 'https://leya-sante.fr/trouver-un-praticien',
+  ogType: 'website',
+  twitterCard: 'summary_large_image',
+  twitterTitle: title,
+  twitterDescription: description,
+  twitterImage: 'https://leya-sante.fr/og-image.png',
 })
 </script>

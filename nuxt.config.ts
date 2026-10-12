@@ -68,6 +68,9 @@ export default defineNuxtConfig({
         { name: 'twitter:description', content: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.' },
         { name: 'twitter:image', content: 'https://leya-sante.fr/og-image.jpg' },
       ],
+      script: [
+        { src: 'https://cloud.umami.is/script.js', defer: true, 'data-website-id': '29f997b8-9b18-4030-a4c6-1aad46f13570' }
+      ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/Favicon.svg' },
         { rel: 'icon', type: 'image/png', href: '/favicon.png' },

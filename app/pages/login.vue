@@ -119,6 +119,7 @@ useSeoMeta({ title: 'Connexion — Léya', robots: 'noindex, nofollow' })
 import { useRouter } from '#app'
 
 const router = useRouter()
+const route = useRoute()
 const mail = ref('')
 const password = ref('')
 const isLoading = ref(false)
@@ -141,7 +142,9 @@ async function handleLogin() {
       }
     })
     
-    router.push('/chatbot')
+    const target = String(route.query.redirect ?? '')
+    // Redirection interne uniquement (évite les redirections ouvertes vers un site externe)
+    router.push(target.startsWith('/') && !target.startsWith('//') ? target : '/chatbot')
 
   } catch (error) {
     if (error.status === 401) {

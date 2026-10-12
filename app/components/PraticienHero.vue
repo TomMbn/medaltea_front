@@ -31,47 +31,42 @@
     <!-- Contenu centré -->
     <div class="relative z-10 text-center w-full max-w-xl mx-auto">
       <h1 class="text-4xl md:text-5xl font-bold text-[#1a1a1a] leading-tight mb-10">
-        Rechercher parmi des milliers de <span class="text-[#E8755A]">praticiens</span>
+        Trouvez un <span class="text-[#E8755A]">praticien</span> près de chez vous
       </h1>
 
       <!-- Barre de recherche -->
-      <div class="bg-white rounded-full shadow-md flex items-center h-14 overflow-hidden">
-        <!-- Localisation -->
-        <div class="flex items-center gap-2 px-5 flex-1 min-w-0 border-r border-gray-100">
-          <MapPin :size="15" class="text-gray-400 shrink-0" />
+      <form class="bg-white rounded-full shadow-md flex items-center h-14 overflow-hidden" role="search" @submit.prevent="search">
+        <div class="flex items-center gap-2 px-5 flex-1 min-w-0">
+          <MapPin :size="15" class="text-gray-400 shrink-0" aria-hidden="true" />
           <input
+            v-model="query"
             type="text"
-            placeholder="Localisation"
+            aria-label="Ville, code postal ou nom du praticien"
+            placeholder="Ville, code postal ou nom"
             class="bg-transparent text-sm text-gray-700 placeholder-gray-400 focus:outline-none min-w-0 w-full"
           />
         </div>
-
-        <!-- Spécialité -->
-        <div class="flex items-center px-5 flex-1">
-          <select class="bg-transparent text-sm text-gray-500 focus:outline-none w-full appearance-none cursor-pointer">
-            <option value="" disabled selected>Spécialité</option>
-            <option>Ostéopathie</option>
-            <option>Naturopathie</option>
-            <option>Sophrologie</option>
-            <option>Acupuncture</option>
-            <option>Hypnothérapie</option>
-            <option>Magnétisme</option>
-            <option>Ergothérapie</option>
-          </select>
-        </div>
-
-        <!-- Bouton -->
         <div class="shrink-0 pr-1.5">
-          <button class="bg-[#156F71] text-white text-sm font-semibold h-11 px-5 rounded-full flex items-center gap-2 hover:bg-[#0f5557] transition-colors whitespace-nowrap">
-            Rechercher <Search :size="14" />
+          <button type="submit" class="bg-[#156F71] text-white text-sm font-semibold h-11 px-5 rounded-full flex items-center gap-2 hover:bg-[#0f5557] transition-colors whitespace-nowrap">
+            Rechercher <Search :size="14" aria-hidden="true" />
           </button>
         </div>
-      </div>
+      </form>
     </div>
 
   </section>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { MapPin, Search } from 'lucide-vue-next'
+
+const route = useRoute()
+const router = useRouter()
+const query = ref(String(route.query.q ?? ''))
+
+function search() {
+  const q = query.value.trim()
+  router.push({ path: '/trouver-un-praticien', query: q ? { q } : {}, hash: '#resultats' })
+}
 </script>

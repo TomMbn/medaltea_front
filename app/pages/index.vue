@@ -38,15 +38,15 @@
 
 useSeoMeta({
   title: 'Léya — La médecine alternative, intelligente et accessible',
-  description: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.',
+  description: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.',
   ogTitle: 'Léya — La médecine alternative, intelligente et accessible',
-  ogDescription: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.',
+  ogDescription: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.',
   ogImage: 'https://leya-sante.fr/og-image.jpg',
   ogUrl: 'https://leya-sante.fr',
   ogType: 'website',
   twitterCard: 'summary_large_image',
   twitterTitle: 'Léya — La médecine alternative, intelligente et accessible',
-  twitterDescription: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.',
+  twitterDescription: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.',
   twitterImage: 'https://leya-sante.fr/og-image.jpg',
 })
 

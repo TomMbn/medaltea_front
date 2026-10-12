@@ -140,16 +140,6 @@ async function handleLogin() {
         password: password.value
       }
     })
-
-    // On success
-    const tokenValue = response?.token || response?.accessToken || response?.access_token || response?.data?.token
-    
-    if (tokenValue) {
-      const tokenCookie = useCookie('token', { maxAge: 60 * 60 * 24 * 7, path: '/' })
-      const accessTokenCookie = useCookie('accessToken', { maxAge: 60 * 60 * 24 * 7, path: '/' })
-      tokenCookie.value = tokenValue
-      accessTokenCookie.value = tokenValue
-    }
     
     router.push('/chatbot')
 

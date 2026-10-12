@@ -226,6 +226,12 @@ const sendMessage = async () => {
       })
     })
 
+    if (response.status === 401) {
+        await useSession().logout()
+        await navigateTo('/login')
+        return
+    }
+
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.statusMessage || 'Network response was not ok');

@@ -100,21 +100,15 @@
 import { ref, computed } from 'vue'
 import { Menu, X } from 'lucide-vue-next'
 import { useRoute, useRouter } from 'vue-router'
-import { useCookie } from '#app'
 
 const route = useRoute()
 const router = useRouter()
 const isMenuOpen = ref(false)
 
-const token = useCookie('token')
-const accessToken = useCookie('accessToken')
-const sbAccessToken = useCookie('sb-access-token')
-const isLoggedIn = computed(() => !!token.value || !!accessToken.value || !!sbAccessToken.value)
+const { isLoggedIn, logout } = useSession()
 
-function handleLogout() {
-  token.value = null
-  accessToken.value = null
-  sbAccessToken.value = null
+async function handleLogout() {
+  await logout()
   isMenuOpen.value = false
   router.push('/')
 }

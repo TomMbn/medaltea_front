@@ -111,7 +111,7 @@
 
         <p class="text-center font-semibold mb-0 font-futura text-[#012828]">
           Déjà un compte ? 
-          <NuxtLink to="/login" class="text-rose-500 hover:underline">Se connecter</NuxtLink>
+          <NuxtLink :to="{ path: '/login', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="text-rose-500 hover:underline">Se connecter</NuxtLink>
         </p>
       </div>
     </div>
@@ -126,6 +126,7 @@ useSeoMeta({ title: 'Créer un compte — Léya', robots: 'noindex, nofollow' })
 import { useRouter } from '#app'
 
 const router = useRouter()
+const route = useRoute()
 const mail = ref('')
 const password = ref('')
 const accepted = ref(false)
@@ -148,15 +149,24 @@ async function handleRegister() {
         password: password.value
       }
     })
-    successMsg.value = 'Compte créé avec succès !'
-    
-    // Smooth redirect after a delay
-    setTimeout(() => {
-      router.push('/')
-    }, 1500)
+    refreshCookie('leya_session')
+    // Redirection interne uniquement (évite les redirections ouvertes vers un site externe)
+    const target = String(route.query.redirect ?? '')
+    const destination = target.startsWith('/') && !target.startsWith('//') ? target : '/'
+
+    if (response?.authenticated) {
+      successMsg.value = 'Compte créé, vous êtes connecté !'
+      setTimeout(() => { router.push(destination) }, 800)
+    } else {
+      // Compte créé mais connexion automatique impossible : on envoie vers la connexion.
+      successMsg.value = 'Compte créé avec succès ! Connectez-vous pour continuer.'
+      setTimeout(() => { router.push({ path: '/login', query: { redirect: destination } }) }, 1200)
+    }
 
   } catch (error) {
-    if (error.status === 400) {
+    if (error.status === 409) {
+      errorMsg.value = 'Un compte existe déjà avec cette adresse email. Connectez-vous.'
+    } else if (error.status === 400) {
       errorMsg.value = 'Données invalides. Veuillez vérifier vos informations.'
     } else {
       errorMsg.value = 'Une erreur est survenue lors de la connexion au serveur.'

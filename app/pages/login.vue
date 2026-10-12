@@ -104,7 +104,7 @@
 
         <p class="text-center font-semibold mb-0 font-futura text-[#012828]">
           Pas encore de compte ? 
-          <NuxtLink to="/register" class="text-rose-500 hover:underline">S'inscrire</NuxtLink>
+          <NuxtLink :to="{ path: '/register', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="text-rose-500 hover:underline">S'inscrire</NuxtLink>
         </p>
       </div>
     </div>
@@ -142,6 +142,7 @@ async function handleLogin() {
       }
     })
     
+    refreshCookie('leya_session')
     const target = String(route.query.redirect ?? '')
     // Redirection interne uniquement (évite les redirections ouvertes vers un site externe)
     router.push(target.startsWith('/') && !target.startsWith('//') ? target : '/chatbot')

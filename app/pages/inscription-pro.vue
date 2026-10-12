@@ -141,6 +141,7 @@ async function submit() {
         specialityIds: f.specialityIds,
       },
     })
+    refreshCookie('leya_session')
     // Le backend peut ne pas ouvrir de session à l'inscription : on renvoie alors vers la connexion.
     if (result?.authenticated) await navigateTo('/pro')
     else await navigateTo({ path: '/login', query: { redirect: '/pro' } })

@@ -53,7 +53,24 @@ export async function authenticate(event: H3Event, path: 'login' | 'register' | 
         })
     }
 
-    const token = extractToken(response)
+    let token = extractToken(response)
+
+    // Le backend ne renvoie pas toujours de token à l'inscription : on connecte alors
+    // l'utilisateur avec les mêmes identifiants, pour qu'il n'ait pas à se reconnecter.
+    if (!token && path !== 'login' && body.mail && body.password) {
+        try {
+            const login = await $fetch(`${apiBase}/auth/login`, {
+                method: 'POST',
+                body: { mail: body.mail, password: body.password },
+                timeout: 10000,
+            })
+            token = extractToken(login)
+        } catch (error: any) {
+            // Le compte est créé : on laisse l'interface renvoyer vers la page de connexion.
+            console.error('Auto-login after registration failed:', error?.message || error)
+        }
+    }
+
     if (token) setSessionCookies(event, token)
     // Le token n'est jamais renvoyé au navigateur.
     return { success: true, authenticated: !!token }

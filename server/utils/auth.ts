@@ -8,7 +8,7 @@ export interface AuthenticatedUser {
 const CACHE_TTL_MS = 60_000
 const verified = new Map<string, { id: string; expires: number }>()
 
-function readToken(event: H3Event): string | undefined {
+export function readToken(event: H3Event): string | undefined {
     return getCookie(event, 'token') || getCookie(event, 'accessToken') || getCookie(event, 'sb-access-token') || undefined
 }
 

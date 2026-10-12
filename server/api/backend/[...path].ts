@@ -14,7 +14,8 @@ type Rule = {
 }
 
 const RULES: Rule[] = [
-    { method: 'GET', pattern: /^praticiens$/, auth: false, cacheable: true },
+    { method: 'GET', pattern: /^specialites$/, auth: false, cacheable: true },
+    { method: 'GET', pattern: /^praticiens$/, auth: false, cacheable: true, query: ['specialityId', 'city'] },
     { method: 'GET', pattern: /^praticiens\/\d+$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens\/\d+\/(consultation-types|availabilities)$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens\/\d+\/slots$/, auth: false, query: ['from', 'to', 'consultationTypeId'] },
@@ -77,6 +78,10 @@ export default defineEventHandler(async (event) => {
         if (path === 'appointments') body = validateAppointment(body)
     }
     const query = rule.query ? pick(getQuery(event), rule.query) : undefined
+    if (query?.specialityId !== undefined && !/^\d+$/.test(String(query.specialityId))) {
+        throw createError({ statusCode: 400, statusMessage: 'Spécialité invalide.' })
+    }
+    if (query?.city !== undefined) query.city = String(query.city).slice(0, 100)
 
     const { apiBase } = useRuntimeConfig()
     let response

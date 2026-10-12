@@ -88,7 +88,7 @@
             <!-- Row 2: practitioner count -->
             <div class="flex items-center gap-1.5 text-[#012828]/50 text-sm">
               <Users :size="13" />
-              <span>{{ med.count }} praticiens</span>
+              <span>{{ countFor(med.slug) }} praticien{{ countFor(med.slug) > 1 ? 's' : '' }}</span>
             </div>
           </div>
         </NuxtLink>
@@ -111,6 +111,8 @@
 </template>
 
 <script setup>
+const { countFor } = await useSpecialityCounts()
+
 import { ChevronDown, ArrowRight, Users } from 'lucide-vue-next'
 import { medecines } from '~/data/medecines'
 

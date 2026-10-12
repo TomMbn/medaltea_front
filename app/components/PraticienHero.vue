@@ -46,6 +46,12 @@
             class="bg-transparent text-sm text-gray-700 placeholder-gray-400 focus:outline-none min-w-0 w-full"
           />
         </div>
+        <div class="hidden sm:flex items-center px-4 border-l border-gray-100 max-w-[200px]">
+          <select v-model="speciality" aria-label="Spécialité" class="bg-transparent text-sm text-gray-600 focus:outline-none w-full appearance-none cursor-pointer">
+            <option value="">Toutes les spécialités</option>
+            <option v-for="sp in specialities" :key="sp.id" :value="specialityKey(sp.name)">{{ sp.name }}</option>
+          </select>
+        </div>
         <div class="shrink-0 pr-1.5">
           <button type="submit" class="bg-[#156F71] text-white text-sm font-semibold h-11 px-5 rounded-full flex items-center gap-2 hover:bg-[#0f5557] transition-colors whitespace-nowrap">
             Rechercher <Search :size="14" aria-hidden="true" />
@@ -64,9 +70,14 @@ import { MapPin, Search } from 'lucide-vue-next'
 const route = useRoute()
 const router = useRouter()
 const query = ref(String(route.query.q ?? ''))
+const speciality = ref(String(route.query.specialite ?? ''))
+const { specialities } = await useSpecialities()
 
 function search() {
   const q = query.value.trim()
-  router.push({ path: '/trouver-un-praticien', query: q ? { q } : {}, hash: '#resultats' })
+  const params = {}
+  if (q) params.q = q
+  if (speciality.value) params.specialite = speciality.value
+  router.push({ path: '/trouver-un-praticien', query: params, hash: '#resultats' })
 }
 </script>

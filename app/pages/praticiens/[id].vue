@@ -20,6 +20,10 @@
             </div>
           </div>
 
+          <ul v-if="praticien.specialities?.length" class="flex flex-wrap gap-1.5 mb-6" aria-label="Spécialités">
+            <li v-for="s in praticien.specialities" :key="s.id" class="text-xs font-medium text-[#156F71] bg-[#e0ecf2] rounded-full px-2.5 py-1">{{ s.name }}</li>
+          </ul>
+
           <dl class="space-y-4 text-sm font-sans">
             <div class="flex gap-3">
               <dt class="shrink-0"><MapPin :size="16" class="text-[#156F71]" aria-label="Adresse" /></dt>

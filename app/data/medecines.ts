@@ -7,7 +7,6 @@ export interface Medecine {
   shortDescription: string
   heroImage: string
   heroTagline: string
-  count: string
   duration: string
   definitionImage: string
   definitionText: string[]
@@ -31,7 +30,6 @@ export const medecines: Medecine[] = [
     shortDescription: 'Thérapie manuelle qui rétablit l\'équilibre du corps',
     heroImage: '/images/medicine-5.jpeg',
     heroTagline: 'Gagnez en mobilité',
-    count: '+200',
     duration: '45 min à 1 heure',
     definitionImage: '/images/AdobeStock_452334355.jpeg',
     definitionText: [
@@ -70,7 +68,6 @@ export const medecines: Medecine[] = [
     shortDescription: 'Approche globale qui utilise les ressources naturelles pour rééquilibrer l\'organisme',
     heroImage: '/images/AdobeStock_336398199.jpeg',
     heroTagline: 'Retrouvez votre équilibre naturel',
-    count: '+150',
     duration: '1 heure à 1h30',
     definitionImage: '/images/AdobeStock_243765470.jpeg',
     definitionText: [
@@ -110,7 +107,6 @@ export const medecines: Medecine[] = [
     shortDescription: 'Méthode psychocorporelle qui harmonise le corps et l\'esprit',
     heroImage: '/images/hero-section.jpeg',
     heroTagline: 'Harmonisez votre corps et votre esprit',
-    count: '+180',
     duration: '1 heure',
     definitionImage: '/images/AdobeStock_519549071.jpeg',
     definitionText: [
@@ -150,7 +146,6 @@ export const medecines: Medecine[] = [
     shortDescription: 'Médecine traditionnelle chinoise qui rééquilibre les énergies vitales du corps',
     heroImage: '/images/medicine-3.jpeg',
     heroTagline: 'Rééquilibrez votre énergie vitale',
-    count: '+120',
     duration: '45 min à 1 heure',
     definitionImage: '/images/AdobeStock_171835155.jpeg',
     definitionText: [
@@ -190,7 +185,6 @@ export const medecines: Medecine[] = [
     shortDescription: 'Thérapie brève qui utilise l\'état d\'hypnose pour accéder aux ressources inconscientes',
     heroImage: '/images/women-hypno.jpg',
     heroTagline: 'Libérez votre potentiel intérieur',
-    count: '+90',
     duration: '1 heure à 1h30',
     definitionImage: '/images/hero-section-2.jpeg',
     definitionText: [
@@ -230,7 +224,6 @@ export const medecines: Medecine[] = [
     shortDescription: 'Thérapie manuelle qui détend le corps et apaise l\'esprit en profondeur',
     heroImage: '/images/medicines-1.jpeg',
     heroTagline: 'Offrez-vous un moment de détente',
-    count: '+300',
     duration: '45 min à 1h30',
     definitionImage: '/images/AdobeStock_33920024.jpeg',
     definitionText: [

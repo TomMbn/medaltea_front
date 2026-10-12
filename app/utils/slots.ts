@@ -81,5 +81,8 @@ export const addDays = (key: string, n: number) => {
 }
 export const todayKey = () => dayKeyFmt.format(new Date())
 
+/** Nombre de jours entre deux jours « YYYY-MM-DD ». */
+export const dayDiff = (a: string, b: string) => Math.round((Date.parse(`${b}T12:00:00Z`) - Date.parse(`${a}T12:00:00Z`)) / 864e5)
+
 /** Le backend stocke le code postal en nombre : on restitue le zéro initial (6000 → 06000). */
 export const formatPostalCode = (value: unknown) => String(value ?? '').replace(/\D/g, '').padStart(5, '0').slice(-5)

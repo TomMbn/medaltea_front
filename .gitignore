@@ -25,3 +25,7 @@ logs
 
 # Données personnelles (imports praticiens) : ne jamais commiter
 data/
+
+# Copies de conflit iCloud (« fichier 2.ext ») : ne jamais commiter
+* 2.*
+* 3.*

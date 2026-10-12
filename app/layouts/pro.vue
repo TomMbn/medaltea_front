@@ -47,12 +47,13 @@
 
 <script setup>
 import { onMounted } from 'vue'
-import { CalendarCheck, Clock3, ListChecks, Settings } from 'lucide-vue-next'
+import { CalendarCheck, CalendarOff, Clock3, ListChecks, Settings } from 'lucide-vue-next'
 import { legal } from '~/data/legal'
 
 const items = [
   { to: '/pro/rendez-vous', label: 'Rendez-vous', icon: CalendarCheck },
-  { to: '/pro/horaires', label: 'Horaires et absences', icon: Clock3 },
+  { to: '/pro/horaires', label: 'Horaires', icon: Clock3 },
+  { to: '/pro/absences', label: 'Absences', icon: CalendarOff },
   { to: '/pro/prestations', label: 'Prestations', icon: ListChecks },
   { to: '/pro/parametres', label: 'Paramètres', icon: Settings },
 ]

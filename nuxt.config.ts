@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@nuxtjs/sitemap'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@nuxtjs/sitemap', '@nuxt/fonts'],
 
   site: {
     url: 'https://leya-sante.fr',
@@ -24,6 +24,12 @@ export default defineNuxtConfig({
       // Une entrée par médecine, générée depuis app/data/medecines.ts
       ...medecines.map(m => ({ loc: `/medecines/${m.slug}`, priority: 0.8, changefreq: 'monthly' as const })),
     ]
+  },
+  fonts: {
+    families: [
+      { name: 'Unbounded', provider: 'google', weights: [300, 400, 500, 600, 700], styles: ['normal'] },
+      { name: 'Jost', provider: 'google', weights: [300, 400, 500, 600, 700], styles: ['normal'] },
+    ],
   },
   image: {
     provider: 'vercel',

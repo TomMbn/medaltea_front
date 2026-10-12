@@ -52,7 +52,7 @@
 
       <!-- Mobile Menu Button -->
       <div class="lg:hidden flex items-center">
-        <button @click="isMenuOpen = !isMenuOpen" class="text-[#012828] hover:text-[#1c6c63] focus:outline-none p-1">
+        <button aria-label="Ouvrir le menu" :aria-expanded="isMenuOpen" @click="isMenuOpen = !isMenuOpen" class="text-[#012828] hover:text-[#1c6c63] focus:outline-none p-1">
           <Menu v-if="!isMenuOpen" :size="32" />
           <X v-else :size="32" />
         </button>

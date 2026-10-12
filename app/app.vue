@@ -5,5 +5,10 @@
 </template>
 
 <script setup>
-// Main entry point using Nuxt routing
+const route = useRoute()
+
+useHead(() => ({
+  htmlAttrs: { lang: 'fr' },
+  link: [{ rel: 'canonical', href: `https://leya-sante.fr${route.path === '/' ? '' : route.path.replace(/\/$/, '')}` }],
+}))
 </script>

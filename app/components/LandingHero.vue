@@ -15,7 +15,7 @@
           <!-- Panda Mascot -->
           <div class="absolute z-20 pointer-events-none right-4 bottom-full mb-[-4px] lg:mb-[-8px] w-[80px] h-[70px] lg:w-[140px] lg:h-[120px]">
             <NuxtImg 
-              src="/images/panda-2.png" 
+              src="/images/panda-2.webp" 
               alt="Léya Panda Mascot"
               class="w-full h-full object-contain"
               width="140"

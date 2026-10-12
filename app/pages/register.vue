@@ -51,6 +51,15 @@
             />
           </div>
 
+          <label class="flex items-start gap-3 text-sm text-[#012828] cursor-pointer">
+            <input v-model="accepted" type="checkbox" required :disabled="isLoading" class="mt-1 shrink-0" />
+            <span>
+              J'ai lu et j'accepte les
+              <NuxtLink to="/cgu" target="_blank" class="underline">CGU</NuxtLink> et la
+              <NuxtLink to="/politique-de-confidentialite" target="_blank" class="underline">politique de confidentialité</NuxtLink>.
+            </span>
+          </label>
+
           <!-- Error Message -->
           <div v-if="errorMsg" class="error-box">
             {{ errorMsg }}
@@ -119,12 +128,13 @@ import { useRouter } from '#app'
 const router = useRouter()
 const mail = ref('')
 const password = ref('')
+const accepted = ref(false)
 const isLoading = ref(false)
 const errorMsg = ref('')
 const successMsg = ref('')
 
 async function handleRegister() {
-  if (isLoading.value) return
+  if (isLoading.value || !accepted.value) return
   
   isLoading.value = true
   errorMsg.value = ''

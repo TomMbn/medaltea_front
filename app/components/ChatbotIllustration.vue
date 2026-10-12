@@ -2,7 +2,7 @@
   <div class="relative h-full min-h-[400px] overflow-hidden rounded-[20px] shadow-lg group bg-white">
     <!-- Background Image -->
     <img 
-      src="/images/landscape.png" 
+      src="/images/landscape.webp" 
       alt="Mountain Sunset" 
       class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
     />

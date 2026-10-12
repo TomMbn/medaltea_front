@@ -304,6 +304,33 @@ useSeoMeta({
   twitterImage: `https://leya-sante.fr${medicine.heroImage}`,
 })
 
+useHead({
+  script: [{
+    type: 'application/ld+json',
+    innerHTML: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://leya-sante.fr' },
+            { '@type': 'ListItem', position: 2, name: 'Médecines', item: 'https://leya-sante.fr/medecines' },
+            { '@type': 'ListItem', position: 3, name: medicine.name, item: `https://leya-sante.fr/medecines/${medicine.slug}` },
+          ],
+        },
+        {
+          '@type': 'WebPage',
+          name: medicine.seo.title,
+          description: medicine.seo.description,
+          url: `https://leya-sante.fr/medecines/${medicine.slug}`,
+          inLanguage: 'fr-FR',
+          isPartOf: { '@id': 'https://leya-sante.fr/#website' },
+        },
+      ],
+    }),
+  }],
+})
+
 const practitionersRef = ref(null)
 
 function scrollToPractitioners() {

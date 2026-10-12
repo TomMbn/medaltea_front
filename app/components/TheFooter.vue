@@ -28,6 +28,11 @@
           </svg>
         </a>
       </div>
+      <nav aria-label="Informations légales" class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-sans text-[#012828] opacity-60">
+        <NuxtLink to="/mentions-legales" class="hover:opacity-100 hover:underline">Mentions légales</NuxtLink>
+        <NuxtLink to="/politique-de-confidentialite" class="hover:underline">Politique de confidentialité</NuxtLink>
+        <NuxtLink to="/cgu" class="hover:underline">CGU</NuxtLink>
+      </nav>
       <div class="text-center opacity-40 text-sm font-sans">
         © 2026 Léya - Tous droits réservés.
       </div>

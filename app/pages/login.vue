@@ -142,7 +142,6 @@ async function handleLogin() {
     })
 
     // On success
-    console.log('Login successful, response:', response)
     const tokenValue = response?.token || response?.accessToken || response?.access_token || response?.data?.token
     
     if (tokenValue) {
@@ -150,7 +149,6 @@ async function handleLogin() {
       const accessTokenCookie = useCookie('accessToken', { maxAge: 60 * 60 * 24 * 7, path: '/' })
       tokenCookie.value = tokenValue
       accessTokenCookie.value = tokenValue
-      console.log('Token stored in cookies')
     }
     
     router.push('/chatbot')

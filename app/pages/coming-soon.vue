@@ -8,7 +8,7 @@
       <!-- Mascot -->
       <div class="mb-6 lg:mb-10 animate-float translate-y-0">
         <NuxtImg 
-          src="/images/panda-standing.png" 
+          src="/images/panda-standing.webp" 
           alt="Léya Panda"
           class="w-32 lg:w-48 h-auto drop-shadow-xl"
           width="256"

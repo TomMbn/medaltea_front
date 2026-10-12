@@ -1,3 +1,5 @@
+import { medecines } from './app/data/medecines'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -15,12 +17,12 @@ export default defineNuxtConfig({
     urls: [
       { loc: '/', priority: 1.0, changefreq: 'weekly' },
       { loc: '/medecines', priority: 0.9, changefreq: 'weekly' },
-      { loc: '/medecines/osteopathie', priority: 0.8, changefreq: 'monthly' },
-      { loc: '/medecines/naturopathie', priority: 0.8, changefreq: 'monthly' },
-      { loc: '/medecines/sophrologie', priority: 0.8, changefreq: 'monthly' },
-      { loc: '/medecines/acupuncture', priority: 0.8, changefreq: 'monthly' },
-      { loc: '/medecines/hypnotherapie', priority: 0.8, changefreq: 'monthly' },
-      { loc: '/medecines/massage', priority: 0.8, changefreq: 'monthly' },
+      { loc: '/trouver-un-praticien', priority: 0.8, changefreq: 'monthly' },
+      { loc: '/mentions-legales', priority: 0.2, changefreq: 'yearly' },
+      { loc: '/politique-de-confidentialite', priority: 0.2, changefreq: 'yearly' },
+      { loc: '/cgu', priority: 0.2, changefreq: 'yearly' },
+      // Une entrée par médecine, générée depuis app/data/medecines.ts
+      ...medecines.map(m => ({ loc: `/medecines/${m.slug}`, priority: 0.8, changefreq: 'monthly' as const })),
     ]
   },
   image: {
@@ -51,11 +53,11 @@ export default defineNuxtConfig({
         { property: 'og:title', content: 'Léya — La médecine alternative, intelligente et accessible' },
         { property: 'og:description', content: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.' },
         { property: 'og:url', content: 'https://leya-sante.fr' },
-        { property: 'og:image', content: 'https://leya-sante.fr/og-image.png' },
+        { property: 'og:image', content: 'https://leya-sante.fr/og-image.jpg' },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: 'Léya — La médecine alternative, intelligente et accessible' },
         { name: 'twitter:description', content: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.' },
-        { name: 'twitter:image', content: 'https://leya-sante.fr/og-image.png' },
+        { name: 'twitter:image', content: 'https://leya-sante.fr/og-image.jpg' },
       ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/Favicon.svg' },

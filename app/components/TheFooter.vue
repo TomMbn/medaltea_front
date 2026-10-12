@@ -33,8 +33,7 @@
         <NuxtLink to="/politique-de-confidentialite" class="hover:underline">Politique de confidentialité</NuxtLink>
         <NuxtLink to="/cgu" class="hover:underline">CGU</NuxtLink>
         <NuxtLink to="/cgu-pro" class="hover:underline">CGU praticiens</NuxtLink>
-        <NuxtLink to="/inscription-pro" class="hover:underline">Vous êtes praticien ?</NuxtLink>
-        <NuxtLink to="/pro" class="hover:underline">Espace praticien</NuxtLink>
+        <NuxtLink to="/praticiens-pro" class="hover:underline">Vous êtes praticien ?</NuxtLink>
       </nav>
       <div class="text-center opacity-70 text-sm font-sans">
         © 2026 Léya - Tous droits réservés.

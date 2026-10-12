@@ -10,15 +10,39 @@ const baseOptions = () => ({
     maxAge: SESSION_MAX_AGE,
 })
 
-/** Pose le token en cookie httpOnly (illisible par JavaScript) + un témoin non sensible pour l'interface. */
-export function setSessionCookies(event: H3Event, token: string) {
+export type Role = 'pro' | 'patient'
+
+/**
+ * Pose le token en cookie httpOnly (illisible par JavaScript) + deux témoins non sensibles pour l'interface :
+ * `leya_session` (connecté) et `leya_role` (pro / patient). L'accès aux données reste contrôlé par le backend.
+ */
+export function setSessionCookies(event: H3Event, token: string, role: Role = 'patient') {
     setCookie(event, 'token', token, { ...baseOptions(), httpOnly: true })
     setCookie(event, 'leya_session', '1', { ...baseOptions(), httpOnly: false })
+    setCookie(event, 'leya_role', role, { ...baseOptions(), httpOnly: false })
 }
 
 export function clearSessionCookies(event: H3Event) {
     for (const name of LEGACY_COOKIES) deleteCookie(event, name, { path: '/' })
     deleteCookie(event, 'leya_session', { path: '/' })
+    deleteCookie(event, 'leya_role', { path: '/' })
+}
+
+/**
+ * Un compte praticien est reconnu au fait que l'API de ses prestations lui répond ;
+ * un patient reçoit une erreur d'autorisation (403/404).
+ */
+export async function detectRole(token: string): Promise<Role> {
+    const { apiBase } = useRuntimeConfig()
+    try {
+        await $fetch(`${apiBase}/praticiens/me/consultation-types`, {
+            headers: { Authorization: `Bearer ${token}` },
+            timeout: 8000,
+        })
+        return 'pro'
+    } catch {
+        return 'patient'
+    }
 }
 
 /** Extrait le token de la réponse du backend (access_token, avec repli sur les anciens noms). */
@@ -71,7 +95,12 @@ export async function authenticate(event: H3Event, path: 'login' | 'register' | 
         }
     }
 
-    if (token) setSessionCookies(event, token)
+    let role: Role | null = null
+    if (token) {
+        // L'inscription pro crée toujours un praticien ; sinon on interroge le backend.
+        role = path === 'register-pro' ? 'pro' : await detectRole(token)
+        setSessionCookies(event, token, role)
+    }
     // Le token n'est jamais renvoyé au navigateur.
-    return { success: true, authenticated: !!token }
+    return { success: true, authenticated: !!token, role }
 }

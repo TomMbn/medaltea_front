@@ -113,6 +113,10 @@
           Déjà un compte ? 
           <NuxtLink :to="{ path: '/login', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="text-rose-500 hover:underline">Se connecter</NuxtLink>
         </p>
+        <p class="text-center text-sm mt-3 text-[#012828]/70">
+          Vous êtes praticien ?
+          <NuxtLink to="/inscription-pro" class="underline text-[#156F71]">Créer un compte praticien</NuxtLink>
+        </p>
       </div>
     </div>
   </div>
@@ -150,6 +154,7 @@ async function handleRegister() {
       }
     })
     refreshCookie('leya_session')
+    refreshCookie('leya_role')
     // Redirection interne uniquement (évite les redirections ouvertes vers un site externe)
     const target = String(route.query.redirect ?? '')
     const destination = target.startsWith('/') && !target.startsWith('//') ? target : '/'

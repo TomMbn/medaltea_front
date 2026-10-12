@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="font-unbounded font-bold text-lg mb-2">Prestations</h2>
+    <h2 class="font-unbounded font-bold text-lg mb-2">Vos prestations</h2>
     <p class="text-sm text-gray-600 mb-5">Chaque prestation définit la durée des créneaux proposés aux patients.</p>
 
     <p v-if="error" class="text-sm text-red-700 bg-red-50 rounded-xl p-3 mb-3" role="alert">{{ error }}</p>
@@ -78,21 +78,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
-const props = defineProps({ initial: { type: Array, default: () => [] } })
-
-const items = ref(Array.isArray(props.initial) ? props.initial.slice() : [])
+const { data: loaded, refresh: refreshTypes } = await useAsyncData('pro-types', () => $fetch('/api/backend/praticiens/me/consultation-types'), { server: false, default: () => [] })
+const items = computed(() => (Array.isArray(loaded.value) ? loaded.value : []))
 const error = ref('')
 const busy = ref(false)
 const editing = ref(null)
 const draft = ref({})
 const form = ref({ name: '', durationMin: 60, price: null, mode: 'cabinet' })
 
-async function reload() {
-  const list = await $fetch('/api/backend/praticiens/me/consultation-types')
-  items.value = Array.isArray(list) ? list : []
-}
+const reload = () => refreshTypes()
 
 const cleanPrice = (v) => (v === null || v === '' || Number.isNaN(v) ? undefined : v)
 

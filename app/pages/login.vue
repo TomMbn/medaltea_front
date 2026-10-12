@@ -106,6 +106,10 @@
           Pas encore de compte ? 
           <NuxtLink :to="{ path: '/register', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="text-rose-500 hover:underline">S'inscrire</NuxtLink>
         </p>
+        <p class="text-center text-sm mt-3 text-[#012828]/70">
+          Vous êtes praticien ?
+          <NuxtLink to="/praticiens-pro" class="underline text-[#156F71]">Découvrir l'espace praticien</NuxtLink>
+        </p>
       </div>
     </div>
   </div>
@@ -143,9 +147,12 @@ async function handleLogin() {
     })
     
     refreshCookie('leya_session')
+    refreshCookie('leya_role')
     const target = String(route.query.redirect ?? '')
     // Redirection interne uniquement (évite les redirections ouvertes vers un site externe)
-    router.push(target.startsWith('/') && !target.startsWith('//') ? target : '/chatbot')
+    const safeTarget = target.startsWith('/') && !target.startsWith('//') ? target : ''
+    // Sans destination demandée : un praticien arrive dans son espace, un patient sur le chatbot.
+    router.push(safeTarget || (response?.role === 'pro' ? '/pro/rendez-vous' : '/chatbot'))
 
   } catch (error) {
     if (error.status === 401) {

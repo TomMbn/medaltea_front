@@ -1,6 +1,7 @@
 <template>
   <div class="bg-[#e0ecf2] min-h-screen overflow-x-hidden">
     <div class="w-11/12 max-w-[760px] mx-auto pt-32 pb-8">
+      <NuxtLink to="/praticiens-pro" class="inline-block text-sm text-[#156F71] hover:underline mb-4">← Espace praticien</NuxtLink>
       <h1 class="font-unbounded font-bold text-2xl lg:text-3xl text-[#012828] mb-2">Rejoindre Léya en tant que praticien</h1>
       <p class="text-[#012828]/70 font-sans mb-8">Créez votre compte professionnel et votre fiche, puis ouvrez la prise de rendez-vous en ligne.</p>
 
@@ -90,7 +91,7 @@
           <button class="bg-[#012828] text-white font-bold text-sm px-8 py-3 rounded-[12px] hover:bg-[#156F71] transition-colors disabled:opacity-50" :disabled="submitting || !form.specialityIds.length">
             {{ submitting ? 'Création…' : 'Créer mon compte praticien' }}
           </button>
-          <p class="text-sm">Déjà inscrit ? <NuxtLink :to="{ path: '/login', query: { redirect: '/pro' } }" class="underline text-[#156F71]">Se connecter</NuxtLink></p>
+          <p class="text-sm">Déjà inscrit ? <NuxtLink :to="{ path: '/login', query: { redirect: '/pro/rendez-vous' } }" class="underline text-[#156F71]">Se connecter</NuxtLink></p>
         </div>
       </form>
 
@@ -142,9 +143,10 @@ async function submit() {
       },
     })
     refreshCookie('leya_session')
+    refreshCookie('leya_role')
     // Le backend peut ne pas ouvrir de session à l'inscription : on renvoie alors vers la connexion.
-    if (result?.authenticated) await navigateTo('/pro')
-    else await navigateTo({ path: '/login', query: { redirect: '/pro' } })
+    if (result?.authenticated) await navigateTo('/pro/rendez-vous')
+    else await navigateTo({ path: '/login', query: { redirect: '/pro/rendez-vous' } })
   } catch (e) {
     const code = apiStatus(e)
     errorMsg.value = code === 409

@@ -22,7 +22,8 @@ export default defineNuxtConfig({
       { loc: '/politique-de-confidentialite', priority: 0.2, changefreq: 'yearly' },
       { loc: '/cgu', priority: 0.2, changefreq: 'yearly' },
       { loc: '/cgu-pro', priority: 0.2, changefreq: 'yearly' },
-      { loc: '/inscription-pro', priority: 0.6, changefreq: 'monthly' },
+      { loc: '/praticiens-pro', priority: 0.7, changefreq: 'monthly' },
+      { loc: '/inscription-pro', priority: 0.5, changefreq: 'monthly' },
       // Une entrée par médecine, générée depuis app/data/medecines.ts
       ...medecines.map(m => ({ loc: `/medecines/${m.slug}`, priority: 0.8, changefreq: 'monthly' as const })),
     ]

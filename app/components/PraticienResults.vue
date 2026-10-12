@@ -33,7 +33,7 @@
                 {{ p.firstName }} {{ p.lastName }}
               </div>
               <div class="flex items-center gap-1 text-gray-500 text-sm mt-1">
-                <MapPin :size="12" /> <span class="truncate">{{ p.city }}<template v-if="p.postalCode"> ({{ p.postalCode }})</template></span>
+                <MapPin :size="12" /> <span class="truncate">{{ p.city }}<template v-if="p.postalCode"> ({{ formatPostalCode(p.postalCode) }})</template></span>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@ const filtered = computed(() => {
   const needle = normalize(props.q).trim()
   if (!needle) return props.praticiens
   return props.praticiens.filter(p =>
-    normalize(`${p.firstName} ${p.lastName} ${p.city} ${p.postalCode} ${p.address}`).includes(needle),
+    normalize(`${p.firstName} ${p.lastName} ${p.city} ${formatPostalCode(p.postalCode)} ${p.address}`).includes(needle),
   )
 })
 

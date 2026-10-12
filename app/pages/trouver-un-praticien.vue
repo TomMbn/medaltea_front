@@ -1,7 +1,7 @@
 <template>
   <div class="overflow-x-hidden min-h-screen">
     <PraticienHero />
-    <div id="resultats"><PraticienResults :praticiens="praticiens ?? []" :q="q" :error="!!error" /></div>
+    <div id="resultats" class="scroll-mt-28"><PraticienResults :praticiens="praticiens ?? []" :q="q" :error="!!error" /></div>
     <PraticienWhy />
     <div class="bg-[#e0ecf2]">
       <div class="w-11/12 max-w-[1440px] mx-auto">

@@ -137,7 +137,6 @@
 <script setup>
 import { ref, nextTick, onMounted, computed } from 'vue'
 import { ArrowUp, Ban } from 'lucide-vue-next'
-import { marked } from 'marked'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -317,10 +316,7 @@ const sendMessage = async () => {
   }
 }
 
-const formatMessage = (text) => {
-  if (!text) return ''
-  return marked.parse(text, { breaks: true })
-}
+const formatMessage = (text) => renderMarkdown(text)
 
 onMounted(() => {
   loadUsage()

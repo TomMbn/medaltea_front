@@ -44,6 +44,17 @@ export default defineNuxtConfig({
       '2xl': 1536
     }
   },
+  routeRules: {
+    '/**': {
+      headers: {
+        'X-Content-Type-Options': 'nosniff',
+        'X-Frame-Options': 'DENY',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+        'Permissions-Policy': 'camera=(), microphone=(), geolocation=(self), payment=()',
+        'Cross-Origin-Opener-Policy': 'same-origin',
+      },
+    },
+  },
   runtimeConfig: {
     geminiApiKey: process.env.GEMINI_API_KEY || '',
     // URL du backend (surchargeable avec NUXT_API_BASE)

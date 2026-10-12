@@ -2,32 +2,35 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
-    const { message, history } = body;
+    const { message, history } = body ?? {};
 
     const config = useRuntimeConfig();
     const apiKey = config.geminiApiKey;
 
-    // --- AUTHENTICATION CHECK ---
-    const token = getCookie(event, 'token');
-    const accessToken = getCookie(event, 'accessToken');
-    const sbAccessToken = getCookie(event, 'sb-access-token');
+    // --- AUTHENTICATION CHECK (token vérifié auprès du backend) ---
+    const user = await requireUser(event);
 
-    const tokenValue = token || accessToken || sbAccessToken;
-    if (!tokenValue) {
-        throw createError({
-            statusCode: 401,
-            statusMessage: "Désolé, vous devez être connecté pour discuter avec Léya.",
-        });
+    // --- INPUT VALIDATION ---
+    if (typeof message !== 'string' || !message.trim() || message.length > 2000) {
+        throw createError({ statusCode: 400, statusMessage: 'Message invalide.' });
     }
+    const safeHistory = (Array.isArray(history) ? history : [])
+        .slice(-20)
+        .filter((m: any) => (m?.role === 'user' || m?.role === 'model') && Array.isArray(m?.parts))
+        .map((m: any) => ({
+            role: m.role,
+            parts: m.parts
+                .filter((p: any) => typeof p?.text === 'string')
+                .slice(0, 5)
+                .map((p: any) => ({ text: p.text.slice(0, 4000) })),
+        }))
+        .filter((m: any) => m.parts.length > 0);
 
     // --- DAILY USAGE LIMIT (SERVER SIDE) ---
     const MAX_DAILY = 10;
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-    // Use a simplified hash or slice of the token as a unique identifier for the user
-    // We use common session identifiers from Supabase or custom auth
-    const userId = tokenValue.substring(tokenValue.length - 12); 
-    const storageKey = `usage:${today}:${userId}`;
-    
+    const storageKey = `usage:${today}:${user.id}`;
+
     const storage = useStorage('cache'); // Using memory/cache storage context
     const currentUsage: any = (await storage.getItem(storageKey)) || 0;
 
@@ -101,10 +104,7 @@ CONSIGNES DE RÉPONSE :
         });
 
         const chat = model.startChat({
-            history: (history || []).map((m: any) => ({
-                role: m.role,
-                parts: m.parts
-            })),
+            history: safeHistory,
         });
 
         const result = await chat.sendMessageStream(message);

@@ -54,6 +54,7 @@
           </div>
         </div>
 
+        <p v-if="slotGone" class="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl p-3 mb-3" role="status">Le créneau choisi n'est plus disponible. Choisissez-en un autre.</p>
         <p v-if="loadError" class="text-sm text-red-700 bg-red-50 rounded-xl p-3" role="alert">{{ loadError }}</p>
         <p v-else-if="loading" class="text-sm text-gray-500">Chargement des créneaux…</p>
         <p v-else-if="!days.length" class="text-sm text-gray-500 bg-[#e0ecf2]/60 rounded-xl p-4">
@@ -70,7 +71,7 @@
                 class="px-3 py-1.5 rounded-full text-sm border transition-colors"
                 :class="selectedSlot === slot ? 'bg-[#156F71] text-white border-[#156F71]' : 'border-gray-300 hover:border-[#156F71]'"
                 :aria-pressed="selectedSlot === slot"
-                @click="selectedSlot = slot"
+                @click="choose(slot)"
               >
                 {{ formatTime(slot) }}
               </button>
@@ -138,13 +139,21 @@ const props = defineProps({
 })
 
 const route = useRoute()
+const router = useRouter()
 const { isLoggedIn } = useSession()
 
-const typeId = ref(props.types[0]?.id ?? null)
+const minWeek = todayKey()
+const typeFromQuery = (v) => props.types.find(t => t.id === Number(v))?.id ?? null
+const slotFromQuery = (v) => (typeof v === 'string' && !Number.isNaN(Date.parse(v)) ? v : null)
+
+const typeId = ref(typeFromQuery(route.query.type) ?? props.types[0]?.id ?? null)
 const selectedType = computed(() => props.types.find(t => t.id === typeId.value))
 
-const minWeek = todayKey()
-const weekStart = ref(minWeek)
+// Créneau demandé par l'adresse (retour après connexion, lien « Réserver » de la page) : restauré une fois les créneaux chargés.
+const wantedSlot = ref(slotFromQuery(route.query.slot))
+const slotGone = ref(false)
+const weekFor = (iso) => { const d = dayKey(iso); return d < minWeek ? minWeek : d }
+const weekStart = ref(wantedSlot.value ? weekFor(wantedSlot.value) : minWeek)
 const canGoPrev = computed(() => weekStart.value > minWeek)
 
 const slots = ref([])
@@ -171,7 +180,14 @@ async function loadSlots() {
     const raw = await $fetch(`/api/backend/praticiens/${props.praticien.id}/slots`, {
       query: { from: weekStart.value, to: addDays(weekStart.value, 6), consultationTypeId: typeId.value },
     })
-    if (current === requestId) slots.value = normalizeSlots(raw)
+    if (current === requestId) {
+      slots.value = normalizeSlots(raw)
+      if (wantedSlot.value) {
+        if (slots.value.includes(wantedSlot.value)) selectedSlot.value = wantedSlot.value
+        else slotGone.value = true
+        wantedSlot.value = null
+      }
+    }
   } catch (e) {
     if (current === requestId) {
       slots.value = []
@@ -187,8 +203,35 @@ function shiftWeek(n) {
   weekStart.value = next < minWeek ? minWeek : next
 }
 
+function setQuery(patch) {
+  const query = { ...route.query, ...patch }
+  for (const k of Object.keys(query)) if (query[k] == null) delete query[k]
+  router.replace({ query })
+}
+
+function choose(slot) {
+  selectedSlot.value = slot
+  slotGone.value = false
+  setQuery({ type: String(typeId.value), slot })
+}
+
 watch([typeId, weekStart], loadSlots)
+// Un changement venu de l'adresse est déjà synchronisé : on n'efface le créneau que pour un choix fait dans le module.
+watch(typeId, (id, old) => { if (old != null && String(route.query.type) !== String(id)) setQuery({ type: String(id), slot: null }) })
 onMounted(loadSlots)
+
+// Liens externes (« Réserver » sur une prestation, prochain créneau) : synchronisent le module via l'adresse.
+watch(() => [route.query.type, route.query.slot], ([t, s]) => {
+  const nextType = typeFromQuery(t)
+  const nextSlot = slotFromQuery(s)
+  if (nextType && nextType !== typeId.value) typeId.value = nextType
+  if (nextSlot && nextSlot !== selectedSlot.value) {
+    wantedSlot.value = nextSlot
+    const w = weekFor(nextSlot)
+    if (w !== weekStart.value) weekStart.value = w
+    else loadSlots()
+  }
+})
 
 async function submit() {
   if (submitting.value || !selectedSlot.value) return

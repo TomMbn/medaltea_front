@@ -39,7 +39,9 @@ export default defineNuxtConfig({
     }
   },
   runtimeConfig: {
-    geminiApiKey: process.env.GEMINI_API_KEY || ''
+    geminiApiKey: process.env.GEMINI_API_KEY || '',
+    // URL du backend (surchargeable avec NUXT_API_BASE)
+    apiBase: process.env.NUXT_API_BASE || 'https://vps123922.serveur-vps.net'
   },
   app: {
     head: {

@@ -38,6 +38,12 @@
           <td>7 jours (cookies de session)</td>
         </tr>
         <tr>
+          <td>Mesure d'audience anonyme</td>
+          <td>Pages visitées, type d'appareil, pays, provenance. Aucune donnée personnelle ni identifiant persistant</td>
+          <td>Intérêt légitime</td>
+          <td>Statistiques agrégées uniquement</td>
+        </tr>
+        <tr>
           <td>Échanges avec notre équipe</td>
           <td>Email et contenu de votre message</td>
           <td>Intérêt légitime</td>
@@ -59,6 +65,7 @@
     <ul>
       <li>Google (Gemini) : génération des réponses de l'assistant virtuel.</li>
       <li>{{ legal.hostName }} : hébergement du site.</li>
+      <li>Umami (Umami Software, Inc.) : mesure d'audience anonyme, sans cookie.</li>
       <li>Serveur applicatif de l'éditeur : gestion des comptes et de l'authentification.</li>
     </ul>
     <p>
@@ -69,8 +76,9 @@
     <h2>Cookies</h2>
     <p>
       {{ legal.brandName }} utilise uniquement des cookies strictement nécessaires au fonctionnement du service
-      (authentification et maintien de votre session). Ils ne nécessitent pas de consentement. Aucun cookie publicitaire
-      ou de mesure d'audience n'est déposé sans votre accord préalable.
+      (authentification et maintien de votre session). Ils ne nécessitent pas de consentement. La mesure d'audience
+      est réalisée avec Umami, sans cookie ni identifiant persistant et sans recoupement entre sites. Aucun cookie
+      publicitaire n'est déposé.
     </p>
 
     <h2>Vos droits</h2>

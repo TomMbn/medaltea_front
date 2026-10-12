@@ -23,7 +23,7 @@
           <dl class="space-y-4 text-sm font-sans">
             <div class="flex gap-3">
               <dt class="shrink-0"><MapPin :size="16" class="text-[#156F71]" aria-label="Adresse" /></dt>
-              <dd>{{ praticien.address }}<br />{{ praticien.postalCode }} {{ praticien.city }}</dd>
+              <dd>{{ praticien.address }}<br />{{ formatPostalCode(praticien.postalCode) }} {{ praticien.city }}</dd>
             </div>
             <div v-if="praticien.phoneNumber" class="flex gap-3">
               <dt class="shrink-0"><Phone :size="16" class="text-[#156F71]" aria-label="Téléphone" /></dt>

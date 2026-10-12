@@ -80,3 +80,6 @@ export const addDays = (key: string, n: number) => {
   return d.toISOString().slice(0, 10)
 }
 export const todayKey = () => dayKeyFmt.format(new Date())
+
+/** Le backend stocke le code postal en nombre : on restitue le zéro initial (6000 → 06000). */
+export const formatPostalCode = (value: unknown) => String(value ?? '').replace(/\D/g, '').padStart(5, '0').slice(-5)

@@ -91,7 +91,7 @@ export default defineEventHandler(async (event) => {
     // Un token refusé par le backend équivaut à une session expirée.
     setResponseStatus(event, response.status)
     setHeader(event, 'Cache-Control', rule.cacheable && response.status === 200
-        ? 'public, s-maxage=60, stale-while-revalidate=300'
+        ? 'public, s-maxage=15, stale-while-revalidate=30'
         : 'no-store')
 
     return stripPrivate(response._data)

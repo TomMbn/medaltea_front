@@ -56,7 +56,8 @@ function validateAppointment(body: Record<string, any>) {
 
 export default defineEventHandler(async (event) => {
     const path = (getRouterParam(event, 'path') || '').replace(/^\/+|\/+$/g, '')
-    const method = event.method.toUpperCase()
+    // HEAD est traité comme GET (sondes, caches, outils de test)
+    const method = event.method.toUpperCase() === 'HEAD' ? 'GET' : event.method.toUpperCase()
 
     const rule = RULES.find(r => r.method === method && r.pattern.test(path))
     if (!rule) throw createError({ statusCode: 404, statusMessage: 'Route introuvable.' })

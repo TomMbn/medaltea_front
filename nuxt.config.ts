@@ -49,6 +49,7 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'google-site-verification', content: '6ptMFJEjzSqdeWEAtJY4t7a79p5OQ6816u0Is4HT1_4' },
         { name: 'description', content: 'Léya connecte patients et praticiens en médecines alternatives. Prenez rendez-vous, consultez notre chatbot IA et trouvez la thérapie naturelle qui vous correspond.' },
         { property: 'og:type', content: 'website' },
         { property: 'og:site_name', content: 'Léya' },

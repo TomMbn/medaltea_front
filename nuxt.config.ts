@@ -57,6 +57,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     geminiApiKey: process.env.GEMINI_API_KEY || '',
+    // Modèle Gemini (surchargeable avec NUXT_GEMINI_MODEL, ex. gemini-3.5-flash-lite)
+    geminiModel: process.env.GEMINI_MODEL || 'gemini-3.8-flash',
     // URL du backend (surchargeable avec NUXT_API_BASE)
     apiBase: process.env.NUXT_API_BASE || 'https://vps123922.serveur-vps.net'
   },

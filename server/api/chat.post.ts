@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
         });
 
         const model = genAI.getGenerativeModel({
-            model: "gemini-2.5-flash",
+            model: config.geminiModel,
             systemInstruction: `Tu es Léya, l'assistante santé de la plateforme Léya, spécialisée exclusivement dans les médecines douces et alternatives.
 
 TON DOMAINE EXCLUSIF :

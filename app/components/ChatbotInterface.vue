@@ -102,6 +102,7 @@
             ></textarea>
             
             <button 
+              aria-label="Envoyer le message"
               @click="sendMessage"
               :disabled="isTyping || !userInput.trim() || isLimitReached"
               class="w-10 h-10 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 disabled:grayscale disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"

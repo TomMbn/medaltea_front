@@ -20,8 +20,9 @@
           Les Médecines
         </NuxtLink>
         <NuxtLink
-          to="/coming-soon"
+          to="/trouver-un-praticien"
           class="text-[#012828] font-semibold text-[14px] opacity-60 hover:opacity-100 transition-opacity"
+          active-class="!opacity-100"
         >
           Trouver un praticien
         </NuxtLink>
@@ -72,7 +73,7 @@
           <NuxtLink to="/medecines" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">
             Les Médecines
           </NuxtLink>
-          <NuxtLink to="/coming-soon" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">
+          <NuxtLink to="/trouver-un-praticien" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">
             Trouver un praticien
           </NuxtLink>
           <template v-if="!isLoggedIn">

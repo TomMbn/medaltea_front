@@ -22,7 +22,7 @@
             <NuxtLink to="/inscription-pro" class="bg-[#EC7F7A] text-white font-bold px-7 py-3.5 rounded-[14px] hover:brightness-105 transition">
               Créer mon compte praticien
             </NuxtLink>
-            <NuxtLink :to="{ path: '/login', query: { redirect: '/pro/rendez-vous' } }" class="border-2 border-white text-white font-bold px-7 py-3.5 rounded-[14px] hover:bg-white/10 transition">
+            <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro/rendez-vous' } }" class="border-2 border-white text-white font-bold px-7 py-3.5 rounded-[14px] hover:bg-white/10 transition">
               Se connecter
             </NuxtLink>
           </div>

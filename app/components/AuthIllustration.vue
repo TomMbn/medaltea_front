@@ -20,7 +20,7 @@
     <div class="absolute bottom-0 left-0 w-full p-12 pb-16 max-w-[850px]">
       <div class="quote-wrapper pl-6">
         <h2 class="text-white text-[32px] md:text-[38px] font-bold leading-[1.25] font-unbounded">
-          Explique-nous ce que tu ressens, on te guide !
+          {{ message }}
         </h2>
       </div>
     </div>
@@ -28,7 +28,9 @@
 </template>
 
 <script setup>
-// Pure presentation component, no logic required.
+defineProps({
+  message: { type: String, default: 'Explique-nous ce que tu ressens, on te guide !' },
+})
 </script>
 
 <style scoped>

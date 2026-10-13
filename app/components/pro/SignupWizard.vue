@@ -460,7 +460,7 @@ async function finish() {
     if (!result?.authenticated) {
       clearDraft()
       trackEvent('pro-signup-success', { session: false })
-      return navigateTo({ path: '/login', query: { redirect: '/pro/bienvenue' } })
+      return navigateTo({ path: '/login', query: { espace: 'pro', redirect: '/pro/bienvenue' } })
     }
 
     const warnings = agenda.enabled ? await setupAgenda() : []

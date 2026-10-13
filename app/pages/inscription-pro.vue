@@ -5,7 +5,7 @@
       <h1 class="font-unbounded font-bold text-2xl lg:text-3xl mb-2">Rejoindre Léya en tant que praticien</h1>
       <p class="text-[#012828]/70 font-sans mb-8">
         Déjà inscrit ?
-        <NuxtLink :to="{ path: '/login', query: { redirect: '/pro/rendez-vous' } }" class="underline text-[#156F71]">Se connecter</NuxtLink>
+        <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro/rendez-vous' } }" class="underline text-[#156F71]">Se connecter</NuxtLink>
       </p>
 
       <ProSignupWizard />

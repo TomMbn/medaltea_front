@@ -2,7 +2,7 @@
   <div class="auth-page-v2">
     <!-- Left Pane: Illustration -->
     <div class="pane-left">
-      <AuthIllustration />
+      <AuthIllustration :message="isProContext ? 'Votre agenda et vos patients, en toute simplicité.' : undefined" />
     </div>
 
     <!-- Right Pane: Form -->
@@ -17,11 +17,12 @@
               class="logo-img"
             />
           </NuxtLink>
+          <p v-if="isProContext" class="pro-tag">Espace praticien</p>
           <h1 class="auth-title mb-4">
-            Bon retour !
+            {{ isProContext ? 'Connexion praticien' : 'Bon retour !' }}
           </h1>
           <p class="auth-subtitle">
-            Ravi de vous revoir. Connectez-vous pour continuer.
+            {{ isProContext ? 'Connectez-vous pour gérer vos rendez-vous et votre agenda.' : 'Ravi de vous revoir. Connectez-vous pour continuer.' }}
           </p>
         </div>
 
@@ -63,6 +64,16 @@
             {{ errorMsg }}
           </div>
 
+          <!-- Connexion réussie, mais avec un compte patient depuis l'entrée praticien -->
+          <div v-if="wrongRole" class="info-box" role="status">
+            <p class="font-semibold mb-1">Ce compte est un compte patient.</p>
+            <p class="mb-2">Il n'a pas accès à l'espace praticien. Utilisez un compte praticien, ou créez-en un avec une autre adresse email.</p>
+            <p class="flex flex-wrap gap-x-4 gap-y-1">
+              <NuxtLink to="/mes-rendez-vous" class="underline">Aller à mon compte patient</NuxtLink>
+              <NuxtLink to="/inscription-pro" class="underline">Créer un compte praticien</NuxtLink>
+            </p>
+          </div>
+
           <!-- Submit Button -->
           <div class="submit-wrapper">
             <button 
@@ -102,21 +113,36 @@
         </div>
 -->
 
-        <p class="text-center font-semibold mb-0 font-futura text-[#012828]">
-          Pas encore de compte ? 
-          <NuxtLink :to="{ path: '/register', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="text-rose-500 hover:underline">S'inscrire</NuxtLink>
-        </p>
-        <p class="text-center text-sm mt-3 text-[#012828]/70">
-          Vous êtes praticien ?
-          <NuxtLink to="/praticiens-pro" class="underline text-[#156F71]">Découvrir l'espace praticien</NuxtLink>
-        </p>
+        <!-- Entrée praticien -->
+        <template v-if="isProContext">
+          <p class="text-center font-semibold mb-0 font-futura text-[#012828]">
+            Pas encore inscrit ?
+            <NuxtLink to="/inscription-pro" class="text-rose-500 hover:underline">Créer mon compte praticien</NuxtLink>
+          </p>
+          <p class="text-center text-sm mt-3 text-[#012828]/70">
+            Vous êtes patient ?
+            <NuxtLink to="/login" class="underline text-[#156F71]">Connexion patient</NuxtLink>
+          </p>
+        </template>
+
+        <!-- Entrée patient -->
+        <template v-else>
+          <p class="text-center font-semibold mb-0 font-futura text-[#012828]">
+            Pas encore de compte ?
+            <NuxtLink :to="{ path: '/register', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="text-rose-500 hover:underline">S'inscrire</NuxtLink>
+          </p>
+          <p class="text-center text-sm mt-3 text-[#012828]/70">
+            Vous êtes praticien ?
+            <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro/rendez-vous' } }" class="underline text-[#156F71]">Connexion praticien</NuxtLink>
+          </p>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Loader2 } from 'lucide-vue-next'
 
 useSeoMeta({ title: 'Connexion — Léya', robots: 'noindex, nofollow' })
@@ -128,12 +154,17 @@ const mail = ref('')
 const password = ref('')
 const isLoading = ref(false)
 const errorMsg = ref('')
+const wrongRole = ref(false)
+
+// Entrée « praticien » : lien « Se connecter » de la page pro, ou redirection vers l'espace pro.
+const isProContext = computed(() => route.query.espace === 'pro' || String(route.query.redirect ?? '').startsWith('/pro'))
 
 async function handleLogin() {
   if (isLoading.value) return
   
   isLoading.value = true
   errorMsg.value = ''
+  wrongRole.value = false
 
   try {
     // Note: Assuming /api/login endpoint exists or will be implemented
@@ -148,6 +179,14 @@ async function handleLogin() {
     
     refreshCookie('leya_session')
     refreshCookie('leya_role')
+    refreshCookie('leya_praticien')
+
+    // Connexion depuis l'entrée praticien avec un compte patient : on l'explique au lieu de rediriger vers une page qui boucle.
+    if (isProContext.value && response?.role !== 'pro') {
+      wrongRole.value = true
+      return
+    }
+
     const target = String(route.query.redirect ?? '')
     // Redirection interne uniquement (évite les redirections ouvertes vers un site externe)
     const safeTarget = target.startsWith('/') && !target.startsWith('//') ? target : ''
@@ -320,6 +359,27 @@ async function handleLogin() {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.pro-tag {
+  display: inline-block;
+  margin: 1rem 0 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: #e0ecf2;
+  color: #156F71;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.info-box {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  color: #78350f;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font-size: 0.875rem;
+  margin-top: 0.75rem;
 }
 
 .error-box {

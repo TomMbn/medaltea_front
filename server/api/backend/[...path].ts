@@ -11,6 +11,10 @@ type Rule = {
     query?: string[]
     body?: string[]
     cacheable?: boolean
+    /** Conserve les valeurs vides (effacer un champ) */
+    keepEmpty?: boolean
+    /** Réponse destinée au propriétaire de la fiche : champs privés conservés */
+    own?: boolean
 }
 
 const RULES: Rule[] = [
@@ -31,6 +35,12 @@ const RULES: Rule[] = [
     // Revendication d'une fiche répertoriée (compte pro)
     { method: 'POST', pattern: /^praticiens\/\d+\/claim-requests$/, auth: true, body: ['message', 'rpps', 'siret'] },
     { method: 'GET', pattern: /^praticiens\/me\/claim-requests$/, auth: true },
+
+    // Ma fiche (propriétaire uniquement : le backend vérifie le compte)
+    { method: 'GET', pattern: /^praticiens\/me$/, auth: true, own: true },
+    { method: 'PUT', pattern: /^praticiens\/\d+$/, auth: true, keepEmpty: true, body: ['firstName', 'lastName', 'specialityIds', 'bio', 'address', 'addressComplement', 'postalCode', 'city', 'latitude', 'longitude', 'phoneNumber', 'website', 'socialLinks', 'rpps', 'adeli', 'siret', 'practicingSince', 'languages', 'wheelchairAccessible', 'paymentMethods', 'reimbursementInfo', 'publicTypes', 'isActive'] },
+    { method: 'POST', pattern: /^praticiens\/me\/diplomas$/, auth: true, body: ['title', 'organization', 'year'] },
+    { method: 'DELETE', pattern: /^praticiens\/me\/diplomas\/\d+$/, auth: true },
 
     // Espace praticien
     { method: 'GET', pattern: /^praticiens\/me\/appointments$/, auth: true, query: ['from', 'to', 'status'] },
@@ -82,6 +92,85 @@ function validateListQuery(query?: Record<string, any>) {
     if (query.consultationTypeId !== undefined && !/^\d+$/.test(String(query.consultationTypeId))) throw bad('Prestation invalide.')
 }
 
+const PAYMENT_METHODS = ['card', 'cash', 'check', 'transfer']
+const SOCIAL_KEYS = ['facebook', 'instagram', 'linkedin', 'youtube', 'tiktok']
+const TEXT_LIMITS: Record<string, number> = {
+    firstName: 80, lastName: 80, bio: 2000, address: 200, addressComplement: 200, postalCode: 5, city: 100,
+    phoneNumber: 20, website: 200, rpps: 11, adeli: 9, siret: 14, reimbursementInfo: 500,
+}
+
+/** Modification de la fiche : types, longueurs et formats vérifiés avant d'atteindre le backend. */
+function validatePraticienUpdate(body: Record<string, any>) {
+    const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
+    const out: Record<string, any> = {}
+    for (const [key, value] of Object.entries(body)) {
+        if (key in TEXT_LIMITS) {
+            if (typeof value !== 'string' || value.length > TEXT_LIMITS[key]) throw bad(`Champ « ${key} » invalide.`)
+            out[key] = value.trim()
+        } else if (key === 'specialityIds') {
+            if (!Array.isArray(value) || value.length > 10 || !value.every(v => Number.isInteger(v) && v > 0)) throw bad('Spécialités invalides.')
+            out[key] = value
+        } else if (key === 'languages') {
+            if (!Array.isArray(value) || value.length > 15 || !value.every(v => typeof v === 'string' && /^[a-z]{2}$/.test(v))) throw bad('Langues invalides.')
+            out[key] = value
+        } else if (key === 'paymentMethods') {
+            if (!Array.isArray(value) || !value.every(v => PAYMENT_METHODS.includes(v))) throw bad('Moyens de paiement invalides.')
+            out[key] = value
+        } else if (key === 'publicTypes') {
+            if (!Array.isArray(value) || !value.every(v => PUBLIC_TYPES.includes(v))) throw bad('Public invalide.')
+            out[key] = value
+        } else if (key === 'wheelchairAccessible' || key === 'isActive') {
+            if (typeof value !== 'boolean') throw bad(`Champ « ${key} » invalide.`)
+            out[key] = value
+        } else if (key === 'practicingSince') {
+            if (!Number.isInteger(value) || value < 1950 || value > new Date().getFullYear()) throw bad('Année de début d\'exercice invalide.')
+            out[key] = value
+        } else if (key === 'latitude' || key === 'longitude') {
+            const max = key === 'latitude' ? 90 : 180
+            if (typeof value !== 'number' || !Number.isFinite(value) || Math.abs(value) > max) throw bad('Coordonnées invalides.')
+            out[key] = value
+        } else if (key === 'socialLinks') {
+            if (!value || typeof value !== 'object' || Array.isArray(value)) throw bad('Réseaux sociaux invalides.')
+            const links: Record<string, string> = {}
+            for (const social of SOCIAL_KEYS) {
+                const url = value[social]
+                if (url === undefined || url === '') continue
+                if (typeof url !== 'string' || url.length > 200 || !/^https:\/\/\S+$/.test(url)) throw bad(`Lien « ${social} » invalide (https requis).`)
+                links[social] = url
+            }
+            out[key] = links
+        }
+    }
+    if (out.postalCode && !/^\d{5}$/.test(out.postalCode)) throw bad('Code postal invalide (5 chiffres).')
+    if (out.rpps && !/^\d{11}$/.test(out.rpps)) throw bad('RPPS invalide (11 chiffres).')
+    if (out.siret && !/^\d{14}$/.test(out.siret)) throw bad('SIRET invalide (14 chiffres).')
+    if (out.adeli && !/^[0-9A-Za-z]{9}$/.test(out.adeli)) throw bad('ADELI invalide (9 caractères).')
+    if (out.website && !/^https?:\/\/\S+$/.test(out.website)) throw bad('Site web invalide (http ou https).')
+    if (out.phoneNumber && !/^\+?\d{10,15}$/.test(out.phoneNumber.replace(/[\s.]/g, ''))) throw bad('Téléphone invalide.')
+    return out
+}
+
+function validateDiploma(body: Record<string, any>) {
+    const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
+    if (typeof body.title !== 'string' || !body.title.trim() || body.title.length > 150) throw bad('Intitulé du diplôme invalide.')
+    const out: Record<string, any> = { title: body.title.trim() }
+    if (body.organization !== undefined) {
+        if (typeof body.organization !== 'string' || body.organization.length > 150) throw bad('Organisme invalide.')
+        out.organization = body.organization.trim()
+    }
+    if (body.year !== undefined) {
+        if (!Number.isInteger(body.year) || body.year < 1950 || body.year > new Date().getFullYear()) throw bad('Année invalide.')
+        out.year = body.year
+    }
+    return out
+}
+
+function pickKeepEmpty(source: Record<string, any>, keys: string[]) {
+    const out: Record<string, any> = {}
+    for (const key of keys) if (source?.[key] !== undefined) out[key] = source[key]
+    return out
+}
+
 function pick(source: Record<string, any>, keys: string[]) {
     const out: Record<string, any> = {}
     for (const key of keys) if (source?.[key] !== undefined && source[key] !== '') out[key] = source[key]
@@ -119,8 +208,11 @@ export default defineEventHandler(async (event) => {
 
     let body: Record<string, any> | undefined
     if (rule.body) {
-        body = pick((await readBody(event)) ?? {}, rule.body)
+        const raw = (await readBody(event)) ?? {}
+        body = rule.keepEmpty ? pickKeepEmpty(raw, rule.body) : pick(raw, rule.body)
         if (path === 'appointments') body = validateAppointment(body)
+        if (method === 'PUT' && /^praticiens\/\d+$/.test(path)) body = validatePraticienUpdate(body)
+        if (path === 'praticiens/me/diplomas') body = validateDiploma(body)
     }
     const query = rule.query ? pick(getQuery(event), rule.query) : undefined
     if (query?.specialityId !== undefined && !/^\d+$/.test(String(query.specialityId))) {
@@ -153,5 +245,6 @@ export default defineEventHandler(async (event) => {
     if (total && /^\d+$/.test(total)) setHeader(event, 'X-Total-Count', total)
 
     if (response.status === 204) return sendNoContent(event)
-    return stripPrivate(response._data)
+    // Le propriétaire de la fiche reçoit ses propres champs privés (RPPS, SIRET…), jamais les autres
+    return rule.own ? response._data : stripPrivate(response._data)
 })

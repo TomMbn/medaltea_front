@@ -23,6 +23,7 @@
         <div class="h-2.5 rounded-full bg-white/20 overflow-hidden" role="progressbar" :aria-valuenow="percent" aria-valuemin="0" aria-valuemax="100" aria-label="Complétion du profil">
           <div class="h-full rounded-full bg-[#EC7F7A] transition-all duration-700" :style="{ width: `${percent}%` }" />
         </div>
+        <p v-if="fiche && !bioOk" class="text-sm text-white/85 mt-3">Une présentation d'au moins 50 caractères permet à votre fiche d'apparaître sur Google.</p>
         <ul class="grid gap-1.5 mt-4 text-sm sm:grid-cols-2">
           <li v-for="c in checklist" :key="c.label" class="flex items-center gap-2">
             <span class="w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0" :class="c.done ? 'bg-white text-[#156F71]' : 'bg-white/20'" aria-hidden="true">{{ c.done ? '✓' : '' }}</span>
@@ -102,21 +103,27 @@ const hasTypes = computed(() => (Array.isArray(types.value) ? types.value : []).
 const hasHours = computed(() => Array.isArray(hours.value) && hours.value.length > 0)
 const bookable = computed(() => hasTypes.value && hasHours.value)
 
+// Fiche du praticien (champs privés compris) : sert aux jalons de complétude et au lien public
+const { data: fiche } = await useAsyncData('pro-fiche-slug', () => $fetch('/api/backend/praticiens/me'), { server: false, default: () => null })
+const bioOk = computed(() => (fiche.value?.bio ?? '').trim().length >= 50)
+const infosOk = computed(() => !!(fiche.value && (fiche.value.languages?.length || fiche.value.publicTypes?.length || fiche.value.paymentMethods?.length)))
+
 const checklist = computed(() => [
   { label: 'Compte créé', done: true },
   { label: 'Fiche et spécialités renseignées', done: true },
+  { label: 'Présentation rédigée', done: bioOk.value, to: '/pro/fiche#presentation', cta: 'Rédiger' },
+  { label: 'Informations pratiques', done: infosOk.value, to: '/pro/fiche#pratique', cta: 'Compléter' },
   { label: 'Prestation ajoutée', done: hasTypes.value, to: '/pro/prestations', cta: 'Ajouter' },
   { label: 'Horaires définis', done: hasHours.value, to: '/pro/horaires', cta: 'Définir' },
 ])
 const percent = computed(() => {
-  // Quatre jalons de 25 % : compte, fiche (créés à l'inscription), prestation, horaires.
-  const done = 2 + (hasTypes.value ? 1 : 0) + (hasHours.value ? 1 : 0)
-  return Math.round((done / 4) * 100)
+  // Six jalons : compte et fiche (créés à l'inscription), présentation, informations pratiques, prestation, horaires.
+  const done = 2 + (bioOk.value ? 1 : 0) + (infosOk.value ? 1 : 0) + (hasTypes.value ? 1 : 0) + (hasHours.value ? 1 : 0)
+  return Math.round((done / 6) * 100)
 })
 
 const origin = useRequestURL().origin
 // Lien public : le slug de la fiche (l'ancienne adresse numérique redirige, elle sert de repli)
-const { data: fiche } = await useAsyncData('pro-fiche-slug', () => $fetch(`/api/backend/praticiens/${praticienId.value}`), { server: false, default: () => null })
 const shareUrl = computed(() => `${origin}/praticiens/${fiche.value?.slug || praticienId.value}`)
 const copied = ref(false)
 async function copyLink() {

@@ -5,6 +5,9 @@
     <div class="bg-white rounded-[20px] shadow-sm p-5 sm:p-8">
       <ProSettings />
     </div>
+    <div class="bg-white rounded-[20px] shadow-sm p-5 sm:p-8 mt-6">
+      <ProVisibility />
+    </div>
   </div>
 </template>
 

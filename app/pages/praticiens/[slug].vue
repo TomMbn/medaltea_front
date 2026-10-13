@@ -225,8 +225,8 @@ const experience = computed(() => {
 })
 const diplomas = computed(() => (Array.isArray(praticien.value.diplomas) ? praticien.value.diplomas.filter(d => d?.title) : []))
 
-const PAYMENTS = { card: 'Carte bancaire', cash: 'Espèces', check: 'Chèque', transfer: 'Virement' }
-const PUBLICS = { babies: 'Bébés', children: 'Enfants', teenagers: 'Adolescents', adults: 'Adultes', seniors: 'Seniors', pregnant_women: 'Femmes enceintes', athletes: 'Sportifs' }
+const PAYMENTS = PAYMENT_LABELS
+const PUBLICS = PUBLIC_LABELS
 const languageName = (code) => {
   try { const name = new Intl.DisplayNames(['fr'], { type: 'language' }).of(code); return name ? name.charAt(0).toUpperCase() + name.slice(1) : code } catch { return code }
 }

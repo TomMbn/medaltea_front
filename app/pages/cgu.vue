@@ -37,6 +37,16 @@
       leur propre responsabilité, notamment pour leurs qualifications, leurs tarifs et la qualité de leurs prestations.
       Les modalités de prise de rendez-vous, d'annulation et de paiement seront précisées lors de l'ouverture de ce service.
     </p>
+    <p>
+      Certaines fiches sont créées par {{ legal.brandName }} à partir d'informations professionnelles publiques. Elles sont
+      signalées comme « non revendiquées » et ne permettent pas la réservation en ligne. {{ legal.brandName }} ne garantit pas
+      l'exactitude de ces informations ; si vous constatez une erreur, écrivez à
+      <a :href="`mailto:${legal.contactEmail}`">{{ legal.contactEmail }}</a>.
+    </p>
+    <p>
+      {{ legal.brandName }} ne vérifie pas les diplômes ni les qualifications de chaque praticien. Il vous appartient de vous
+      renseigner avant de consulter.
+    </p>
 
     <h2>6. Utilisation acceptable</h2>
     <p>Vous vous engagez à ne pas :</p>

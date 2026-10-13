@@ -40,17 +40,37 @@
       les modifier ou demander la suppression de sa fiche à tout moment à
       <a :href="`mailto:${legal.contactEmail}`">{{ legal.contactEmail }}</a>.
     </p>
+    <p>
+      Le praticien peut masquer sa fiche de l'annuaire à tout moment depuis son espace (Paramètres), ou demander son retrait
+      définitif à <a :href="`mailto:${legal.contactEmail}`">{{ legal.contactEmail }}</a>. {{ legal.brandName }} traite cette
+      demande au plus tard dans un délai d'un mois.
+    </p>
 
-    <h2>6. Suspension et résiliation</h2>
+    <h2>6. Revendication d'une fiche</h2>
+    <p>
+      Si une fiche à votre nom existe déjà dans l'annuaire, vous pouvez en demander la gestion depuis cette fiche, avec un
+      compte praticien. Vous pouvez joindre votre numéro RPPS ou SIRET pour faciliter la vérification.
+    </p>
+    <p>
+      Chaque demande est examinée manuellement par l'équipe {{ legal.brandName }}. Une seule demande en attente est possible
+      par compte et par fiche. Vous êtes informé de la décision dans votre espace praticien ; en cas de refus, le motif est
+      indiqué.
+    </p>
+    <p>
+      {{ legal.brandName }} peut refuser une demande ou retirer la gestion d'une fiche en cas de doute sur l'identité du
+      demandeur, d'informations inexactes ou d'usurpation.
+    </p>
+
+    <h2>7. Suspension et résiliation</h2>
     <p>
       {{ legal.brandName }} peut suspendre ou supprimer une fiche en cas d'informations inexactes, de manquement à ces conditions ou de signalement
       sérieux. Le praticien peut cesser d'utiliser le service à tout moment.
     </p>
 
-    <h2>7. Tarifs du service</h2>
+    <h2>8. Tarifs du service</h2>
     <p>L'accès au service est, à la date de mise à jour de ces conditions, gratuit pour les praticiens. Toute évolution tarifaire sera notifiée à l'avance.</p>
 
-    <h2>8. Droit applicable</h2>
+    <h2>9. Droit applicable</h2>
     <p>Ces conditions sont soumises au droit français.</p>
   </LegalPage>
 </template>

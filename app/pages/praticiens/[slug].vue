@@ -14,9 +14,15 @@
 
       <!-- En-tête du profil -->
       <header class="bg-white rounded-[20px] shadow-sm p-6 sm:p-8 mb-6 flex flex-col sm:flex-row sm:items-center gap-5">
-        <div class="w-20 h-20 shrink-0 rounded-full bg-[#156F71] text-white flex items-center justify-center font-bold text-2xl" aria-hidden="true">{{ initials }}</div>
+        <img v-if="photo && !photoFailed" ref="photoEl" :src="photo" :alt="`Photo de ${fullName}`" width="80" height="80" referrerpolicy="no-referrer" class="w-20 h-20 shrink-0 rounded-full object-cover bg-[#e0ecf2]" @error="photoFailed = true" />
+        <div v-else class="w-20 h-20 shrink-0 rounded-full bg-[#156F71] text-white flex items-center justify-center font-bold text-2xl" aria-hidden="true">{{ initials }}</div>
         <div class="flex-1 min-w-0">
           <h1 class="font-unbounded font-bold text-2xl lg:text-3xl leading-tight">{{ fullName }}</h1>
+          <p v-if="praticien.isVerified || rating || experience" class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm mt-2 text-[#012828]/80">
+            <span v-if="praticien.isVerified" class="inline-flex items-center gap-1 font-semibold text-[#156F71]"><BadgeCheck :size="16" aria-hidden="true" /> Profil vérifié</span>
+            <span v-if="rating" class="inline-flex items-center gap-1"><Star :size="14" aria-hidden="true" /> {{ rating }} ({{ praticien.reviewCount }} avis)</span>
+            <span v-if="experience">{{ experience }}</span>
+          </p>
           <ul v-if="praticien.specialities?.length" class="flex flex-wrap gap-1.5 mt-3" aria-label="Spécialités">
             <li v-for="s in praticien.specialities" :key="s.id" class="text-xs font-semibold text-[#156F71] bg-[#e0ecf2] rounded-full px-3 py-1">{{ s.name }}</li>
           </ul>
@@ -101,6 +107,26 @@
         </section>
 
 
+        <section v-if="practicalInfo.length" class="card lg:col-span-3 lg:col-start-1" aria-labelledby="info-title">
+          <h2 id="info-title" class="card-title">Informations pratiques</h2>
+          <dl class="grid gap-x-6 gap-y-4 sm:grid-cols-2 text-sm">
+            <div v-for="item in practicalInfo" :key="item.label" :class="item.wide ? 'sm:col-span-2' : ''">
+              <dt class="text-xs font-semibold uppercase tracking-wide text-[#012828]/50">{{ item.label }}</dt>
+              <dd class="mt-1 whitespace-pre-line text-[#012828]/80">{{ item.value }}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section v-if="diplomas.length" class="card lg:col-span-3 lg:col-start-1" aria-labelledby="diplomas-title">
+          <h2 id="diplomas-title" class="card-title">Formation et diplômes</h2>
+          <ul class="grid gap-3 text-sm">
+            <li v-for="d in diplomas" :key="d.id ?? d.title" class="flex flex-wrap items-baseline justify-between gap-x-4">
+              <span><span class="font-semibold">{{ d.title }}</span><template v-if="d.organization"> — {{ d.organization }}</template></span>
+              <span v-if="d.year" class="text-[#012828]/60">{{ d.year }}</span>
+            </li>
+          </ul>
+        </section>
+
         <section class="card lg:col-span-3 lg:col-start-1" aria-labelledby="where-title">
           <h2 id="where-title" class="card-title">Adresse et contact</h2>
           <address class="not-italic text-sm leading-relaxed">
@@ -112,6 +138,9 @@
             </a>
             <a v-if="safeWebsite" :href="safeWebsite" target="_blank" rel="noopener noreferrer nofollow" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
               <Globe :size="15" aria-hidden="true" /> Site web
+            </a>
+            <a v-for="link in socialLinks" :key="link.label" :href="link.href" target="_blank" rel="noopener noreferrer nofollow" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
+              <Globe :size="15" aria-hidden="true" /> {{ link.label }}
             </a>
             <a v-if="praticien.phoneNumber" :href="`tel:${praticien.phoneNumber}`" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
               <Phone :size="15" aria-hidden="true" /> {{ praticien.phoneNumber }}
@@ -133,7 +162,7 @@
 
 <script setup>
 import { computed, ref, onMounted } from 'vue'
-import { MapPin, Phone, Navigation, Globe } from 'lucide-vue-next'
+import { MapPin, Phone, Navigation, Globe, BadgeCheck, Star } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
@@ -179,6 +208,46 @@ const about = computed(() => praticien.value.bio ?? praticien.value.description 
 // Site web : uniquement http(s), sinon on ne l'affiche pas
 const safeWebsite = computed(() => { try { const u = new URL(praticien.value.website); return ['http:', 'https:'].includes(u.protocol) ? u.href : '' } catch { return '' } })
 const mapsUrl = computed(() => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${praticien.value.address}, ${formatPostalCode(praticien.value.postalCode)} ${praticien.value.city}`)}`)
+
+// --- Informations facultatives de la fiche : on n'affiche que ce que l'API fournit
+const isHttps = (value) => { try { return new URL(value).protocol === 'https:' } catch { return false } }
+const photo = computed(() => (isHttps(praticien.value.photoUrl) ? praticien.value.photoUrl : ''))
+const photoFailed = ref(false)
+const photoEl = ref(null)
+// L'erreur de chargement peut survenir avant l'hydratation (rendu serveur) : on la revérifie au montage.
+onMounted(() => { const el = photoEl.value; if (el?.complete && el.naturalWidth === 0) photoFailed.value = true })
+const rating = computed(() => (praticien.value.averageRating && praticien.value.reviewCount > 0
+  ? String(Number(praticien.value.averageRating).toFixed(1)).replace('.', ',')
+  : ''))
+const experience = computed(() => {
+  const year = Number(praticien.value.practicingSince)
+  return Number.isInteger(year) && year >= 1950 && year <= new Date().getFullYear() ? `Exerce depuis ${year}` : ''
+})
+const diplomas = computed(() => (Array.isArray(praticien.value.diplomas) ? praticien.value.diplomas.filter(d => d?.title) : []))
+
+const PAYMENTS = { card: 'Carte bancaire', cash: 'Espèces', check: 'Chèque', transfer: 'Virement' }
+const PUBLICS = { babies: 'Bébés', children: 'Enfants', teenagers: 'Adolescents', adults: 'Adultes', seniors: 'Seniors', pregnant_women: 'Femmes enceintes', athletes: 'Sportifs' }
+const languageName = (code) => {
+  try { const name = new Intl.DisplayNames(['fr'], { type: 'language' }).of(code); return name ? name.charAt(0).toUpperCase() + name.slice(1) : code } catch { return code }
+}
+const practicalInfo = computed(() => {
+  const p = praticien.value
+  const items = []
+  const list = (values, map) => (Array.isArray(values) ? values.map(v => map(v)).filter(Boolean).join(', ') : '')
+  const publics = list(p.publicTypes, v => PUBLICS[v])
+  if (publics) items.push({ label: 'Public accueilli', value: publics })
+  const languages = list(p.languages, v => languageName(v))
+  if (languages) items.push({ label: 'Langues parlées', value: languages })
+  const payments = list(p.paymentMethods, v => PAYMENTS[v])
+  if (payments) items.push({ label: 'Moyens de paiement', value: payments })
+  if (typeof p.wheelchairAccessible === 'boolean') items.push({ label: 'Accessibilité', value: p.wheelchairAccessible ? 'Accessible aux personnes à mobilité réduite' : 'Non accessible aux personnes à mobilité réduite' })
+  if (typeof p.reimbursementInfo === 'string' && p.reimbursementInfo.trim()) items.push({ label: 'Remboursement', value: p.reimbursementInfo.trim(), wide: true })
+  return items
+})
+const SOCIAL = { facebook: 'Facebook', instagram: 'Instagram', linkedin: 'LinkedIn', youtube: 'YouTube', tiktok: 'TikTok' }
+const socialLinks = computed(() => Object.entries(SOCIAL)
+  .map(([key, label]) => ({ label, href: praticien.value.socialLinks?.[key] }))
+  .filter(l => isHttps(l.href)))
 
 // --- Prochaine disponibilité (première prestation, 30 jours)
 const nextSlot = ref(null)
@@ -226,7 +295,8 @@ function jsonLd() {
     url: canonicalUrl.value,
     address: { '@type': 'PostalAddress', streetAddress: p.address, postalCode: formatPostalCode(p.postalCode), addressLocality: p.city, addressCountry: 'FR' },
     ...(p.phoneNumber ? { telephone: p.phoneNumber } : {}),
-    ...(safeWebsite.value ? { sameAs: [safeWebsite.value] } : {}),
+    ...(([safeWebsite.value, ...socialLinks.value.map(l => l.href)].filter(Boolean)).length ? { sameAs: [safeWebsite.value, ...socialLinks.value.map(l => l.href)].filter(Boolean) } : {}),
+    ...(Array.isArray(p.paymentMethods) && p.paymentMethods.length ? { paymentAccepted: p.paymentMethods.map(m => PAYMENTS[m]).filter(Boolean).join(', ') } : {}),
     ...(p.photoUrl ? { image: p.photoUrl } : {}),
     ...(p.bio ? { description: p.bio } : {}),
     ...(p.specialities?.length ? { knowsAbout: p.specialities.map(s => s.name) } : {}),

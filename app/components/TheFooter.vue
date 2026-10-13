@@ -28,6 +28,9 @@
           </svg>
         </a>
       </div>
+      <nav aria-label="Nos médecines" class="flex flex-wrap justify-center gap-x-4 gap-y-0 text-sm font-sans text-[#012828]">
+        <NuxtLink v-for="m in medecines" :key="m.slug" :to="`/medecines/${m.slug}`" class="py-3 px-2 hover:underline">{{ m.name }}</NuxtLink>
+      </nav>
       <nav aria-label="Informations légales" class="flex flex-wrap justify-center gap-x-4 gap-y-0 text-sm font-sans text-[#012828] opacity-75">
         <NuxtLink to="/mentions-legales" class="py-3 px-2 hover:opacity-100 hover:underline">Mentions légales</NuxtLink>
         <NuxtLink to="/politique-de-confidentialite" class="py-3 px-2 hover:underline">Politique de confidentialité</NuxtLink>
@@ -41,3 +44,7 @@
     </div>
   </footer>
 </template>
+
+<script setup>
+import { medecines } from '~/data/medecines'
+</script>

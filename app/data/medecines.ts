@@ -56,7 +56,7 @@ export const medecines: Medecine[] = [
       'Peut contribuer au bien-être général'
     ],
     seo: {
-      title: 'Ostéopathie — Trouvez un ostéopathe près de chez vous | Léya',
+      title: 'Ostéopathie : trouver un ostéopathe près de vous | Léya',
       description: 'Découvrez l\'ostéopathie sur Léya : en quoi elle consiste, le déroulé d\'une séance, et trouvez un ostéopathe près de chez vous pour prendre rendez-vous en ligne.'
     }
   },
@@ -94,7 +94,7 @@ export const medecines: Medecine[] = [
       'Un suivi à votre rythme'
     ],
     seo: {
-      title: 'Naturopathie — Trouvez un naturopathe près de chez vous | Léya',
+      title: 'Naturopathie : trouver un naturopathe près de vous | Léya',
       description: 'Découvrez la naturopathie sur Léya : une approche d\'hygiène de vie (alimentation, plantes, gestion du stress). Trouvez un naturopathe près de chez vous et prenez rendez-vous en ligne.'
     }
   },
@@ -133,7 +133,7 @@ export const medecines: Medecine[] = [
       'Une meilleure connaissance de soi'
     ],
     seo: {
-      title: 'Sophrologie — Trouvez un sophrologue près de chez vous | Léya',
+      title: 'Sophrologie : trouver un sophrologue près de vous | Léya',
       description: 'Découvrez la sophrologie sur Léya : relaxation, respiration, visualisation. Trouvez un sophrologue près de chez vous et prenez rendez-vous en ligne.'
     }
   },
@@ -170,7 +170,7 @@ export const medecines: Medecine[] = [
       'Une pratique souvent associée à un suivi médical'
     ],
     seo: {
-      title: 'Acupuncture — Trouvez un acupuncteur près de chez vous | Léya',
+      title: 'Acupuncture : trouver un acupuncteur près de vous | Léya',
       description: 'Découvrez l\'acupuncture sur Léya : une pratique issue de la médecine traditionnelle chinoise. Trouvez un acupuncteur près de chez vous et prenez rendez-vous en ligne.'
     }
   },
@@ -208,7 +208,7 @@ export const medecines: Medecine[] = [
       'Un accompagnement personnalisé, à votre rythme'
     ],
     seo: {
-      title: 'Hypnothérapie — Trouvez un hypnothérapeute près de chez vous | Léya',
+      title: 'Hypnothérapie : trouver un hypnothérapeute | Léya',
       description: 'Découvrez l\'hypnothérapie sur Léya : en quoi consiste une séance et ce qu\'elle peut accompagner. Trouvez un hypnothérapeute près de chez vous et prenez rendez-vous en ligne.'
     }
   },
@@ -246,7 +246,7 @@ export const medecines: Medecine[] = [
       'Un accompagnement de la récupération après l\'effort'
     ],
     seo: {
-      title: 'Massage bien-être — Trouvez un masseur près de chez vous | Léya',
+      title: 'Massage bien-être : trouver un praticien près de vous | Léya',
       description: 'Découvrez les massages bien-être sur Léya : détente et récupération. Trouvez un praticien près de chez vous et réservez en ligne.'
     }
   }

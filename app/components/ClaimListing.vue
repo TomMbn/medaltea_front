@@ -21,7 +21,7 @@
           Connectez-vous avec votre compte praticien pour demander l'accès à cette fiche et ouvrir vos réservations.
         </p>
         <div class="flex flex-wrap gap-2">
-          <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: route.fullPath } }" class="bg-[#012828] text-white text-sm font-bold px-5 py-2.5 rounded-[12px] hover:bg-[#156F71] transition-colors">Revendiquer cette fiche</NuxtLink>
+          <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: route.fullPath } }" rel="nofollow" class="bg-[#012828] text-white text-sm font-bold px-5 py-2.5 rounded-[12px] hover:bg-[#156F71] transition-colors">Revendiquer cette fiche</NuxtLink>
           <NuxtLink to="/inscription-pro" class="border border-gray-300 text-sm font-semibold px-5 py-2.5 rounded-[12px] hover:border-[#156F71] transition-colors">Créer un compte praticien</NuxtLink>
         </div>
       </template>

@@ -13,9 +13,8 @@
               width="1000"
               height="800"
               format="webp"
-              quality="80"
-              loading="lazy"
-              placeholder
+              quality="75"
+              loading="eager"
               sizes="xs:400px md:800px lg:940px"
             />
           </div>

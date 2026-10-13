@@ -65,6 +65,7 @@
     <ul>
       <li>Google (Gemini) : génération des réponses de l'assistant virtuel.</li>
       <li>{{ legal.hostName }} : hébergement du site.</li>
+      <li>Base Adresse Nationale (data.gouv.fr) : saisie assistée de l'adresse du cabinet à l'inscription des praticiens, via notre serveur (seule l'adresse tapée est transmise).</li>
       <li>Umami (Umami Software, Inc.) : mesure d'audience anonyme, sans cookie.</li>
       <li>Serveur applicatif de l'éditeur : gestion des comptes et de l'authentification.</li>
     </ul>

@@ -16,16 +16,20 @@ export type Role = 'pro' | 'patient'
  * Pose le token en cookie httpOnly (illisible par JavaScript) + deux témoins non sensibles pour l'interface :
  * `leya_session` (connecté) et `leya_role` (pro / patient). L'accès aux données reste contrôlé par le backend.
  */
-export function setSessionCookies(event: H3Event, token: string, role: Role = 'patient') {
+export function setSessionCookies(event: H3Event, token: string, role: Role = 'patient', praticienId: number | null = null) {
     setCookie(event, 'token', token, { ...baseOptions(), httpOnly: true })
     setCookie(event, 'leya_session', '1', { ...baseOptions(), httpOnly: false })
     setCookie(event, 'leya_role', role, { ...baseOptions(), httpOnly: false })
+    // Identifiant public de la fiche (lien « Ma fiche publique ») : aucune donnée sensible.
+    if (role === 'pro' && praticienId) setCookie(event, 'leya_praticien', String(praticienId), { ...baseOptions(), httpOnly: false })
+    else deleteCookie(event, 'leya_praticien', { path: '/' })
 }
 
 export function clearSessionCookies(event: H3Event) {
     for (const name of LEGACY_COOKIES) deleteCookie(event, name, { path: '/' })
     deleteCookie(event, 'leya_session', { path: '/' })
     deleteCookie(event, 'leya_role', { path: '/' })
+    deleteCookie(event, 'leya_praticien', { path: '/' })
 }
 
 /**
@@ -52,6 +56,33 @@ export function extractToken(payload: any): string | undefined {
 }
 
 /** Appelle le backend d'authentification et pose la session si un token est renvoyé. */
+/**
+ * Retrouve l'identifiant de la fiche du compte connecté : réponse d'inscription, puis profil, puis recherche
+ * par identifiant utilisateur ou email dans la liste. À remplacer par GET /praticiens/me quand il existera.
+ */
+export async function findPraticienId(token: string, mail?: string, response?: any): Promise<number | null> {
+    const direct = Number(response?.praticien?.id ?? response?.praticienId)
+    if (Number.isInteger(direct) && direct > 0) return direct
+
+    const { apiBase } = useRuntimeConfig()
+    try {
+        const me: any = await $fetch(`${apiBase}/users/me`, { headers: { Authorization: `Bearer ${token}` }, timeout: 8000 })
+        const fromProfile = Number(me?.praticien?.id ?? me?.praticienId)
+        if (Number.isInteger(fromProfile) && fromProfile > 0) return fromProfile
+
+        const userId = me?.id ?? me?.sub ?? me?.userId
+        const list: any[] = await $fetch(`${apiBase}/praticiens`, { timeout: 8000 })
+        const fiches = Array.isArray(list) ? list : []
+        // L'email saisi à l'inscription ou à la connexion est le critère le plus direct ; l'identifiant utilisateur sert de repli.
+        const byMail = mail ? fiches.find(p => p?.mail && String(p.mail).toLowerCase() === mail.toLowerCase()) : undefined
+        const byUser = userId != null ? fiches.find(p => p?.userId != null && String(p.userId) === String(userId)) : undefined
+        const match = byMail ?? byUser
+        return match?.id ? Number(match.id) : null
+    } catch {
+        return null
+    }
+}
+
 const AUTH_FIELDS: Record<'login' | 'register' | 'register-pro', string[]> = {
     login: ['mail', 'password'],
     register: ['mail', 'password'],
@@ -96,11 +127,13 @@ export async function authenticate(event: H3Event, path: 'login' | 'register' | 
     }
 
     let role: Role | null = null
+    let praticienId: number | null = null
     if (token) {
         // L'inscription pro crée toujours un praticien ; sinon on interroge le backend.
         role = path === 'register-pro' ? 'pro' : await detectRole(token)
-        setSessionCookies(event, token, role)
+        if (role === 'pro') praticienId = await findPraticienId(token, body.mail, response)
+        setSessionCookies(event, token, role, praticienId)
     }
     // Le token n'est jamais renvoyé au navigateur.
-    return { success: true, authenticated: !!token, role }
+    return { success: true, authenticated: !!token, role, praticienId }
 }

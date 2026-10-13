@@ -9,6 +9,7 @@
           <span class="hidden sm:inline text-xs font-semibold text-[#156F71] bg-[#e0ecf2] rounded-full px-3 py-1 whitespace-nowrap">Espace praticien</span>
         </div>
         <div class="flex items-center gap-4 text-sm">
+          <NuxtLink v-if="praticienId" :to="`/praticiens/${praticienId}`" target="_blank" class="hidden sm:inline hover:underline">Ma fiche publique ↗</NuxtLink>
           <NuxtLink to="/" class="hidden sm:inline hover:underline">Voir le site</NuxtLink>
           <button class="font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:bg-gray-50 transition-colors" @click="handleLogout">
             Déconnexion
@@ -47,10 +48,11 @@
 
 <script setup>
 import { onMounted } from 'vue'
-import { CalendarCheck, CalendarOff, Clock3, ListChecks, Settings } from 'lucide-vue-next'
+import { CalendarCheck, CalendarOff, Clock3, House, ListChecks, Settings } from 'lucide-vue-next'
 import { legal } from '~/data/legal'
 
 const items = [
+  { to: '/pro/bienvenue', label: 'Accueil', icon: House },
   { to: '/pro/rendez-vous', label: 'Rendez-vous', icon: CalendarCheck },
   { to: '/pro/horaires', label: 'Horaires', icon: Clock3 },
   { to: '/pro/absences', label: 'Absences', icon: CalendarOff },
@@ -58,7 +60,7 @@ const items = [
   { to: '/pro/parametres', label: 'Paramètres', icon: Settings },
 ]
 
-const { syncRole, logout } = useSession()
+const { syncRole, logout, praticienId } = useSession()
 
 // Un compte patient n'a rien à faire ici (sessions anciennes sans rôle comprises).
 onMounted(async () => {

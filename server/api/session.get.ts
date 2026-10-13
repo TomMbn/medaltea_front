@@ -19,6 +19,8 @@ export default defineEventHandler(async (event) => {
     }
 
     const role = await detectRole(token)
-    setSessionCookies(event, token, role)
-    return { authenticated: true, role }
+    const known = Number(getCookie(event, 'leya_praticien')) || null
+    const praticienId = role === 'pro' ? (known ?? await findPraticienId(token)) : null
+    setSessionCookies(event, token, role, praticienId)
+    return { authenticated: true, role, praticienId }
 })

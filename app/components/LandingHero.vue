@@ -286,8 +286,9 @@ const handleSuggestion = (text) => {
     gap: 60px;
   }
 
+  /* Fluide jusqu'à 54 px : à 54 px fixes le titre passait sur 5 lignes entre 1280 et 1340 px et repoussait la carte hors de l'écran */
   .hero-title {
-    font-size: 54px;
+    font-size: clamp(40px, 3.65vw, 54px);
   }
 
   .hero-content {
@@ -311,6 +312,22 @@ const handleSuggestion = (text) => {
 
   .overlay-card {
     width: 54%;
+  }
+}
+
+/* Écrans peu hauts (portables, barre de favoris, zoom du navigateur) : la carte « Demander à Léya » reste visible sans défiler */
+@media (min-width: 1024px) and (max-height: 760px) {
+  .hero-section {
+    padding-top: 108px;
+    padding-bottom: 40px;
+  }
+
+  .hero-content {
+    padding-top: 32px;
+  }
+
+  .search-bar-wrapper {
+    margin-top: 40px;
   }
 }
 </style>

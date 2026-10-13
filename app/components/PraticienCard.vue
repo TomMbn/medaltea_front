@@ -1,5 +1,5 @@
 <template>
-  <li class="bg-white rounded-2xl p-4 shadow-sm flex flex-col gap-4">
+  <li class="bg-white rounded-2xl p-4 shadow-sm flex flex-col gap-4 min-w-0">
     <div class="flex items-center gap-3">
       <div
         class="w-14 h-14 shrink-0 rounded-full flex items-center justify-center text-white font-bold text-base"
@@ -9,7 +9,7 @@
         {{ initials }}
       </div>
       <div class="min-w-0">
-        <div class="font-unbounded font-bold text-[#012828] text-sm leading-tight truncate">
+        <div class="font-unbounded font-bold text-[#012828] text-sm leading-tight line-clamp-2 break-words">
           {{ praticien.firstName }} {{ praticien.lastName }}
         </div>
         <div class="flex items-center gap-1 text-gray-500 text-sm mt-1">
@@ -36,13 +36,13 @@
       <span class="font-semibold first-letter:uppercase">{{ nextSlot }}</span>
     </p>
 
-    <div class="flex items-center justify-between gap-2 mt-auto">
+    <div class="flex flex-wrap items-center justify-between gap-2 mt-auto">
       <span v-if="praticien.bookable === false" class="text-[#012828]/60 text-xs">Réservation indisponible</span>
       <span v-else-if="price" class="text-[#E8755A] text-sm font-semibold">À partir de {{ price }} €</span>
       <span v-else />
       <NuxtLink
         :to="`/praticiens/${praticien.slug || praticien.id}`"
-        class="flex items-center gap-1 bg-[#012828] text-white text-xs font-medium px-3 py-2 rounded-full hover:bg-[#156F71] transition-colors whitespace-nowrap"
+        class="flex items-center gap-1 bg-[#012828] text-white text-sm font-medium px-4 py-3 rounded-full hover:bg-[#156F71] transition-colors whitespace-nowrap"
       >
         {{ praticien.bookable === false ? 'Voir la fiche' : 'Prendre rendez-vous' }} <ArrowUpRight :size="12" aria-hidden="true" />
       </NuxtLink>

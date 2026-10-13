@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-col w-full max-w-[1440px] mx-auto min-h-0 h-full flex-1 overflow-hidden">
+  <div class="flex flex-col w-full max-w-[1440px] mx-auto min-h-0 h-full flex-1" :class="isChatActive ? 'overflow-hidden' : 'overflow-y-auto'">
     <!-- Initial View: Logo and Title (Centered) -->
-    <div v-if="!isChatActive" class="flex flex-col items-center w-full relative pt-8 lg:pt-[127px]">
+    <div v-if="!isChatActive" class="flex flex-col items-center w-full relative pt-8 lg:pt-[clamp(24px,10vh,127px)]">
       <!-- Logo -->
-      <div class="mb-8 lg:mb-[73px]">
+      <div class="mb-8 lg:mb-[clamp(16px,6vh,73px)]">
         <img src="/images/logo.svg" alt="Léya" class="h-8 lg:h-12 w-auto" />
       </div>
       
@@ -106,7 +106,7 @@
               aria-label="Envoyer le message"
               @click="sendMessage"
               :disabled="isTyping || !userInput.trim() || isLimitReached"
-              class="w-10 h-10 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 disabled:grayscale disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+              class="w-11 h-11 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 disabled:grayscale disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
             >
               <ArrowUp v-if="!isLimitReached" :size="20" stroke-width="3" />
               <Ban v-else :size="20" stroke-width="3" />

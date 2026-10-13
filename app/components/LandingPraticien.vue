@@ -47,7 +47,7 @@
             />
           </div>
           <div class="flex-grow">
-            <div class="text-[#012828]/70 text-[11px] font-semibold uppercase tracking-wide mb-0.5">Exemple de fiche</div>
+            <div class="text-[#012828]/70 text-xs font-semibold uppercase tracking-wide mb-0.5">Exemple de fiche</div>
             <div class="text-[#012828] font-bold text-[18px]">Jean Dupont</div>
             <div class="text-[#EC7F7A] text-[14px] font-medium leading-none mb-2">Hypnothérapeute</div>
             <div class="flex items-center gap-2 mt-2">

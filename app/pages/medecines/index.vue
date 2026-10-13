@@ -40,7 +40,7 @@
     <div class="w-11/12 max-w-[1200px] mx-auto pb-12">
 
       <!-- Barre de filtres -->
-      <div class="flex items-center gap-3 mb-8">
+      <div class="flex flex-wrap items-center gap-3 mb-8">
         <button class="flex items-center gap-2 border border-[#012828]/20 text-[#012828] text-sm font-medium px-5 py-2.5 rounded-full hover:border-[#012828]/50 transition-colors">
           Filtrer par <ChevronDown :size="15" />
         </button>
@@ -96,7 +96,7 @@
 
       <!-- Pagination -->
       <div class="flex justify-end mt-10">
-        <button class="flex items-center gap-2 text-[#EC7F7A] text-sm font-semibold hover:opacity-70 transition-opacity">
+        <button class="flex items-center gap-2 text-[#EC7F7A] text-sm font-semibold hover:opacity-70 transition-opacity py-3">
           Page suivante <ArrowRight :size="15" />
         </button>
       </div>

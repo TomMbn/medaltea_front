@@ -196,6 +196,7 @@ async function handleRegister() {
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
+  min-height: 100svh;
   background-color: #e0ecf2;
   color: #012828;
 }
@@ -227,6 +228,7 @@ async function handleRegister() {
     display: block;
     width: 50%;
     height: 100vh;
+    height: 100svh;
     position: sticky;
     top: 0;
     padding: 16px;
@@ -235,6 +237,7 @@ async function handleRegister() {
   .pane-right {
     width: 50%;
     height: 100vh;
+    height: 100svh;
     padding: 32px;
     overflow-y: auto;
   }

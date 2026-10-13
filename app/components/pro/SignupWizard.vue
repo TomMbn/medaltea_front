@@ -34,7 +34,7 @@
           </div>
           <p id="err-password" class="err" role="alert">{{ errors.password }}</p>
         </div>
-        <ul class="text-sm text-[#012828]/70 grid gap-1.5">
+        <ul class="hide-short text-sm text-[#012828]/70 grid gap-1.5">
           <li class="flex gap-2"><span class="text-[#156F71]" aria-hidden="true">✓</span> Votre fiche visible par les patients de votre ville</li>
           <li class="flex gap-2"><span class="text-[#156F71]" aria-hidden="true">✓</span> Un agenda en ligne et la gestion des demandes</li>
         </ul>

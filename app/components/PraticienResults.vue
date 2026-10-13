@@ -52,16 +52,16 @@
         <!-- Tri par défaut : les fiches réservables d'abord, puis les autres -->
         <template v-if="grouped">
           <h3 class="text-white font-unbounded font-bold text-lg mb-4">Réservables en ligne</h3>
-          <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-10">
+          <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-10">
             <PraticienCard v-for="p in bookableList" :key="p.id" :praticien="p" />
           </ul>
           <h3 class="text-white font-unbounded font-bold text-lg mb-1">Autres praticiens</h3>
           <p class="text-white/70 text-sm mb-4">Réservation en ligne indisponible pour le moment.</p>
-          <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <PraticienCard v-for="p in otherList" :key="p.id" :praticien="p" />
           </ul>
         </template>
-        <ul v-else class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul v-else class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <PraticienCard v-for="p in praticiens" :key="p.id" :praticien="p" />
         </ul>
 

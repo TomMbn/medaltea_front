@@ -5,7 +5,7 @@
       
       <!-- Left Zone: Logo -->
       <div class="flex items-center shrink-0">
-        <NuxtLink to="/" class="flex items-center">
+        <NuxtLink to="/" class="flex items-center min-h-[44px]">
             <img src="/images/logo.svg" alt="Léya" class="h-10 w-auto" />
         </NuxtLink>
       </div>
@@ -74,9 +74,9 @@
 
       <!-- Mobile Menu Button -->
       <div class="lg:hidden flex items-center">
-        <button aria-label="Ouvrir le menu" :aria-expanded="isMenuOpen" @click="isMenuOpen = !isMenuOpen" class="text-[#012828] hover:text-[#1c6c63] focus:outline-none p-1">
-          <Menu v-if="!isMenuOpen" :size="32" />
-          <X v-else :size="32" />
+        <button aria-label="Ouvrir le menu" :aria-expanded="isMenuOpen" @click="isMenuOpen = !isMenuOpen" class="text-[#012828] hover:text-[#1c6c63] focus:outline-none p-2">
+          <Menu v-if="!isMenuOpen" :size="28" />
+          <X v-else :size="28" />
         </button>
       </div>
     </nav>

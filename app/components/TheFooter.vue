@@ -29,11 +29,11 @@
         </a>
       </div>
       <nav aria-label="Informations légales" class="flex flex-wrap justify-center gap-x-4 gap-y-0 text-sm font-sans text-[#012828] opacity-75">
-        <NuxtLink to="/mentions-legales" class="py-3 px-1 hover:opacity-100 hover:underline">Mentions légales</NuxtLink>
-        <NuxtLink to="/politique-de-confidentialite" class="py-3 px-1 hover:underline">Politique de confidentialité</NuxtLink>
-        <NuxtLink to="/cgu" class="py-3 px-1 hover:underline">CGU</NuxtLink>
-        <NuxtLink to="/cgu-pro" class="py-3 px-1 hover:underline">CGU praticiens</NuxtLink>
-        <NuxtLink to="/praticiens-pro" class="py-3 px-1 hover:underline">Vous êtes praticien ?</NuxtLink>
+        <NuxtLink to="/mentions-legales" class="py-3 px-2 hover:opacity-100 hover:underline">Mentions légales</NuxtLink>
+        <NuxtLink to="/politique-de-confidentialite" class="py-3 px-2 hover:underline">Politique de confidentialité</NuxtLink>
+        <NuxtLink to="/cgu" class="py-3 px-2 hover:underline">CGU</NuxtLink>
+        <NuxtLink to="/cgu-pro" class="py-3 px-2 hover:underline">CGU praticiens</NuxtLink>
+        <NuxtLink to="/praticiens-pro" class="py-3 px-2 hover:underline">Vous êtes praticien ?</NuxtLink>
       </nav>
       <div class="text-center opacity-70 text-sm font-sans">
         © 2026 Léya - Tous droits réservés.

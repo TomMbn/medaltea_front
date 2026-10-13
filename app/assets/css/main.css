@@ -107,3 +107,28 @@ h6,
     scroll-behavior: auto !important;
   }
 }
+
+/*
+  Écrans tactiles : zones à toucher d'au moins 44 px (boutons, listes déroulantes, champs de saisie).
+  Les cases à cocher gardent leur taille mais sont étendues par leur étiquette.
+*/
+@media (pointer: coarse) {
+  button:not(.chip),
+  select,
+  summary,
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='hidden']) {
+    min-height: 44px;
+  }
+  input[type='checkbox'],
+  input[type='radio'] {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+/* Éléments d'accompagnement masqués quand la fenêtre est peu haute (portables avec barre de favoris, zoom) : le formulaire reste dans le premier écran */
+@media (min-width: 768px) and (max-height: 760px) {
+  .hide-short {
+    display: none;
+  }
+}

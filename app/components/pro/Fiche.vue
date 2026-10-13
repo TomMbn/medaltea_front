@@ -88,8 +88,8 @@
             <div>
               <p class="label">Accessibilité</p>
               <div class="flex flex-wrap gap-4 text-sm">
-                <label class="inline-flex items-center gap-2"><input v-model="form.wheelchair" type="radio" value="yes" class="accent-[#156F71]" /> Accessible aux personnes à mobilité réduite</label>
-                <label class="inline-flex items-center gap-2"><input v-model="form.wheelchair" type="radio" value="no" class="accent-[#156F71]" /> Non accessible</label>
+                <label class="inline-flex items-center gap-2 min-h-[44px]"><input v-model="form.wheelchair" type="radio" value="yes" class="accent-[#156F71]" /> Accessible aux personnes à mobilité réduite</label>
+                <label class="inline-flex items-center gap-2 min-h-[44px]"><input v-model="form.wheelchair" type="radio" value="no" class="accent-[#156F71]" /> Non accessible</label>
               </div>
             </div>
           </div>

@@ -99,7 +99,7 @@
             <li v-for="d in DAYS" :key="d.n" class="flex gap-4 rounded-lg px-3 py-2" :class="d.n === todayN ? 'bg-[#e0ecf2]/70 font-semibold' : ''">
               <span class="w-24 shrink-0">{{ d.label }}</span>
               <span v-if="!week[d.n].length" class="text-gray-400">Fermé</span>
-              <span v-else>{{ week[d.n].map(r => `${r.start} – ${r.end}`).join('  ·  ') }}</span>
+              <span v-else class="flex flex-wrap gap-x-3"><span v-for="r in week[d.n]" :key="r.start" class="whitespace-nowrap">{{ r.start }} – {{ r.end }}</span></span>
             </li>
           </ul>
           <p v-else-if="praticien.schedules" class="text-sm">{{ praticien.schedules }}</p>
@@ -133,16 +133,16 @@
             {{ praticien.address }}<br />{{ formatPostalCode(praticien.postalCode) }} {{ praticien.city }}
           </address>
           <div class="flex flex-wrap gap-3 mt-4">
-            <a :href="mapsUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
+            <a :href="mapsUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-3 hover:border-[#156F71] transition-colors">
               <Navigation :size="15" aria-hidden="true" /> Itinéraire
             </a>
-            <a v-if="safeWebsite" :href="safeWebsite" target="_blank" rel="noopener noreferrer nofollow" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
+            <a v-if="safeWebsite" :href="safeWebsite" target="_blank" rel="noopener noreferrer nofollow" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-3 hover:border-[#156F71] transition-colors">
               <Globe :size="15" aria-hidden="true" /> Site web
             </a>
-            <a v-for="link in socialLinks" :key="link.label" :href="link.href" target="_blank" rel="noopener noreferrer nofollow" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
+            <a v-for="link in socialLinks" :key="link.label" :href="link.href" target="_blank" rel="noopener noreferrer nofollow" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-3 hover:border-[#156F71] transition-colors">
               <Globe :size="15" aria-hidden="true" /> {{ link.label }}
             </a>
-            <a v-if="praticien.phoneNumber" :href="`tel:${praticien.phoneNumber}`" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
+            <a v-if="praticien.phoneNumber" :href="`tel:${praticien.phoneNumber}`" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-3 hover:border-[#156F71] transition-colors">
               <Phone :size="15" aria-hidden="true" /> {{ praticien.phoneNumber }}
             </a>
           </div>

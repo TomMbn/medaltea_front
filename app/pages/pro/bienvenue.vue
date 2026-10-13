@@ -28,7 +28,7 @@
           <li v-for="c in checklist" :key="c.label" class="flex items-center gap-2">
             <span class="w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0" :class="c.done ? 'bg-white text-[#156F71]' : 'bg-white/20'" aria-hidden="true">{{ c.done ? '✓' : '' }}</span>
             <span :class="c.done ? '' : 'text-white/70'">{{ c.label }}</span>
-            <NuxtLink v-if="!c.done && c.to" :to="c.to" class="underline text-white ml-1">{{ c.cta }}</NuxtLink>
+            <NuxtLink v-if="!c.done && c.to" :to="c.to" class="underline text-white ml-1 inline-block py-2">{{ c.cta }}</NuxtLink>
           </li>
         </ul>
       </div>

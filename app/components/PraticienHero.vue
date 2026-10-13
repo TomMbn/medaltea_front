@@ -30,19 +30,20 @@
 
       <!-- Barre de recherche -->
       <form class="focus-ring-within bg-white rounded-full shadow-md flex items-center h-14 sm:-mx-12 lg:-mx-20" role="search" @submit.prevent="search">
-        <div class="flex items-center gap-2 px-5 flex-1 min-w-0">
+        <label for="hero-q" class="flex items-center gap-2 px-5 max-[419px]:px-3 flex-1 min-w-0 self-stretch cursor-text">
           <MapPin :size="15" class="text-gray-400 shrink-0" aria-hidden="true" />
           <input
+            id="hero-q"
             v-model="query"
             type="text"
             aria-label="Ville, code postal ou nom du praticien"
             placeholder="Ville, code postal ou nom"
             class="focus-in-parent bg-transparent text-sm text-gray-700 placeholder-gray-400 focus:outline-none min-w-0 w-full"
           />
-        </div>
+        </label>
         <button
           type="button"
-          class="shrink-0 mr-2 inline-flex items-center gap-1.5 rounded-full px-3 h-9 text-xs font-semibold transition-colors"
+          class="shrink-0 mr-2 inline-flex items-center gap-1.5 rounded-full px-3 h-11 min-w-[44px] justify-center text-xs font-semibold transition-colors"
           :class="geo ? 'bg-[#156F71] text-white' : 'text-[#156F71] hover:bg-[#e0ecf2]'"
           :aria-pressed="geo ? 'true' : 'false'"
           aria-label="Autour de moi"
@@ -58,8 +59,8 @@
           </select>
         </div>
         <div class="shrink-0 pr-1.5">
-          <button type="submit" class="bg-[#156F71] text-white text-sm font-semibold h-11 px-5 rounded-full flex items-center gap-2 hover:bg-[#0f5557] transition-colors whitespace-nowrap">
-            Rechercher <Search :size="14" aria-hidden="true" />
+          <button type="submit" aria-label="Rechercher" class="bg-[#156F71] text-white text-sm font-semibold h-11 px-5 max-[419px]:px-3.5 rounded-full flex items-center gap-2 hover:bg-[#0f5557] transition-colors whitespace-nowrap">
+            <span class="max-[419px]:hidden">Rechercher</span> <Search :size="14" aria-hidden="true" />
           </button>
         </div>
       </form>

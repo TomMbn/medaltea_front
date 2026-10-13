@@ -50,7 +50,7 @@
                 <button 
                   aria-label="Envoyer le message"
                   @click="handleSubmit"
-                  class="w-10 h-10 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 cursor-pointer"
+                  class="w-11 h-11 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 cursor-pointer"
                 >
                   <ArrowUp :size="20" stroke-width="3" />
                 </button>
@@ -243,6 +243,7 @@ const handleSuggestion = (text) => {
 @media (min-width: 1024px) {
   .hero-section {
     min-height: 100vh;
+    min-height: 100svh;
   }
 
   .images-stack {
@@ -316,6 +317,12 @@ const handleSuggestion = (text) => {
 }
 
 /* Écrans peu hauts (portables, barre de favoris, zoom du navigateur) : la carte « Demander à Léya » reste visible sans défiler */
+@media (max-width: 1023px) {
+  .search-bar-wrapper {
+    margin-top: 88px;
+  }
+}
+
 @media (min-width: 1024px) and (max-height: 760px) {
   .hero-section {
     padding-top: 108px;

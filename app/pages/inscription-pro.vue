@@ -1,7 +1,7 @@
 <template>
   <div class="bg-[#e0ecf2] min-h-screen overflow-x-hidden">
     <div class="w-11/12 max-w-[680px] mx-auto pt-32 pb-8 text-[#012828]">
-      <NuxtLink to="/praticiens-pro" class="inline-block text-sm text-[#156F71] hover:underline mb-4">← Espace praticien</NuxtLink>
+      <NuxtLink to="/praticiens-pro" class="inline-block text-sm text-[#156F71] hover:underline mb-1 py-3">← Espace praticien</NuxtLink>
       <h1 class="font-unbounded font-bold text-2xl lg:text-3xl mb-2">Rejoindre Léya en tant que praticien</h1>
       <p class="text-[#012828]/70 font-sans mb-8">
         Déjà inscrit ?

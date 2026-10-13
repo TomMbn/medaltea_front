@@ -20,7 +20,7 @@
         </div>
         <h1 class="font-unbounded font-bold text-4xl md:text-5xl mb-10">{{ medicine.name }}</h1>
         <button
-          class="bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-2 hover:bg-white/90 transition-colors whitespace-nowrap"
+          class="bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-3 hover:bg-white/90 transition-colors whitespace-nowrap"
           @click="scrollToPractitioners"
         >
           Trouvez {{ medicine.ctaLabel }}
@@ -108,7 +108,7 @@
           <div class="flex-1 lg:flex-none relative bg-[#156F71] rounded-[20px] h-[180px] lg:h-[160px] flex items-center p-5 lg:p-6 overflow-hidden">
             <NuxtLink
               :to="`/trouver-un-praticien?specialite=${medicine.slug}#resultats`"
-              class="absolute top-5 right-5 bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-2 hover:bg-white/90 transition-colors whitespace-nowrap"
+              class="absolute top-5 right-5 bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-3 hover:bg-white/90 transition-colors whitespace-nowrap"
             >
               Voir la liste →
             </NuxtLink>
@@ -183,7 +183,7 @@
             Cette pratique ne remplace pas un avis ou un traitement médical. En cas de symptôme persistant ou inquiétant, consultez un professionnel de santé.
           </p>
           <button
-            class="bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-2 hover:bg-white/90 transition-colors whitespace-nowrap"
+            class="bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-3 hover:bg-white/90 transition-colors whitespace-nowrap"
             @click="scrollToPractitioners"
           >
             Trouvez {{ medicine.ctaLabel }}

@@ -1,0 +1,25 @@
+# Léya
+
+> Léya est une plateforme française qui associe un assistant IA et un annuaire de praticiens en médecines douces (ostéopathie, naturopathie, sophrologie, hypnothérapie, acupuncture, massage). Les patients recherchent un praticien par spécialité et par ville, consultent sa fiche et réservent en ligne. Léya ne fournit ni diagnostic ni conseil médical et ne remplace pas un avis médical.
+
+## Pages principales
+- [Accueil](https://leya-sante.fr/): présentation de Léya et de l'assistant IA
+- [Les médecines](https://leya-sante.fr/medecines): présentation des disciplines
+- [Trouver un praticien](https://leya-sante.fr/trouver-un-praticien): recherche par spécialité et par ville
+- [Espace praticiens](https://leya-sante.fr/praticiens-pro): présentation de l'offre pour les professionnels
+
+## Médecines
+- [Acupuncture](https://leya-sante.fr/medecines/acupuncture)
+- [Hypnothérapie](https://leya-sante.fr/medecines/hypnotherapie)
+- [Massage](https://leya-sante.fr/medecines/massage)
+- [Naturopathie](https://leya-sante.fr/medecines/naturopathie)
+- [Ostéopathie](https://leya-sante.fr/medecines/osteopathie)
+- [Sophrologie](https://leya-sante.fr/medecines/sophrologie)
+
+## Informations légales
+- [Mentions légales](https://leya-sante.fr/mentions-legales)
+- [Politique de confidentialité](https://leya-sante.fr/politique-de-confidentialite)
+- [CGU](https://leya-sante.fr/cgu)
+
+## Contact
+contact@leya-sante.fr

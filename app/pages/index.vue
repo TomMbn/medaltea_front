@@ -64,9 +64,9 @@ useHead({
           logo: 'https://leya-sante.fr/favicon.png',
           email: 'contact@leya-sante.fr',
           sameAs: [
-            'https://www.facebook.com/people/Medaltea-Medaltea/61584876630055/',
-            'https://www.instagram.com/medaltea.france/',
-            'https://www.linkedin.com/company/medaltea',
+            'https://www.facebook.com/LeyaSante/',
+            'https://www.instagram.com/leya.sante/',
+            'https://www.linkedin.com/company/leya-sante/',
           ],
         },
         {

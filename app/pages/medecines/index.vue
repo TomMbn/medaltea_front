@@ -31,7 +31,7 @@
           :src="img.src"
           :alt="img.alt"
           class="w-full h-full object-cover"
-          width="350" height="220" format="webp" quality="80" loading="lazy"
+          width="350" height="220" format="webp" quality="80" loading="lazy" sizes="xs:300px md:340px lg:420px xl:600px 3xl:780px"
         />
       </div>
     </div>
@@ -65,7 +65,7 @@
               :src="med.heroImage"
               :alt="med.name"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              width="429" height="260" format="webp" quality="80" loading="lazy"
+              width="429" height="260" format="webp" quality="80" loading="lazy" sizes="xs:360px lg:300px xl:390px"
             />
             <!-- Icon: pinned bottom-right of image, always proportional -->
             <div

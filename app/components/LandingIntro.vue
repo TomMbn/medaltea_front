@@ -16,7 +16,7 @@
               quality="80"
               loading="lazy"
               placeholder
-              sizes="sm:100vw md:50vw lg:600px"
+              sizes="xs:400px md:800px lg:940px"
             />
           </div>
           

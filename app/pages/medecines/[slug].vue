@@ -7,7 +7,7 @@
         :src="medicine.heroImage"
         :alt="medicine.name"
         class="w-full h-full object-cover"
-        width="1440" height="520" format="webp" quality="85"
+        width="1440" height="520" format="webp" quality="85" sizes="xs:640px md:820px lg:1024px xl:1440px 3xl:1920px"
         fetchpriority="high"
       />
       <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
@@ -33,7 +33,7 @@
             :src="medicine.definitionImage"
             :alt="`${medicine.name} — définition`"
             class="w-full h-full object-cover"
-            width="600" height="380" format="webp" quality="80" loading="lazy"
+            width="600" height="380" format="webp" quality="80" sizes="xs:400px md:680px lg:600px xl:660px" loading="lazy"
           />
         </div>
         <div>
@@ -74,7 +74,7 @@
               :src="medicine.mosaicImage1"
               :alt="medicine.name"
               class="w-full h-full object-cover"
-              width="460" height="280" format="webp" quality="80" loading="lazy"
+              width="460" height="280" format="webp" quality="80" sizes="xs:400px md:450px lg:440px" loading="lazy"
             />
           </div>
           <div class="flex-1 lg:flex-none bg-[#90BAD1] rounded-[20px] h-[180px] lg:h-[160px] flex flex-col justify-between p-5 lg:p-6">
@@ -92,7 +92,7 @@
             :src="medicine.mosaicImage2"
             :alt="medicine.mosaicImage2Tagline"
             class="w-full h-full object-cover"
-            width="460" height="476" format="webp" quality="80" loading="lazy"
+            width="460" height="476" format="webp" quality="80" sizes="xs:280px md:860px lg:640px" loading="lazy"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           <span class="absolute bottom-5 left-5 text-white font-unbounded font-bold text-xl">
@@ -119,7 +119,7 @@
               :src="medicine.mosaicImage3"
               :alt="medicine.name"
               class="w-full h-full object-cover"
-              width="460" height="280" format="webp" quality="80" loading="lazy"
+              width="460" height="280" format="webp" quality="80" sizes="xs:400px md:450px lg:440px" loading="lazy"
             />
           </div>
         </div>
@@ -157,7 +157,7 @@
             :src="medicine.heroImage"
             :alt="medicine.name"
             class="w-full h-full object-cover"
-            width="1440" height="420" format="webp" quality="60" loading="lazy"
+            width="1440" height="420" format="webp" quality="75" sizes="xs:640px md:820px lg:1024px xl:1440px 3xl:1920px" loading="lazy"
           />
         </div>
         <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(90deg, #156F71 46.59%, rgba(0,0,0,0) 100%)" />

@@ -1,6 +1,8 @@
 import { medecines } from './app/data/medecines'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
+const buildDate = new Date().toISOString().slice(0, 10)
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -17,16 +19,16 @@ export default defineNuxtConfig({
     // Fiches praticiens indexables (revendiquées et complètes), lues dans l'annuaire
     sources: ['/api/__sitemap__/praticiens'],
     urls: [
-      { loc: '/', priority: 1.0, changefreq: 'weekly' },
-      { loc: '/medecines', priority: 0.9, changefreq: 'weekly' },
-      { loc: '/trouver-un-praticien', priority: 0.8, changefreq: 'monthly' },
-      { loc: '/mentions-legales', priority: 0.2, changefreq: 'yearly' },
-      { loc: '/politique-de-confidentialite', priority: 0.2, changefreq: 'yearly' },
-      { loc: '/cgu', priority: 0.2, changefreq: 'yearly' },
-      { loc: '/cgu-pro', priority: 0.2, changefreq: 'yearly' },
-      { loc: '/praticiens-pro', priority: 0.7, changefreq: 'monthly' },
+      { loc: '/', priority: 1.0, changefreq: 'weekly', lastmod: buildDate },
+      { loc: '/medecines', priority: 0.9, changefreq: 'weekly', lastmod: buildDate },
+      { loc: '/trouver-un-praticien', priority: 0.8, changefreq: 'monthly', lastmod: buildDate },
+      { loc: '/mentions-legales', priority: 0.2, changefreq: 'yearly', lastmod: buildDate },
+      { loc: '/politique-de-confidentialite', priority: 0.2, changefreq: 'yearly', lastmod: buildDate },
+      { loc: '/cgu', priority: 0.2, changefreq: 'yearly', lastmod: buildDate },
+      { loc: '/cgu-pro', priority: 0.2, changefreq: 'yearly', lastmod: buildDate },
+      { loc: '/praticiens-pro', priority: 0.7, changefreq: 'monthly', lastmod: buildDate },
       // Une entrée par médecine, générée depuis app/data/medecines.ts
-      ...medecines.map(m => ({ loc: `/medecines/${m.slug}`, priority: 0.8, changefreq: 'monthly' as const })),
+      ...medecines.map(m => ({ loc: `/medecines/${m.slug}`, priority: 0.8, changefreq: 'monthly' as const, lastmod: buildDate })),
     ]
   },
   fonts: {
@@ -78,7 +80,9 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'google-site-verification', content: '6ptMFJEjzSqdeWEAtJY4t7a79p5OQ6816u0Is4HT1_4' },
         { name: 'description', content: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.' },
+        { name: 'theme-color', content: '#177070' },
         { property: 'og:type', content: 'website' },
+        { property: 'og:locale', content: 'fr_FR' },
         { property: 'og:site_name', content: 'Léya' },
         { property: 'og:title', content: 'Léya — La médecine alternative, intelligente et accessible' },
         { property: 'og:description', content: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.' },

@@ -65,6 +65,12 @@ useHead({
           url: 'https://leya-sante.fr',
           logo: 'https://leya-sante.fr/favicon.png',
           email: 'contact@leya-sante.fr',
+          contactPoint: {
+            '@type': 'ContactPoint',
+            contactType: 'customer support',
+            email: 'contact@leya-sante.fr',
+            availableLanguage: 'French',
+          },
           sameAs: [
             'https://www.facebook.com/LeyaSante/',
             'https://www.instagram.com/leya.sante/',

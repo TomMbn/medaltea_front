@@ -85,9 +85,7 @@
             height="626"
             format="webp"
             quality="80"
-            fetchpriority="high"
-            preload
-            placeholder
+            loading="lazy"
             sizes="sm:100vw md:80vw lg:800px"
           />
         </div>
@@ -102,9 +100,7 @@
             height="393"
             format="webp"
             quality="80"
-            fetchpriority="high"
-            preload
-            placeholder
+            loading="lazy"
             sizes="sm:60vw md:50vw lg:600px"
           />
         </div>

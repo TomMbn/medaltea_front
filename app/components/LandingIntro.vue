@@ -43,9 +43,11 @@
             <ul class="space-y-4 mb-10">
               <li v-for="item in features" :key="item" class="flex items-center gap-4">
                 <div class="w-6 h-6 flex items-center justify-center shrink-0">
-                  <NuxtImg 
-                    src="/images/landing-intro.svg" 
-                    alt="Check Icon" 
+                  <img
+                    src="/images/landing-intro.svg"
+                    alt="Check Icon"
+                    width="24"
+                    height="24"
                     class="w-full h-full object-contain"
                   />
                 </div>

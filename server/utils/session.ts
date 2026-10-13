@@ -86,7 +86,7 @@ export async function findPraticienId(token: string, mail?: string, response?: a
 const AUTH_FIELDS: Record<'login' | 'register' | 'register-pro', string[]> = {
     login: ['mail', 'password'],
     register: ['mail', 'password'],
-    'register-pro': ['mail', 'password', 'lastName', 'firstName', 'address', 'country', 'city', 'postalCode', 'phoneNumber', 'schedules', 'price', 'specialityIds'],
+    'register-pro': ['mail', 'password', 'lastName', 'firstName', 'address', 'country', 'city', 'postalCode', 'latitude', 'longitude', 'phoneNumber', 'schedules', 'price', 'specialityIds'],
 }
 
 export async function authenticate(event: H3Event, path: 'login' | 'register' | 'register-pro') {

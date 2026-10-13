@@ -107,27 +107,33 @@
           <p v-if="form.address && form.city" class="text-xs text-emerald-700 mt-2">
             ✓ {{ form.address }}, {{ form.postalCode }} {{ form.city }}
           </p>
-          <button type="button" class="text-xs underline text-[#156F71] mt-2" @click="manualAddress = true">Saisir l'adresse manuellement</button>
+          <p v-if="searchEmpty" class="text-sm text-[#012828]/80 mt-2" role="status">
+            Aucune adresse trouvée.
+            <button type="button" class="underline font-semibold text-[#156F71]" @click="manualAddress = true">Je ne trouve pas mon adresse</button>
+          </p>
         </div>
 
         <div v-else class="grid gap-4">
           <div>
             <label for="s-street" class="label">Adresse du cabinet</label>
-            <input id="s-street" v-model.trim="form.address" autocomplete="street-address" class="field" :aria-invalid="!!errors.address" aria-describedby="err-address" @input="errors.address = ''" />
+            <input id="s-street" v-model.trim="form.address" autocomplete="street-address" class="field" :aria-invalid="!!errors.address" aria-describedby="err-address" @input="errors.address = ''; coords = null" />
             <p id="err-address" class="err" role="alert">{{ errors.address }}</p>
           </div>
           <div class="grid gap-4 sm:grid-cols-3">
             <div>
               <label for="s-cp" class="label">Code postal</label>
-              <input id="s-cp" v-model.trim="form.postalCode" inputmode="numeric" maxlength="5" autocomplete="postal-code" class="field" :aria-invalid="!!errors.postalCode" aria-describedby="err-cp" @input="errors.postalCode = ''" />
+              <input id="s-cp" v-model.trim="form.postalCode" inputmode="numeric" maxlength="5" autocomplete="postal-code" class="field" :aria-invalid="!!errors.postalCode" aria-describedby="err-cp" @input="errors.postalCode = ''; coords = null" />
               <p id="err-cp" class="err" role="alert">{{ errors.postalCode }}</p>
             </div>
             <div class="sm:col-span-2">
               <label for="s-city" class="label">Ville</label>
-              <input id="s-city" v-model.trim="form.city" autocomplete="address-level2" class="field" :aria-invalid="!!errors.city" aria-describedby="err-city" @input="errors.city = ''" />
+              <input id="s-city" v-model.trim="form.city" autocomplete="address-level2" class="field" :aria-invalid="!!errors.city" aria-describedby="err-city" @input="errors.city = ''; coords = null" />
               <p id="err-city" class="err" role="alert">{{ errors.city }}</p>
             </div>
           </div>
+          <p class="text-xs text-[#012828]/70">
+            Nous essaierons de localiser cette adresse. Si elle reste introuvable, votre fiche fonctionnera normalement mais n'apparaîtra pas dans la recherche « autour de moi ».
+          </p>
           <button type="button" class="text-xs underline text-[#156F71] justify-self-start" @click="manualAddress = false">Utiliser la recherche d'adresse</button>
         </div>
 
@@ -283,6 +289,10 @@ function restart() {
 // ---------- Adresse : saisie assistée (Base Adresse Nationale via notre serveur)
 const manualAddress = ref(false)
 const addressQuery = ref('')
+// Coordonnées de l'adresse choisie dans les suggestions (absentes en saisie manuelle)
+const coords = ref(null)
+// Vrai quand la recherche d'adresse n'a rien trouvé (ou que le service est indisponible) : le mode manuel devient disponible
+const searchEmpty = ref(false)
 const suggestions = ref([])
 const suggestionsOpen = ref(false)
 const activeIndex = ref(-1)
@@ -295,7 +305,9 @@ watch([form, agenda, step, () => manualAddress.value], saveDraft, { deep: true }
 function onAddressInput() {
   // Toute modification invalide l'adresse précédemment choisie.
   form.address = ''; form.postalCode = ''; form.city = ''
+  coords.value = null
   errors.address = ''
+  searchEmpty.value = false
   clearTimeout(timer)
   const q = addressQuery.value.trim()
   if (q.length < 3) { suggestions.value = []; return }
@@ -305,16 +317,22 @@ function onAddressInput() {
       const res = await $fetch('/api/address', { query: { q } })
       if (current !== addressToken) return
       suggestions.value = Array.isArray(res) ? res : []
+      searchEmpty.value = suggestions.value.length === 0
       suggestionsOpen.value = true
       activeIndex.value = -1
-    } catch { suggestions.value = [] }
+    } catch {
+      suggestions.value = []
+      if (current === addressToken) searchEmpty.value = true
+    }
   }, 250)
 }
 function pickAddress(a) {
   form.address = a.street
   form.postalCode = String(a.postalCode)
   form.city = a.city
+  coords.value = Number.isFinite(a.latitude) && Number.isFinite(a.longitude) ? { latitude: a.latitude, longitude: a.longitude } : null
   addressQuery.value = a.label
+  searchEmpty.value = false
   suggestionsOpen.value = false
   suggestions.value = []
   activeIndex.value = -1
@@ -348,7 +366,7 @@ const validators = {
       if (!/^\d{5}$/.test(form.postalCode)) errors.postalCode = 'Code postal à 5 chiffres.'
       if (!form.city) errors.city = 'Indiquez la ville.'
     } else if (!form.address || !form.city) {
-      errors.address = 'Choisissez votre adresse dans la liste, ou saisissez-la manuellement.'
+      errors.address = 'Choisissez votre adresse dans la liste des suggestions.'
     }
     if (!/^(?:0|\+33)[1-9]\d{8}$/.test(phoneDigits(form.phone))) errors.phone = 'Saisissez un numéro français valide (ex. 06 12 34 56 78).'
   },
@@ -435,6 +453,12 @@ async function finish() {
   submitError.value = ''
   trackEvent('pro-signup-submit', { agenda: agenda.enabled })
   try {
+    // Adresse saisie à la main : on tente de la localiser avant l'envoi (échec sans conséquence)
+    if (!coords.value && form.address && form.postalCode && form.city) {
+      const hits = await $fetch('/api/address', { query: { q: `${form.address} ${form.postalCode} ${form.city}` } }).catch(() => [])
+      const hit = Array.isArray(hits) ? hits.find(h => String(h.postalCode) === form.postalCode && Number.isFinite(h.latitude) && Number.isFinite(h.longitude)) : null
+      if (hit) coords.value = { latitude: hit.latitude, longitude: hit.longitude }
+    }
     const price = agenda.enabled && agenda.service.price !== null && agenda.service.price !== '' ? Number(agenda.service.price) : undefined
     const result = await $fetch('/api/register-pro', {
       method: 'POST',
@@ -446,6 +470,7 @@ async function finish() {
         address: form.address,
         city: form.city,
         postalCode: Number(form.postalCode),
+        ...(coords.value ?? {}),
         country: 'France',
         phoneNumber: phoneDigits(form.phone),
         price,

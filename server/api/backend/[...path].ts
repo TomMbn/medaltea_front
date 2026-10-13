@@ -131,6 +131,8 @@ function validatePraticienUpdate(body: Record<string, any>) {
             if (!Number.isInteger(value) || value < 1950 || value > new Date().getFullYear()) throw bad('Année de début d\'exercice invalide.')
             out[key] = value
         } else if (key === 'latitude' || key === 'longitude') {
+            // null : l'adresse a changé et n'a pas pu être localisée (on n'efface pas par défaut, seulement sur demande explicite)
+            if (value === null) { out[key] = null; continue }
             const max = key === 'latitude' ? 90 : 180
             if (typeof value !== 'number' || !Number.isFinite(value) || Math.abs(value) > max) throw bad('Coordonnées invalides.')
             out[key] = value

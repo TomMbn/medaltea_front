@@ -6,6 +6,10 @@
     <p v-else-if="!form" class="text-sm text-gray-500" role="status">Chargement de votre fiche…</p>
 
     <template v-else>
+      <p v-if="unlocated" class="text-sm bg-amber-50 border border-amber-300 text-amber-900 rounded-xl px-4 py-3 mb-6" role="status">
+        Votre adresse n'est pas localisée : votre fiche fonctionne normalement mais n'apparaît pas dans la recherche « autour de moi ».
+        <a href="#cabinet" class="underline font-semibold">Recherchez votre adresse</a> pour la localiser.
+      </p>
       <form class="grid gap-6" novalidate @submit.prevent="save">
         <!-- Présentation -->
         <section id="presentation" class="card scroll-mt-24" aria-labelledby="f-pres">
@@ -52,12 +56,17 @@
         </section>
 
         <!-- Cabinet -->
-        <section class="card" aria-labelledby="f-cab">
+        <section id="cabinet" class="card scroll-mt-24" aria-labelledby="f-cab">
           <h2 id="f-cab" class="card-title">Cabinet</h2>
           <div class="grid gap-4">
             <div>
+              <AddressSuggest id="f-search" v-model="addressSearch" label="Rechercher votre adresse" @select="pickAddress" />
+              <p v-if="form.located" class="text-xs text-emerald-700 mt-1">✓ Adresse localisée.</p>
+              <p v-else class="help">Choisissez une suggestion pour que votre fiche apparaisse dans la recherche « autour de moi ».</p>
+            </div>
+            <div>
               <label for="f-address" class="label">Adresse</label>
-              <input id="f-address" v-model="form.address" maxlength="200" autocomplete="street-address" class="field" :aria-invalid="!!errors.address" />
+              <input id="f-address" v-model="form.address" maxlength="200" autocomplete="street-address" class="field" :aria-invalid="!!errors.address" @input="form.located = ''" />
               <p v-if="errors.address" class="err" role="alert">{{ errors.address }}</p>
             </div>
             <div>
@@ -67,12 +76,12 @@
             <div class="grid gap-4 sm:grid-cols-3">
               <div>
                 <label for="f-postal" class="label">Code postal</label>
-                <input id="f-postal" v-model="form.postalCode" inputmode="numeric" maxlength="5" autocomplete="postal-code" class="field" :aria-invalid="!!errors.postalCode" />
+                <input id="f-postal" v-model="form.postalCode" inputmode="numeric" maxlength="5" autocomplete="postal-code" class="field" :aria-invalid="!!errors.postalCode" @input="form.located = ''" />
                 <p v-if="errors.postalCode" class="err" role="alert">{{ errors.postalCode }}</p>
               </div>
               <div class="sm:col-span-2">
                 <label for="f-city" class="label">Ville</label>
-                <input id="f-city" v-model="form.city" maxlength="100" autocomplete="address-level2" class="field" :aria-invalid="!!errors.city" />
+                <input id="f-city" v-model="form.city" maxlength="100" autocomplete="address-level2" class="field" :aria-invalid="!!errors.city" @input="form.located = ''" />
                 <p v-if="errors.city" class="err" role="alert">{{ errors.city }}</p>
               </div>
             </div>
@@ -172,6 +181,7 @@
             </button>
             <p v-if="dirty && !saving" class="text-xs text-[#012828]/70">Modifications non enregistrées</p>
             <p v-if="saved" class="text-sm text-emerald-700" role="status">Fiche enregistrée.</p>
+            <p v-if="saved && locateWarning" class="text-sm text-amber-800" role="status">{{ locateWarning }}</p>
             <p v-if="errorMessage" class="text-sm text-red-700" role="alert">{{ errorMessage }}</p>
           </div>
         </div>
@@ -239,10 +249,25 @@ const toForm = (f) => ({
   publicTypes: [...(f.publicTypes ?? [])], languages: [...(f.languages ?? [])], paymentMethods: [...(f.paymentMethods ?? [])],
   reimbursementInfo: f.reimbursementInfo ?? '',
   rpps: f.rpps ?? '', adeli: f.adeli ?? '', siret: f.siret ?? '',
+  // Coordonnées d'une suggestion choisie dans cette session (vide : aucune)
+  located: '',
 })
 
 const form = ref(null)
 const initial = ref('')
+const addressSearch = ref('')
+let pickedCoords = null
+// Fiche sans coordonnées : absente de la recherche « autour de moi »
+const unlocated = computed(() => !!fiche.value && (fiche.value.latitude == null || fiche.value.longitude == null))
+
+function pickAddress(a) {
+  form.value.address = a.street
+  form.value.postalCode = String(a.postalCode)
+  form.value.city = a.city
+  const ok = Number.isFinite(a.latitude) && Number.isFinite(a.longitude)
+  pickedCoords = ok ? { latitude: a.latitude, longitude: a.longitude } : null
+  form.value.located = ok ? `${a.latitude},${a.longitude}` : ''
+}
 const snapshot = (value) => JSON.stringify(value, (k, v) => (Array.isArray(v) ? [...v].sort() : v))
 watch(fiche, (f) => {
   if (!f) return
@@ -256,6 +281,7 @@ const errors = reactive({})
 const saving = ref(false)
 const saved = ref(false)
 const errorMessage = ref('')
+const locateWarning = ref('')
 
 function validate() {
   for (const k of Object.keys(errors)) delete errors[k]
@@ -299,17 +325,42 @@ async function save() {
   errorMessage.value = ''
   if (!validate()) { errorMessage.value = 'Corrigez les champs signalés.'; return }
   const payload = changes()
-  if (!Object.keys(payload).length) return
+  const addressChanged = !!(payload.address || payload.postalCode || payload.city)
+  // Une suggestion choisie pour une adresse jusque-là non localisée doit aussi enregistrer ses coordonnées
+  const locatesExisting = !!(form.value.located && unlocated.value)
+  if (!Object.keys(payload).length && !locatesExisting) return
   saving.value = true
+  locateWarning.value = ''
   try {
-    // Adresse modifiée : on retrouve ses coordonnées (Base Adresse Nationale) pour la recherche « autour de moi »
-    if (payload.address || payload.postalCode || payload.city) {
-      const f = form.value
-      const hits = await $fetch('/api/address', { query: { q: `${f.address} ${f.postalCode} ${f.city}` } }).catch(() => [])
-      const hit = hits.find(h => String(h.postalCode) === f.postalCode && Number.isFinite(h.latitude) && Number.isFinite(h.longitude))
-      if (hit) { payload.latitude = hit.latitude; payload.longitude = hit.longitude }
+    // Coordonnées pour la recherche « autour de moi » : suggestion choisie, sinon recherche automatique (Base Adresse Nationale)
+    if (addressChanged || locatesExisting) {
+      let coords = form.value.located ? pickedCoords : null
+      if (!coords) {
+        const f = form.value
+        const hits = await $fetch('/api/address', { query: { q: `${f.address} ${f.postalCode} ${f.city}` } }).catch(() => [])
+        const hit = Array.isArray(hits) ? hits.find(h => String(h.postalCode) === f.postalCode && Number.isFinite(h.latitude) && Number.isFinite(h.longitude)) : null
+        if (hit) coords = { latitude: hit.latitude, longitude: hit.longitude }
+      }
+      if (coords) Object.assign(payload, coords)
+      else if (addressChanged) {
+        // Adresse changée mais introuvable : on retire les anciennes coordonnées plutôt que de laisser une position fausse
+        payload.latitude = null
+        payload.longitude = null
+        locateWarning.value = 'Nous n\'avons pas pu localiser cette adresse : votre fiche n\'apparaîtra pas dans la recherche « autour de moi ».'
+      }
     }
-    await $fetch(`/api/backend/praticiens/${fiche.value.id}`, { method: 'PUT', body: payload })
+    try {
+      await $fetch(`/api/backend/praticiens/${fiche.value.id}`, { method: 'PUT', body: payload })
+    } catch (e) {
+      // Le backend peut refuser la remise à zéro des coordonnées : on enregistre alors le reste
+      const message = String(e?.data?.message ?? e?.statusMessage ?? '')
+      if (payload.latitude === null && (e?.statusCode ?? e?.response?.status) === 400 && /latitude|longitude/i.test(message)) {
+        delete payload.latitude; delete payload.longitude
+        await $fetch(`/api/backend/praticiens/${fiche.value.id}`, { method: 'PUT', body: payload })
+      } else throw e
+    }
+    pickedCoords = null
+    addressSearch.value = ''
     await refresh()
     saved.value = true
     trackEvent('pro-fiche-saved')

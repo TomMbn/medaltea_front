@@ -35,6 +35,7 @@ export default defineEventHandler(async (event) => {
     const currentUsage: any = (await storage.getItem(storageKey)) || 0;
 
     if (currentUsage >= MAX_DAILY) {
+        trackUserEvent(event, 'chat_quota_reached', { scope: 'user' });
         throw createError({
             statusCode: 429,
             statusMessage: `Limite journalière atteinte (${MAX_DAILY}/${MAX_DAILY}). Revenez demain pour discuter avec Léya !`,
@@ -51,6 +52,7 @@ export default defineEventHandler(async (event) => {
     const ipUsage : any = await storage.getItem(rateLimitKey) || 0;
     
     if (ipUsage >= 30) { // Safety limit for IPs to prevent bot storms even if authenticated
+        trackUserEvent(event, 'chat_quota_reached', { scope: 'ip' });
         throw createError({
             statusCode: 429,
             statusMessage: "Trop de requêtes depuis votre adresse IP. Reviens demain !",
@@ -108,6 +110,9 @@ CONSIGNES DE RÉPONSE :
         });
 
         const result = await chat.sendMessageStream(message);
+
+        // Tracking sans attente : taille de l'historique seulement, jamais le contenu des messages
+        trackUserEvent(event, 'chat_message_sent', { history_length: safeHistory.length });
 
         // We use sendIterable to stream the response chunks back to the client
         return sendIterable(event, (async function* () {

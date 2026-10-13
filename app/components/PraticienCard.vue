@@ -15,6 +15,7 @@
         <div class="flex items-center gap-1 text-gray-500 text-sm mt-1">
           <MapPin :size="12" aria-hidden="true" />
           <span class="truncate">{{ praticien.city }}<template v-if="praticien.postalCode"> ({{ formatPostalCode(praticien.postalCode) }})</template></span>
+          <span v-if="distance" class="shrink-0">· {{ distance }}</span>
         </div>
       </div>
     </div>
@@ -25,9 +26,19 @@
       </li>
     </ul>
 
+    <p v-if="praticien.isVerified || rating" class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#012828]/80">
+      <span v-if="praticien.isVerified" class="inline-flex items-center gap-1 font-semibold text-[#156F71]"><BadgeCheck :size="14" aria-hidden="true" /> Profil vérifié</span>
+      <span v-if="rating" class="inline-flex items-center gap-1"><Star :size="13" aria-hidden="true" /> {{ rating }}<span v-if="praticien.reviewCount"> ({{ praticien.reviewCount }} avis)</span></span>
+    </p>
+
+    <p v-if="nextSlot" class="text-sm text-[#012828]">
+      <span class="text-xs font-semibold uppercase tracking-wide text-[#012828]/60 block">Prochain créneau</span>
+      <span class="font-semibold first-letter:uppercase">{{ nextSlot }}</span>
+    </p>
+
     <div class="flex items-center justify-between gap-2 mt-auto">
       <span v-if="praticien.bookable === false" class="text-[#012828]/60 text-xs">Réservation indisponible</span>
-      <span v-else-if="praticien.price" class="text-[#E8755A] text-sm font-semibold">{{ praticien.price }} € par séance</span>
+      <span v-else-if="price" class="text-[#E8755A] text-sm font-semibold">À partir de {{ price }} €</span>
       <span v-else />
       <NuxtLink
         :to="`/praticiens/${praticien.slug || praticien.id}`"
@@ -41,12 +52,31 @@
 
 <script setup>
 import { computed } from 'vue'
-import { MapPin, ArrowUpRight } from 'lucide-vue-next'
+import { MapPin, ArrowUpRight, BadgeCheck, Star } from 'lucide-vue-next'
 
 const props = defineProps({ praticien: { type: Object, required: true } })
 
 const colors = ['#156F71', '#90BAD1', '#EC7F7A', '#012828', '#177070']
 const initials = computed(() => `${(props.praticien.firstName || '?')[0]}${(props.praticien.lastName || '')[0] || ''}`.toUpperCase())
+
+// Uniquement ce que l'API fournit : rien n'est affiché sinon.
+const price = computed(() => props.praticien.priceFrom ?? props.praticien.price ?? null)
+const rating = computed(() => (props.praticien.averageRating && props.praticien.reviewCount > 0
+  ? String(Number(props.praticien.averageRating).toFixed(1)).replace('.', ',')
+  : ''))
+const distance = computed(() => {
+  const km = Number(props.praticien.distanceKm)
+  if (!Number.isFinite(km) || props.praticien.distanceKm == null) return ''
+  return km < 1 ? 'moins de 1 km' : `${km.toFixed(km < 10 ? 1 : 0).replace('.', ',')} km`
+})
+const nextSlot = computed(() => {
+  const iso = props.praticien.nextAvailabilityAt
+  if (!iso || props.praticien.bookable === false || Number.isNaN(Date.parse(iso))) return ''
+  const d = new Date(iso)
+  const day = new Intl.DateTimeFormat('fr-FR', { timeZone: PARIS_TZ, weekday: 'long', day: 'numeric', month: 'long' }).format(d)
+  const time = new Intl.DateTimeFormat('fr-FR', { timeZone: PARIS_TZ, hour: '2-digit', minute: '2-digit' }).format(d).replace(':', ' h ').replace(/ h 00$/, ' h')
+  return `${day} à ${time}`
+})
 </script>
 
 <style scoped>

@@ -32,7 +32,7 @@ const speciality = computed(() => findBySlug(props.slug))
 const { data } = await useAsyncData(
   `praticiens-${props.slug}`,
   () => (speciality.value
-    ? $fetch('/api/backend/praticiens', { query: { specialityId: speciality.value.id } }).catch(() => [])
+    ? $fetch('/api/backend/praticiens', { query: { specialityId: speciality.value.id, limit: 6 } }).catch(() => [])
     : []),
   { default: () => [] },
 )

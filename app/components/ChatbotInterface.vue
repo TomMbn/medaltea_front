@@ -87,7 +87,7 @@
         
         <!-- White Inner Container -->
         <div 
-          class="flex-1 bg-white rounded-[17.5px] flex flex-col transition-all duration-300"
+          class="focus-ring-within flex-1 bg-white rounded-[17.5px] flex flex-col transition-all duration-300"
           :class="isChatActive ? 'px-8 justify-center shadow-sm' : 'p-6 justify-between shadow-lg'"
         >
           <!-- Input Row -->
@@ -98,7 +98,7 @@
               :rows="1"
               @keydown.enter.prevent="sendMessage"
               :disabled="isTyping || isLimitReached"
-              class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans disabled:opacity-50 overflow-hidden"
+              class="focus-in-parent flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans disabled:opacity-50 overflow-hidden"
               :placeholder="isLimitReached ? 'Limite quotidienne atteinte (10/10)' : 'Demander à Léya'"
             ></textarea>
             

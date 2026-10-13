@@ -15,7 +15,7 @@ type Rule = {
 
 const RULES: Rule[] = [
     { method: 'GET', pattern: /^specialites$/, auth: false, cacheable: true },
-    { method: 'GET', pattern: /^praticiens$/, auth: false, cacheable: true, query: ['specialityId', 'city', 'q', 'language', 'publicType', 'claimed', 'bookable', 'sort', 'limit', 'offset'] },
+    { method: 'GET', pattern: /^praticiens$/, auth: false, cacheable: true, query: ['specialityId', 'city', 'q', 'language', 'publicType', 'claimed', 'bookable', 'sort', 'limit', 'offset', 'lat', 'lng', 'radiusKm'] },
     { method: 'GET', pattern: /^praticiens\/\d+$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens\/slug\/[a-z0-9-]{1,120}$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens\/\d+\/next-slot$/, auth: false, query: ['consultationTypeId'] },
@@ -73,6 +73,12 @@ function validateListQuery(query?: Record<string, any>) {
     for (const flag of ['claimed', 'bookable']) {
         if (query[flag] !== undefined && !['true', 'false'].includes(String(query[flag]))) throw bad('Filtre invalide.')
     }
+    const inRange = (value: unknown, min: number, max: number) => /^-?\d{1,3}(\.\d{1,6})?$/.test(String(value)) && +String(value) >= min && +String(value) <= max
+    if (query.lat !== undefined && !inRange(query.lat, -90, 90)) throw bad('Latitude invalide.')
+    if (query.lng !== undefined && !inRange(query.lng, -180, 180)) throw bad('Longitude invalide.')
+    if (query.radiusKm !== undefined && !inRange(query.radiusKm, 1, 500)) throw bad('Rayon invalide.')
+    if ((query.lat === undefined) !== (query.lng === undefined)) throw bad('Position incomplète.')
+    if (query.sort === 'distance' && query.lat === undefined) throw bad('Le tri par distance nécessite une position.')
     if (query.consultationTypeId !== undefined && !/^\d+$/.test(String(query.consultationTypeId))) throw bad('Prestation invalide.')
 }
 

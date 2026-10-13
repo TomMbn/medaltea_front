@@ -31,16 +31,24 @@ export async function useSpecialities() {
 
 /** Nombre réel de praticiens par médecine (remplace les anciens chiffres fixes de medecines.ts). */
 export async function useSpecialityCounts() {
-  const { data } = await useAsyncData<any[]>(
-    'praticiens-all',
-    () => $fetch<any[]>('/api/backend/praticiens').catch(() => []),
-    { default: () => [] },
+  // Un appel léger par spécialité (une seule fiche demandée) : le total vient de l'en-tête X-Total-Count.
+  // La liste des spécialités est lue dans le même appel : le contexte Nuxt est perdu après un `await` dans un composable.
+  const { data } = await useAsyncData<Record<string, number>>(
+    'praticiens-counts',
+    async () => {
+      const list = await $fetch<Speciality[]>('/api/backend/specialites').catch(() => [] as Speciality[])
+      const entries = await Promise.all(list.map(async (s) => {
+        try {
+          const res = await $fetch.raw('/api/backend/praticiens', { query: { specialityId: s.id, limit: 1 } })
+          return [specialityKey(s.name), Number(res.headers.get('x-total-count')) || 0] as const
+        } catch {
+          return [specialityKey(s.name), 0] as const
+        }
+      }))
+      return Object.fromEntries(entries)
+    },
+    { default: () => ({}) },
   )
-  const countFor = (slug: string) => {
-    const key = specialityKeyForSlug(slug)
-    return (Array.isArray(data.value) ? data.value : []).filter(
-      p => (p.specialities || []).some((s: Speciality) => specialityKey(s.name) === key),
-    ).length
-  }
+  const countFor = (slug: string) => data.value?.[specialityKeyForSlug(slug)] ?? 0
   return { countFor }
 }

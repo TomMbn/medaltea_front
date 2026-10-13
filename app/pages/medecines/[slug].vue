@@ -12,8 +12,11 @@
       />
       <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
       <div class="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-6">
-        <div class="bg-white/20 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center text-3xl mb-8">
-          {{ medicine.icon }}
+        <div class="bg-white/20 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center mb-8">
+          <!-- Pictogramme passé en blanc pour rester lisible sur la photo (le filtre est sur le conteneur : l'animation globale des images occupe déjà celui de l'image) -->
+          <span class="inline-flex" style="filter: brightness(0) invert(1);">
+            <img :src="medicine.icon" alt="" width="32" height="32" class="w-8 h-8 object-contain" />
+          </span>
         </div>
         <h1 class="font-unbounded font-bold text-4xl md:text-5xl mb-10">{{ medicine.name }}</h1>
         <button

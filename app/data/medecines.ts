@@ -3,6 +3,7 @@ export interface Medecine {
   name: string
   nameWithArticle: string
   ctaLabel: string
+  /** Pictogramme de la médecine (image dans public/icons) */
   icon: string
   shortDescription: string
   heroImage: string
@@ -26,7 +27,7 @@ export const medecines: Medecine[] = [
     name: 'Ostéopathie',
     nameWithArticle: "l'ostéopathie",
     ctaLabel: 'un/e ostéopathe',
-    icon: '🦴',
+    icon: '/icons/osteopathie.png',
     shortDescription: 'Pratique manuelle qui s\'intéresse à la mobilité du corps',
     heroImage: '/images/medicine-5.jpeg',
     heroTagline: 'Gagnez en mobilité',
@@ -64,7 +65,7 @@ export const medecines: Medecine[] = [
     name: 'Naturopathie',
     nameWithArticle: 'la naturopathie',
     ctaLabel: 'un/e naturopathe',
-    icon: '🌿',
+    icon: '/icons/naturopathie.png',
     shortDescription: 'Approche globale centrée sur l\'hygiène de vie : alimentation, plantes, gestion du stress',
     heroImage: '/images/AdobeStock_336398199.jpeg',
     heroTagline: 'Prenez soin de votre hygiène de vie',
@@ -102,7 +103,7 @@ export const medecines: Medecine[] = [
     name: 'Sophrologie',
     nameWithArticle: 'la sophrologie',
     ctaLabel: 'un/e sophrologue',
-    icon: '🧘',
+    icon: '/icons/sophrologie.png',
     shortDescription: 'Méthode de relaxation, de respiration et de visualisation',
     heroImage: '/images/hero-section.jpeg',
     heroTagline: 'Apprenez à mieux vous détendre',
@@ -141,7 +142,7 @@ export const medecines: Medecine[] = [
     name: 'Acupuncture',
     nameWithArticle: "l'acupuncture",
     ctaLabel: 'un/e acupuncteur',
-    icon: '✨',
+    icon: '/icons/acupuncture.png',
     shortDescription: 'Pratique issue de la médecine traditionnelle chinoise, qui utilise de fines aiguilles',
     heroImage: '/images/medicine-3.jpeg',
     heroTagline: 'Une pratique issue de la tradition chinoise',
@@ -178,7 +179,7 @@ export const medecines: Medecine[] = [
     name: 'Hypnothérapie',
     nameWithArticle: "l'hypnothérapie",
     ctaLabel: 'un/e hypnothérapeute',
-    icon: '🌀',
+    icon: '/icons/hypnotherapie.png',
     shortDescription: 'Accompagnement qui utilise l\'état d\'hypnose pour travailler sur ses habitudes et ses émotions',
     heroImage: '/images/women-hypno.jpg',
     heroTagline: 'Un accompagnement par l\'hypnose',
@@ -216,7 +217,7 @@ export const medecines: Medecine[] = [
     name: 'Massage bien-être',
     nameWithArticle: 'le massage bien-être',
     ctaLabel: 'un/e thérapeute',
-    icon: '🤲',
+    icon: '/icons/massage.png',
     shortDescription: 'Massage de détente qui s\'adresse au corps et à l\'esprit',
     heroImage: '/images/medicines-1.jpeg',
     heroTagline: 'Offrez-vous un moment de détente',

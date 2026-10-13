@@ -69,10 +69,10 @@
             />
             <!-- Icon: pinned bottom-right of image, always proportional -->
             <div
-              class="absolute z-10 flex items-center justify-center text-3xl"
+              class="absolute z-10 flex items-center justify-center"
               style="bottom: 8px; right: 12px; width: 64px; height: 64px; border-radius: 14px; background: #B8CFD8;"
             >
-              {{ med.icon }}
+              <img :src="med.icon" alt="" width="36" height="36" class="w-9 h-9 object-contain" />
             </div>
           </div>
 

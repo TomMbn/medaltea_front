@@ -30,7 +30,12 @@ const RULES: Rule[] = [
     { method: 'PATCH', pattern: /^appointments\/\d+\/status$/, auth: true, body: ['status', 'reason'] },
 
     // Profil
-    { method: 'GET', pattern: /^users\/me$/, auth: true },
+    // Profil du compte connecté : l'utilisateur reçoit ses propres informations (dont son email)
+    { method: 'GET', pattern: /^users\/me$/, auth: true, own: true },
+    { method: 'PATCH', pattern: /^users\/me$/, auth: true, body: ['firstName', 'lastName', 'phoneNumber'], own: true },
+    { method: 'GET', pattern: /^users\/me\/export$/, auth: true, own: true },
+    // Suppression du compte (mot de passe exigé par le backend ; un compte pro supprime aussi sa fiche)
+    { method: 'DELETE', pattern: /^users\/me$/, auth: true, body: ['password'] },
 
     // Revendication d'une fiche répertoriée (compte pro)
     { method: 'POST', pattern: /^praticiens\/\d+\/claim-requests$/, auth: true, body: ['message', 'rpps', 'siret'] },
@@ -150,6 +155,22 @@ function validatePraticienUpdate(body: Record<string, any>) {
     return out
 }
 
+/** Profil : texte court, ou null pour effacer une information. */
+function validateProfileUpdate(body: Record<string, any>) {
+    const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
+    const out: Record<string, any> = {}
+    const limits: Record<string, number> = { firstName: 80, lastName: 80, phoneNumber: 20 }
+    for (const [key, max] of Object.entries(limits)) {
+        const value = body[key]
+        if (value === undefined) continue
+        if (value === null) { out[key] = null; continue }
+        if (typeof value !== 'string' || value.length > max) throw bad(`Champ « ${key} » invalide.`)
+        out[key] = value.trim()
+    }
+    if (out.phoneNumber && !/^\+?\d{10,15}$/.test(out.phoneNumber.replace(/[\s.]/g, ''))) throw bad('Téléphone invalide.')
+    return out
+}
+
 function validateDiploma(body: Record<string, any>) {
     const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
     if (typeof body.title !== 'string' || !body.title.trim() || body.title.length > 150) throw bad('Intitulé du diplôme invalide.')
@@ -213,6 +234,12 @@ export default defineEventHandler(async (event) => {
         if (path === 'appointments') body = validateAppointment(body)
         if (method === 'PUT' && /^praticiens\/\d+$/.test(path)) body = validatePraticienUpdate(body)
         if (path === 'praticiens/me/diplomas') body = validateDiploma(body)
+        if (method === 'PATCH' && path === 'users/me') body = validateProfileUpdate(body)
+        if (method === 'DELETE' && path === 'users/me') {
+            if (typeof body.password !== 'string' || !body.password || body.password.length > 200) {
+                throw createError({ statusCode: 400, statusMessage: 'Mot de passe requis.' })
+            }
+        }
     }
     const query = rule.query ? pick(getQuery(event), rule.query) : undefined
     if (query?.specialityId !== undefined && !/^\d+$/.test(String(query.specialityId))) {
@@ -243,6 +270,9 @@ export default defineEventHandler(async (event) => {
     // Total des résultats (pagination de l'annuaire)
     const total = response.headers.get('x-total-count')
     if (total && /^\d+$/.test(total)) setHeader(event, 'X-Total-Count', total)
+
+    // Compte supprimé : la session n'a plus lieu d'être
+    if (method === 'DELETE' && path === 'users/me' && response.status === 204) clearSessionCookies(event)
 
     if (response.status === 204) return sendNoContent(event)
     // Le propriétaire de la fiche reçoit ses propres champs privés (RPPS, SIRET…), jamais les autres

@@ -1,4 +1,8 @@
 import { medecines } from './app/data/medecines'
+import { UMAMI_PROXY_PATH } from './app/utils/tracking'
+
+// Umami auto-hébergé (ex. https://stats.leya-sante.fr), lu au build pour les réécritures Vercel
+const umamiHost = (process.env.NUXT_PUBLIC_UMAMI_HOST || '').replace(/\/+$/, '')
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 const buildDate = new Date().toISOString().slice(0, 10)
@@ -7,7 +11,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@nuxtjs/sitemap', '@nuxt/fonts', '@vercel/analytics'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@nuxtjs/sitemap', '@nuxt/fonts'],
 
   site: {
     url: 'https://leya-sante.fr',
@@ -61,7 +65,7 @@ export default defineNuxtConfig({
         'Cross-Origin-Opener-Policy': 'same-origin',
         // Politique de sécurité des contenus en mode « rapport seul » : elle ne bloque rien, les écarts sont journalisés
         // (voir server/api/csp-report.post.ts) avant de passer en mode bloquant.
-        'Content-Security-Policy-Report-Only': "default-src 'self'; script-src 'self' 'unsafe-inline' https://cloud.umami.is; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://gateway.umami.is https://cloud.umami.is; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; report-uri /api/csp-report",
+        'Content-Security-Policy-Report-Only': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self'; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; report-uri /api/csp-report",
       },
     },
   },
@@ -70,7 +74,30 @@ export default defineNuxtConfig({
     // Modèle Gemini (surchargeable avec NUXT_GEMINI_MODEL, ex. gemini-3.5-flash-lite)
     geminiModel: process.env.GEMINI_MODEL || 'gemini-3.8-flash',
     // URL du backend (surchargeable avec NUXT_API_BASE)
-    apiBase: process.env.NUXT_API_BASE || 'https://vps123922.serveur-vps.net'
+    apiBase: process.env.NUXT_API_BASE || 'https://vps123922.serveur-vps.net',
+    public: {
+      // Mesure d'audience (NUXT_PUBLIC_UMAMI_HOST, NUXT_PUBLIC_UMAMI_WEBSITE_ID, NUXT_PUBLIC_UMAMI_DOMAINS).
+      // Hôte ou identifiant vide (développement) : pas de script, voir app/plugins/umami.ts
+      umami: {
+        host: umamiHost,
+        websiteId: process.env.NUXT_PUBLIC_UMAMI_WEBSITE_ID || '',
+        domains: process.env.NUXT_PUBLIC_UMAMI_DOMAINS || 'leya-sante.fr,www.leya-sante.fr',
+      },
+    },
+  },
+  nitro: {
+    vercel: {
+      config: {
+        // Proxy de la mesure d'audience sur le domaine principal : réécritures externes exécutées par Vercel,
+        // sans fonction serverless. Seuls le script et la collecte sont relayés, pas l'interface d'Umami.
+        routes: umamiHost
+          ? [
+              { src: `^${UMAMI_PROXY_PATH}/s\\.js$`, dest: `${umamiHost}/script.js` },
+              { src: `^${UMAMI_PROXY_PATH}/api/send$`, dest: `${umamiHost}/api/send` },
+            ]
+          : [],
+      },
+    },
   },
   app: {
     head: {
@@ -92,9 +119,6 @@ export default defineNuxtConfig({
         { name: 'twitter:title', content: 'Léya — La médecine alternative, intelligente et accessible' },
         { name: 'twitter:description', content: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.' },
         { name: 'twitter:image', content: 'https://leya-sante.fr/og-image.jpg' },
-      ],
-      script: [
-        { src: 'https://cloud.umami.is/script.js', defer: true, 'data-website-id': '29f997b8-9b18-4030-a4c6-1aad46f13570' }
       ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/Favicon.svg' },

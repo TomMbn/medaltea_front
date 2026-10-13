@@ -27,16 +27,16 @@ export const medecines: Medecine[] = [
     nameWithArticle: "l'ostéopathie",
     ctaLabel: 'un/e ostéopathe',
     icon: '🦴',
-    shortDescription: 'Thérapie manuelle qui rétablit l\'équilibre du corps',
+    shortDescription: 'Pratique manuelle qui s\'intéresse à la mobilité du corps',
     heroImage: '/images/medicine-5.jpeg',
     heroTagline: 'Gagnez en mobilité',
     duration: '45 min à 1 heure',
     definitionImage: '/images/AdobeStock_452334355.jpeg',
     definitionText: [
-      'L\'ostéopathie est une thérapie manuelle qui vise à rétablir l\'équilibre du corps en traitant les restrictions de mobilité.',
-      'À travers des manipulations douces, elle permet de soulager les douleurs et d\'améliorer le fonctionnement global de l\'organisme.'
+      'L\'ostéopathie est une pratique manuelle qui vise à améliorer la mobilité du corps en travaillant sur les tensions et les restrictions de mouvement.',
+      'À travers des manipulations douces, elle peut aider à relâcher les tensions et à soulager certaines gênes.'
     ],
-    conditions: ['Douleurs lombaires', 'Tensions musculaires', 'Migraines et maux de tête', 'Troubles digestifs', 'Douleurs articulaires', 'Stress et fatigue'],
+    conditions: ['Douleurs de dos', 'Tensions musculaires', 'Maux de tête', 'Gênes digestives', 'Douleurs articulaires', 'Stress et fatigue'],
     mosaicImage1: '/images/AdobeStock_313373132.jpeg',
     mosaicImage2: '/images/AdobeStock_317007907.jpeg',
     mosaicImage2Tagline: 'Gagnez en mobilité',
@@ -44,19 +44,19 @@ export const medecines: Medecine[] = [
     steps: [
       { title: 'Consultation initiale', description: 'Vous échangez avec le praticien sur vos douleurs, votre mode de vie et vos antécédents.' },
       { title: 'Analyse du corps', description: 'L\'ostéopathe observe votre posture, vos mouvements et identifie les zones de tension.' },
-      { title: 'Manipulations', description: 'Des techniques manuelles adaptées sont réalisées pour relâcher les tensions et rétablir l\'équilibre.' },
+      { title: 'Manipulations', description: 'Des techniques manuelles adaptées sont réalisées pour relâcher les tensions et retrouver de la mobilité.' },
       { title: 'Conseils personnalisés', description: 'Vous repartez avec des recommandations pour prolonger les effets de la séance.' }
     ],
     benefits: [
-      'Soulage efficacement les douleurs musculaires et articulaires',
-      'Améliore la mobilité et la posture',
-      'Réduit les tensions liées au stress',
-      'Favorise la récupération sportive',
-      'Améliore le bien-être général'
+      'Peut aider à soulager les douleurs musculaires et articulaires',
+      'Peut contribuer à une meilleure mobilité et posture',
+      'Peut aider à relâcher les tensions liées au stress',
+      'Peut accompagner la récupération sportive',
+      'Peut contribuer au bien-être général'
     ],
     seo: {
       title: 'Ostéopathie — Trouvez un ostéopathe près de chez vous | Léya',
-      description: 'Découvrez l\'ostéopathie sur Léya et trouvez un ostéopathe qualifié près de chez vous. Douleurs lombaires, tensions musculaires, migraines : prenez rendez-vous facilement.'
+      description: 'Découvrez l\'ostéopathie sur Léya : en quoi elle consiste, le déroulé d\'une séance, et trouvez un ostéopathe près de chez vous pour prendre rendez-vous en ligne.'
     }
   },
   {
@@ -65,37 +65,36 @@ export const medecines: Medecine[] = [
     nameWithArticle: 'la naturopathie',
     ctaLabel: 'un/e naturopathe',
     icon: '🌿',
-    shortDescription: 'Approche globale qui utilise les ressources naturelles pour rééquilibrer l\'organisme',
+    shortDescription: 'Approche globale centrée sur l\'hygiène de vie : alimentation, plantes, gestion du stress',
     heroImage: '/images/AdobeStock_336398199.jpeg',
-    heroTagline: 'Retrouvez votre équilibre naturel',
+    heroTagline: 'Prenez soin de votre hygiène de vie',
     duration: '1 heure à 1h30',
     definitionImage: '/images/AdobeStock_243765470.jpeg',
     definitionText: [
-      'La naturopathie est une approche holistique de la santé qui utilise les ressources naturelles — alimentation, plantes, techniques de relaxation — pour rééquilibrer l\'organisme.',
-      'Elle s\'appuie sur la capacité naturelle du corps à s\'autoguérir et vise à identifier et corriger les causes profondes des déséquilibres de santé.'
+      'La naturopathie est une approche globale de l\'hygiène de vie qui utilise des ressources naturelles — alimentation, plantes, techniques de relaxation — pour accompagner le bien-être au quotidien.',
+      'Elle part de vos habitudes de vie (alimentation, sommeil, activité, stress) pour proposer des conseils d\'hygiène de vie personnalisés, en complément d\'un suivi médical.'
     ],
-    conditions: ['Fatigue chronique', 'Troubles digestifs', 'Problèmes de peau', 'Anxiété et stress', 'Troubles du sommeil', 'Déséquilibres hormonaux', 'Surpoids'],
+    conditions: ['Fatigue', 'Gênes digestives', 'Alimentation', 'Stress', 'Sommeil', 'Équilibre alimentaire', 'Hygiène de vie'],
     mosaicImage1: '/images/AdobeStock_160757465.jpeg',
     mosaicImage2: '/images/AdobeStock_171835155.jpeg',
-    mosaicImage2Tagline: 'Retrouvez votre vitalité',
+    mosaicImage2Tagline: 'Une approche au quotidien',
     mosaicImage3: '/images/AdobeStock_33920024.jpeg',
     steps: [
       { title: 'Bilan de santé global', description: 'Le naturopathe évalue votre état de santé global : alimentation, sommeil, stress, antécédents familiaux.' },
-      { title: 'Analyse des habitudes', description: 'Identification des facteurs déséquilibrants dans votre mode de vie quotidien.' },
-      { title: 'Programme naturel', description: 'Mise en place d\'un protocole personnalisé : nutrition, plantes, techniques de détox et exercices.' },
-      { title: 'Suivi et ajustements', description: 'Un accompagnement régulier pour adapter le programme à vos progrès et besoins évolutifs.' }
+      { title: 'Analyse des habitudes', description: 'Repérage des habitudes de votre quotidien qui peuvent être ajustées.' },
+      { title: 'Programme naturel', description: 'Mise en place d\'un programme personnalisé : conseils nutritionnels, plantes, techniques de relaxation et exercices.' },
+      { title: 'Suivi et ajustements', description: 'Un accompagnement régulier pour adapter les conseils à votre rythme et à vos besoins.' }
     ],
     benefits: [
-      'Rééquilibre naturel et durable de l\'organisme',
-      'Prévention des maladies chroniques',
-      'Amélioration du sommeil et de l\'énergie',
-      'Gestion du stress et des émotions',
-      'Accompagnement nutritionnel personnalisé',
-      'Soutien du système immunitaire'
+      'Un accompagnement personnalisé sur l\'hygiène de vie',
+      'Des conseils nutritionnels adaptés à votre situation',
+      'Des pistes pour mieux gérer le stress',
+      'Des habitudes à construire pour le sommeil et l\'énergie',
+      'Un suivi à votre rythme'
     ],
     seo: {
       title: 'Naturopathie — Trouvez un naturopathe près de chez vous | Léya',
-      description: 'Découvrez la naturopathie sur Léya. Approche naturelle et holistique pour rééquilibrer votre organisme. Trouvez un naturopathe qualifié et prenez rendez-vous facilement.'
+      description: 'Découvrez la naturopathie sur Léya : une approche d\'hygiène de vie (alimentation, plantes, gestion du stress). Trouvez un naturopathe près de chez vous et prenez rendez-vous en ligne.'
     }
   },
   {
@@ -104,37 +103,37 @@ export const medecines: Medecine[] = [
     nameWithArticle: 'la sophrologie',
     ctaLabel: 'un/e sophrologue',
     icon: '🧘',
-    shortDescription: 'Méthode psychocorporelle qui harmonise le corps et l\'esprit',
+    shortDescription: 'Méthode de relaxation, de respiration et de visualisation',
     heroImage: '/images/hero-section.jpeg',
-    heroTagline: 'Harmonisez votre corps et votre esprit',
+    heroTagline: 'Apprenez à mieux vous détendre',
     duration: '1 heure',
     definitionImage: '/images/AdobeStock_519549071.jpeg',
     definitionText: [
-      'La sophrologie est une méthode psychocorporelle qui utilise des exercices de relaxation, de respiration et de visualisation positive pour harmoniser le corps et l\'esprit.',
-      'Elle permet de développer une meilleure conscience de soi et d\'acquérir des outils concrets pour gérer le stress, les émotions et les défis du quotidien.'
+      'La sophrologie est une méthode psychocorporelle qui utilise des exercices de relaxation, de respiration et de visualisation positive pour favoriser la détente du corps et de l\'esprit.',
+      'Elle propose des outils concrets, à pratiquer seul, pour mieux gérer le stress, les émotions et les défis du quotidien.'
     ],
-    conditions: ['Stress et anxiété', 'Troubles du sommeil', 'Manque de confiance', 'Phobies', 'Douleurs chroniques', 'Préparation aux examens', 'Burn-out'],
+    conditions: ['Stress', 'Sommeil', 'Confiance en soi', 'Peurs du quotidien', 'Gestion de la douleur au quotidien', 'Préparation aux examens', 'Fatigue et surmenage'],
     mosaicImage1: '/images/AdobeStock_550036958.jpeg',
     mosaicImage2: '/images/women-phone.jpeg',
-    mosaicImage2Tagline: 'Trouvez votre sérénité',
+    mosaicImage2Tagline: 'Des outils pour le quotidien',
     mosaicImage3: '/images/AdobeStock_329541430.jpeg',
     steps: [
       { title: 'Entretien initial', description: 'Le sophrologue identifie vos besoins, objectifs et définit avec vous le protocole adapté.' },
-      { title: 'Relaxation guidée', description: 'Des exercices de respiration et de détente musculaire pour atteindre un état de calme profond.' },
+      { title: 'Relaxation guidée', description: 'Des exercices de respiration et de détente musculaire pour favoriser un état de calme.' },
       { title: 'Sophronisation', description: 'Visualisations positives et techniques mentales pour ancrer de nouvelles ressources intérieures.' },
       { title: 'Ancrage et autonomie', description: 'Vous repartez avec des exercices à pratiquer seul pour maintenir les bénéfices au quotidien.' }
     ],
     benefits: [
-      'Gestion efficace du stress et de l\'anxiété',
-      'Amélioration significative de la qualité du sommeil',
-      'Renforcement de la confiance et de l\'estime de soi',
-      'Préparation mentale aux défis importants',
-      'Soulagement des douleurs et tensions chroniques',
-      'Meilleure connaissance et acceptation de soi'
+      'Des outils pour mieux gérer le stress',
+      'Des exercices pour favoriser l\'endormissement',
+      'Un soutien pour gagner en confiance',
+      'Une préparation mentale avant une échéance importante',
+      'Des techniques de détente face aux tensions du quotidien',
+      'Une meilleure connaissance de soi'
     ],
     seo: {
       title: 'Sophrologie — Trouvez un sophrologue près de chez vous | Léya',
-      description: 'Découvrez la sophrologie sur Léya. Gérez votre stress, améliorez votre sommeil et renforcez votre confiance. Trouvez un sophrologue qualifié et prenez rendez-vous facilement.'
+      description: 'Découvrez la sophrologie sur Léya : relaxation, respiration, visualisation. Trouvez un sophrologue près de chez vous et prenez rendez-vous en ligne.'
     }
   },
   {
@@ -143,37 +142,35 @@ export const medecines: Medecine[] = [
     nameWithArticle: "l'acupuncture",
     ctaLabel: 'un/e acupuncteur',
     icon: '✨',
-    shortDescription: 'Médecine traditionnelle chinoise qui rééquilibre les énergies vitales du corps',
+    shortDescription: 'Pratique issue de la médecine traditionnelle chinoise, qui utilise de fines aiguilles',
     heroImage: '/images/medicine-3.jpeg',
-    heroTagline: 'Rééquilibrez votre énergie vitale',
+    heroTagline: 'Une pratique issue de la tradition chinoise',
     duration: '45 min à 1 heure',
     definitionImage: '/images/AdobeStock_171835155.jpeg',
     definitionText: [
-      'L\'acupuncture est une pratique de la médecine traditionnelle chinoise qui consiste à stimuler des points précis du corps à l\'aide de fines aiguilles pour rétablir la circulation de l\'énergie vitale.',
-      'Reconnue par l\'OMS pour de nombreuses indications, elle agit en profondeur sur le corps et l\'esprit pour restaurer un équilibre durable.'
+      'L\'acupuncture est une pratique de la médecine traditionnelle chinoise qui consiste à stimuler des points précis du corps à l\'aide de fines aiguilles. Selon cette tradition, cela vise à rétablir la circulation de l\'énergie vitale.',
+      'Elle est souvent utilisée en complément d\'un suivi médical, par exemple face à des douleurs ou à du stress. Parlez-en à votre médecin si vous suivez un traitement.'
     ],
-    conditions: ['Douleurs chroniques', 'Migraines', 'Troubles digestifs', 'Anxiété et dépression', 'Troubles du sommeil', 'Problèmes gynécologiques', 'Arrêt du tabac'],
+    conditions: ['Douleurs', 'Maux de tête', 'Gênes digestives', 'Stress', 'Sommeil', 'Accompagnement pour arrêter de fumer'],
     mosaicImage1: '/images/AdobeStock_160757465.jpeg',
     mosaicImage2: '/images/AdobeStock_243765470.jpeg',
-    mosaicImage2Tagline: 'Libérez votre énergie',
+    mosaicImage2Tagline: 'Une pratique ancestrale',
     mosaicImage3: '/images/AdobeStock_33920024.jpeg',
     steps: [
       { title: 'Diagnostic traditionnel', description: 'L\'acupuncteur évalue votre état de santé selon les principes de la médecine traditionnelle chinoise.' },
-      { title: 'Identification des méridiens', description: 'Les déséquilibres énergétiques et les points à traiter sont identifiés avec précision.' },
-      { title: 'Pose des aiguilles', description: 'Des aiguilles très fines, stériles et indolores sont placées sur les points thérapeutiques sélectionnés.' },
-      { title: 'Rééquilibrage énergétique', description: 'Un moment de repos laisse l\'énergie circuler librement et les effets thérapeutiques s\'installer.' }
+      { title: 'Identification des méridiens', description: 'Selon la tradition chinoise, l\'acupuncteur repère les points à stimuler.' },
+      { title: 'Pose des aiguilles', description: 'Des aiguilles très fines et stériles à usage unique sont placées sur les points choisis. La sensation varie selon les personnes.' },
+      { title: 'Temps de repos', description: 'Un moment de repos, aiguilles en place, avant leur retrait.' }
     ],
     benefits: [
-      'Soulagement durable des douleurs chroniques',
-      'Régulation du système nerveux et émotionnel',
-      'Amélioration du sommeil et de la vitalité',
-      'Soutien du système immunitaire',
-      'Gestion du stress, de l\'anxiété et des troubles digestifs',
-      'Reconnue par l\'Organisation Mondiale de la Santé'
+      'Peut aider à soulager certaines douleurs',
+      'Peut accompagner la gestion du stress',
+      'Peut contribuer à un meilleur sommeil',
+      'Une pratique souvent associée à un suivi médical'
     ],
     seo: {
       title: 'Acupuncture — Trouvez un acupuncteur près de chez vous | Léya',
-      description: 'Découvrez l\'acupuncture sur Léya. Médecine traditionnelle chinoise reconnue par l\'OMS. Trouvez un acupuncteur qualifié pour soulager vos douleurs et rééquilibrer votre énergie.'
+      description: 'Découvrez l\'acupuncture sur Léya : une pratique issue de la médecine traditionnelle chinoise. Trouvez un acupuncteur près de chez vous et prenez rendez-vous en ligne.'
     }
   },
   {
@@ -182,37 +179,36 @@ export const medecines: Medecine[] = [
     nameWithArticle: "l'hypnothérapie",
     ctaLabel: 'un/e hypnothérapeute',
     icon: '🌀',
-    shortDescription: 'Thérapie brève qui utilise l\'état d\'hypnose pour accéder aux ressources inconscientes',
+    shortDescription: 'Accompagnement qui utilise l\'état d\'hypnose pour travailler sur ses habitudes et ses émotions',
     heroImage: '/images/women-hypno.jpg',
-    heroTagline: 'Libérez votre potentiel intérieur',
+    heroTagline: 'Un accompagnement par l\'hypnose',
     duration: '1 heure à 1h30',
     definitionImage: '/images/hero-section-2.jpeg',
     definitionText: [
-      'L\'hypnothérapie est une thérapie brève qui utilise l\'état naturel d\'hypnose — une conscience modifiée entre veille et sommeil — pour accéder aux ressources de l\'inconscient et faciliter des changements profonds.',
-      'Contrairement aux idées reçues, vous restez pleinement conscient et en contrôle pendant toute la séance. L\'hypnose est un état naturel que nous expérimentons tous quotidiennement.'
+      'L\'hypnothérapie est un accompagnement qui utilise l\'état naturel d\'hypnose — une conscience modifiée entre veille et sommeil — pour accompagner un changement d\'habitude, la gestion d\'une émotion ou d\'une peur.',
+      'Contrairement aux idées reçues, vous restez conscient et en contrôle pendant la séance.'
     ],
-    conditions: ['Phobies et peurs', 'Arrêt du tabac', 'Troubles anxieux', 'Manque de confiance', 'Gestion de la douleur', 'Traumatismes', 'Troubles alimentaires'],
+    conditions: ['Peurs du quotidien', 'Accompagnement pour arrêter de fumer', 'Stress', 'Confiance en soi', 'Gestion de la douleur au quotidien', 'Habitudes alimentaires'],
     mosaicImage1: '/images/AdobeStock_317007907.jpeg',
     mosaicImage2: '/images/AdobeStock_452334355.jpeg',
-    mosaicImage2Tagline: 'Accédez à vos ressources',
+    mosaicImage2Tagline: 'Un état de détente guidée',
     mosaicImage3: '/images/AdobeStock_550036958.jpeg',
     steps: [
       { title: 'Entretien motivationnel', description: 'L\'hypnothérapeute comprend vos objectifs et installe un cadre de confiance et de sécurité.' },
       { title: 'Induction hypnotique', description: 'Un état de relaxation profonde est induit à travers des techniques de guidage progressif.' },
-      { title: 'Travail thérapeutique', description: 'Des suggestions positives et des techniques adaptées agissent sur les schémas inconscients à modifier.' },
+      { title: 'Séance d\'accompagnement', description: 'Des suggestions positives et des techniques adaptées pour accompagner le changement souhaité.' },
       { title: 'Retour et ancrage', description: 'Un retour en pleine conscience et des techniques d\'ancrage renforcent les changements positifs.' }
     ],
     benefits: [
-      'Libération des peurs, phobies et blocages inconscients',
-      'Aide efficace à l\'arrêt du tabac et aux addictions',
-      'Gestion profonde du stress et de l\'anxiété',
-      'Amélioration de la confiance et de l\'estime de soi',
-      'Traitement des traumatismes et deuils',
-      'Résultats souvent visibles dès la première séance'
+      'Un accompagnement face aux peurs du quotidien',
+      'Un soutien dans une démarche d\'arrêt du tabac',
+      'Des outils pour mieux gérer le stress',
+      'Un appui pour la confiance en soi',
+      'Un accompagnement personnalisé, à votre rythme'
     ],
     seo: {
       title: 'Hypnothérapie — Trouvez un hypnothérapeute près de chez vous | Léya',
-      description: 'Découvrez l\'hypnothérapie sur Léya. Thérapie brève et efficace pour surmonter vos peurs, arrêter de fumer ou gérer votre stress. Trouvez un hypnothérapeute qualifié facilement.'
+      description: 'Découvrez l\'hypnothérapie sur Léya : en quoi consiste une séance et ce qu\'elle peut accompagner. Trouvez un hypnothérapeute près de chez vous et prenez rendez-vous en ligne.'
     }
   },
   {
@@ -221,37 +217,36 @@ export const medecines: Medecine[] = [
     nameWithArticle: 'le massage bien-être',
     ctaLabel: 'un/e thérapeute',
     icon: '🤲',
-    shortDescription: 'Thérapie manuelle qui détend le corps et apaise l\'esprit en profondeur',
+    shortDescription: 'Massage de détente qui s\'adresse au corps et à l\'esprit',
     heroImage: '/images/medicines-1.jpeg',
     heroTagline: 'Offrez-vous un moment de détente',
     duration: '45 min à 1h30',
     definitionImage: '/images/AdobeStock_33920024.jpeg',
     definitionText: [
-      'Le massage bien-être est une pratique thérapeutique qui utilise des techniques manuelles variées pour détendre les muscles, améliorer la circulation et libérer les tensions physiques et mentales accumulées.',
-      'Bien plus qu\'une simple relaxation, le massage agit en profondeur sur le système nerveux, favorisant un état de bien-être durable et une meilleure récupération de l\'organisme.'
+      'Le massage bien-être est une pratique de détente qui utilise des techniques manuelles variées pour relâcher les muscles et les tensions accumulées.',
+      'Un massage bien-être n\'a pas de visée médicale : c\'est un moment de détente qui peut contribuer au bien-être et à la récupération.'
     ],
-    conditions: ['Tensions musculaires', 'Stress et anxiété', 'Douleurs dorsales', 'Fatigue chronique', 'Troubles du sommeil', 'Récupération sportive', 'Circulation sanguine'],
+    conditions: ['Tensions musculaires', 'Stress', 'Raideurs du dos', 'Fatigue', 'Sommeil', 'Récupération sportive', 'Détente'],
     mosaicImage1: '/images/AdobeStock_519549071.jpeg',
     mosaicImage2: '/images/AdobeStock_550036958.jpeg',
     mosaicImage2Tagline: 'Détente et récupération',
     mosaicImage3: '/images/AdobeStock_336398199.jpeg',
     steps: [
-      { title: 'Accueil et écoute', description: 'Le thérapeute identifie vos zones de tension, vos besoins et adapte la technique au protocole idéal.' },
+      { title: 'Accueil et écoute', description: 'Le thérapeute identifie vos zones de tension, vos besoins et adapte la technique à votre demande.' },
       { title: 'Préparation', description: 'Installation confortable sur la table de massage dans une ambiance propice à la détente totale.' },
       { title: 'Massage personnalisé', description: 'Application des techniques adaptées : effleurage, pétrissage, points de pression selon les besoins.' },
       { title: 'Conseils post-séance', description: 'Recommandations pour prolonger les bienfaits : hydratation, étirements, fréquence des séances.' }
     ],
     benefits: [
-      'Décontraction musculaire profonde et durable',
-      'Amélioration de la circulation sanguine et lymphatique',
-      'Réduction significative du stress et de l\'anxiété',
-      'Soulagement des douleurs chroniques',
-      'Amélioration de la qualité du sommeil',
-      'Boost de l\'énergie et de la vitalité'
+      'Un moment de détente musculaire',
+      'Une sensation de légèreté après la séance',
+      'Un temps pour relâcher le stress',
+      'Peut contribuer à un meilleur sommeil',
+      'Un accompagnement de la récupération après l\'effort'
     ],
     seo: {
       title: 'Massage bien-être — Trouvez un masseur près de chez vous | Léya',
-      description: 'Découvrez les massages bien-être sur Léya. Détente, récupération et soulagement des douleurs. Trouvez un thérapeute qualifié près de chez vous et réservez en ligne.'
+      description: 'Découvrez les massages bien-être sur Léya : détente et récupération. Trouvez un praticien près de chez vous et réservez en ligne.'
     }
   }
 ]

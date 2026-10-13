@@ -48,7 +48,7 @@
             {{ para }}
           </p>
           <h3 class="font-unbounded font-bold text-[17px] text-[#012828] mt-8 mb-4">
-            Pour qui est-ce recommandé ?
+            Motifs de consultation fréquents
           </h3>
           <div class="flex flex-wrap gap-3">
             <span
@@ -164,7 +164,7 @@
         <div class="w-11/12 max-w-[1200px] mx-auto relative z-10">
         <div class="max-w-lg">
           <h2 class="font-unbounded font-bold text-2xl md:text-3xl text-white mb-8">
-            Principaux bienfaits
+            Ce que cette pratique peut apporter
           </h2>
           <ul class="space-y-3 mb-10">
             <li
@@ -176,6 +176,9 @@
               <span>{{ benefit }}</span>
             </li>
           </ul>
+          <p class="text-white/80 text-[13px] leading-relaxed mb-6">
+            Cette pratique ne remplace pas un avis ou un traitement médical. En cas de symptôme persistant ou inquiétant, consultez un professionnel de santé.
+          </p>
           <button
             class="bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-2 hover:bg-white/90 transition-colors whitespace-nowrap"
             @click="scrollToPractitioners"

@@ -14,7 +14,7 @@
         <div class="benefit-card text-card bg-[#90BAD1] p-8 rounded-[30px] shadow-lg flex flex-col justify-center min-h-[280px]">
           <h3 class="font-unbounded font-bold text-[18px] mb-4">Transparence Totale</h3>
           <p class="text-[14px] leading-relaxed opacity-80 font-sans">
-            Explorez les profils détaillés et les retours d'expérience de la communauté pour choisir le praticien qui vous correspond en toute confiance.
+            Explorez les fiches détaillées (prestations, tarifs, horaires, adresse) pour choisir le praticien qui vous correspond en toute confiance.
           </p>
         </div>
 
@@ -25,7 +25,7 @@
         <div class="benefit-card text-card bg-[#156F71] p-8 rounded-[30px] shadow-lg flex flex-col justify-center text-white min-h-[280px]">
           <h3 class="font-unbounded font-bold text-[18px] mb-4">Orientation Léya</h3>
           <p class="text-[14px] leading-relaxed opacity-80 font-sans">
-            Profitez de notre IA spécialisée pour identifier la discipline naturelle (naturopathie, sophrologie, etc.) la plus adaptée à vos besoins.
+            Profitez de notre assistant IA pour identifier les disciplines (naturopathie, sophrologie, etc.) qui peuvent répondre à vos besoins.
           </p>
         </div>
 
@@ -33,7 +33,7 @@
         <div class="benefit-card text-card bg-[#156F71] p-8 rounded-[30px] shadow-lg flex flex-col justify-center text-white min-h-[280px]">
           <h3 class="font-unbounded font-bold text-[18px] mb-4">Accès Instantané</h3>
           <p class="text-[14px] leading-relaxed opacity-80 font-sans">
-            Trouvez une solution ou un praticien en quelques secondes. Plus besoin de chercher pendant des heures, Léya centralise le meilleur du bien-être.
+            Trouvez un praticien et réservez en quelques clics : l'orientation et la prise de rendez-vous sont réunies au même endroit.
           </p>
         </div>
 
@@ -44,7 +44,7 @@
         <div class="benefit-card text-card bg-[#90BAD1] p-8 rounded-[30px] shadow-lg flex flex-col justify-center min-h-[280px]">
           <h3 class="font-unbounded font-bold text-[18px] mb-4">Confidentialité</h3>
           <p class="text-[14px] leading-relaxed opacity-80 font-sans">
-            Vos échanges et données de santé sont protégés. Nous utilisons des protocoles de sécurité avancés pour garantir votre vie privée.
+            Vos données sont traitées conformément au RGPD. Vos messages à l'assistant ne sont pas conservés par Léya : ils sont traités par notre prestataire d'IA. Voir la <NuxtLink to="/politique-de-confidentialite" class="underline">politique de confidentialité</NuxtLink>.
           </p>
         </div>
 

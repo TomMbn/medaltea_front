@@ -4,28 +4,22 @@
     <!-- Glow rose derrière l'avatar top-center -->
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-72 h-72 rounded-full bg-pink-200/50 blur-3xl pointer-events-none" />
 
-    <!-- Avatar top-center -->
-    <div class="absolute top-[92px] left-1/2 -translate-x-1/2 flex-col items-center gap-2 hidden md:flex z-10">
-      <div class="w-[72px] h-[72px] rounded-full overflow-hidden shadow-lg ring-2 ring-white">
-        <img src="https://placehold.co/72x72/c4a882/ffffff?text=M" alt="Magnétiseuse" class="w-full h-full object-cover" />
+    <!-- Décor : trois spécialités réelles du site (aucune image externe) -->
+    <div
+      v-for="(sp, i) in decor"
+      :key="sp.id"
+      class="absolute hidden md:flex flex-col items-center gap-2 z-10"
+      :class="decorPositions[i]"
+      aria-hidden="true"
+    >
+      <div
+        class="flex items-center justify-center text-white font-bold shadow-lg ring-2 ring-white"
+        :class="decorShapes[i]"
+        :style="{ backgroundColor: decorColors[i] }"
+      >
+        {{ sp.name[0] }}
       </div>
-      <span class="bg-[#E8755A] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm whitespace-nowrap">Magnétiseuse</span>
-    </div>
-
-    <!-- Avatar gauche -->
-    <div class="absolute left-[7%] top-1/2 -translate-y-1/3 flex-col items-center gap-2 hidden md:flex z-10">
-      <div class="w-[88px] h-[88px] rounded-full overflow-hidden shadow-lg ring-2 ring-white">
-        <img src="https://placehold.co/88x88/a8c0b0/ffffff?text=E" alt="Ergothérapeute" class="w-full h-full object-cover" />
-      </div>
-      <span class="bg-[#E8755A] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm whitespace-nowrap">Ergothérapeute</span>
-    </div>
-
-    <!-- Avatar droite (carré arrondi) -->
-    <div class="absolute right-[7%] top-[92px] flex-col items-center gap-2 hidden md:flex z-10">
-      <div class="w-[120px] h-[120px] rounded-[20px] overflow-hidden shadow-lg ring-2 ring-white">
-        <img src="https://placehold.co/120x120/8a9bb5/ffffff?text=O" alt="Ostéopathe" class="w-full h-full object-cover" />
-      </div>
-      <span class="bg-[#E8755A] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm whitespace-nowrap">Ostéopathe</span>
+      <span class="bg-[#E8755A] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm whitespace-nowrap">{{ sp.name }}</span>
     </div>
 
     <!-- Contenu centré -->
@@ -64,7 +58,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { MapPin, Search } from 'lucide-vue-next'
 
 const route = useRoute()
@@ -72,6 +66,22 @@ const router = useRouter()
 const query = ref(String(route.query.q ?? ''))
 const speciality = ref(String(route.query.specialite ?? ''))
 const { specialities } = await useSpecialities()
+
+// Trois spécialités affichées en décor : on privilégie les plus connues, puis on complète avec la liste.
+const PREFERRED = ['Ostéopathie', 'Naturopathie', 'Sophrologie']
+const decor = computed(() => {
+  const list = specialities.value
+  const picked = PREFERRED.map(n => list.find(s => s.name === n)).filter(Boolean)
+  for (const s of list) if (picked.length < 3 && !picked.includes(s)) picked.push(s)
+  return picked.slice(0, 3)
+})
+const decorPositions = [
+  'top-[92px] left-1/2 -translate-x-1/2',
+  'left-[7%] top-1/2 -translate-y-1/3',
+  'right-[7%] top-[92px]',
+]
+const decorShapes = ['w-[72px] h-[72px] rounded-full text-2xl', 'w-[88px] h-[88px] rounded-full text-3xl', 'w-[120px] h-[120px] rounded-[20px] text-4xl']
+const decorColors = ['#c4a882', '#a8c0b0', '#8a9bb5']
 
 function search() {
   const q = query.value.trim()

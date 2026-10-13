@@ -8,7 +8,7 @@
           Trouvez un praticien <br class="hidden lg:block"/> près de chez vous
         </h2>
         <p class="text-white/90 text-[16px] lg:text-[18px] mb-8 lg:mb-12 font-sans max-w-[480px]">
-          Consultez des professionnels certifiés, triés par spécialité et localisation.
+          Recherchez par spécialité et par ville, consultez les fiches et réservez en ligne.
         </p>
         <NuxtLink to="/trouver-un-praticien" class="px-8 py-3.5 rounded-[30px] border-2 border-white text-white font-bold text-[16px] lg:text-[17px] transition-all hover:bg-white/10 flex items-center gap-3 self-start group">
           <span class="font-sans">Voir tous les praticiens</span>
@@ -31,13 +31,13 @@
           sizes="sm:100vw md:50vw lg:600px"
         />
         
-        <!-- Floating Profile Card: Fabrice Desuet -->
+        <!-- Carte de profil d'illustration (fictive) -->
         <div class="absolute left-4 bottom-4 lg:left-10 lg:bottom-10 bg-white rounded-[20px] p-4 lg:p-5 shadow-2xl flex items-center gap-4 min-w-[260px] sm:min-w-[320px] animate-float z-20">
           <div class="w-16 h-16 rounded-[15px] overflow-hidden bg-gray-100 flex-shrink-0">
              <NuxtImg 
               src="/images/praticien-landing.jpg" 
               class="w-full h-full object-cover" 
-              alt="Fabrice Desuet Avatar" 
+              alt="Photo d'illustration d'un praticien (exemple)" 
               width="128"
               height="128"
               format="webp"
@@ -47,7 +47,8 @@
             />
           </div>
           <div class="flex-grow">
-            <div class="text-[#012828] font-bold text-[18px]">Fabrice Desuet</div>
+            <div class="text-[#012828]/70 text-[11px] font-semibold uppercase tracking-wide mb-0.5">Exemple de fiche</div>
+            <div class="text-[#012828] font-bold text-[18px]">Jean Dupont</div>
             <div class="text-[#EC7F7A] text-[14px] font-medium leading-none mb-2">Hypnothérapeute</div>
             <div class="flex items-center gap-2 mt-2">
               <span class="text-[#012828] font-bold text-[14px]">5/5</span>

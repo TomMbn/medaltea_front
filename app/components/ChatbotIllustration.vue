@@ -21,9 +21,9 @@
       <!-- Vertical White Bar (Adaptive height) -->
       <div class="w-[1px] bg-white shrink-0"></div>
       
-      <h2 class="text-[32px] font-normal text-white leading-[1.2] tracking-tight font-unbounded">
-        Explique-nous ce <br /> que tu ressens, on <br /> te guide !
-      </h2>
+      <p class="text-[32px] font-normal text-white leading-[1.2] tracking-tight font-unbounded">
+        Expliquez-nous ce <br /> que vous ressentez, <br /> nous vous guidons !
+      </p>
     </div>
   </div>
 </template>

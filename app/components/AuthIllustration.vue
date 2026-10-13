@@ -19,9 +19,9 @@
     <!-- Quote Content -->
     <div class="absolute bottom-0 left-0 w-full p-12 pb-16 max-w-[850px]">
       <div class="quote-wrapper pl-6">
-        <h2 class="text-white text-[32px] md:text-[38px] font-bold leading-[1.25] font-unbounded">
+        <p class="text-white text-[32px] md:text-[38px] font-bold leading-[1.25] font-unbounded">
           {{ message }}
-        </h2>
+        </p>
       </div>
     </div>
   </div>
@@ -29,7 +29,7 @@
 
 <script setup>
 defineProps({
-  message: { type: String, default: 'Explique-nous ce que tu ressens, on te guide !' },
+  message: { type: String, default: 'Expliquez-nous ce que vous ressentez, nous vous guidons !' },
 })
 </script>
 

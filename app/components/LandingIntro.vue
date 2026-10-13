@@ -38,7 +38,7 @@
             </h2>
             
             <p class="text-white text-[16px] lg:text-[18px] leading-relaxed mb-8 font-sans opacity-95">
-              C'est la première plateforme d’IA générative au service des médecines douces et de votre bien-être. Trouvez l’orientation dont vous avez besoin en un instant, gratuitement.
+              Léya associe un assistant IA et un annuaire de praticiens, au service des médecines douces et de votre bien-être. Trouvez l’orientation dont vous avez besoin en un instant, gratuitement.
             </p>
 
             <ul class="space-y-4 mb-10">

@@ -77,15 +77,15 @@ const toggle = (index) => {
 const faqs = [
   {
     question: "Comment choisir le bon praticien ?",
-    answer: "Léya vous guide à travers une sélection rigoureuse de professionnels certifiés. Vous pouvez filtrer par spécialité, localisation et consulter les avis pour trouver l'expert qui correspond le mieux à vos besoins de santé naturelle."
+    answer: "Recherchez par ville et par spécialité, puis consultez la fiche de chaque praticien : prestations, tarifs, horaires et adresse. Vous pouvez aussi demander conseil à l'assistant Léya pour identifier la discipline qui correspond à votre besoin. Léya ne remplace pas un avis médical."
   },
   {
     question: "Quels sont les délais de prise de rendez-vous ?",
-    answer: "La prise de rendez-vous est immédiate via notre plateforme. Les disponibilités varient selon les praticiens, mais la plupart proposent des créneaux dans la semaine en cours."
+    answer: "Vous voyez en direct les créneaux libres de chaque praticien et vous réservez en quelques clics. Les disponibilités varient d'un praticien à l'autre."
   },
   {
     question: "Puis-je annuler une consultation ?",
-    answer: "Oui, vous pouvez annuler ou reporter votre consultation directement depuis votre espace personnel jusqu'à 24 heures avant le rendez-vous sans frais supplémentaires."
+    answer: "Oui, vous pouvez annuler un rendez-vous à venir depuis « Mes rendez-vous ». Les conditions d'annulation (délai, éventuels frais) sont celles de chaque praticien : renseignez-vous auprès de lui avant de réserver."
   }
 ]
 

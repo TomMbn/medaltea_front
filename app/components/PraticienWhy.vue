@@ -32,10 +32,15 @@
 
       <!-- Droite : photo -->
       <div class="rounded-2xl overflow-hidden h-[400px] shadow-sm">
-        <img
-          src="https://placehold.co/600x400/e0ecf2/012828?text=Photo"
-          alt="Praticienne avec un patient"
+        <NuxtImg
+          src="/images/women-hypno.jpg"
+          alt="Un praticien accompagne une patiente lors d'une séance"
           class="w-full h-full object-cover"
+          width="600"
+          height="424"
+          format="webp"
+          quality="80"
+          loading="lazy"
         />
       </div>
 
@@ -47,7 +52,7 @@
 import { Check, ArrowUpRight } from 'lucide-vue-next'
 
 const items = [
-  'Des professionnels sélectionnés selon des critères de qualité et de pertinence',
+  'Des fiches complètes : spécialités, prestations, tarifs, horaires et adresse',
   'Des informations claires pour choisir en toute confiance',
 ]
 </script>

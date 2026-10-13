@@ -28,10 +28,13 @@
         <!-- Registration Form -->
         <form @submit.prevent="handleRegister" class="auth-form">
           <div class="field-group">
-            <label class="input-label">Adresse mail</label>
+            <label class="input-label" for="register-mail">Adresse mail</label>
             <input 
+              id="register-mail"
               v-model="mail"
-              type="email" 
+              type="email"
+              autocomplete="email"
+              inputmode="email" 
               class="form-input"
               required
               placeholder="votre@email.com"
@@ -40,10 +43,13 @@
           </div>
 
           <div class="field-group">
-            <label class="input-label">Mot de passe</label>
+            <label class="input-label" for="register-password">Mot de passe</label>
             <input 
+              id="register-password"
               v-model="password"
-              type="password" 
+              type="password"
+              autocomplete="new-password"
+              minlength="6" 
               class="form-input"
               required
               placeholder="••••••••"

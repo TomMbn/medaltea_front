@@ -72,3 +72,27 @@ h6,
   opacity: 0;
   filter: blur(1rem);
 }
+/*
+  Accessibilité — focus clavier
+  Contour visible uniquement à la navigation au clavier (jamais au clic). Les `!important` servent à ce
+  qu'aucun `focus:outline-none` d'un composant ne supprime le repère de focus.
+*/
+:is(a, button, summary, select, input, textarea, [tabindex], [role='button'], [role='tab'], [role='switch'], [role='radio'], [role='option']):focus-visible {
+  outline: 2px solid #156F71 !important;
+  outline-offset: 2px !important;
+}
+
+/*
+  Accessibilité — mouvement réduit
+  Pour les personnes qui ont demandé moins d'animations dans leur système.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

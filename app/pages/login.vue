@@ -29,10 +29,13 @@
         <!-- Login Form -->
         <form @submit.prevent="handleLogin" class="auth-form">
           <div class="field-group">
-            <label class="input-label">Adresse mail</label>
+            <label class="input-label" for="login-mail">Adresse mail</label>
             <input 
+              id="login-mail"
               v-model="mail"
-              type="email" 
+              type="email"
+              autocomplete="username"
+              inputmode="email" 
               class="form-input"
               required
               placeholder="votre@email.com"
@@ -42,7 +45,7 @@
 
           <div class="field-group">
             <div class="flex justify-between items-center mb-1">
-              <label class="input-label mb-0">Mot de passe</label>
+              <label class="input-label mb-0" for="login-password">Mot de passe</label>
 <!--
               <NuxtLink to="/forgot-password" class="text-sm font-semibold text-[#012828] hover:underline opacity-60">
                 Oublié ?
@@ -50,8 +53,10 @@
 -->
             </div>
             <input 
+              id="login-password"
               v-model="password"
-              type="password" 
+              type="password"
+              autocomplete="current-password" 
               class="form-input"
               required
               placeholder="••••••••"

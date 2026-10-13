@@ -94,6 +94,7 @@
           <div class="flex items-center gap-4">
             <textarea 
               v-model="userInput"
+              aria-label="Votre message à Léya"
               :rows="1"
               @keydown.enter.prevent="sendMessage"
               :disabled="isTyping || isLimitReached"

@@ -40,6 +40,7 @@
               <div class="flex items-center gap-4">
                 <textarea 
                   v-model="userInput"
+                  aria-label="Votre message à Léya"
                   :rows="1"
                   @keydown.enter.prevent="handleSubmit"
                   class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans w-full overflow-hidden"

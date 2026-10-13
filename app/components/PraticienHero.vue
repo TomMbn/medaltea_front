@@ -29,7 +29,7 @@
       </h1>
 
       <!-- Barre de recherche -->
-      <form class="bg-white rounded-full shadow-md flex items-center h-14 overflow-hidden" role="search" @submit.prevent="search">
+      <form class="focus-ring-within bg-white rounded-full shadow-md flex items-center h-14 sm:-mx-12 lg:-mx-20" role="search" @submit.prevent="search">
         <div class="flex items-center gap-2 px-5 flex-1 min-w-0">
           <MapPin :size="15" class="text-gray-400 shrink-0" aria-hidden="true" />
           <input
@@ -37,11 +37,22 @@
             type="text"
             aria-label="Ville, code postal ou nom du praticien"
             placeholder="Ville, code postal ou nom"
-            class="bg-transparent text-sm text-gray-700 placeholder-gray-400 focus:outline-none min-w-0 w-full"
+            class="focus-in-parent bg-transparent text-sm text-gray-700 placeholder-gray-400 focus:outline-none min-w-0 w-full"
           />
         </div>
+        <button
+          type="button"
+          class="shrink-0 mr-2 inline-flex items-center gap-1.5 rounded-full px-3 h-9 text-xs font-semibold transition-colors"
+          :class="geo ? 'bg-[#156F71] text-white' : 'text-[#156F71] hover:bg-[#e0ecf2]'"
+          :aria-pressed="geo ? 'true' : 'false'"
+          aria-label="Autour de moi"
+          @click="emit(geo ? 'unlocate' : 'locate')"
+        >
+          <LocateFixed :size="15" aria-hidden="true" />
+          <span class="hidden lg:inline">Autour de moi</span>
+        </button>
         <div class="hidden sm:flex items-center px-4 border-l border-gray-100 max-w-[200px]">
-          <select v-model="speciality" aria-label="Spécialité" class="bg-transparent text-sm text-gray-600 focus:outline-none w-full appearance-none cursor-pointer">
+          <select v-model="speciality" aria-label="Spécialité" class="focus-in-parent bg-transparent text-sm text-gray-600 focus:outline-none w-full appearance-none cursor-pointer">
             <option value="">Toutes les spécialités</option>
             <option v-for="sp in specialities" :key="sp.id" :value="specialityKey(sp.name)">{{ sp.name }}</option>
           </select>
@@ -59,7 +70,10 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { MapPin, Search } from 'lucide-vue-next'
+import { MapPin, Search, LocateFixed } from 'lucide-vue-next'
+
+defineProps({ geo: { type: Object, default: null } })
+const emit = defineEmits(['locate', 'unlocate'])
 
 const route = useRoute()
 const router = useRouter()

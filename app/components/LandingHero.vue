@@ -35,7 +35,7 @@
             ></div>
             
             <!-- White Inner Container -->
-            <div class="flex-1 bg-white rounded-[17.5px] flex flex-col p-6 justify-between shadow-xl">
+            <div class="flex-1 bg-white rounded-[17.5px] flex flex-col p-6 justify-between shadow-xl focus-ring-within">
               <!-- Input Row -->
               <div class="flex items-center gap-4">
                 <textarea 
@@ -43,7 +43,7 @@
                   aria-label="Votre message à Léya"
                   :rows="1"
                   @keydown.enter.prevent="handleSubmit"
-                  class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans w-full overflow-hidden"
+                  class="focus-in-parent flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans w-full overflow-hidden"
                   placeholder="Demander à Léya"
                 ></textarea>
                 

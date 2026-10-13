@@ -44,6 +44,12 @@
           <td>Statistiques agrégées uniquement</td>
         </tr>
         <tr>
+          <td>Recherche « autour de moi » (facultative)</td>
+          <td>Position approximative de votre appareil (arrondie à environ 1 km), uniquement si vous l'autorisez dans votre navigateur</td>
+          <td>Votre consentement</td>
+          <td>Non conservée : utilisée le temps de la recherche pour trier les praticiens par distance</td>
+        </tr>
+        <tr>
           <td>Échanges avec notre équipe</td>
           <td>Email et contenu de votre message</td>
           <td>Intérêt légitime</td>

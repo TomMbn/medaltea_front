@@ -50,6 +50,8 @@ useSeoMeta({
   twitterImage: 'https://leya-sante.fr/og-image.jpg',
 })
 
+useWebPageSchema({ name: 'Léya — La médecine alternative, intelligente et accessible', description: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.', type: 'WebPage' })
+
 useHead({
   script: [{
     type: 'application/ld+json',

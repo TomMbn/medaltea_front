@@ -132,6 +132,7 @@
 import { ref } from 'vue'
 import { Apple, Loader2 } from 'lucide-vue-next'
 
+definePageMeta({ middleware: 'guest' })
 useSeoMeta({ title: 'Créer un compte — Léya', robots: 'noindex, nofollow' })
 import { useRouter } from '#app'
 

@@ -59,4 +59,5 @@ useSeoMeta({
   title: 'Mentions légales — Léya',
   description: 'Mentions légales du site Léya : éditeur, hébergeur, propriété intellectuelle et avertissement santé.',
 })
+useWebPageSchema({ name: "Mentions légales", description: 'Mentions légales du site Léya : éditeur, hébergeur, propriété intellectuelle et avertissement santé.', breadcrumbs: [{ name: "Mentions légales", path: '/mentions-legales' }] })
 </script>

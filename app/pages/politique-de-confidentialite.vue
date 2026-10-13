@@ -117,4 +117,5 @@ useSeoMeta({
   title: 'Politique de confidentialité — Léya',
   description: 'Comment Léya collecte, utilise et protège vos données personnelles, y compris celles échangées avec l\'assistant virtuel.',
 })
+useWebPageSchema({ name: "Politique de confidentialité", description: 'Comment Léya collecte, utilise et protège vos données personnelles, y compris celles échangées avec l\'assistant virtuel.', breadcrumbs: [{ name: "Politique de confidentialité", path: '/politique-de-confidentialite' }] })
 </script>

@@ -131,4 +131,6 @@ useSeoMeta({
   ogDescription: 'Explorez toutes les disciplines de médecines alternatives sur Léya et trouvez le praticien adapté à vos besoins.',
   ogUrl: 'https://leya-sante.fr/medecines',
 })
+
+useWebPageSchema({ name: 'Les Médecines alternatives — Découvrez toutes les disciplines', description: 'Explorez l\'annuaire des médecines alternatives sur Léya : ostéopathie, naturopathie, sophrologie, acupuncture, hypnothérapie et plus encore.', type: 'CollectionPage', breadcrumbs: [{ name: "Médecines", path: '/medecines' }] })
 </script>

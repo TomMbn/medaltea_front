@@ -83,4 +83,5 @@ useSeoMeta({
   title: 'Conditions générales d\'utilisation — Léya',
   description: 'Conditions générales d\'utilisation de la plateforme Léya : service, compte utilisateur, responsabilités et avertissement santé.',
 })
+useWebPageSchema({ name: "Conditions générales d'utilisation", description: 'Conditions générales d\'utilisation de la plateforme Léya : service, compte utilisateur, responsabilités et avertissement santé.', breadcrumbs: [{ name: "Conditions générales d'utilisation", path: '/cgu' }] })
 </script>

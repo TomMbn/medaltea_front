@@ -20,6 +20,7 @@ useSeoMeta({
   title: 'Devenir praticien — Léya',
   description: 'Créez votre fiche praticien sur Léya en 2 minutes et ouvrez la prise de rendez-vous en ligne pour vos patients.',
 })
+useWebPageSchema({ name: "Devenir praticien", description: 'Créez votre fiche praticien sur Léya en 2 minutes et ouvrez la prise de rendez-vous en ligne pour vos patients.', breadcrumbs: [{ name: "Devenir praticien", path: '/inscription-pro' }] })
 </script>
 
 <style scoped>

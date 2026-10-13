@@ -57,6 +57,9 @@ export default defineNuxtConfig({
         'Referrer-Policy': 'strict-origin-when-cross-origin',
         'Permissions-Policy': 'camera=(), microphone=(), geolocation=(self), payment=()',
         'Cross-Origin-Opener-Policy': 'same-origin',
+        // Politique de sécurité des contenus en mode « rapport seul » : elle ne bloque rien, les écarts sont journalisés
+        // (voir server/api/csp-report.post.ts) avant de passer en mode bloquant.
+        'Content-Security-Policy-Report-Only': "default-src 'self'; script-src 'self' 'unsafe-inline' https://cloud.umami.is; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://gateway.umami.is https://cloud.umami.is; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; report-uri /api/csp-report",
       },
     },
   },

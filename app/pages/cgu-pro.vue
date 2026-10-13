@@ -62,4 +62,5 @@ useSeoMeta({
   title: 'Conditions générales des praticiens — Léya',
   description: 'Conditions applicables aux praticiens inscrits sur Léya : engagements, données des patients et visibilité de la fiche.',
 })
+useWebPageSchema({ name: "Conditions générales des praticiens", description: 'Conditions applicables aux praticiens inscrits sur Léya : engagements, données des patients et visibilité de la fiche.', breadcrumbs: [{ name: "Conditions générales des praticiens", path: '/cgu-pro' }] })
 </script>

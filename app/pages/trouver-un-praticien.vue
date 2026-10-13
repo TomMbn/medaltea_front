@@ -131,4 +131,6 @@ useSeoMeta({
   twitterDescription: description,
   twitterImage: 'https://leya-sante.fr/og-image.jpg',
 })
+
+useWebPageSchema({ name: 'Trouver un praticien', description, breadcrumbs: [{ name: 'Trouver un praticien', path: '/trouver-un-praticien' }] })
 </script>

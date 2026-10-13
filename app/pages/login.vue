@@ -150,6 +150,7 @@
 import { ref, computed } from 'vue'
 import { Loader2 } from 'lucide-vue-next'
 
+definePageMeta({ middleware: 'guest' })
 useSeoMeta({ title: 'Connexion — Léya', robots: 'noindex, nofollow' })
 import { useRouter } from '#app'
 

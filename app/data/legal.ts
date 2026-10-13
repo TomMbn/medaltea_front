@@ -4,7 +4,7 @@ export const legal = {
   brandName: 'Léya',
   siteUrl: 'https://leya-sante.fr',
   contactEmail: 'contact@leya-sante.fr',
-  lastUpdate: '12 octobre 2026',
+  lastUpdate: '13 octobre 2026',
 
   // Éditeur du site : anonyme (art. 6-III-2 LCEN), identité communiquée à l'hébergeur.
   // À remplacer par les informations de la structure une fois créée (raison sociale, SIRET, adresse…).

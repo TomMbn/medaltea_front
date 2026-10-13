@@ -26,13 +26,14 @@
     </ul>
 
     <div class="flex items-center justify-between gap-2 mt-auto">
-      <span v-if="praticien.price" class="text-[#E8755A] text-sm font-semibold">{{ praticien.price }} € par séance</span>
+      <span v-if="praticien.bookable === false" class="text-[#012828]/60 text-xs">Réservation indisponible</span>
+      <span v-else-if="praticien.price" class="text-[#E8755A] text-sm font-semibold">{{ praticien.price }} € par séance</span>
       <span v-else />
       <NuxtLink
         :to="`/praticiens/${praticien.id}`"
         class="flex items-center gap-1 bg-[#012828] text-white text-xs font-medium px-3 py-2 rounded-full hover:bg-[#156F71] transition-colors whitespace-nowrap"
       >
-        Prendre rendez-vous <ArrowUpRight :size="12" aria-hidden="true" />
+        {{ praticien.bookable === false ? 'Voir la fiche' : 'Prendre rendez-vous' }} <ArrowUpRight :size="12" aria-hidden="true" />
       </NuxtLink>
     </div>
   </li>

@@ -24,12 +24,12 @@
             <MapPin :size="15" aria-hidden="true" /> {{ praticien.city }}<template v-if="praticien.postalCode"> ({{ formatPostalCode(praticien.postalCode) }})</template>
           </p>
         </div>
-        <div v-if="nextSlot" class="sm:text-right sm:max-w-[240px]">
+        <div v-if="bookable && nextSlot" class="sm:text-right sm:max-w-[240px]">
           <p class="text-xs font-semibold uppercase tracking-wide text-[#012828]/50">Prochaine disponibilité</p>
           <p class="font-bold mt-1 first-letter:uppercase">{{ formatLongDate(nextSlot) }}</p>
           <button type="button" class="mt-3 bg-[#EC7F7A] text-white text-sm font-bold px-5 py-2.5 rounded-[12px] hover:brightness-105 transition" @click="bookSlot(nextSlot)">Réserver ce créneau</button>
         </div>
-        <a v-else-if="types.length" href="#reservation" class="shrink-0 bg-[#012828] text-white text-sm font-bold px-6 py-3 rounded-[12px] text-center hover:bg-[#156F71] transition-colors">Prendre rendez-vous</a>
+        <a v-else-if="bookable && types.length" href="#reservation" class="shrink-0 bg-[#012828] text-white text-sm font-bold px-6 py-3 rounded-[12px] text-center hover:bg-[#156F71] transition-colors">Prendre rendez-vous</a>
       </header>
 
       <div class="grid gap-6 lg:grid-cols-5 items-start">
@@ -38,8 +38,14 @@
           <p class="text-sm leading-relaxed whitespace-pre-line text-[#012828]/80">{{ about }}</p>
         </section>
 
+        <!-- Fiche sans réservation en ligne : information, revendication et retrait -->
+        <section v-if="!bookable" class="lg:col-span-2 lg:col-start-4 lg:row-start-1 lg:row-span-3 bg-white rounded-[20px] shadow-sm p-6 sm:p-8" aria-labelledby="unclaimed-title">
+          <h2 id="unclaimed-title" class="font-unbounded font-bold text-lg mb-4">Réservation indisponible</h2>
+          <ClaimListing :praticien="praticien" />
+        </section>
+
         <!-- 1. Prestations : c'est ici que se choisit la prestation -->
-        <section id="prestations" class="card lg:col-span-3 lg:col-start-1 scroll-mt-28" aria-labelledby="services-title">
+        <section v-if="bookable" id="prestations" class="card lg:col-span-3 lg:col-start-1 scroll-mt-28" aria-labelledby="services-title">
           <h2 id="services-title" class="card-title">Prestations et tarifs</h2>
           <fieldset v-if="types.length > 1">
             <legend class="text-xs text-gray-500 mb-3">Choisissez une prestation, puis un créneau.</legend>
@@ -76,12 +82,12 @@
         </section>
 
         <!-- 2. Réservation : choix du créneau (colonne latérale fixe sur ordinateur) -->
-        <section id="reservation" class="lg:col-span-2 lg:col-start-4 lg:row-start-1 lg:row-span-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto bg-white rounded-[20px] shadow-sm p-6 sm:p-8 scroll-mt-28" aria-labelledby="booking-title">
+        <section v-if="bookable" id="reservation" class="lg:col-span-2 lg:col-start-4 lg:row-start-1 lg:row-span-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto bg-white rounded-[20px] shadow-sm p-6 sm:p-8 scroll-mt-28" aria-labelledby="booking-title">
           <h2 id="booking-title" class="font-unbounded font-bold text-lg mb-5">Prendre rendez-vous</h2>
           <AppointmentBooking :praticien="praticien" :types="types" />
         </section>
 
-        <section class="card lg:col-span-3 lg:col-start-1" aria-labelledby="hours-title">
+        <section v-if="bookable" class="card lg:col-span-3 lg:col-start-1" aria-labelledby="hours-title">
           <h2 id="hours-title" class="card-title">Horaires d'ouverture</h2>
           <ul v-if="hasHours" class="grid gap-1 text-sm">
             <li v-for="d in DAYS" :key="d.n" class="flex gap-4 rounded-lg px-3 py-2" :class="d.n === todayN ? 'bg-[#e0ecf2]/70 font-semibold' : ''">
@@ -104,6 +110,9 @@
             <a :href="mapsUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
               <Navigation :size="15" aria-hidden="true" /> Itinéraire
             </a>
+            <a v-if="safeWebsite" :href="safeWebsite" target="_blank" rel="noopener noreferrer nofollow" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
+              <Globe :size="15" aria-hidden="true" /> Site web
+            </a>
             <a v-if="praticien.phoneNumber" :href="`tel:${praticien.phoneNumber}`" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
               <Phone :size="15" aria-hidden="true" /> {{ praticien.phoneNumber }}
             </a>
@@ -124,7 +133,7 @@
 
 <script setup>
 import { computed, ref, onMounted } from 'vue'
-import { MapPin, Phone, Navigation } from 'lucide-vue-next'
+import { MapPin, Phone, Navigation, Globe } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
@@ -138,15 +147,18 @@ if (error.value || !praticien.value) {
   throw createError({ statusCode: 404, statusMessage: 'Praticien introuvable', fatal: true })
 }
 
+// Les fiches non revendiquées n'ont ni prestations ni créneaux : on ne les interroge pas.
+const bookable = computed(() => praticien.value.bookable !== false)
+
 const { data: rawTypes } = await useAsyncData(`praticien-${id}-types`, () =>
-  $fetch(`/api/backend/praticiens/${id}/consultation-types`).catch(() => []),
+  bookable.value ? $fetch(`/api/backend/praticiens/${id}/consultation-types`).catch(() => []) : [],
 )
 const types = computed(() => normalizeTypes(rawTypes.value))
 // Prestation active dans le module de réservation (synchronisée par l'adresse).
 const selectedTypeId = computed(() => types.value.find(t => t.id === Number(route.query.type))?.id ?? types.value[0]?.id ?? null)
 
 const { data: rawHours } = await useAsyncData(`praticien-${id}-hours`, () =>
-  $fetch(`/api/backend/praticiens/${id}/availabilities`).catch(() => []),
+  bookable.value ? $fetch(`/api/backend/praticiens/${id}/availabilities`).catch(() => []) : [],
 )
 const week = computed(() => weekFromServer(rawHours.value))
 const hasHours = computed(() => Array.isArray(rawHours.value) && rawHours.value.length > 0)
@@ -155,14 +167,16 @@ const todayN = computed(() => { const d = new Date(`${todayKey()}T12:00:00Z`).ge
 const fullName = computed(() => `${praticien.value.firstName} ${praticien.value.lastName}`)
 const initials = computed(() => `${(praticien.value.firstName || '?')[0]}${(praticien.value.lastName || '')[0] || ''}`.toUpperCase())
 // Texte de présentation : affiché dès que l'API le fournira.
-const about = computed(() => praticien.value.description ?? praticien.value.about ?? praticien.value.presentation ?? '')
+const about = computed(() => praticien.value.bio ?? praticien.value.description ?? praticien.value.about ?? praticien.value.presentation ?? '')
+// Site web : uniquement http(s), sinon on ne l'affiche pas
+const safeWebsite = computed(() => { try { const u = new URL(praticien.value.website); return ['http:', 'https:'].includes(u.protocol) ? u.href : '' } catch { return '' } })
 const mapsUrl = computed(() => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${praticien.value.address}, ${formatPostalCode(praticien.value.postalCode)} ${praticien.value.city}`)}`)
 
 // --- Prochaine disponibilité (première prestation, 30 jours)
 const nextSlot = ref(null)
 onMounted(async () => {
   const first = types.value[0]
-  if (!first) return
+  if (!first || !bookable.value) return
   try {
     const raw = await $fetch(`/api/backend/praticiens/${id}/slots`, {
       query: { from: todayKey(), to: addDays(todayKey(), 30), consultationTypeId: first.id },
@@ -187,8 +201,10 @@ function bookSlot(slot) {
 
 // Fiches nominatives : non indexées tant que le cadre légal (information, opposition) n'est pas validé.
 useSeoMeta({
-  title: () => `${fullName.value} — Prendre rendez-vous | Léya`,
-  description: () => `Prenez rendez-vous en ligne avec ${fullName.value} à ${praticien.value.city}.`,
+  title: () => bookable.value ? `${fullName.value} — Prendre rendez-vous | Léya` : `${fullName.value} — ${praticien.value.city} | Léya`,
+  description: () => bookable.value
+    ? `Prenez rendez-vous en ligne avec ${fullName.value} à ${praticien.value.city}.`
+    : `Fiche de ${fullName.value}, ${praticien.value.city}.`,
   robots: 'noindex, nofollow',
 })
 </script>

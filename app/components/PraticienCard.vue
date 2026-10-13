@@ -30,7 +30,7 @@
       <span v-else-if="praticien.price" class="text-[#E8755A] text-sm font-semibold">{{ praticien.price }} € par séance</span>
       <span v-else />
       <NuxtLink
-        :to="`/praticiens/${praticien.id}`"
+        :to="`/praticiens/${praticien.slug || praticien.id}`"
         class="flex items-center gap-1 bg-[#012828] text-white text-xs font-medium px-3 py-2 rounded-full hover:bg-[#156F71] transition-colors whitespace-nowrap"
       >
         {{ praticien.bookable === false ? 'Voir la fiche' : 'Prendre rendez-vous' }} <ArrowUpRight :size="12" aria-hidden="true" />

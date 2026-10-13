@@ -50,7 +50,7 @@
       <section v-if="praticienId" class="card" aria-labelledby="public-title">
         <h2 id="public-title" class="card-title">Voir ma fiche publique</h2>
         <p class="text-sm text-[#012828]/70 mb-3">C'est ce que vos patients voient : vos spécialités, vos prestations, vos horaires et votre calendrier.</p>
-        <NuxtLink :to="`/praticiens/${praticienId}`" target="_blank" class="inline-block border border-[#012828] text-sm font-bold px-5 py-2.5 rounded-[12px] hover:bg-[#012828] hover:text-white transition-colors">
+        <NuxtLink :to="`/praticiens/${fiche?.slug || praticienId}`" target="_blank" class="inline-block border border-[#012828] text-sm font-bold px-5 py-2.5 rounded-[12px] hover:bg-[#012828] hover:text-white transition-colors">
           Ouvrir ma fiche ↗
         </NuxtLink>
       </section>
@@ -115,7 +115,9 @@ const percent = computed(() => {
 })
 
 const origin = useRequestURL().origin
-const shareUrl = computed(() => `${origin}/praticiens/${praticienId.value}`)
+// Lien public : le slug de la fiche (l'ancienne adresse numérique redirige, elle sert de repli)
+const { data: fiche } = await useAsyncData('pro-fiche-slug', () => $fetch(`/api/backend/praticiens/${praticienId.value}`), { server: false, default: () => null })
+const shareUrl = computed(() => `${origin}/praticiens/${fiche.value?.slug || praticienId.value}`)
 const copied = ref(false)
 async function copyLink() {
   try {

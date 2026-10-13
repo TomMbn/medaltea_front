@@ -14,6 +14,8 @@ export default defineNuxtConfig({
 
   sitemap: {
     excludeAppSources: true,
+    // Fiches praticiens indexables (revendiquées et complètes), lues dans l'annuaire
+    sources: ['/api/__sitemap__/praticiens'],
     urls: [
       { loc: '/', priority: 1.0, changefreq: 'weekly' },
       { loc: '/medecines', priority: 0.9, changefreq: 'weekly' },

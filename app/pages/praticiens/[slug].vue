@@ -137,15 +137,23 @@ import { MapPin, Phone, Navigation, Globe } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
-const id = Number(route.params.id)
-if (!Number.isInteger(id) || id < 1) {
+// L'adresse publique est le slug. Les anciennes adresses numériques (/praticiens/12) redirigent vers elle.
+const param = String(route.params.slug)
+const legacyId = /^\d+$/.test(param)
+if (!legacyId && !/^[a-z0-9-]{1,120}$/.test(param)) {
   throw createError({ statusCode: 404, statusMessage: 'Praticien introuvable', fatal: true })
 }
 
-const { data: praticien, error } = await useAsyncData(`praticien-${id}`, () => $fetch(`/api/backend/praticiens/${id}`))
+const { data: praticien, error } = await useAsyncData(`praticien-${param}`, () =>
+  $fetch(legacyId ? `/api/backend/praticiens/${param}` : `/api/backend/praticiens/slug/${param}`),
+)
 if (error.value || !praticien.value) {
   throw createError({ statusCode: 404, statusMessage: 'Praticien introuvable', fatal: true })
 }
+if (legacyId && praticien.value.slug) {
+  await navigateTo({ path: `/praticiens/${praticien.value.slug}`, query: route.query }, { redirectCode: 301, replace: true })
+}
+const id = praticien.value.id
 
 // Les fiches non revendiquées n'ont ni prestations ni créneaux : on ne les interroge pas.
 const bookable = computed(() => praticien.value.bookable !== false)
@@ -199,13 +207,54 @@ function bookSlot(slot) {
   scrollToBooking()
 }
 
-// Fiches nominatives : non indexées tant que le cadre légal (information, opposition) n'est pas validé.
+// Indexation : uniquement les fiches revendiquées et suffisamment renseignées (voir shared/utils/praticien.ts).
+// Les autres restent en noindex : fiches nominatives non revendiquées ou pages trop pauvres.
+const indexable = computed(() => isIndexablePraticien(praticien.value))
+const canonicalUrl = computed(() => `https://leya-sante.fr/praticiens/${praticien.value.slug ?? id}`)
+
+useHead(() => ({
+  link: [{ rel: 'canonical', href: canonicalUrl.value }],
+  script: indexable.value ? [{ type: 'application/ld+json', innerHTML: JSON.stringify(jsonLd()) }] : [],
+}))
+
+function jsonLd() {
+  const p = praticien.value
+  const business = {
+    '@type': 'MedicalBusiness',
+    '@id': `${canonicalUrl.value}#praticien`,
+    name: fullName.value,
+    url: canonicalUrl.value,
+    address: { '@type': 'PostalAddress', streetAddress: p.address, postalCode: formatPostalCode(p.postalCode), addressLocality: p.city, addressCountry: 'FR' },
+    ...(p.phoneNumber ? { telephone: p.phoneNumber } : {}),
+    ...(safeWebsite.value ? { sameAs: [safeWebsite.value] } : {}),
+    ...(p.photoUrl ? { image: p.photoUrl } : {}),
+    ...(p.bio ? { description: p.bio } : {}),
+    ...(p.specialities?.length ? { knowsAbout: p.specialities.map(s => s.name) } : {}),
+    ...(p.latitude != null && p.longitude != null ? { geo: { '@type': 'GeoCoordinates', latitude: p.latitude, longitude: p.longitude } } : {}),
+    ...(p.averageRating && p.reviewCount > 0 ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: p.averageRating, reviewCount: p.reviewCount } } : {}),
+  }
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      business,
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://leya-sante.fr' },
+          { '@type': 'ListItem', position: 2, name: 'Trouver un praticien', item: 'https://leya-sante.fr/trouver-un-praticien' },
+          { '@type': 'ListItem', position: 3, name: fullName.value, item: canonicalUrl.value },
+        ],
+      },
+    ],
+  }
+}
+
 useSeoMeta({
   title: () => bookable.value ? `${fullName.value} — Prendre rendez-vous | Léya` : `${fullName.value} — ${praticien.value.city} | Léya`,
   description: () => bookable.value
     ? `Prenez rendez-vous en ligne avec ${fullName.value} à ${praticien.value.city}.`
     : `Fiche de ${fullName.value}, ${praticien.value.city}.`,
-  robots: 'noindex, nofollow',
+  robots: () => indexable.value ? 'index, follow' : 'noindex, nofollow',
 })
 </script>
 

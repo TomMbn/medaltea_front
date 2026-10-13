@@ -49,15 +49,17 @@
           <section class="card" aria-labelledby="services-title">
             <h2 id="services-title" class="card-title">Prestations et tarifs</h2>
             <ul v-if="types.length" class="grid gap-2">
-              <li v-for="t in types" :key="t.id" class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 px-4 py-3">
+              <li
+                v-for="t in types"
+                :key="t.id"
+                class="flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3 transition-colors"
+                :class="t.id === selectedTypeId ? 'border-[#156F71] bg-[#e0ecf2]/50' : 'border-gray-200'"
+              >
                 <div>
                   <p class="text-sm font-semibold">{{ t.name }}</p>
                   <p class="text-xs text-gray-500">{{ t.durationMin }} min · {{ t.mode === 'visio' ? 'En visio' : 'Au cabinet' }}</p>
                 </div>
-                <div class="flex items-center gap-4">
-                  <span v-if="t.price != null" class="text-sm font-bold text-[#E8755A]">{{ t.price }} €</span>
-                  <button type="button" class="text-xs font-bold border border-[#012828] rounded-[10px] px-3.5 py-2 hover:bg-[#012828] hover:text-white transition-colors" @click="chooseType(t)">Réserver</button>
-                </div>
+                <span v-if="t.price != null" class="text-sm font-bold text-[#E8755A]">{{ t.price }} €</span>
               </li>
             </ul>
             <p v-else class="text-sm text-gray-500">
@@ -125,6 +127,8 @@ const { data: rawTypes } = await useAsyncData(`praticien-${id}-types`, () =>
   $fetch(`/api/backend/praticiens/${id}/consultation-types`).catch(() => []),
 )
 const types = computed(() => normalizeTypes(rawTypes.value))
+// Prestation active dans le module de réservation (synchronisée par l'adresse).
+const selectedTypeId = computed(() => types.value.find(t => t.id === Number(route.query.type))?.id ?? types.value[0]?.id ?? null)
 
 const { data: rawHours } = await useAsyncData(`praticien-${id}-hours`, () =>
   $fetch(`/api/backend/praticiens/${id}/availabilities`).catch(() => []),
@@ -155,10 +159,6 @@ onMounted(async () => {
 
 function scrollToBooking() {
   document.getElementById('reservation')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
-function chooseType(t) {
-  router.replace({ query: { ...route.query, type: String(t.id), slot: undefined } })
-  scrollToBooking()
 }
 function bookSlot(slot) {
   router.replace({ query: { ...route.query, type: String(types.value[0].id), slot } })

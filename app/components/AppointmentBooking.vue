@@ -19,27 +19,22 @@
       </div>
 
       <template v-else>
-        <!-- Type de consultation -->
-        <fieldset class="mb-6">
-          <legend class="text-sm font-semibold mb-2">Type de consultation</legend>
-          <div class="grid gap-2">
-            <label
-              v-for="t in types"
-              :key="t.id"
-              class="flex items-center justify-between gap-3 rounded-xl border px-4 py-3 cursor-pointer transition-colors"
-              :class="typeId === t.id ? 'border-[#156F71] bg-[#e0ecf2]/50' : 'border-gray-200 hover:border-gray-300'"
-            >
-              <span class="flex items-center gap-3">
-                <input v-model="typeId" type="radio" name="consultation-type" :value="t.id" class="accent-[#156F71]" />
-                <span>
-                  <span class="block text-sm font-medium">{{ t.name }}</span>
-                  <span class="block text-xs text-gray-500">{{ t.durationMin }} min · {{ t.mode === 'visio' ? 'Visio' : 'Au cabinet' }}</span>
-                </span>
-              </span>
-              <span v-if="t.price != null" class="text-sm font-semibold text-[#E8755A] whitespace-nowrap">{{ t.price }} €</span>
-            </label>
-          </div>
-        </fieldset>
+        <!-- Prestation : sélecteur compact pour laisser les créneaux visibles sans défiler -->
+        <div class="mb-5">
+          <label for="consultation-type" class="block text-sm font-semibold mb-1.5">Prestation</label>
+          <select
+            v-if="types.length > 1"
+            id="consultation-type"
+            v-model.number="typeId"
+            class="w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:border-[#156F71]"
+          >
+            <option v-for="t in types" :key="t.id" :value="t.id">{{ typeLabel(t) }}</option>
+          </select>
+          <p v-else-if="types[0]" id="consultation-type" class="rounded-xl border border-gray-200 bg-[#e0ecf2]/40 px-3 py-2.5 text-sm">{{ typeLabel(types[0]) }}</p>
+          <p v-if="selectedType" class="text-xs text-gray-500 mt-1.5">
+            {{ selectedType.durationMin }} min · {{ selectedType.mode === 'visio' ? 'En visio' : 'Au cabinet' }}
+          </p>
+        </div>
 
         <!-- Navigation par semaine -->
         <div class="flex items-center justify-between mb-3">
@@ -148,6 +143,7 @@ const slotFromQuery = (v) => (typeof v === 'string' && !Number.isNaN(Date.parse(
 
 const typeId = ref(typeFromQuery(route.query.type) ?? props.types[0]?.id ?? null)
 const selectedType = computed(() => props.types.find(t => t.id === typeId.value))
+const typeLabel = (t) => `${t.name} · ${t.durationMin} min${t.price != null ? ` · ${t.price} €` : ''}`
 
 // Créneau demandé par l'adresse (retour après connexion, lien « Réserver » de la page) : restauré une fois les créneaux chargés.
 const wantedSlot = ref(slotFromQuery(route.query.slot))

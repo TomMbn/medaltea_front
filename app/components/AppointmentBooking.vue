@@ -19,21 +19,14 @@
       </div>
 
       <template v-else>
-        <!-- Prestation : sélecteur compact pour laisser les créneaux visibles sans défiler -->
-        <div class="mb-5">
-          <label for="consultation-type" class="block text-sm font-semibold mb-1.5">Prestation</label>
-          <select
-            v-if="types.length > 1"
-            id="consultation-type"
-            v-model.number="typeId"
-            class="w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:border-[#156F71]"
-          >
-            <option v-for="t in types" :key="t.id" :value="t.id">{{ typeLabel(t) }}</option>
-          </select>
-          <p v-else-if="types[0]" id="consultation-type" class="rounded-xl border border-gray-200 bg-[#e0ecf2]/40 px-3 py-2.5 text-sm">{{ typeLabel(types[0]) }}</p>
-          <p v-if="selectedType" class="text-xs text-gray-500 mt-1.5">
-            {{ selectedType.durationMin }} min · {{ selectedType.mode === 'visio' ? 'En visio' : 'Au cabinet' }}
+        <!-- Rappel de la prestation choisie (le choix se fait dans « Prestations et tarifs ») -->
+        <div v-if="selectedType" class="mb-5 rounded-xl bg-[#e0ecf2]/60 px-4 py-3">
+          <p class="text-xs font-semibold uppercase tracking-wide text-[#012828]/50">Prestation</p>
+          <p class="text-sm font-semibold mt-0.5">{{ selectedType.name }}</p>
+          <p class="text-xs text-gray-600">
+            {{ selectedType.durationMin }} min · {{ selectedType.mode === 'visio' ? 'En visio' : 'Au cabinet' }}<template v-if="selectedType.price != null"> · {{ selectedType.price }} €</template>
           </p>
+          <a v-if="types.length > 1" href="#prestations" class="lg:hidden text-xs underline text-[#156F71] mt-1 inline-block">Changer de prestation</a>
         </div>
 
         <!-- Navigation par semaine -->
@@ -143,7 +136,6 @@ const slotFromQuery = (v) => (typeof v === 'string' && !Number.isNaN(Date.parse(
 
 const typeId = ref(typeFromQuery(route.query.type) ?? props.types[0]?.id ?? null)
 const selectedType = computed(() => props.types.find(t => t.id === typeId.value))
-const typeLabel = (t) => `${t.name} · ${t.durationMin} min${t.price != null ? ` · ${t.price} €` : ''}`
 
 // Créneau demandé par l'adresse (retour après connexion, lien « Réserver » de la page) : restauré une fois les créneaux chargés.
 const wantedSlot = ref(slotFromQuery(route.query.slot))

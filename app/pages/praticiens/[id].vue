@@ -33,73 +33,88 @@
       </header>
 
       <div class="grid gap-6 lg:grid-cols-5 items-start">
-        <!-- Réservation : en premier sur mobile, colonne latérale fixe sur ordinateur -->
-        <section id="reservation" class="lg:col-span-2 lg:order-2 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto bg-white rounded-[20px] shadow-sm p-6 sm:p-8 scroll-mt-28" aria-labelledby="booking-title">
+        <section v-if="about" class="card lg:col-span-3 lg:col-start-1" aria-labelledby="about-title">
+          <h2 id="about-title" class="card-title">Présentation</h2>
+          <p class="text-sm leading-relaxed whitespace-pre-line text-[#012828]/80">{{ about }}</p>
+        </section>
+
+        <!-- 1. Prestations : c'est ici que se choisit la prestation -->
+        <section id="prestations" class="card lg:col-span-3 lg:col-start-1 scroll-mt-28" aria-labelledby="services-title">
+          <h2 id="services-title" class="card-title">Prestations et tarifs</h2>
+          <fieldset v-if="types.length > 1">
+            <legend class="text-xs text-gray-500 mb-3">Choisissez une prestation, puis un créneau.</legend>
+            <ul class="grid gap-2">
+              <li v-for="t in types" :key="t.id">
+                <label
+                  class="flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3 cursor-pointer transition-colors"
+                  :class="t.id === selectedTypeId ? 'border-[#156F71] bg-[#e0ecf2]/50' : 'border-gray-200 hover:border-gray-300'"
+                >
+                  <span class="flex items-center gap-3">
+                    <input type="radio" name="prestation" :value="t.id" :checked="t.id === selectedTypeId" class="accent-[#156F71]" @change="selectType(t.id)" />
+                    <span>
+                      <span class="block text-sm font-semibold">{{ t.name }}</span>
+                      <span class="block text-xs text-gray-500">{{ t.durationMin }} min · {{ t.mode === 'visio' ? 'En visio' : 'Au cabinet' }}</span>
+                    </span>
+                  </span>
+                  <span v-if="t.price != null" class="text-sm font-bold text-[#E8755A]">{{ t.price }} €</span>
+                </label>
+              </li>
+            </ul>
+          </fieldset>
+          <ul v-else-if="types.length" class="grid gap-2">
+            <li v-for="t in types" :key="t.id" class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#156F71] bg-[#e0ecf2]/50 px-4 py-3">
+              <span>
+                <span class="block text-sm font-semibold">{{ t.name }}</span>
+                <span class="block text-xs text-gray-500">{{ t.durationMin }} min · {{ t.mode === 'visio' ? 'En visio' : 'Au cabinet' }}</span>
+              </span>
+              <span v-if="t.price != null" class="text-sm font-bold text-[#E8755A]">{{ t.price }} €</span>
+            </li>
+          </ul>
+          <p v-else class="text-sm text-gray-500">
+            Ce praticien n'a pas encore détaillé ses prestations<template v-if="praticien.price"> (à partir de {{ praticien.price }} € la séance)</template>.
+          </p>
+        </section>
+
+        <!-- 2. Réservation : choix du créneau (colonne latérale fixe sur ordinateur) -->
+        <section id="reservation" class="lg:col-span-2 lg:col-start-4 lg:row-start-1 lg:row-span-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto bg-white rounded-[20px] shadow-sm p-6 sm:p-8 scroll-mt-28" aria-labelledby="booking-title">
           <h2 id="booking-title" class="font-unbounded font-bold text-lg mb-5">Prendre rendez-vous</h2>
           <AppointmentBooking :praticien="praticien" :types="types" />
         </section>
 
-        <!-- Profil -->
-        <div class="lg:col-span-3 lg:order-1 grid gap-6">
-          <section v-if="about" class="card" aria-labelledby="about-title">
-            <h2 id="about-title" class="card-title">Présentation</h2>
-            <p class="text-sm leading-relaxed whitespace-pre-line text-[#012828]/80">{{ about }}</p>
-          </section>
+        <section class="card lg:col-span-3 lg:col-start-1" aria-labelledby="hours-title">
+          <h2 id="hours-title" class="card-title">Horaires d'ouverture</h2>
+          <ul v-if="hasHours" class="grid gap-1 text-sm">
+            <li v-for="d in DAYS" :key="d.n" class="flex gap-4 rounded-lg px-3 py-2" :class="d.n === todayN ? 'bg-[#e0ecf2]/70 font-semibold' : ''">
+              <span class="w-24 shrink-0">{{ d.label }}</span>
+              <span v-if="!week[d.n].length" class="text-gray-400">Fermé</span>
+              <span v-else>{{ week[d.n].map(r => `${r.start} – ${r.end}`).join('  ·  ') }}</span>
+            </li>
+          </ul>
+          <p v-else-if="praticien.schedules" class="text-sm">{{ praticien.schedules }}</p>
+          <p v-else class="text-sm text-gray-500">Horaires non renseignés.</p>
+        </section>
 
-          <section class="card" aria-labelledby="services-title">
-            <h2 id="services-title" class="card-title">Prestations et tarifs</h2>
-            <ul v-if="types.length" class="grid gap-2">
-              <li
-                v-for="t in types"
-                :key="t.id"
-                class="flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3 transition-colors"
-                :class="t.id === selectedTypeId ? 'border-[#156F71] bg-[#e0ecf2]/50' : 'border-gray-200'"
-              >
-                <div>
-                  <p class="text-sm font-semibold">{{ t.name }}</p>
-                  <p class="text-xs text-gray-500">{{ t.durationMin }} min · {{ t.mode === 'visio' ? 'En visio' : 'Au cabinet' }}</p>
-                </div>
-                <span v-if="t.price != null" class="text-sm font-bold text-[#E8755A]">{{ t.price }} €</span>
-              </li>
-            </ul>
-            <p v-else class="text-sm text-gray-500">
-              Ce praticien n'a pas encore détaillé ses prestations<template v-if="praticien.price"> (à partir de {{ praticien.price }} € la séance)</template>.
-            </p>
-          </section>
 
-          <section class="card" aria-labelledby="hours-title">
-            <h2 id="hours-title" class="card-title">Horaires d'ouverture</h2>
-            <ul v-if="hasHours" class="grid gap-1 text-sm">
-              <li v-for="d in DAYS" :key="d.n" class="flex gap-4 rounded-lg px-3 py-2" :class="d.n === todayN ? 'bg-[#e0ecf2]/70 font-semibold' : ''">
-                <span class="w-24 shrink-0">{{ d.label }}</span>
-                <span v-if="!week[d.n].length" class="text-gray-400">Fermé</span>
-                <span v-else>{{ week[d.n].map(r => `${r.start} – ${r.end}`).join('  ·  ') }}</span>
-              </li>
-            </ul>
-            <p v-else-if="praticien.schedules" class="text-sm">{{ praticien.schedules }}</p>
-            <p v-else class="text-sm text-gray-500">Horaires non renseignés.</p>
-          </section>
+        <section class="card lg:col-span-3 lg:col-start-1" aria-labelledby="where-title">
+          <h2 id="where-title" class="card-title">Adresse et contact</h2>
+          <address class="not-italic text-sm leading-relaxed">
+            {{ praticien.address }}<br />{{ formatPostalCode(praticien.postalCode) }} {{ praticien.city }}
+          </address>
+          <div class="flex flex-wrap gap-3 mt-4">
+            <a :href="mapsUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
+              <Navigation :size="15" aria-hidden="true" /> Itinéraire
+            </a>
+            <a v-if="praticien.phoneNumber" :href="`tel:${praticien.phoneNumber}`" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
+              <Phone :size="15" aria-hidden="true" /> {{ praticien.phoneNumber }}
+            </a>
+          </div>
+        </section>
 
-          <section class="card" aria-labelledby="where-title">
-            <h2 id="where-title" class="card-title">Adresse et contact</h2>
-            <address class="not-italic text-sm leading-relaxed">
-              {{ praticien.address }}<br />{{ formatPostalCode(praticien.postalCode) }} {{ praticien.city }}
-            </address>
-            <div class="flex flex-wrap gap-3 mt-4">
-              <a :href="mapsUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
-                <Navigation :size="15" aria-hidden="true" /> Itinéraire
-              </a>
-              <a v-if="praticien.phoneNumber" :href="`tel:${praticien.phoneNumber}`" class="inline-flex items-center gap-2 text-sm font-semibold border border-gray-300 rounded-[10px] px-4 py-2 hover:border-[#156F71] transition-colors">
-                <Phone :size="15" aria-hidden="true" /> {{ praticien.phoneNumber }}
-              </a>
-            </div>
-          </section>
 
-          <p class="text-xs text-[#012828]/50 leading-relaxed px-2">
-            Fiche professionnelle. Ce praticien exerce sous sa propre responsabilité ; Léya n'est pas partie à la relation de soin et ne remplace pas un avis médical.
-            <NuxtLink to="/cgu" class="underline">En savoir plus</NuxtLink>
-          </p>
-        </div>
+        <p class="text-xs text-[#012828]/50 leading-relaxed px-2 lg:col-span-3 lg:col-start-1">
+          Fiche professionnelle. Ce praticien exerce sous sa propre responsabilité ; Léya n'est pas partie à la relation de soin et ne remplace pas un avis médical.
+          <NuxtLink to="/cgu" class="underline">En savoir plus</NuxtLink>
+        </p>
       </div>
 
       <TheFooter />
@@ -156,6 +171,11 @@ onMounted(async () => {
     nextSlot.value = slots.find(s => Date.parse(s) > Date.now()) ?? null
   } catch { /* la prochaine disponibilité est un confort : on l'ignore en cas d'erreur */ }
 })
+
+// Choix de la prestation : l'adresse fait foi, le module de réservation s'y synchronise.
+function selectType(typeId) {
+  router.replace({ query: { ...route.query, type: String(typeId), slot: undefined } })
+}
 
 function scrollToBooking() {
   document.getElementById('reservation')?.scrollIntoView({ behavior: 'smooth', block: 'start' })

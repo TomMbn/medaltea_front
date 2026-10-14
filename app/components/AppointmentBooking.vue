@@ -470,6 +470,11 @@ async function submit() {
     })
     booked.value = { ...booked.value, startAt: booked.value?.startAt ?? selectedSlot.value }
     trackEvent('booking-success', { mode: bookingMode() })
+    // Page de confirmation (si le backend renvoie bien l'identifiant du rendez-vous)
+    if (booked.value?.id) {
+      await navigateTo({ path: '/rendez-vous/confirmation', query: { id: String(booked.value.id) } })
+      return
+    }
   } catch (e) {
     trackEvent('booking-error', { status: apiStatus(e) ?? 0 })
     if (apiStatus(e) === 401) {

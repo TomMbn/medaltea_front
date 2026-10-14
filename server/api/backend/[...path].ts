@@ -29,6 +29,8 @@ const RULES: Rule[] = [
     // Note Google lue en direct : jamais mise en cache (conditions Google Maps Platform), sans les avis
     { method: 'GET', pattern: /^praticiens\/\d+\/google-rating$/, auth: false },
     { method: 'GET', pattern: /^appointments\/me$/, auth: true, query: ['from', 'to', 'status'] },
+    // Fichier iCal d'un de mes rendez-vous (ajout à l'agenda)
+    { method: 'GET', pattern: /^appointments\/\d+\/ics$/, auth: true },
     { method: 'POST', pattern: /^appointments$/, auth: true, body: ['praticienId', 'consultationTypeId', 'startAt', 'userNote'] },
     { method: 'PATCH', pattern: /^appointments\/\d+\/status$/, auth: true, body: ['status', 'reason'] },
 
@@ -283,6 +285,12 @@ export default defineEventHandler(async (event) => {
     if (method === 'DELETE' && path === 'users/me' && response.status === 204) clearSessionCookies(event)
 
     if (response.status === 204) return sendNoContent(event)
+    // Fichier iCal : renvoyé tel quel, en téléchargement
+    if (/^appointments\/\d+\/ics$/.test(path) && response.status === 200 && typeof response._data === 'string') {
+        setHeader(event, 'Content-Type', 'text/calendar; charset=utf-8')
+        setHeader(event, 'Content-Disposition', 'attachment; filename="rendez-vous-leya.ics"')
+        return response._data
+    }
     // Le propriétaire de la fiche reçoit ses propres champs privés (RPPS, SIRET…), jamais les autres
     return rule.own ? response._data : stripPrivate(response._data)
 })

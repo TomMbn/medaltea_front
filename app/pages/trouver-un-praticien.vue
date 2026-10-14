@@ -1,37 +1,46 @@
 <template>
-  <div class="overflow-x-hidden min-h-screen">
-    <PraticienHero :geo="geo" @locate="locate" @unlocate="unlocate" />
-    <div id="resultats" class="scroll-mt-28">
-      <PraticienResults
-        :praticiens="items"
-        :total="total"
-        :q="q"
-        :speciality-name="speciality?.name ?? ''"
-        :error="!!error"
-        :loading="pending || loadingMore"
-        :sort="sort"
-        :only-bookable="onlyBookable"
-        :geo="geo"
-        :geo-error="geoError"
-        :radius="radius"
-        @update:sort="setSort"
-        @update:only-bookable="setOnlyBookable"
-        @update:radius="radius = $event"
-        @unlocate="unlocate"
-        @more="loadMore"
-      />
-    </div>
-    <PraticienWhy />
-    <div class="bg-[#e0ecf2]">
-      <div class="w-11/12 max-w-[1440px] mx-auto">
-        <LandingFAQ class="pb-16" />
+  <div class="page-search relative overflow-x-hidden min-h-screen bg-gradient-to-b from-bleu-50 to-[#e0ecf2]">
+    <!-- Page « Recherche » -->
+    <template v-if="!isResults">
+      <img src="/images/medecines/illu-naturopathie.svg" alt="" aria-hidden="true" class="page-mortar hidden xl:block absolute pointer-events-none select-none opacity-[0.08]" style="animation: none;" />
+      <PraticienHero :geo="geo" @locate="locate" @unlocate="unlocate" />
+      <PraticienCarousel />
+      <PraticienWhy />
+    </template>
+
+    <!-- Page « Résultats » -->
+    <template v-else>
+      <div class="pt-28 lg:pt-[140px]">
+        <PraticienSearchBar :key="searchKey" :geo="geo" />
       </div>
-    </div>
+      <div id="resultats" class="scroll-mt-28">
+        <PraticienResults
+          :praticiens="items"
+          :total="total"
+          :page="page"
+          :page-size="PAGE_SIZE"
+          :q="q"
+          :speciality-name="speciality?.name ?? ''"
+          :error="!!error"
+          :loading="pending"
+          :sort="sort"
+          :only-bookable="onlyBookable"
+          :geo="geo"
+          :geo-error="geoError"
+          :radius="radius"
+          @update:sort="setSort"
+          @update:only-bookable="setOnlyBookable"
+          @update:radius="radius = $event"
+          @locate="locate"
+          @unlocate="unlocate"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
 <script setup>
-const PAGE_SIZE = 12
+const PAGE_SIZE = 10
 const SORTS = { pertinence: undefined, disponibilite: 'nextAvailability', prix: 'price', distance: 'distance' }
 
 const route = useRoute()
@@ -40,6 +49,12 @@ const q = computed(() => String(route.query.q ?? '').trim().slice(0, 100))
 const { findBySlug } = await useSpecialities()
 const speciality = computed(() => findBySlug(String(route.query.specialite ?? '')))
 const onlyBookable = computed(() => route.query.reservable === '1')
+// Deux écrans : la page « Recherche » (sans critère) et la page « Résultats » (dès qu'un critère est choisi)
+const RESULT_KEYS = ['q', 'specialite', 'tri', 'reservable', 'page', 'tous']
+const isResults = computed(() => Object.keys(route.query).some(k => RESULT_KEYS.includes(k)))
+const page = computed(() => Math.max(1, Math.floor(Number(route.query.page)) || 1))
+// Remet à zéro la barre de recherche quand on arrive d'un autre critère (lien, retour arrière)
+const searchKey = computed(() => `${route.query.q ?? ''}|${route.query.specialite ?? ''}`)
 
 // Position (facultative) : gardée en mémoire seulement, jamais dans l'adresse de la page.
 const geo = ref(null)
@@ -66,32 +81,26 @@ async function fetchPage(offset) {
   return { items: Array.isArray(res._data) ? res._data : [], total: Number(res.headers.get('x-total-count')) || 0 }
 }
 
-const { data: first, error, pending } = await useAsyncData('praticiens-search', () => fetchPage(0), { watch: [apiQuery] })
-const more = ref([])
-const loadingMore = ref(false)
-watch(first, () => { more.value = [] })
+const { data: first, error, pending } = await useAsyncData(
+  'praticiens-search',
+  () => (isResults.value ? fetchPage((page.value - 1) * PAGE_SIZE) : Promise.resolve({ items: [], total: 0 })),
+  { watch: [apiQuery, isResults, page] },
+)
 
-const items = computed(() => [...(first.value?.items ?? []), ...more.value])
+const items = computed(() => first.value?.items ?? [])
 const total = computed(() => first.value?.total ?? 0)
-
-async function loadMore() {
-  if (loadingMore.value || items.value.length >= total.value) return
-  loadingMore.value = true
-  try {
-    const page = await fetchPage(items.value.length)
-    more.value = [...more.value, ...page.items]
-  } finally {
-    loadingMore.value = false
-  }
-}
 
 function setQuery(patch) {
   const next = { ...route.query, ...patch }
   for (const key of Object.keys(next)) if (next[key] === undefined || next[key] === '') delete next[key]
   router.replace({ path: route.path, query: next, hash: '#resultats' })
 }
-const setSort = (value) => setQuery({ tri: value === 'pertinence' ? undefined : value })
-const setOnlyBookable = (value) => setQuery({ reservable: value ? '1' : undefined })
+// La position ou le rayon changent : retour à la première page
+watch([geo, radius], () => { if (page.value > 1) setQuery({ page: undefined }) })
+
+// Changer le tri ou un filtre ramène à la première page
+const setSort = (value) => setQuery({ tri: value === 'pertinence' ? undefined : value, page: undefined })
+const setOnlyBookable = (value) => setQuery({ reservable: value ? '1' : undefined, page: undefined })
 
 function locate() {
   geoError.value = ''
@@ -100,6 +109,8 @@ function locate() {
     (pos) => {
       // Position arrondie (environ 1 km) : suffisante pour trier, sans précision inutile.
       geo.value = { lat: Math.round(pos.coords.latitude * 100) / 100, lng: Math.round(pos.coords.longitude * 100) / 100 }
+      // Depuis la page « Recherche », la position mène aux résultats autour de soi
+      if (!isResults.value) router.push({ path: route.path, query: { tous: '1' }, hash: '#resultats' })
     },
     (err) => { geoError.value = err.code === 1 ? 'Position refusée : autorisez la localisation dans votre navigateur pour trier par distance.' : 'Impossible de déterminer votre position.' },
     { timeout: 10000, maximumAge: 300000 },
@@ -114,7 +125,7 @@ const title = 'Trouver un praticien — Léya'
 const description = 'Trouvez facilement des praticiens en médecines alternatives près de chez vous. Prenez rendez-vous en ligne.'
 
 // Les variantes filtrées (recherche, tri, spécialité) ne sont pas indexées : la page de base fait foi.
-const isFiltered = computed(() => Object.keys(route.query).some(k => ['q', 'specialite', 'tri', 'reservable'].includes(k)))
+const isFiltered = isResults
 
 useSeoMeta({
   robots: () => (isFiltered.value ? 'noindex, follow' : 'index, follow'),
@@ -133,3 +144,9 @@ useSeoMeta({
 
 useWebPageSchema({ name: 'Trouver un praticien', description, breadcrumbs: [{ name: 'Trouver un praticien', path: '/trouver-un-praticien' }] })
 </script>
+
+<style scoped>
+/* Illustration de fond placée comme dans la maquette (1728 px) */
+.page-search { --u: calc(min(100vw, 1728px) / 1728); }
+.page-mortar { left: calc(50% + var(--u) * 376); top: calc(var(--u) * 1200); width: calc(var(--u) * 650); }
+</style>

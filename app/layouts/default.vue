@@ -31,6 +31,9 @@
     <main v-else class="flex-1 flex flex-col w-full min-h-0">
       <slot />
     </main>
+
+    <!-- Pied de page : pleine largeur, une seule fois (absent du chat, de la connexion et du compte praticien) -->
+    <TheFooter v-if="showFooter" />
   </div>
 </template>
 
@@ -43,4 +46,6 @@ const route = useRoute()
 const isAuthPage = computed(() => ['/register', '/login'].includes(route.path))
 const isChatPage = computed(() => route.path === '/chatbot')
 const isLandingPage = computed(() => route.path === '/')
+const { isPro } = useSession()
+const showFooter = computed(() => !isAuthPage.value && !isChatPage.value && !(isPro.value && route.path === '/mon-compte'))
 </script>

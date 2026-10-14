@@ -10,7 +10,6 @@
 
       <ProSignupWizard />
 
-      <TheFooter />
     </div>
   </div>
 </template>

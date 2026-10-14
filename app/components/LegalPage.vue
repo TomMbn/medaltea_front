@@ -8,7 +8,6 @@
           <slot />
         </div>
       </article>
-      <TheFooter />
     </div>
   </div>
 </template>

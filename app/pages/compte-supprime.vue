@@ -6,7 +6,6 @@
         Vos informations ont été effacées et vos rendez-vous à venir annulés. Merci d'avoir utilisé Léya.
       </p>
       <NuxtLink to="/" class="inline-block bg-[#012828] text-white text-sm font-bold px-6 py-3 rounded-[12px] hover:bg-[#156F71] transition-colors">Retour à l'accueil</NuxtLink>
-      <TheFooter class="mt-16" />
     </div>
   </div>
 </template>

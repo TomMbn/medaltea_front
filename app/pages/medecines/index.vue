@@ -102,10 +102,6 @@
       </div>
     </div>
 
-    <!-- Footer -->
-    <div class="w-11/12 max-w-[1200px] mx-auto">
-      <TheFooter />
-    </div>
 
   </div>
 </template>

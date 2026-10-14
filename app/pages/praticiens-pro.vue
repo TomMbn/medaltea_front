@@ -85,7 +85,6 @@
     </section>
 
     <div class="w-11/12 max-w-[1100px] mx-auto pb-8">
-      <TheFooter />
     </div>
   </div>
 </template>

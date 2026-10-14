@@ -25,7 +25,6 @@
     <div class="bg-[#e0ecf2]">
       <div class="w-11/12 max-w-[1440px] mx-auto">
         <LandingFAQ class="pb-16" />
-        <TheFooter />
       </div>
     </div>
   </div>

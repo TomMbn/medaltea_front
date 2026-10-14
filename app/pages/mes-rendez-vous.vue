@@ -60,7 +60,6 @@
         </section>
       </template>
 
-      <TheFooter />
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="landing-page overflow-x-hidden min-h-screen bg-gradient-to-br from-bleu-50 to-[#e0ecf2]">
+  <div class="landing-page overflow-x-hidden min-h-screen bg-gradient-to-b from-bleu-50 to-[#e0ecf2]">
     <LandingHero />
     <LandingConcept />
     <LandingBenefits />

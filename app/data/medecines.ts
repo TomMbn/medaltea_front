@@ -105,7 +105,7 @@ export const medecines: Medecine[] = [
     ctaLabel: 'un/e sophrologue',
     icon: '/icons/sophrologie.png',
     shortDescription: 'Méthode de relaxation, de respiration et de visualisation',
-    heroImage: '/images/hero-section.jpeg',
+    heroImage: '/images/medecines/bandeau-4.webp',
     heroTagline: 'Apprenez à mieux vous détendre',
     duration: '1 heure',
     definitionImage: '/images/AdobeStock_519549071.jpeg',

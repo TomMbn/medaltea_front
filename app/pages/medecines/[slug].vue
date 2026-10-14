@@ -1,217 +1,198 @@
 <template>
-  <div class="medicine-page min-h-screen bg-[#e0ecf2] overflow-x-hidden">
+  <div class="medicine-page min-h-screen overflow-x-hidden bg-gradient-to-b from-bleu-50 to-[#e0ecf2]">
 
     <!-- Hero -->
-    <div class="relative w-full overflow-hidden h-[420px] md:h-[520px] rounded-b-[30px]">
-      <NuxtImg
-        :src="medicine.heroImage"
-        :alt="medicine.name"
-        class="w-full h-full object-cover"
-        width="1440" height="520" format="webp" quality="85" sizes="xs:640px md:820px lg:1024px xl:1440px 3xl:1920px"
-        fetchpriority="high"
-      />
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-      <div class="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-6">
-        <div class="bg-white/20 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center mb-8">
-          <!-- Pictogramme passé en blanc pour rester lisible sur la photo (le filtre est sur le conteneur : l'animation globale des images occupe déjà celui de l'image) -->
-          <span class="inline-flex" style="filter: brightness(0) invert(1);">
-            <img :src="medicine.icon" alt="" width="32" height="32" class="w-8 h-8 object-contain" />
+    <section class="relative pt-[120px] lg:pt-[150px] pb-14 lg:pb-24" aria-labelledby="med-title">
+      <img src="/images/medecines/rond-corail.svg" alt="" aria-hidden="true" class="hidden lg:block absolute -left-[15%] top-[270px] w-[37%] max-w-[640px] pointer-events-none select-none" style="animation: none;" />
+      <img src="/images/footer/feuille-2.svg" alt="" aria-hidden="true" class="hidden lg:block absolute left-[51%] top-[40px] w-[8.7%] opacity-[0.7] pointer-events-none select-none" style="animation: none; transform: rotate(-25deg);" />
+
+      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] grid grid-cols-1 lg:grid-cols-[1fr_600px] gap-10 lg:gap-8 items-start">
+        <div>
+          <nav aria-label="Fil d'Ariane" class="inline-flex items-center bg-white rounded-full px-4 py-[9px] text-[16px] font-medium text-vert-900">
+            <NuxtLink to="/medecines" class="hover:underline">Médecines</NuxtLink>
+            <span aria-hidden="true" class="mx-1.5">›</span>
+            <span aria-current="page">{{ medicine.name }}</span>
+          </nav>
+
+          <span class="mt-8 lg:mt-[34px] w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-vert-600 flex items-center justify-center" aria-hidden="true">
+            <span class="inline-flex" style="filter: brightness(0) invert(1);">
+              <img :src="pictogram" alt="" width="48" height="34" class="max-w-[40px] lg:max-w-[48px] max-h-[40px] w-auto h-auto" />
+            </span>
           </span>
+
+          <h1 id="med-title" class="mt-8 lg:mt-[34px] font-unbounded font-normal text-vert-900 text-[30px] sm:text-[40px] lg:text-[clamp(36px,3.3vw,56px)] leading-[1.15] flex flex-col items-start gap-1 lg:gap-2">
+            <span>{{ medicine.heroTagline }}</span>
+            <span class="bg-corail-100 text-corail-700 rounded-full px-5 lg:px-[22px] pt-0.5 pb-2 lg:pb-[10px]">{{ medicine.name.toLowerCase() }}</span>
+          </h1>
+
+          <p class="mt-8 lg:mt-12 text-[18px] lg:text-[24px] leading-snug text-neutre-600 max-w-[640px]">{{ medicine.shortDescription }}.</p>
+
+          <ul v-if="chips.length" class="mt-8 flex flex-wrap gap-2" aria-label="Motifs de consultation fréquents">
+            <li v-for="c in chips" :key="c" class="inline-flex items-center gap-2 bg-white rounded-full pl-3 pr-4 py-[9px] text-[16px] font-medium text-vert-900"><Leaf :size="14" class="text-vert-600" aria-hidden="true" /> {{ c }}</li>
+          </ul>
+
+          <div class="mt-8 lg:mt-10 flex flex-wrap gap-3">
+            <button type="button" class="inline-flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:shadow-douce transition-shadow" @click="scrollToPractitioners">
+              Trouver {{ medicine.ctaLabel }}
+              <span class="w-10 h-10 rounded-full bg-corail-500 flex items-center justify-center"><ArrowUpRight :size="20" aria-hidden="true" /></span>
+            </button>
+            <NuxtLink to="/chatbot" class="inline-flex items-center gap-[14px] min-h-[48px] border-[1.5px] border-vert-900 text-vert-900 font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:bg-white/60 transition-colors">
+              Poser une question à Léya
+              <span class="w-10 h-10 rounded-full border-[1.5px] border-vert-900 flex items-center justify-center"><ArrowUpRight :size="20" aria-hidden="true" /></span>
+            </NuxtLink>
+          </div>
         </div>
-        <h1 class="font-unbounded font-bold text-4xl md:text-5xl mb-10">{{ medicine.name }}</h1>
-        <button
-          class="bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-3 hover:bg-white/90 transition-colors whitespace-nowrap"
-          @click="scrollToPractitioners"
-        >
-          Trouvez {{ medicine.ctaLabel }}
-        </button>
+
+        <div class="relative mx-auto lg:mx-0 w-full max-w-[420px] lg:max-w-none">
+          <div class="photo-mask aspect-[600/680] w-full">
+            <NuxtImg :src="medicine.heroImage" :alt="`${medicine.name} : séance avec un praticien`" class="w-full h-full object-cover" width="1200" height="1360" format="webp" quality="80" sizes="xs:90vw lg:600px" fetchpriority="high" />
+          </div>
+          <div v-if="practitionerCount > 0" class="absolute left-0 lg:-left-12 bottom-6 lg:bottom-8 -rotate-[5deg] bg-white rounded-[24px] shadow-douce px-6 lg:px-7 py-5 lg:py-6 flex flex-col gap-1 max-w-[300px]">
+            <span class="font-unbounded font-medium text-[44px] lg:text-[56px] leading-none text-vert-600">{{ practitionerCount }}</span>
+            <span class="text-[16px] lg:text-[18px] text-neutre-600">praticiens référencés en {{ medicine.name.toLowerCase() }}</span>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
     <!-- Définition -->
-    <div class="w-11/12 max-w-[1200px] mx-auto py-20">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div class="rounded-[20px] overflow-hidden h-[260px] md:h-auto">
-          <NuxtImg
-            :src="medicine.definitionImage"
-            :alt="`${medicine.name} — définition`"
-            class="w-full h-full object-cover"
-            width="600" height="380" format="webp" quality="80" sizes="xs:400px md:680px lg:600px xl:660px" loading="lazy"
-          />
+    <section class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pb-16 lg:pb-24" aria-labelledby="med-def">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div class="rounded-[28px] overflow-hidden aspect-[4/3] lg:aspect-[3/2]">
+          <NuxtImg :src="medicine.definitionImage" :alt="`${medicine.name} : définition`" class="w-full h-full object-cover" width="1200" height="800" format="webp" quality="75" sizes="xs:100vw lg:660px" loading="lazy" />
         </div>
         <div>
-          <h2 class="font-unbounded font-bold text-2xl md:text-3xl text-[#012828] mb-6">
-            Qu'est-ce que {{ medicine.nameWithArticle }} ?
-          </h2>
-          <p
-            v-for="(para, i) in medicine.definitionText"
-            :key="i"
-            class="text-[#012828]/70 leading-relaxed mb-4 text-[16px]"
-          >
-            {{ para }}
-          </p>
-          <h3 class="font-unbounded font-bold text-[17px] text-[#012828] mt-8 mb-4">
-            Motifs de consultation fréquents
-          </h3>
-          <div class="flex flex-wrap gap-3">
-            <span
-              v-for="condition in medicine.conditions.slice(0, 6)"
-              :key="condition"
-              class="bg-[#90BAD14F] border border-[#90BAD1] text-[#012828] text-sm px-5 py-2.5 rounded-[50px] font-sans"
-            >
-              {{ condition }}
-            </span>
-          </div>
+          <p class="text-[14px] font-medium uppercase tracking-[0.08em] text-vert-600 mb-4">En bref</p>
+          <h2 id="med-def" class="font-unbounded font-normal text-[26px] sm:text-[32px] lg:text-[40px] leading-[1.2] text-vert-900 mb-6">Qu’est-ce que {{ medicine.nameWithArticle }} ?</h2>
+          <p v-for="(para, i) in medicine.definitionText" :key="i" class="text-[17px] lg:text-[20px] leading-snug text-neutre-600 mb-4">{{ para }}</p>
+          <template v-if="medicine.conditions?.length">
+            <h3 class="font-unbounded font-normal text-[18px] lg:text-[20px] text-vert-900 mt-8 mb-4">Motifs de consultation fréquents</h3>
+            <ul class="flex flex-wrap gap-2">
+              <li v-for="condition in medicine.conditions.slice(0, 6)" :key="condition" class="bg-white rounded-full px-4 py-[9px] text-[16px] font-medium text-vert-900">{{ condition }}</li>
+            </ul>
+          </template>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- Mosaïque -->
-    <div class="w-11/12 max-w-[1440px] mx-auto pb-20">
-      <div class="flex flex-col lg:flex-row gap-4">
-
-        <!-- Colonne gauche : image + stats côte-à-côte sur mobile, empilés sur desktop -->
-        <div class="flex flex-row lg:flex-col gap-4 lg:flex-1">
-          <div class="flex-1 lg:flex-none relative rounded-[20px] overflow-hidden h-[180px] lg:h-[250px]">
-            <NuxtImg
-              :src="medicine.mosaicImage1"
-              :alt="medicine.name"
-              class="w-full h-full object-cover"
-              width="460" height="280" format="webp" quality="80" sizes="xs:400px md:450px lg:440px" loading="lazy"
-            />
+    <section class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pb-16 lg:pb-24" aria-label="En images">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-[26px] lg:items-stretch">
+        <div class="flex flex-col gap-4 lg:gap-7">
+          <div class="relative rounded-[35px] overflow-hidden h-[220px] lg:h-[212px]">
+            <NuxtImg :src="medicine.mosaicImage1" :alt="medicine.name" class="absolute inset-0 w-full h-full object-cover" width="850" height="424" format="webp" quality="75" sizes="xs:100vw lg:425px" loading="lazy" />
           </div>
-          <div class="flex-1 lg:flex-none bg-[#90BAD1] rounded-[20px] h-[180px] lg:h-[160px] flex flex-col justify-between p-5 lg:p-6">
-            <div class="flex items-center gap-2 text-[#012828]/60">
-              <Clock :size="15" />
-              <span class="text-sm font-medium">Temps moyen d'une séance</span>
+          <div class="bg-bleu-300 rounded-leya-m px-7 py-6 flex flex-col justify-between gap-8 lg:flex-1">
+            <p class="flex items-center gap-3 text-[18px] lg:text-[20px] text-vert-900"><Clock :size="20" aria-hidden="true" /> Temps moyen d’une séance</p>
+            <p class="font-unbounded font-normal text-[18px] text-vert-900">{{ medicine.duration }}</p>
+          </div>
+        </div>
+
+        <div class="relative rounded-[35px] overflow-hidden min-h-[300px] lg:min-h-[391px]">
+          <NuxtImg :src="medicine.mosaicImage2" :alt="medicine.mosaicImage2Tagline" class="absolute inset-0 w-full h-full object-cover" width="850" height="800" format="webp" quality="75" sizes="xs:100vw lg:425px" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" aria-hidden="true"></div>
+          <p class="absolute left-5 bottom-7 right-16 font-unbounded font-normal text-white text-[26px] lg:text-[34px] leading-tight">{{ medicine.mosaicImage2Tagline }}</p>
+        </div>
+
+        <div class="flex flex-col gap-4 lg:gap-5">
+          <div v-if="practitionerCount > 0" class="bg-vert-600 rounded-leya-m px-4 pt-7 pb-8 flex items-start justify-between gap-3 text-white">
+            <div class="font-unbounded font-normal">
+              <p class="text-[40px] lg:text-[47px] leading-none">{{ practitionerCount }}</p>
+              <p class="text-[20px] lg:text-[24px] mt-2 leading-tight">praticiens référencés</p>
             </div>
-            <div class="font-unbounded font-semibold text-2xl text-[#012828]">{{ medicine.duration }}</div>
+            <NuxtLink :to="{ path: '/trouver-un-praticien', query: { specialite: medicine.slug }, hash: '#resultats' }" class="shrink-0 bg-white text-black text-[14px] rounded-leya-m px-4 py-2 hover:bg-white/90 transition-colors">Voir la liste</NuxtLink>
+          </div>
+          <div class="relative rounded-[35px] overflow-hidden min-h-[240px] lg:flex-1">
+            <NuxtImg :src="medicine.mosaicImage3" :alt="medicine.name" class="absolute inset-0 w-full h-full object-cover" width="850" height="440" format="webp" quality="75" sizes="xs:100vw lg:425px" loading="lazy" />
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Colonne centrale -->
-        <div class="relative rounded-[20px] overflow-hidden h-[260px] lg:h-auto lg:flex-1">
-          <NuxtImg
-            :src="medicine.mosaicImage2"
-            :alt="medicine.mosaicImage2Tagline"
-            class="w-full h-full object-cover"
-            width="460" height="476" format="webp" quality="80" sizes="xs:280px md:860px lg:640px" loading="lazy"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-          <span class="absolute bottom-5 left-5 text-white font-unbounded font-bold text-xl">
-            {{ medicine.mosaicImage2Tagline }}
-          </span>
-        </div>
+    <!-- Ce que la pratique peut apporter -->
+    <section class="relative bg-vert-600 overflow-hidden pt-14 lg:pt-[72px] pb-16 lg:pb-[100px]" aria-labelledby="med-benefits">
+      <img src="/images/footer/feuille-1.svg" alt="" aria-hidden="true" class="hidden lg:block absolute left-[1%] top-[40px] w-[12%] pointer-events-none" style="animation: none; transform: rotate(10deg);" />
+      <img src="/images/footer/feuille-5.svg" alt="" aria-hidden="true" class="hidden lg:block absolute right-[2%] top-[-10px] w-[10%] pointer-events-none" style="animation: none; transform: rotate(-40deg);" />
+      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px]">
+        <h2 id="med-benefits" class="font-unbounded font-normal text-[26px] sm:text-[32px] lg:text-[40px] leading-[1.2] text-white max-w-[640px]">Ce que {{ medicine.nameWithArticle }} peut apporter</h2>
+        <p class="mt-4 text-[17px] lg:text-[20px] text-bleu-100 max-w-[640px]">Une approche complémentaire, qui ne remplace pas un avis ou un traitement médical.</p>
+        <ul class="mt-10 lg:mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
+          <li v-for="benefit in medicine.benefits" :key="benefit" class="bg-white rounded-[24px] shadow-douce p-6 lg:p-7 flex flex-col gap-5">
+            <span class="w-11 h-11 rounded-full bg-corail-100 text-corail-700 flex items-center justify-center"><Check :size="20" aria-hidden="true" /></span>
+            <p class="text-[17px] lg:text-[18px] leading-snug text-vert-900">{{ benefit }}</p>
+          </li>
+        </ul>
+        <button type="button" class="mt-10 inline-flex items-center gap-[14px] min-h-[48px] bg-white text-vert-900 font-semibold text-[18px] rounded-full pl-6 pr-1 py-1" @click="scrollToPractitioners">
+          Trouver {{ medicine.ctaLabel }}
+          <span class="w-10 h-10 rounded-full bg-vert-900 flex items-center justify-center text-white"><ArrowUpRight :size="20" aria-hidden="true" /></span>
+        </button>
+      </div>
+    </section>
 
-        <!-- Colonne droite : count + image côte-à-côte sur mobile, empilés sur desktop -->
-        <div class="flex flex-row lg:flex-col gap-4 lg:flex-1">
-          <div class="flex-1 lg:flex-none relative bg-[#156F71] rounded-[20px] h-[180px] lg:h-[160px] flex items-center p-5 lg:p-6 overflow-hidden">
-            <NuxtLink
-              :to="`/trouver-un-praticien?specialite=${medicine.slug}#resultats`"
-              class="absolute top-5 right-5 bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-3 hover:bg-white/90 transition-colors whitespace-nowrap"
-            >
-              Voir la liste →
-            </NuxtLink>
-            <div class="text-white">
-              <div class="font-unbounded font-bold text-5xl lg:text-6xl leading-none">{{ practitionerCount }}</div>
-              <div class="font-unbounded text-base lg:text-lg mt-2 opacity-80">praticien{{ practitionerCount > 1 ? 's' : '' }} en {{ medicine.name.toLowerCase() }}</div>
-            </div>
+    <!-- Séance -->
+    <section class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pt-16 lg:pt-24 pb-16 lg:pb-24" aria-labelledby="med-steps">
+      <p class="text-[14px] font-medium uppercase tracking-[0.08em] text-vert-600 mb-4">La séance</p>
+      <h2 id="med-steps" class="font-unbounded font-normal text-[26px] sm:text-[32px] lg:text-[40px] leading-[1.2] text-vert-900">Comment se passe une séance ?</h2>
+
+      <ol class="mt-10 lg:mt-14 grid grid-cols-1 md:grid-cols-4 gap-x-8 gap-y-10">
+        <li v-for="(step, i) in medicine.steps" :key="step.title" class="relative">
+          <div class="flex items-center">
+            <span class="w-[72px] h-[72px] lg:w-[88px] lg:h-[88px] shrink-0 rounded-full bg-white shadow-douce flex items-center justify-center font-unbounded text-[18px] lg:text-[20px] text-corail-500">{{ String(i + 1).padStart(2, '0') }}</span>
+            <span v-if="i < medicine.steps.length - 1" class="hidden md:block h-[2px] flex-1 bg-corail-500/30" aria-hidden="true"></span>
           </div>
-          <div class="flex-1 lg:flex-none relative rounded-[20px] overflow-hidden h-[180px] lg:h-[250px]">
-            <NuxtImg
-              :src="medicine.mosaicImage3"
-              :alt="medicine.name"
-              class="w-full h-full object-cover"
-              width="460" height="280" format="webp" quality="80" sizes="xs:400px md:450px lg:440px" loading="lazy"
-            />
-          </div>
-        </div>
+          <h3 class="mt-6 font-unbounded font-normal text-[18px] lg:text-[20px] text-vert-900">{{ step.title }}</h3>
+          <p class="mt-3 text-[16px] lg:text-[18px] leading-snug text-neutre-600 max-w-[290px]">{{ step.description }}</p>
+        </li>
+      </ol>
 
+      <div class="mt-14 lg:mt-20 bg-vert-600 rounded-[28px] p-7 lg:p-10 text-white">
+        <h3 class="font-unbounded font-normal text-[20px] lg:text-[22px]">Avant de commencer</h3>
+        <ul class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 text-[16px] lg:text-[18px] leading-snug">
+          <li class="flex items-start gap-3"><Info :size="20" class="shrink-0 mt-0.5" aria-hidden="true" /> Cette pratique ne remplace pas un avis ni un traitement prescrit par votre médecin.</li>
+          <li class="flex items-start gap-3"><Info :size="20" class="shrink-0 mt-0.5" aria-hidden="true" /> En cas de symptôme persistant ou inquiétant, ou de pathologie suivie, parlez-en d’abord à un professionnel de santé.</li>
+        </ul>
       </div>
-    </div>
+    </section>
 
-    <!-- Comment ça fonctionne -->
-    <div class="w-11/12 max-w-[1200px] mx-auto pb-20">
-      <h2 class="font-unbounded font-bold text-2xl md:text-3xl text-[#012828] text-center mb-12">
-        Comment ça fonctionne ?
-      </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <div
-          v-for="(step, i) in medicine.steps"
-          :key="i"
-          class="bg-[#e0ecf2] rounded-[20px] p-8 border border-[#EC7F7A]"
-        >
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-9 h-9 rounded-full bg-[#EC7F7A] text-white font-unbounded font-bold flex items-center justify-center text-lg shrink-0">
-              {{ i + 1 }}
-            </span>
-            <h3 class="font-unbounded font-bold text-2xl text-black">{{ step.title }}</h3>
-          </div>
-          <p class="text-black/80 leading-relaxed text-base font-light font-sans">{{ step.description }}</p>
+    <!-- Praticiens + question à Léya -->
+    <section ref="practitionersRef" class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pb-24 lg:pb-32 scroll-mt-28" aria-labelledby="med-pract">
+      <img :src="pictogram" alt="" aria-hidden="true" class="hidden lg:block absolute -left-[6%] -top-[40px] w-[28%] max-w-[420px] opacity-[0.06] pointer-events-none select-none" style="animation: none;" />
+      <div class="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10 lg:mb-12">
+        <div>
+          <p class="text-[14px] font-medium uppercase tracking-[0.08em] text-vert-600 mb-4">Praticiens</p>
+          <h2 id="med-pract" class="font-unbounded font-normal text-[26px] sm:text-[32px] lg:text-[40px] leading-[1.2] text-vert-900">Des praticiens en {{ medicine.name.toLowerCase() }}</h2>
         </div>
-      </div>
-    </div>
-
-    <!-- Principaux bienfaits -->
-    <div class="w-full pb-20">
-      <div class="relative overflow-hidden py-16" style="background: linear-gradient(90deg, #156F71 46.59%, rgba(0,0,0,0) 100%)">
-        <div class="absolute inset-0 pointer-events-none">
-          <NuxtImg
-            :src="medicine.heroImage"
-            :alt="medicine.name"
-            class="w-full h-full object-cover"
-            width="1440" height="420" format="webp" quality="75" sizes="xs:640px md:820px lg:1024px xl:1440px 3xl:1920px" loading="lazy"
-          />
-        </div>
-        <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(90deg, #156F71 46.59%, rgba(0,0,0,0) 100%)" />
-        <div class="w-11/12 max-w-[1200px] mx-auto relative z-10">
-        <div class="max-w-lg">
-          <h2 class="font-unbounded font-bold text-2xl md:text-3xl text-white mb-8">
-            Ce que cette pratique peut apporter
-          </h2>
-          <ul class="space-y-3 mb-10">
-            <li
-              v-for="benefit in medicine.benefits"
-              :key="benefit"
-              class="flex items-start gap-3 text-white/85 text-[15px]"
-            >
-              <Check :size="17" class="text-white mt-0.5 shrink-0" />
-              <span>{{ benefit }}</span>
-            </li>
-          </ul>
-          <p class="text-white/80 text-[13px] leading-relaxed mb-6">
-            Cette pratique ne remplace pas un avis ou un traitement médical. En cas de symptôme persistant ou inquiétant, consultez un professionnel de santé.
-          </p>
-          <button
-            class="bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-3 hover:bg-white/90 transition-colors whitespace-nowrap"
-            @click="scrollToPractitioners"
-          >
-            Trouvez {{ medicine.ctaLabel }}
-          </button>
-        </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Praticiens -->
-    <div ref="practitionersRef" class="w-11/12 max-w-[1200px] mx-auto pb-20">
-      <h2 class="font-unbounded font-bold text-2xl md:text-3xl text-[#012828] text-center mb-2">
-        Des praticiens en {{ medicine.name.toLowerCase() }}
-      </h2>
-      <div class="flex justify-center mb-12">
-        <div class="h-1 w-16 bg-[#EC7F7A] rounded-full" />
+        <NuxtLink :to="{ path: '/trouver-un-praticien', query: { specialite: medicine.slug }, hash: '#resultats' }" class="self-start lg:self-auto inline-flex items-center gap-[14px] min-h-[48px] border-[1.5px] border-vert-900 text-vert-900 font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:bg-white/60 transition-colors whitespace-nowrap">
+          Voir tous les praticiens
+          <span class="w-10 h-10 rounded-full border-[1.5px] border-vert-900/30 flex items-center justify-center"><ArrowUpRight :size="20" aria-hidden="true" /></span>
+        </NuxtLink>
       </div>
 
-      <MedicinePraticiens :slug="medicine.slug" :name="medicine.name" />
-    </div>
+      <div class="relative">
+        <MedicinePraticiens :slug="medicine.slug" :name="medicine.name" :show-link="false" />
+      </div>
 
-
+      <!-- Question à Léya -->
+      <div class="relative mt-28 lg:mt-[130px] mx-auto max-w-[640px]">
+        <div class="absolute z-0 w-[150px] sm:w-[223px] right-[4%] sm:right-[8%] -top-[130px] sm:-top-[165px] -scale-x-100 pointer-events-none" aria-hidden="true">
+          <img src="/images/landing/mascotte-panda.webp" alt="" width="223" height="193" class="w-full h-auto" />
+        </div>
+        <div class="relative z-10 bg-vert-600 rounded-[32px] p-8 lg:p-10 text-white">
+          <h2 class="font-unbounded font-normal text-[22px] lg:text-[26px] leading-tight">Une question sur {{ medicine.nameWithArticle }} ?</h2>
+          <p class="mt-4 text-[17px] lg:text-[18px] leading-snug text-bleu-100">Léya vous répond en quelques secondes.</p>
+          <form class="mt-8 bg-white rounded-full pl-5 pr-1.5 py-1.5 flex items-center gap-2.5 focus-ring-within" @submit.prevent="ask">
+            <input v-model="question" type="text" :aria-label="`Votre question sur ${medicine.nameWithArticle}`" :placeholder="`Posez votre question sur ${medicine.nameWithArticle}…`" class="focus-in-parent flex-1 min-w-0 bg-transparent text-[16px] sm:text-[18px] text-vert-900 placeholder-neutre-600 focus:outline-none" />
+            <button type="submit" aria-label="Envoyer la question à Léya" class="w-11 h-11 shrink-0 rounded-full bg-corail-500 text-white flex items-center justify-center hover:bg-[#f1aeab] transition-colors"><ArrowRight :size="18" aria-hidden="true" /></button>
+          </form>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { Clock, Check } from 'lucide-vue-next'
+import { ref, computed } from 'vue'
+import { Clock, Check, Info, Leaf, ArrowUpRight, ArrowRight } from 'lucide-vue-next'
 import { getMedecineBySlug } from '~/data/medecines'
 
 const route = useRoute()
@@ -265,9 +246,35 @@ useHead({
 const { countFor } = await useSpecialityCounts()
 const practitionerCount = countFor(medicine.slug)
 
-const practitionersRef = ref(null)
+// Pictogrammes de la maquette ; l'acupuncture (absente de la maquette) garde son pictogramme actuel.
+const pictograms = {
+  osteopathie: '/images/landing/med-osteopathie.svg',
+  sophrologie: '/images/landing/med-sophrologie.svg',
+  naturopathie: '/images/landing/med-naturopathie.svg',
+  hypnotherapie: '/images/landing/med-hypnotherapie.svg',
+  massage: '/images/landing/med-massage.svg',
+}
+const pictogram = pictograms[medicine.slug] ?? medicine.icon
 
+const chips = computed(() => (medicine.conditions ?? []).slice(0, 4))
+
+const practitionersRef = ref(null)
 function scrollToPractitioners() {
   practitionersRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
+
+const question = ref('')
+function ask() {
+  const text = question.value.trim()
+  if (!text) return
+  navigateTo({ path: '/chatbot', query: { q: text } })
+}
 </script>
+
+<style scoped>
+/* Photo à la forme découpée de la maquette (le canal alpha de l'image sert de masque) */
+.photo-mask {
+  -webkit-mask: url('/images/medecines/masque-fiche.webp') center / 100% 100% no-repeat;
+  mask: url('/images/medecines/masque-fiche.webp') center / 100% 100% no-repeat;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-[1080px] mx-auto">
+  <div class="max-w-[1328px] mx-auto">
     <ul v-if="praticiens.length" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <PraticienCard v-for="p in praticiens" :key="p.id" :praticien="p" />
     </ul>
@@ -7,7 +7,7 @@
       Les premiers praticiens en {{ name.toLowerCase() }} arrivent bientôt.
     </p>
 
-    <div class="flex justify-center mt-8">
+    <div v-if="showLink" class="flex justify-center mt-8">
       <NuxtLink
         :to="{ path: '/trouver-un-praticien', query: speciality ? { specialite: slug } : {}, hash: '#resultats' }"
         class="inline-flex items-center gap-2 bg-[#012828] text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-[#156F71] transition-colors"
@@ -24,6 +24,7 @@ import { computed } from 'vue'
 const props = defineProps({
   slug: { type: String, required: true },
   name: { type: String, required: true },
+  showLink: { type: Boolean, default: true },
 })
 
 const { findBySlug } = await useSpecialities()

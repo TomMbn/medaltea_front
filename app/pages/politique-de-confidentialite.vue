@@ -105,10 +105,10 @@
     <h2>Destinataires et sous-traitants</h2>
     <ul>
       <li>Google (Gemini) : génération des réponses de l'assistant virtuel.</li>
-      <li>{{ legal.hostName }} : hébergement du site.</li>
+      <li>{{ legal.hostName }} : hébergement du site (partie visible par les internautes).</li>
       <li>Base Adresse Nationale (data.gouv.fr) : saisie assistée de l'adresse du cabinet à l'inscription des praticiens, via notre serveur (seule l'adresse tapée est transmise).</li>
       <li>Umami (Umami Software, Inc.) : mesure d'audience anonyme, sans cookie.</li>
-      <li>Serveur applicatif de l'éditeur : gestion des comptes et de l'authentification.</li>
+      <li>{{ legal.backHostName }} (France) : hébergement de l'API et de la base de données, où sont stockés les comptes, les rendez-vous et les fiches.</li>
     </ul>
     <p>
       Vos données ne sont pas vendues. Si un sous-traitant est situé hors de l'Union européenne, le transfert est

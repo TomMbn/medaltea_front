@@ -13,10 +13,13 @@
     <h2>Directeur de la publication</h2>
     <p>{{ legal.publicationDirector }}</p>
 
-    <h2>Hébergeur</h2>
+    <h2>Hébergeurs</h2>
     <p>
-      Le site est hébergé par <strong>{{ legal.hostName }}</strong>, {{ legal.hostAddress }}
-      (<a :href="legal.hostWebsite" target="_blank" rel="noopener noreferrer">{{ legal.hostWebsite }}</a>).
+      Le site (partie visible par les internautes) est hébergé par <strong>{{ legal.hostName }}</strong>, {{ legal.hostAddress }}.
+    </p>
+    <p>
+      Le back-end (API et base de données) est hébergé par <strong>{{ legal.backHostName }}</strong>,
+      {{ legal.backHostAddress }}.
     </p>
 
     <h2>Propriété intellectuelle</h2>

@@ -10,6 +10,7 @@
         Votre adresse n'est pas localisée : votre fiche fonctionne normalement mais n'apparaît pas dans la recherche « autour de moi ».
         <a href="#cabinet" class="underline font-semibold">Recherchez votre adresse</a> pour la localiser.
       </p>
+      <ProPhotoUpload class="mb-6" :photo-url="fiche.photoUrl || ''" :first-name="form.firstName" :last-name="form.lastName" />
       <form class="grid gap-6" novalidate @submit.prevent="save">
         <!-- Présentation -->
         <section id="presentation" class="card scroll-mt-24" aria-labelledby="f-pres">

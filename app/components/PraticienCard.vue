@@ -1,7 +1,19 @@
 <template>
   <li class="bg-white rounded-2xl p-4 shadow-sm flex flex-col gap-4 min-w-0">
     <div class="flex items-center gap-3">
+      <img
+        v-if="thumb && !thumbFailed"
+        :src="thumb"
+        alt=""
+        width="56"
+        height="56"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        class="w-14 h-14 shrink-0 rounded-full object-cover bg-[#e0ecf2]"
+        @error="thumbFailed = true"
+      />
       <div
+        v-else
         class="w-14 h-14 shrink-0 rounded-full flex items-center justify-center text-white font-bold text-base"
         :style="{ backgroundColor: colors[praticien.id % colors.length] }"
         aria-hidden="true"
@@ -51,10 +63,17 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { MapPin, ArrowUpRight, BadgeCheck, Star } from 'lucide-vue-next'
 
 const props = defineProps({ praticien: { type: Object, required: true } })
+
+// Vignette 128 × 128 fournie par l'API (https uniquement) ; initiales si absente ou illisible.
+const thumbFailed = ref(false)
+const thumb = computed(() => {
+  const url = props.praticien.photoThumbUrl || props.praticien.photoUrl
+  try { return new URL(url).protocol === 'https:' ? url : '' } catch { return '' }
+})
 
 const colors = ['#156F71', '#90BAD1', '#EC7F7A', '#012828', '#177070']
 const initials = computed(() => `${(props.praticien.firstName || '?')[0]}${(props.praticien.lastName || '')[0] || ''}`.toUpperCase())

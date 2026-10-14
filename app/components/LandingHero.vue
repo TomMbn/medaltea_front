@@ -1,6 +1,7 @@
 <template>
-  <section class="hero-section" :class="{ 'opacity-0 scale-95 pointer-events-none transition-all duration-500': isSubmitting }">
-    <div class="hero-container">
+  <section class="hero-section relative" :class="{ 'opacity-0 scale-95 pointer-events-none transition-all duration-500': isSubmitting }">
+    <img src="/images/landing/hero-ellipse.svg" alt="" aria-hidden="true" class="hidden lg:block absolute pointer-events-none select-none" style="left: -22%; top: 264px; width: 40.8%; animation: none;" />
+    <div class="hero-container relative">
       
       <!-- Left Content -->
       <div class="hero-content">
@@ -10,20 +11,25 @@
           pour votre <span class="text-rose">bien-être</span>
         </h1>
 
+        <p class="hero-lead">
+          Décrivez votre besoin à Léya, notre assistant IA : il vous oriente vers les médecines douces et les praticiens adaptés.
+        </p>
+
         <!-- Search Bar Area Wrapper -->
         <div class="search-bar-wrapper">
-          <!-- Panda Mascot -->
-          <div class="absolute z-20 pointer-events-none right-4 bottom-full mb-[-4px] lg:mb-[-8px] w-[80px] h-[70px] lg:w-[140px] lg:h-[120px]">
-            <NuxtImg 
-              src="/images/panda-2.webp" 
-              alt="Léya Panda Mascot"
-              class="w-full h-full object-contain"
-              width="140"
-              height="120"
-              format="webp"
-              quality="80"
-              loading="lazy"
-            />
+          <!-- Mascotte -->
+          <div class="absolute z-20 pointer-events-none right-4 lg:right-[11px] bottom-full mb-[-4px] lg:mb-[-27px] w-[80px] lg:w-[223px]" aria-hidden="true">
+            <div class="-scale-x-100">
+              <NuxtImg
+                src="/images/landing/mascotte-panda.webp"
+                alt=""
+                class="w-full h-auto"
+                width="223"
+                height="193"
+                loading="lazy"
+                placeholder
+              />
+            </div>
           </div>
 
           <!-- Main Search/Input Box Wrapper (Gradient Border) -->
@@ -43,33 +49,38 @@
                   aria-label="Votre message à Léya"
                   :rows="1"
                   @keydown.enter.prevent="handleSubmit"
-                  class="focus-in-parent flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans w-full overflow-hidden"
-                  placeholder="Demander à Léya"
+                  class="focus-in-parent flex-1 text-[18px] sm:text-[22px] lg:text-[26px] border-none focus:ring-0 focus:outline-none placeholder-neutre-500 text-vert-900 resize-none py-2 bg-transparent font-sans w-full overflow-hidden min-h-[3.6rem] sm:min-h-0"
+                  placeholder="Je n’arrive plus à m’endormir, qui consulter ?"
                 ></textarea>
                 
                 <button 
                   aria-label="Envoyer le message"
                   @click="handleSubmit"
-                  class="w-11 h-11 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 cursor-pointer"
+                  class="w-11 h-11 rounded-full bg-corail-500 flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 cursor-pointer"
                 >
                   <ArrowUp :size="20" stroke-width="3" />
                 </button>
               </div>
 
               <!-- Suggestion Chips -->
-              <div class="flex flex-wrap gap-2 mt-auto">
+              <div class="flex flex-wrap gap-2 lg:gap-[22px] mt-auto">
                 <button 
                   v-for="chip in suggestions" 
                   :key="chip.text"
                   @click="handleSuggestion(chip.text)"
-                  class="h-[42px] px-4 bg-white shadow-sm border border-[#D9D9D9] hover:bg-gray-50 rounded-[14px] text-[14px] font-medium text-black transition-all flex items-center gap-2 cursor-pointer"
+                  class="min-h-[44px] lg:min-h-[61px] px-4 lg:px-[18px] bg-white border border-neutre-200 hover:bg-bleu-50 rounded-leya-m text-[15px] lg:text-[20px] text-black transition-colors flex items-center cursor-pointer"
                 >
-                  <span class="text-lg">{{ chip.emoji }}</span>
                   <span class="font-sans">{{ chip.text }}</span>
                 </button>
               </div>
             </div>
           </div>
+
+          <!-- Réassurance (seulement ce qui est vrai : l'accès à l'assistant demande un compte, donc pas de « sans inscription ») -->
+          <ul class="reassurance" aria-label="Points de confiance">
+            <li><Check :size="18" aria-hidden="true" /> Gratuit</li>
+            <li><Check :size="18" aria-hidden="true" /> Échanges non enregistrés par Léya</li>
+          </ul>
         </div>
       </div>
 
@@ -111,14 +122,14 @@
 
 <script setup>
 import { ref } from 'vue'
-import { ArrowUp } from 'lucide-vue-next'
+import { ArrowUp, Check } from 'lucide-vue-next'
 
 const userInput = ref('')
 const isSubmitting = ref(false)
 const suggestions = [
-  { text: 'Soulager mon stress', emoji: '🌿' },
-  { text: 'Mieux dormir', emoji: '😴' },
-  { text: 'Comprendre une douleur', emoji: '🤕' }
+  { text: 'Soulager mon stress' },
+  { text: 'Mieux dormir' },
+  { text: 'Comprendre une douleur' },
 ]
 
 const handleSubmit = () => {
@@ -150,14 +161,13 @@ const handleSuggestion = (text) => {
 .hero-section {
   padding-top: 124px;
   padding-bottom: 80px;
-  background-color: #e0ecf2;
   display: flex;
   align-items: center;
 }
 
 .hero-container {
-  width: 91.666%;
-  max-width: 1440px;
+  width: calc(100% - 2rem);
+  max-width: 1328px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -185,8 +195,30 @@ const handleSuggestion = (text) => {
 }
 
 .text-rose {
-  color: #EC7F7A;
+  color: var(--corail-500);
 }
+
+.hero-lead {
+  font-size: 18px;
+  line-height: 1.3;
+  color: #000;
+  max-width: 658px;
+  margin-top: -8px;
+}
+@media (min-width: 1024px) { .hero-lead { font-size: 20px; margin-top: -16px; } }
+@media (min-width: 1280px) { .hero-lead { font-size: 24px; } }
+
+.reassurance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-top: 20px;
+  padding-left: 10px;
+  color: var(--vert-600);
+  font-weight: 500;
+  font-size: 16px;
+}
+.reassurance li { display: inline-flex; align-items: center; gap: 8px; }
 
 .search-bar-wrapper {
   width: 100%;
@@ -203,7 +235,7 @@ const handleSuggestion = (text) => {
 }
 
 .image-card {
-  border-radius: 40px;
+  border-radius: var(--rayon-m);
   overflow: hidden;
 }
 
@@ -258,7 +290,7 @@ const handleSuggestion = (text) => {
   }
 
   .hero-title {
-    font-size: clamp(36px, 3.6vw, 54px);
+    font-size: clamp(36px, 3.6vw, 56px);
   }
 
   .hero-content {
@@ -285,7 +317,7 @@ const handleSuggestion = (text) => {
 
   /* Fluide jusqu'à 54 px : à 54 px fixes le titre passait sur 5 lignes entre 1280 et 1340 px et repoussait la carte hors de l'écran */
   .hero-title {
-    font-size: clamp(40px, 3.65vw, 54px);
+    font-size: clamp(40px, 3.65vw, 56px);
   }
 
   .hero-content {

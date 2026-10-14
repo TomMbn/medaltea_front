@@ -1,34 +1,12 @@
 <template>
-  <div class="landing-page overflow-x-hidden bg-[#e0ecf2] min-h-screen">
-    <!-- Hero -->
+  <div class="landing-page overflow-x-hidden min-h-screen bg-gradient-to-br from-bleu-50 to-[#e0ecf2]">
     <LandingHero />
-    
-    <!-- 1. The Floating White Sheet (Intro + Steps) -->
-    <div class="relative w-full flex flex-col items-center">
-      <!-- Background Decorator for Intro & Steps -->
-      <div 
-        class="absolute top-[200px] lg:top-[280px] bottom-0 left-1/2 -translate-x-1/2 w-11/12 max-w-[1440px] bg-white rounded-[20px] shadow-sm z-0"
-      ></div>
-
-      <!-- Content over the sheet -->
-      <div class="relative z-10 w-11/12 max-w-[1440px] flex flex-col items-center">
-        <div class="w-full">
-          <LandingIntro />
-          <LandingSteps />
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. Subsequent Sections on Grey Background -->
-    <div class="w-full flex flex-col items-center bg-[#e0ecf2]">
-      <div class="w-11/12 max-w-[1440px]">
-        <LandingBenefits />
-        <LandingPraticien />
-        <LandingMedicines />
-        <LandingFAQ class="pb-16" />
-
-      </div>
-    </div>
+    <LandingConcept />
+    <LandingBenefits />
+    <LandingFind />
+    <LandingMedicines />
+    <LandingChange />
+    <LandingFAQ />
   </div>
 </template>
 

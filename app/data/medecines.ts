@@ -301,3 +301,13 @@ export const medecines: Medecine[] = [
 export function getMedecineBySlug(slug: string): Medecine | undefined {
   return medecines.find(m => m.slug === slug)
 }
+
+/** Pictogrammes de la maquette (vert, pour fond clair) ; à défaut, l'icône historique de la médecine. */
+const PICTOGRAMS: Record<string, string> = {
+  osteopathie: '/images/landing/med-osteopathie.svg',
+  sophrologie: '/images/landing/med-sophrologie.svg',
+  naturopathie: '/images/landing/med-naturopathie.svg',
+  hypnotherapie: '/images/landing/med-hypnotherapie.svg',
+  massage: '/images/landing/med-massage.svg',
+}
+export const medecinePictogram = (m: Medecine): string => PICTOGRAMS[m.slug] ?? m.icon

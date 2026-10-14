@@ -1,58 +1,58 @@
 <template>
-  <div class="text-[#012828]">
-    <p class="text-sm leading-relaxed text-[#012828]/80">
+  <div class="text-vert-900">
+    <p class="text-[16px] leading-snug text-neutre-600">
       Cette fiche a été créée à partir d'informations publiques<template v-if="praticien.sourceLabel"> ({{ praticien.sourceLabel }})</template>.
       Ce praticien n'a pas encore ouvert la réservation en ligne sur Léya.
     </p>
 
     <!-- Fiche déjà liée à ce compte -->
-    <p v-if="isOwner" class="mt-4 text-sm font-semibold text-[#156F71]">C'est votre fiche.</p>
+    <p v-if="isOwner" class="mt-4 text-[16px] font-semibold text-vert-600">C'est votre fiche.</p>
 
     <!-- Revendication (fiche non revendiquée uniquement) -->
     <div v-else-if="!praticien.claimed" class="mt-5">
-      <h3 class="font-unbounded font-bold text-sm mb-2">Vous êtes ce praticien ?</h3>
+      <h3 class="font-unbounded font-normal text-[18px] leading-[normal] mb-2">Vous êtes ce praticien ?</h3>
 
-      <p v-if="done" class="text-sm rounded-xl bg-[#e0ecf2] px-4 py-3" role="status">
+      <p v-if="done" class="text-[16px] rounded-2xl bg-bleu-50 px-4 py-3" role="status">
         Votre demande a bien été envoyée. Nous la vérifions manuellement avant de vous donner accès à cette fiche.
       </p>
 
       <template v-else-if="!isPro">
-        <p class="text-sm text-[#012828]/70 mb-3">
+        <p class="text-[16px] leading-snug text-neutre-600 mb-3">
           Connectez-vous avec votre compte praticien pour demander l'accès à cette fiche et ouvrir vos réservations.
         </p>
         <div class="flex flex-wrap gap-2">
-          <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: route.fullPath } }" rel="nofollow" class="bg-[#012828] text-white text-sm font-bold px-5 py-2.5 rounded-[12px] hover:bg-[#156F71] transition-colors">Revendiquer cette fiche</NuxtLink>
-          <NuxtLink to="/inscription-pro" class="border border-gray-300 text-sm font-semibold px-5 py-2.5 rounded-[12px] hover:border-[#156F71] transition-colors">Créer un compte praticien</NuxtLink>
+          <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: route.fullPath } }" rel="nofollow" class="inline-flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[16px] rounded-full pl-6 pr-1 py-1 hover:bg-vert-600 transition-colors">Revendiquer cette fiche <span class="w-10 h-10 rounded-full bg-corail-500 flex items-center justify-center" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span></NuxtLink>
+          <NuxtLink to="/inscription-pro" class="inline-flex items-center min-h-[48px] border-[1.5px] border-vert-900 text-vert-900 font-semibold text-[16px] rounded-full px-6 py-1 hover:bg-bleu-50 transition-colors">Créer un compte praticien</NuxtLink>
         </div>
       </template>
 
       <form v-else class="grid gap-3" @submit.prevent="submit">
-        <p class="text-sm text-[#012828]/70">Un administrateur vérifie chaque demande. Les identifiants facilitent la vérification.</p>
-        <label class="grid gap-1 text-sm font-semibold" for="claim-message">
+        <p class="text-[16px] leading-snug text-neutre-600">Un administrateur vérifie chaque demande. Les identifiants facilitent la vérification.</p>
+        <label class="grid gap-1 text-[16px] font-medium" for="claim-message">
           Message
           <textarea id="claim-message" v-model="message" rows="3" maxlength="500" class="field font-normal" placeholder="Je suis ce praticien, mon cabinet est situé…"></textarea>
         </label>
-        <label class="grid gap-1 text-sm font-semibold" for="claim-rpps">
+        <label class="grid gap-1 text-[16px] font-medium" for="claim-rpps">
           RPPS (11 chiffres, facultatif)
           <input id="claim-rpps" v-model="rpps" inputmode="numeric" maxlength="11" pattern="\d{11}" class="field font-normal" />
         </label>
-        <label class="grid gap-1 text-sm font-semibold" for="claim-siret">
+        <label class="grid gap-1 text-[16px] font-medium" for="claim-siret">
           SIRET (14 chiffres, facultatif)
           <input id="claim-siret" v-model="siret" inputmode="numeric" maxlength="14" pattern="\d{14}" class="field font-normal" />
         </label>
-        <p v-if="errorMessage" class="text-sm text-red-700" role="alert">{{ errorMessage }}</p>
-        <button type="submit" :disabled="sending" class="bg-[#012828] text-white text-sm font-bold px-5 py-2.5 rounded-[12px] hover:bg-[#156F71] transition-colors disabled:opacity-60">
+        <p v-if="errorMessage" class="text-[16px] text-red-700" role="alert">{{ errorMessage }}</p>
+        <button type="submit" :disabled="sending" class="min-h-[48px] bg-vert-900 text-white font-semibold text-[16px] rounded-full px-6 py-1 hover:bg-vert-600 transition-colors disabled:opacity-60">
           {{ sending ? 'Envoi…' : 'Envoyer ma demande' }}
         </button>
       </form>
     </div>
 
-    <p v-else class="mt-4 text-sm text-[#012828]/70">Cette fiche est gérée par son praticien.</p>
+    <p v-else class="mt-4 text-[16px] text-neutre-600">Cette fiche est gérée par son praticien.</p>
 
     <!-- Retrait -->
-    <p class="mt-5 text-xs text-[#012828]/60 leading-relaxed">
+    <p class="mt-5 text-[14px] text-neutre-600 leading-relaxed">
       Vous souhaitez que cette fiche soit retirée ou corrigée ?
-      <a :href="removalLink" class="underline text-[#156F71]">Écrivez-nous</a>, nous traitons la demande dans les meilleurs délais.
+      <a :href="removalLink" class="underline text-vert-600">Écrivez-nous</a>, nous traitons la demande dans les meilleurs délais.
     </p>
   </div>
 </template>
@@ -103,5 +103,6 @@ async function submit() {
 
 <style scoped>
 .font-unbounded { font-family: 'Unbounded', cursive; }
-.field { width: 100%; border: 1px solid #d1d5db; border-radius: 10px; padding: 0.5rem 0.75rem; font-size: 0.875rem; background: #fff; }
+.field { width: 100%; border: 0; border-radius: 16px; padding: 0.75rem 1rem; font-size: 1rem; background: #eef5f8; }
+.field:focus { outline: 2px solid #156F71; }
 </style>

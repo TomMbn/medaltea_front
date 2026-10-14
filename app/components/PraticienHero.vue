@@ -8,7 +8,7 @@
 
     <!-- Bulles de spécialités : portraits d'illustration, chacune mène à la spécialité -->
     <ul class="hidden xl:block" aria-label="Spécialités">
-      <li v-for="b in bubbles" :key="b.slug" class="absolute z-10" :style="{ left: `calc(50% + var(--u) * ${b.x})`, top: `calc(var(--u) * ${b.y})`, width: `calc(var(--u) * ${b.w})`, height: `calc(var(--u) * ${b.h})` }">
+      <li v-for="(b, i) in bubbles" :key="b.slug" class="absolute z-10" :class="i === 2 ? 'xl:max-2xl:hidden' : ''" :style="{ left: `calc(50% + var(--u) * ${b.x})`, top: `calc(var(--u) * ${b.y})`, width: `calc(var(--u) * ${b.w})`, height: `calc(var(--u) * ${b.h})` }">
         <NuxtLink :to="{ path: '/trouver-un-praticien', query: { specialite: b.slug }, hash: '#resultats' }" class="group block relative w-full h-full" :aria-label="`Voir les praticiens : ${b.label}`">
           <span class="absolute left-0 top-0 w-[63.89%] h-[90.4%] rounded-leya-m overflow-hidden">
             <NuxtImg :src="b.photo" alt="" class="w-full h-full object-cover" :width="b.pw" :height="b.ph" format="webp" quality="80" loading="eager" style="animation: none;" />

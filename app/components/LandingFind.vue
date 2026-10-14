@@ -22,20 +22,20 @@
           <h2 id="find-title" class="font-unbounded font-normal text-[26px] sm:text-[32px] lg:text-[40px] leading-[1.2] text-white">Trouvez un praticien près de chez vous</h2>
           <p class="mt-6 lg:mt-10 text-[17px] lg:text-[18px] font-light leading-snug text-white max-w-[554px]">Consultez des praticiens, triés par spécialité et par localisation.</p>
 
-          <form class="mt-8 bg-white rounded-full pl-5 pr-1.5 py-1.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3.5 focus-ring-within" role="search" @submit.prevent="search">
-            <label class="flex items-center gap-2 flex-1 min-w-0 cursor-text py-2 sm:py-0">
+          <form class="mt-8 bg-white rounded-[28px] sm:rounded-full lg:rounded-[28px] 2xl:rounded-full px-5 py-3 sm:pl-5 sm:pr-1.5 sm:py-1.5 lg:px-5 lg:py-3 2xl:pl-5 2xl:pr-1.5 2xl:py-1.5 flex flex-col sm:flex-row lg:flex-col 2xl:flex-row sm:items-center lg:items-stretch 2xl:items-center gap-2 sm:gap-3.5 focus-ring-within" role="search" @submit.prevent="search">
+            <label class="flex items-center gap-2 flex-1 min-w-0 cursor-text py-2 sm:py-0 lg:py-2 2xl:py-0">
               <MapPin :size="18" class="text-vert-600 shrink-0" aria-hidden="true" />
               <input v-model="place" type="text" aria-label="Ville, code postal ou nom du praticien" placeholder="Localisation" class="focus-in-parent bg-transparent text-[17px] lg:text-[18px] text-vert-900 placeholder-neutre-600 focus:outline-none min-w-0 w-full" />
             </label>
-            <span class="hidden sm:block w-px h-7 bg-bleu-100" aria-hidden="true"></span>
-            <label class="flex items-center gap-2 flex-[1.25] min-w-0 relative py-2 sm:py-0 border-t border-bleu-100 sm:border-0">
+            <span class="hidden sm:block lg:hidden 2xl:block w-px h-7 bg-bleu-100" aria-hidden="true"></span>
+            <label class="flex items-center gap-2 flex-[1.25] min-w-0 relative py-2 sm:py-0 lg:py-2 2xl:py-0 border-t border-bleu-100 sm:border-0 lg:border-t 2xl:border-0">
               <select v-model="speciality" aria-label="Besoin ou spécialité" class="focus-in-parent bg-transparent text-[17px] lg:text-[18px] text-vert-900 focus:outline-none w-full appearance-none cursor-pointer pr-6" :class="speciality ? '' : 'text-neutre-600'">
                 <option value="">Besoin ou spécialité</option>
                 <option v-for="sp in specialities" :key="sp.id" :value="sp.slug">{{ sp.name }}</option>
               </select>
               <ChevronDown :size="18" class="absolute right-0 text-vert-600 pointer-events-none" aria-hidden="true" />
             </label>
-            <button type="submit" class="inline-flex items-center justify-center gap-[14px] min-h-[48px] bg-corail-500 text-vert-900 font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 whitespace-nowrap">
+            <button type="submit" class="inline-flex items-center justify-center gap-[14px] min-h-[48px] bg-corail-500 text-vert-900 font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 whitespace-nowrap w-full sm:w-auto lg:w-full 2xl:w-auto">
               Rechercher
               <span class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-corail-500"><ArrowUpRight :size="20" aria-hidden="true" /></span>
             </button>

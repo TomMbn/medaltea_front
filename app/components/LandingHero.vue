@@ -365,4 +365,11 @@ const handleSuggestion = (text) => {
     margin-top: 40px;
   }
 }
+
+/* 1024 à 1279 px : la mascotte (223 px de haut) ne doit pas recouvrir le paragraphe */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .search-bar-wrapper {
+    margin-top: 190px;
+  }
+}
 </style>

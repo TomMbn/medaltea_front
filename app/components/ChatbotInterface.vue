@@ -35,7 +35,7 @@
 
           <div class="relative w-full mt-12 lg:mt-[46px]">
             <!-- Mascotte, posée sur le bord de la saisie -->
-            <img src="/images/chatbot-mascotte-accueil.webp" alt="" aria-hidden="true" width="148" height="175" class="hidden sm:block absolute right-6 lg:right-[-4px] bottom-[calc(100%-22px)] w-[110px] lg:w-[148px] h-auto pointer-events-none select-none" style="animation: none;" />
+            <img src="/images/chatbot-mascotte-accueil.webp" alt="" aria-hidden="true" width="148" height="175" class="hidden sm:block absolute right-6 lg:right-[-4px] bottom-[calc(100%-22px)] w-[110px] lg:w-[148px] xl:w-[110px] 2xl:w-[148px] h-auto pointer-events-none select-none" style="animation: none;" />
             <div class="relative p-[3px] rounded-[20px] isolate">
               <div class="absolute inset-0 rounded-[20px] -z-10" style="background: linear-gradient(90deg, #EC7F7A 0%, #FFFFFF 47%, #90BAD1 100%)"></div>
               <div class="focus-ring-within bg-white rounded-[17.5px] px-5 lg:pl-[23px] lg:pr-8 pt-5 pb-5 lg:pb-[23px] flex flex-col gap-6 lg:gap-[35px]">

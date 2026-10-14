@@ -12,7 +12,7 @@
     </div>
 
     <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pt-28 lg:pt-[130px]">
-      <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-x-[68px]">
+      <div class="xl:grid xl:grid-cols-[minmax(0,1fr)_440px] xl:gap-x-[68px]">
         <!-- Colonne principale : fil d'Ariane, identité, présentation -->
         <div class="min-w-0">
           <nav aria-label="Fil d'Ariane" class="inline-flex flex-wrap items-center bg-white rounded-full px-4 py-[9px] text-[16px] font-medium leading-[normal] text-vert-900">
@@ -35,7 +35,7 @@
                 <span v-else class="w-full h-full flex items-center justify-center text-white font-unbounded text-[56px]" aria-hidden="true">{{ initials }}</span>
               </div>
               <!-- Note Google (lue en direct) -->
-              <div v-if="google" class="absolute -left-4 sm:-left-10 -top-6 sm:top-[-10px] -rotate-[8deg] flex items-center gap-4 bg-white rounded-[20px] shadow-douce px-5 py-4">
+              <div v-if="google" class="absolute -left-4 sm:-left-4 xl:-left-10 -top-6 sm:top-[-10px] -rotate-[8deg] flex items-center gap-4 bg-white rounded-[20px] shadow-douce px-5 py-4">
                 <span class="font-unbounded text-[28px] sm:text-[32px] leading-none text-vert-900">{{ googleRating }}</span>
                 <span class="flex flex-col gap-1">
                   <span class="text-[18px] leading-none text-jaune-400" aria-hidden="true">★★★★★</span>
@@ -71,7 +71,7 @@
         </div>
 
         <!-- Colonne latérale : réservation, ou information pour une fiche non réclamée -->
-        <aside class="mt-10 lg:mt-[110px] lg:self-start lg:row-span-2 min-w-0" aria-label="Réservation">
+        <aside class="mt-10 xl:mt-[110px] xl:self-start xl:row-span-2 min-w-0 max-w-[560px] xl:max-w-none" aria-label="Réservation">
           <section v-if="bookable" id="reservation" class="bg-white rounded-[32px] shadow-[0_12px_16px_rgba(1,40,40,0.08)] p-6 sm:p-7 scroll-mt-28" aria-labelledby="booking-title">
             <AppointmentBooking :praticien="praticien" :types="types" :from-price="fromPrice" />
           </section>

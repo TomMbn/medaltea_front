@@ -45,7 +45,7 @@
                   <img :src="med.pictogram" alt="" width="60" height="45" class="w-[44px] h-[33px] lg:w-[60px] lg:h-[45px] object-contain" style="animation: none; filter: brightness(0) invert(1);" />
                 </span>
               </div>
-              <div class="mt-5 lg:mt-[25px] px-4 flex items-start justify-between gap-4">
+              <div class="mt-5 lg:mt-[25px] px-4 flex flex-col lg:flex-row xl:flex-col 2xl:flex-row items-start justify-between gap-4">
                 <div class="flex flex-col gap-3.5 flex-1 min-w-0">
                   <h2 class="font-unbounded font-normal text-[22px] leading-[normal] text-black break-words" :class="med.name.length > 12 ? 'lg:text-[24px]' : 'lg:text-[26px]'">{{ med.name }}</h2>
                   <p class="flex items-center gap-2.5 text-[16px] leading-[normal] text-black"><Stethoscope :size="16" aria-hidden="true" /> {{ countLabel(med.slug) }}</p>

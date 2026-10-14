@@ -45,9 +45,9 @@
       <!-- Comment ça marche ? -->
       <h2 id="comment-ca-marche" class="scroll-mt-32 font-unbounded font-normal text-[22px] sm:text-[32px] lg:text-[40px] text-center text-black mt-14 lg:mt-[110px] mb-14 lg:mb-[50px]">Comment ça marche ?</h2>
 
-      <div class="relative grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-14 lg:gap-x-[32px]">
+      <div class="relative grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-14 lg:gap-x-[32px]">
         <!-- Étape 1 -->
-        <div>
+        <div class="max-w-[560px] lg:max-w-none">
           <div class="step-visual step-link bg-bleu-50 relative flex flex-col justify-end gap-3 lg:gap-5 px-[6.6%] pb-4">
             <div class="absolute z-0 w-[53%] max-w-[223px] left-[43.7%] top-[-19.6%] -scale-x-100 pointer-events-none" aria-hidden="true"><img src="/images/landing/mascotte-panda.webp" alt="" width="223" height="193" class="w-full h-auto" /></div>
             <div class="relative z-10 bg-white rounded-full shadow-douce flex items-center gap-2.5 pl-[18px] pr-1.5 py-1.5">
@@ -65,7 +65,7 @@
         </div>
 
         <!-- Étape 2 -->
-        <div>
+        <div class="max-w-[560px] lg:max-w-none">
           <div class="step-visual step-link bg-vert-600 relative">
             <div class="absolute left-[5.7%] right-[5.7%] top-[10.8%] bg-white rounded-[18px] px-5 py-[18px] flex flex-col gap-2.5">
               <p class="text-[16px] font-medium text-vert-600">Léya</p>
@@ -78,7 +78,7 @@
         </div>
 
         <!-- Étape 3 -->
-        <div>
+        <div class="max-w-[560px] lg:max-w-none">
           <div class="step-visual relative">
             <NuxtImg
               src="/images/women-phone.jpeg"
@@ -135,7 +135,7 @@ const features = [
   overflow: visible;
 }
 /* Trait corail entre deux visuels : il occupe exactement l'espace de 32 px entre les colonnes */
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .step-link::after {
     content: '';
     position: absolute;

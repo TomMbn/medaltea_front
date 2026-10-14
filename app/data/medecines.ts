@@ -8,6 +8,10 @@ export interface Medecine {
   shortDescription: string
   heroImage: string
   heroTagline: string
+  /** Phrase d'accroche sous le titre (par défaut : shortDescription) */
+  heroLead?: string
+  /** Pastilles du hero (par défaut : les premiers motifs de consultation) */
+  heroChips?: { label: string; icon: 'wind' | 'moon' | 'heart' | 'info' | 'activity' | 'leaf' }[]
   duration: string
   definitionImage: string
   definitionText: string[]
@@ -30,7 +34,14 @@ export const medecines: Medecine[] = [
     icon: '/icons/osteopathie.png',
     shortDescription: 'Pratique manuelle qui s\'intéresse à la mobilité du corps',
     heroImage: '/images/medicine-5.jpeg',
-    heroTagline: 'Gagnez en mobilité',
+    heroTagline: 'Retrouver sa mobilité avec l’',
+    heroLead: 'Pratique manuelle douce pour mieux comprendre les tensions du corps, soulager les gênes du quotidien et bouger plus librement.',
+    heroChips: [
+      { label: 'Douleurs de dos', icon: 'activity' },
+      { label: 'Tensions musculaires', icon: 'activity' },
+      { label: 'Maux de tête', icon: 'info' },
+      { label: 'Stress et fatigue', icon: 'wind' }
+    ],
     duration: '45 min à 1 heure',
     definitionImage: '/images/AdobeStock_452334355.jpeg',
     definitionText: [
@@ -68,7 +79,14 @@ export const medecines: Medecine[] = [
     icon: '/icons/naturopathie.png',
     shortDescription: 'Approche globale centrée sur l\'hygiène de vie : alimentation, plantes, gestion du stress',
     heroImage: '/images/AdobeStock_336398199.jpeg',
-    heroTagline: 'Prenez soin de votre hygiène de vie',
+    heroTagline: 'Prendre soin de soi avec la',
+    heroLead: 'Une approche globale centrée sur l’hygiène de vie : alimentation, plantes et gestion du stress, pour mieux vous écouter au quotidien.',
+    heroChips: [
+      { label: 'Fatigue', icon: 'moon' },
+      { label: 'Gênes digestives', icon: 'leaf' },
+      { label: 'Alimentation', icon: 'leaf' },
+      { label: 'Stress', icon: 'wind' }
+    ],
     duration: '1 heure à 1h30',
     definitionImage: '/images/AdobeStock_243765470.jpeg',
     definitionText: [
@@ -106,18 +124,25 @@ export const medecines: Medecine[] = [
     icon: '/icons/sophrologie.png',
     shortDescription: 'Méthode de relaxation, de respiration et de visualisation',
     heroImage: '/images/medecines/bandeau-4.webp',
-    heroTagline: 'Apprenez à mieux vous détendre',
-    duration: '1 heure',
+    heroTagline: 'Apaiser le corps et l’esprit avec la',
+    heroLead: 'Respiration, relaxation et visualisation : une méthode douce pour mieux gérer le stress, le sommeil et les émotions.',
+    heroChips: [
+      { label: 'Stress', icon: 'wind' },
+      { label: 'Sommeil', icon: 'moon' },
+      { label: 'Anxiété', icon: 'heart' },
+      { label: 'Concentration', icon: 'info' }
+    ],
+    duration: '45 min à 1 heure',
     definitionImage: '/images/AdobeStock_519549071.jpeg',
     definitionText: [
       'La sophrologie est une méthode psychocorporelle qui utilise des exercices de relaxation, de respiration et de visualisation positive pour favoriser la détente du corps et de l\'esprit.',
       'Elle propose des outils concrets, à pratiquer seul, pour mieux gérer le stress, les émotions et les défis du quotidien.'
     ],
     conditions: ['Stress', 'Sommeil', 'Confiance en soi', 'Peurs du quotidien', 'Gestion de la douleur au quotidien', 'Préparation aux examens', 'Fatigue et surmenage'],
-    mosaicImage1: '/images/AdobeStock_550036958.jpeg',
-    mosaicImage2: '/images/women-phone.jpeg',
-    mosaicImage2Tagline: 'Des outils pour le quotidien',
-    mosaicImage3: '/images/AdobeStock_329541430.jpeg',
+    mosaicImage1: '/images/medecines/soph-mosaique-1.webp',
+    mosaicImage2: '/images/medecines/soph-mosaique-2.webp',
+    mosaicImage2Tagline: 'Retrouvez le calme',
+    mosaicImage3: '/images/medecines/soph-mosaique-3.webp',
     steps: [
       { title: 'Entretien initial', description: 'Le sophrologue identifie vos besoins, objectifs et définit avec vous le protocole adapté.' },
       { title: 'Relaxation guidée', description: 'Des exercices de respiration et de détente musculaire pour favoriser un état de calme.' },
@@ -145,7 +170,14 @@ export const medecines: Medecine[] = [
     icon: '/icons/acupuncture.png',
     shortDescription: 'Pratique issue de la médecine traditionnelle chinoise, qui utilise de fines aiguilles',
     heroImage: '/images/medicine-3.jpeg',
-    heroTagline: 'Une pratique issue de la tradition chinoise',
+    heroTagline: 'Une pratique traditionnelle : l’',
+    heroLead: 'Pratique issue de la médecine traditionnelle chinoise, qui utilise de fines aiguilles pour accompagner le bien-être au quotidien.',
+    heroChips: [
+      { label: 'Douleurs', icon: 'activity' },
+      { label: 'Maux de tête', icon: 'info' },
+      { label: 'Stress', icon: 'wind' },
+      { label: 'Sommeil', icon: 'moon' }
+    ],
     duration: '45 min à 1 heure',
     definitionImage: '/images/AdobeStock_171835155.jpeg',
     definitionText: [
@@ -182,7 +214,14 @@ export const medecines: Medecine[] = [
     icon: '/icons/hypnotherapie.png',
     shortDescription: 'Accompagnement qui utilise l\'état d\'hypnose pour travailler sur ses habitudes et ses émotions',
     heroImage: '/images/women-hypno.jpg',
-    heroTagline: 'Un accompagnement par l\'hypnose',
+    heroTagline: 'Se recentrer avec l’',
+    heroLead: 'Un accompagnement qui utilise l’état d’hypnose pour travailler sur ses habitudes, ses émotions et sa confiance en soi.',
+    heroChips: [
+      { label: 'Stress', icon: 'wind' },
+      { label: 'Confiance en soi', icon: 'heart' },
+      { label: 'Peurs du quotidien', icon: 'heart' },
+      { label: 'Habitudes alimentaires', icon: 'leaf' }
+    ],
     duration: '1 heure à 1h30',
     definitionImage: '/images/hero-section-2.jpeg',
     definitionText: [
@@ -220,7 +259,14 @@ export const medecines: Medecine[] = [
     icon: '/icons/massage.png',
     shortDescription: 'Massage de détente qui s\'adresse au corps et à l\'esprit',
     heroImage: '/images/medicines-1.jpeg',
-    heroTagline: 'Offrez-vous un moment de détente',
+    heroTagline: 'Un moment de détente avec le',
+    heroLead: 'Un massage de détente qui s’adresse au corps et à l’esprit, pour relâcher les tensions et prendre un vrai temps pour soi.',
+    heroChips: [
+      { label: 'Tensions musculaires', icon: 'activity' },
+      { label: 'Stress', icon: 'wind' },
+      { label: 'Fatigue', icon: 'moon' },
+      { label: 'Raideurs du dos', icon: 'activity' }
+    ],
     duration: '45 min à 1h30',
     definitionImage: '/images/AdobeStock_33920024.jpeg',
     definitionText: [

@@ -4,6 +4,7 @@
     <!-- Hero -->
     <section class="relative pt-[120px] lg:pt-[150px] pb-14 lg:pb-24" aria-labelledby="med-title">
       <img src="/images/medecines/rond-corail.svg" alt="" aria-hidden="true" class="hidden lg:block absolute -left-[15%] top-[270px] w-[37%] max-w-[640px] pointer-events-none select-none" style="animation: none;" />
+      <img src="/images/medecines/feuille-hero.svg" alt="" aria-hidden="true" class="hidden lg:block absolute left-[86.8%] top-[620px] w-[15.3%] opacity-[0.7] pointer-events-none select-none" style="animation: none;" />
       <img src="/images/footer/feuille-2.svg" alt="" aria-hidden="true" class="hidden lg:block absolute left-[51%] top-[40px] w-[8.7%] opacity-[0.7] pointer-events-none select-none" style="animation: none; transform: rotate(-25deg);" />
 
       <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] grid grid-cols-1 lg:grid-cols-[1fr_600px] gap-10 lg:gap-8 items-start">
@@ -20,15 +21,15 @@
             </span>
           </span>
 
-          <h1 id="med-title" class="mt-8 lg:mt-[34px] font-unbounded font-normal text-vert-900 text-[30px] sm:text-[40px] lg:text-[clamp(36px,3.3vw,56px)] leading-[1.15] flex flex-col items-start gap-1 lg:gap-2">
-            <span>{{ medicine.heroTagline }}</span>
-            <span class="bg-corail-100 text-corail-700 rounded-full px-5 lg:px-[22px] pt-0.5 pb-2 lg:pb-[10px]">{{ medicine.name.toLowerCase() }}</span>
+          <h1 id="med-title" class="mt-8 lg:mt-[34px] font-unbounded font-normal text-vert-900 text-[30px] sm:text-[40px] lg:text-[clamp(36px,3.3vw,56px)] leading-[1.15] flex flex-col items-start gap-1 lg:gap-2 lg:max-w-[560px]">
+            <span class="text-balance">{{ medicine.heroTagline }}</span>
+            <span class="whitespace-nowrap bg-corail-100 text-corail-700 rounded-full px-5 lg:px-[22px] pt-0.5 pb-2 lg:pb-[10px]">{{ medicine.name.toLowerCase() }}</span>
           </h1>
 
-          <p class="mt-8 lg:mt-12 text-[18px] lg:text-[24px] leading-snug text-neutre-600 max-w-[640px]">{{ medicine.shortDescription }}.</p>
+          <p class="mt-8 lg:mt-12 text-[18px] lg:text-[24px] leading-snug text-neutre-600 max-w-[640px]">{{ medicine.heroLead ?? `${medicine.shortDescription}.` }}</p>
 
           <ul v-if="chips.length" class="mt-8 flex flex-wrap gap-2" aria-label="Motifs de consultation fréquents">
-            <li v-for="c in chips" :key="c" class="inline-flex items-center gap-2 bg-white rounded-full pl-3 pr-4 py-[9px] text-[16px] font-medium text-vert-900"><Leaf :size="14" class="text-vert-600" aria-hidden="true" /> {{ c }}</li>
+            <li v-for="c in chips" :key="c.label" class="inline-flex items-center gap-2 bg-white rounded-full pl-3 pr-4 py-[9px] text-[16px] font-medium text-vert-900"><component :is="c.icon" :size="14" class="text-vert-600" aria-hidden="true" /> {{ c.label }}</li>
           </ul>
 
           <div class="mt-8 lg:mt-10 flex flex-wrap gap-3">
@@ -47,9 +48,9 @@
           <div class="photo-mask aspect-[600/680] w-full">
             <NuxtImg :src="medicine.heroImage" :alt="`${medicine.name} : séance avec un praticien`" class="w-full h-full object-cover" width="1200" height="1360" format="webp" quality="80" sizes="xs:90vw lg:600px" fetchpriority="high" />
           </div>
-          <div v-if="practitionerCount > 0" class="absolute left-0 lg:-left-12 bottom-6 lg:bottom-8 -rotate-[5deg] bg-white rounded-[24px] shadow-douce px-6 lg:px-7 py-5 lg:py-6 flex flex-col gap-1 max-w-[300px]">
+          <div v-if="practitionerCount > 0" class="absolute left-0 lg:-left-12 bottom-6 lg:-bottom-10 -rotate-[5deg] bg-white rounded-[24px] shadow-douce px-6 lg:px-8 py-5 lg:py-6 flex flex-col gap-1">
             <span class="font-unbounded font-medium text-[44px] lg:text-[56px] leading-none text-vert-600">{{ practitionerCount }}</span>
-            <span class="text-[16px] lg:text-[18px] text-neutre-600">praticiens référencés en {{ medicine.name.toLowerCase() }}</span>
+            <span class="text-[15px] lg:text-[16px] text-neutre-600 whitespace-nowrap">praticiens référencés en {{ medicine.name.toLowerCase() }}</span>
           </div>
         </div>
       </div>
@@ -147,9 +148,9 @@
 
       <div class="mt-14 lg:mt-20 bg-vert-600 rounded-[28px] p-7 lg:p-10 text-white">
         <h3 class="font-unbounded font-normal text-[20px] lg:text-[22px]">Avant de commencer</h3>
-        <ul class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 text-[16px] lg:text-[18px] leading-snug">
-          <li class="flex items-start gap-3"><Info :size="20" class="shrink-0 mt-0.5" aria-hidden="true" /> Cette pratique ne remplace pas un avis ni un traitement prescrit par votre médecin.</li>
-          <li class="flex items-start gap-3"><Info :size="20" class="shrink-0 mt-0.5" aria-hidden="true" /> En cas de symptôme persistant ou inquiétant, ou de pathologie suivie, parlez-en d’abord à un professionnel de santé.</li>
+        <ul class="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 text-[16px] lg:text-[18px] leading-snug">
+          <li class="flex items-start gap-3"><span class="w-[26px] h-[26px] shrink-0 rounded-full bg-white text-vert-600 flex items-center justify-center"><Info :size="14" aria-hidden="true" /></span> Cette pratique ne remplace pas un avis ni un traitement prescrit par votre médecin.</li>
+          <li class="flex items-start gap-3"><span class="w-[26px] h-[26px] shrink-0 rounded-full bg-white text-vert-600 flex items-center justify-center"><Info :size="14" aria-hidden="true" /></span> En cas de symptôme persistant ou inquiétant, ou de pathologie suivie, parlez-en d’abord à un professionnel de santé.</li>
         </ul>
       </div>
     </section>
@@ -173,8 +174,8 @@
       </div>
 
       <!-- Question à Léya -->
-      <div class="relative mt-28 lg:mt-[130px] mx-auto max-w-[640px]">
-        <div class="absolute z-0 w-[150px] sm:w-[223px] right-[4%] sm:right-[8%] -top-[130px] sm:-top-[165px] -scale-x-100 pointer-events-none" aria-hidden="true">
+      <div class="relative mt-28 lg:mt-[130px] mx-auto max-w-[520px]">
+        <div class="absolute z-0 w-[110px] sm:w-[150px] right-[8%] sm:right-[43px] -top-[84px] sm:-top-[112px] -scale-x-100 pointer-events-none" aria-hidden="true">
           <img src="/images/landing/mascotte-panda.webp" alt="" width="223" height="193" class="w-full h-auto" />
         </div>
         <div class="relative z-10 bg-vert-600 rounded-[32px] p-8 lg:p-10 text-white">
@@ -192,7 +193,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Clock, Check, Info, Leaf, ArrowUpRight, ArrowRight } from 'lucide-vue-next'
+import { Clock, Check, Info, Leaf, Wind, Moon, Heart, Activity, ArrowUpRight, ArrowRight } from 'lucide-vue-next'
 import { getMedecineBySlug } from '~/data/medecines'
 
 const route = useRoute()
@@ -256,7 +257,10 @@ const pictograms = {
 }
 const pictogram = pictograms[medicine.slug] ?? medicine.icon
 
-const chips = computed(() => (medicine.conditions ?? []).slice(0, 4))
+const chipIcons = { wind: Wind, moon: Moon, heart: Heart, info: Info, activity: Activity, leaf: Leaf }
+const chips = computed(() => medicine.heroChips
+  ? medicine.heroChips.map(c => ({ label: c.label, icon: chipIcons[c.icon] }))
+  : (medicine.conditions ?? []).slice(0, 4).map(label => ({ label, icon: Leaf })))
 
 const practitionersRef = ref(null)
 function scrollToPractitioners() {

@@ -36,19 +36,19 @@
           <span class="font-medium text-corail-500">{{ filtered.length }}</span> {{ filtered.length > 1 ? 'médecines' : 'médecine' }}
         </p>
 
-        <ul v-if="filtered.length" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+        <ul v-if="filtered.length" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-5 gap-y-5 lg:gap-y-[27px]">
           <li v-for="med in filtered" :key="med.slug">
-            <NuxtLink :to="`/medecines/${med.slug}`" class="group block h-full bg-white rounded-leya-m overflow-hidden shadow-[0_4px_10px_rgba(161,161,161,0.2)] hover:-translate-y-1 hover:shadow-douce transition-all duration-300 pb-6 lg:pb-[33px]">
-              <div class="relative aspect-[429/274] overflow-hidden">
-                <NuxtImg :src="med.heroImage" :alt="`${med.name} : séance`" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width="858" height="548" format="webp" quality="75" loading="lazy" sizes="xs:100vw sm:50vw lg:429px" />
-                <span class="absolute bottom-0 right-[11px] w-[64px] h-[64px] lg:w-[81px] lg:h-[81px] bg-bleu-300 rounded-leya-s flex items-center justify-center">
-                  <img :src="med.pictogram" alt="" width="60" height="45" class="max-w-[44px] max-h-[44px] lg:max-w-[56px] lg:max-h-[56px] w-auto h-auto" />
+            <NuxtLink :to="`/medecines/${med.slug}`" class="group block h-full bg-white rounded-leya-m shadow-[0_4px_10px_rgba(161,161,161,0.2)] hover:-translate-y-1 hover:shadow-douce transition-all duration-300 pb-6 lg:pb-[33px]">
+              <div class="relative aspect-[429/274] overflow-hidden rounded-t-leya-m">
+                <NuxtImg :src="med.heroImage" :alt="`${med.name} : séance`" class="card-mask w-full h-full object-cover" width="858" height="548" format="webp" quality="75" loading="lazy" sizes="xs:100vw sm:50vw lg:429px" />
+                <span class="absolute bottom-0 right-[2.6%] w-[64px] h-[64px] lg:w-[81px] lg:h-[81px] bg-bleu-300 rounded-leya-s flex items-center justify-center">
+                  <img :src="med.pictogram" alt="" width="60" height="45" class="w-[44px] h-[33px] lg:w-[60px] lg:h-[45px] object-contain" style="animation: none; filter: brightness(0) invert(1);" />
                 </span>
               </div>
-              <div class="mt-5 lg:mt-[25px] px-5 sm:px-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-4">
-                <div class="flex flex-col gap-3.5 flex-1 basis-[210px] min-w-0">
-                  <h2 class="font-unbounded font-normal text-[20px] xl:text-[22px] 2xl:text-[24px] leading-tight text-black">{{ med.name }}</h2>
-                  <p class="flex items-center gap-2.5 text-[16px] text-black"><Stethoscope :size="16" aria-hidden="true" /> {{ countLabel(med.slug) }}</p>
+              <div class="mt-5 lg:mt-[25px] px-4 flex items-start justify-between gap-4">
+                <div class="flex flex-col gap-3.5 flex-1 min-w-0">
+                  <h2 class="font-unbounded font-normal text-[22px] leading-[normal] text-black break-words" :class="med.name.length > 12 ? 'lg:text-[24px]' : 'lg:text-[26px]'">{{ med.name }}</h2>
+                  <p class="flex items-center gap-2.5 text-[16px] leading-[normal] text-black"><Stethoscope :size="16" aria-hidden="true" /> {{ countLabel(med.slug) }}</p>
                 </div>
                 <span class="shrink-0 inline-flex items-center gap-2.5 bg-vert-900 text-white text-[16px] h-10 px-[22px] lg:px-[30px] rounded-leya-xl group-hover:bg-vert-600 transition-colors">Découvrir <ArrowRight :size="16" aria-hidden="true" /></span>
               </div>
@@ -62,15 +62,15 @@
     <!-- Aide au choix -->
     <section class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pt-24 lg:pt-[165px] pb-20 lg:pb-32" aria-labelledby="med-help-title">
       <div class="relative">
-        <div class="absolute z-0 w-[150px] lg:w-[223px] right-[4%] lg:right-[9%] -top-[130px] lg:-top-[165px] -scale-x-100 pointer-events-none" aria-hidden="true">
+        <div class="absolute z-0 w-[110px] lg:w-[150px] right-[4%] lg:right-[125px] -top-[84px] lg:-top-[112px] -scale-x-100 pointer-events-none" aria-hidden="true">
           <img src="/images/landing/mascotte-panda.webp" alt="" width="223" height="193" class="w-full h-auto" />
         </div>
-        <div class="relative z-10 bg-vert-600 rounded-[32px] overflow-hidden px-7 sm:px-10 lg:px-14 py-10 lg:py-[56px] lg:min-h-[240px]">
-          <img src="/images/medecines/illu-naturopathie.svg" alt="" aria-hidden="true" class="hidden lg:block absolute right-[14%] top-[20px] w-[300px] h-auto opacity-[0.12] pointer-events-none" style="animation: none;" />
+        <div class="relative z-10 bg-vert-600 rounded-[32px] overflow-hidden px-7 sm:px-10 lg:px-14 pt-10 pb-8 lg:pt-[56px] lg:pb-8">
+          <img src="/images/medecines/illu-naturopathie.svg" alt="" aria-hidden="true" class="hidden lg:block absolute right-12 top-[20px] w-[300px] h-auto opacity-[0.12] pointer-events-none" style="animation: none;" />
           <div class="relative max-w-[640px]">
-            <h2 id="med-help-title" class="font-unbounded font-normal text-[22px] sm:text-[26px] leading-tight text-white">Vous hésitez entre plusieurs médecines ?</h2>
-            <p class="mt-4 text-[17px] lg:text-[20px] leading-snug text-bleu-100">Décrivez votre besoin à Léya, elle vous oriente vers la médecine qui peut vous convenir.</p>
-            <NuxtLink to="/chatbot" class="mt-8 lg:mt-10 inline-flex items-center gap-[14px] min-h-[48px] bg-white text-vert-900 font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:shadow-douce transition-shadow">
+            <h2 id="med-help-title" class="font-unbounded font-normal text-[22px] sm:text-[26px] leading-tight lg:leading-[32px] text-white">Vous hésitez entre plusieurs médecines ?</h2>
+            <p class="mt-4 text-[17px] lg:text-[20px] leading-snug lg:leading-[24px] text-bleu-100">Décrivez votre besoin à Léya, elle vous oriente.</p>
+            <NuxtLink to="/chatbot" class="mt-6 lg:mt-10 inline-flex items-center gap-[14px] min-h-[48px] bg-white text-vert-900 font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:shadow-douce transition-shadow">
               Demander à Léya
               <span class="w-10 h-10 rounded-full bg-vert-900 flex items-center justify-center text-white"><ArrowUpRight :size="20" aria-hidden="true" /></span>
             </NuxtLink>
@@ -131,3 +131,10 @@ useSeoMeta({
 
 useWebPageSchema({ name: 'Médecines alternatives : les disciplines à découvrir', description: 'Explorez l\'annuaire des médecines alternatives sur Léya : ostéopathie, naturopathie, sophrologie, acupuncture, hypnothérapie et plus encore.', type: 'CollectionPage', breadcrumbs: [{ name: "Médecines", path: '/medecines' }] })
 </script>
+
+<style scoped>
+.card-mask {
+  -webkit-mask: url('/images/medecines/masque-carte.webp') center / 100% 100% no-repeat;
+  mask: url('/images/medecines/masque-carte.webp') center / 100% 100% no-repeat;
+}
+</style>

@@ -91,7 +91,6 @@
         </form>
       </section>
 
-      <TheFooter v-if="!isPro" class="mt-10" />
     </div>
   </div>
 </template>

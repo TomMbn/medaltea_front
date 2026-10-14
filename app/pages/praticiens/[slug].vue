@@ -155,7 +155,6 @@
         </p>
       </div>
 
-      <TheFooter />
     </div>
   </div>
 </template>

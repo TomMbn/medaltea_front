@@ -27,8 +27,6 @@
         <LandingMedicines />
         <LandingFAQ class="pb-16" />
 
-        <!-- Footer -->
-        <TheFooter />
       </div>
     </div>
   </div>

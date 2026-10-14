@@ -1,87 +1,64 @@
 <template>
-  <!-- Floating Wrapper -->
-  <div class="fixed top-0 inset-x-0 z-50 pt-6 pointer-events-none">
-    <nav class="mx-auto w-11/12 max-w-[1440px] bg-white rounded-[20px] shadow-sm border border-gray-100 px-8 py-2.5 flex items-center justify-between pointer-events-auto">
-      
-      <!-- Left Zone: Logo -->
-      <div class="flex items-center shrink-0">
-        <NuxtLink to="/" class="flex items-center min-h-[44px]">
-            <img src="/images/logo.svg" alt="Léya" class="h-10 w-auto" />
-        </NuxtLink>
-      </div>
+  <!-- Barre flottante (maquette V5) -->
+  <div class="fixed top-0 inset-x-0 z-50 pt-5 pointer-events-none">
+    <nav class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4.5rem)] max-w-[1654px] bg-white rounded-leya-m border border-[rgba(160,160,160,0.38)] shadow-[0_1px_15px_rgba(144,186,209,0.31)] pl-5 pr-3 lg:pl-[30px] lg:pr-[23px] py-2.5 lg:py-[18px] flex items-center justify-between gap-6 pointer-events-auto" aria-label="Navigation principale">
 
-      <!-- Center Nav Links (Desktop) -->
-      <div class="hidden lg:flex items-center gap-7">
-        <NuxtLink
-          to="/medecines"
-          class="text-[#012828] font-semibold text-[14px] opacity-60 hover:opacity-100 transition-opacity"
-          active-class="!opacity-100"
-        >
-          Les Médecines
-        </NuxtLink>
-        <NuxtLink
-          to="/trouver-un-praticien"
-          class="text-[#012828] font-semibold text-[14px] opacity-60 hover:opacity-100 transition-opacity"
-          active-class="!opacity-100"
-        >
-          Trouver un praticien
-        </NuxtLink>
-      </div>
+      <!-- Logo -->
+      <NuxtLink to="/" class="flex items-center min-h-[44px] shrink-0" aria-label="Léya, accueil">
+        <img src="/images/logo.svg" alt="Léya" width="87" height="39" class="h-10 lg:h-[39px] w-auto" />
+      </NuxtLink>
 
-      <!-- Right Group (Desktop) -->
-      <div class="hidden lg:flex items-center gap-4">
+      <!-- Navigation et actions (bureau) -->
+      <div class="hidden lg:flex items-center gap-5 xl:gap-[30px]">
+        <NuxtLink to="/medecines" class="nav-link">Médecines</NuxtLink>
+        <NuxtLink to="/trouver-un-praticien" class="nav-link inline-flex items-center gap-2 xl:gap-[10px]">
+          <MapPin :size="18" aria-hidden="true" /> Trouver un praticien
+        </NuxtLink>
+        <NuxtLink v-if="!isLoggedIn" to="/praticiens-pro" class="nav-link">Espace praticien</NuxtLink>
+
         <!-- Visiteur -->
         <template v-if="!isLoggedIn">
-          <NuxtLink to="/praticiens-pro" class="text-[#012828] font-semibold text-[14px] opacity-60 hover:opacity-100 transition-opacity text-nowrap">
-            Vous êtes praticien ?
-          </NuxtLink>
-          <NuxtLink v-if="route.path !== '/login' && route.path !== '/register'" to="/login" class="btn-signup text-white px-7 py-2 rounded-[12px] font-bold text-[14px] transition-all hover:shadow-md active:scale-95 text-nowrap">
-            Connexion
-          </NuxtLink>
+          <NuxtLink v-if="route.path !== '/login' && route.path !== '/register'" to="/login" class="btn-dark">Connexion</NuxtLink>
         </template>
 
         <!-- Praticien connecté -->
         <template v-else-if="isPro">
-          <NuxtLink to="/pro/rendez-vous" class="btn-signup text-white px-7 py-2 rounded-[12px] font-bold text-[14px] transition-all hover:shadow-md active:scale-95 text-nowrap">
-            Mon espace praticien
-          </NuxtLink>
-          <button class="text-[#012828] font-semibold text-[14px] opacity-60 hover:opacity-100 transition-opacity" @click="handleLogout">Déconnexion</button>
+          <NuxtLink to="/pro/rendez-vous" class="btn-dark">Mon espace praticien</NuxtLink>
+          <button class="nav-link" @click="handleLogout">Déconnexion</button>
         </template>
 
         <!-- Patient connecté -->
         <div v-else ref="accountRef" class="relative">
           <button
-            class="btn-signup text-white pl-5 pr-4 py-2 rounded-[12px] font-bold text-[14px] transition-all hover:shadow-md active:scale-95 text-nowrap flex items-center gap-2"
+            class="btn-dark inline-flex items-center gap-2"
             aria-haspopup="menu"
             :aria-expanded="isAccountOpen"
             @click="isAccountOpen = !isAccountOpen"
           >
             Mon compte <ChevronDown :size="16" aria-hidden="true" />
           </button>
-          <div v-if="isAccountOpen" role="menu" class="absolute right-0 mt-2 w-56 bg-white rounded-[16px] shadow-xl border border-gray-100 py-2">
-            <NuxtLink to="/mes-rendez-vous" role="menuitem" class="block px-5 py-2.5 text-sm font-semibold text-[#012828] hover:bg-gray-50" @click="isAccountOpen = false">Mes rendez-vous</NuxtLink>
-            <NuxtLink to="/trouver-un-praticien" role="menuitem" class="block px-5 py-2.5 text-sm font-semibold text-[#012828] hover:bg-gray-50" @click="isAccountOpen = false">Prendre rendez-vous</NuxtLink>
-            <NuxtLink to="/mon-compte" role="menuitem" class="block px-5 py-2.5 text-sm font-semibold text-[#012828] hover:bg-gray-50" @click="isAccountOpen = false">Mes informations</NuxtLink>
-            <button role="menuitem" class="w-full text-left px-5 py-2.5 text-sm font-semibold text-red-700 hover:bg-gray-50 border-t border-gray-100" @click="handleLogout">Déconnexion</button>
+          <div v-if="isAccountOpen" role="menu" class="absolute right-0 mt-2 w-60 bg-white rounded-leya-m shadow-douce border border-bleu-100 py-2">
+            <NuxtLink to="/mes-rendez-vous" role="menuitem" class="block px-5 py-3 text-base font-semibold text-vert-900 hover:bg-bleu-50" @click="isAccountOpen = false">Mes rendez-vous</NuxtLink>
+            <NuxtLink to="/trouver-un-praticien" role="menuitem" class="block px-5 py-3 text-base font-semibold text-vert-900 hover:bg-bleu-50" @click="isAccountOpen = false">Prendre rendez-vous</NuxtLink>
+            <NuxtLink to="/mon-compte" role="menuitem" class="block px-5 py-3 text-base font-semibold text-vert-900 hover:bg-bleu-50" @click="isAccountOpen = false">Mes informations</NuxtLink>
+            <button role="menuitem" class="w-full text-left px-5 py-3 text-base font-semibold text-red-700 hover:bg-bleu-50 border-t border-bleu-100" @click="handleLogout">Déconnexion</button>
           </div>
         </div>
 
-        <!-- Chatbot Button (patients et visiteurs) -->
-        <NuxtLink v-if="!isPro && route.path !== '/chatbot'" to="/chatbot" class="btn-chatbot text-white px-7 py-2 rounded-[12px] font-bold text-[14px] transition-all hover:scale-110 active:scale-95">
-          Chatbot
-        </NuxtLink>
+        <!-- Parler à Léya (patients et visiteurs) -->
+        <NuxtLink v-if="!isPro && route.path !== '/chatbot'" to="/chatbot" class="btn-chatbot">Parler à Léya</NuxtLink>
       </div>
 
-      <!-- Mobile Menu Button -->
+      <!-- Bouton du menu (mobile) -->
       <div class="lg:hidden flex items-center">
-        <button aria-label="Ouvrir le menu" :aria-expanded="isMenuOpen" @click="isMenuOpen = !isMenuOpen" class="text-[#012828] hover:text-[#1c6c63] focus:outline-none p-2">
+        <button aria-label="Ouvrir le menu" :aria-expanded="isMenuOpen" class="text-vert-900 hover:text-vert-600 focus:outline-none p-2" @click="isMenuOpen = !isMenuOpen">
           <Menu v-if="!isMenuOpen" :size="28" />
           <X v-else :size="28" />
         </button>
       </div>
     </nav>
 
-    <!-- Mobile Menu Dropdown -->
+    <!-- Menu déroulant (mobile) -->
     <transition
       enter-active-class="transition duration-200 ease-out"
       enter-from-class="transform scale-95 opacity-0"
@@ -90,25 +67,20 @@
       leave-from-class="transform scale-100 opacity-100"
       leave-to-class="transform scale-95 opacity-0"
     >
-      <div v-if="isMenuOpen" class="mx-auto w-11/12 mt-4 bg-white rounded-[20px] shadow-2xl border border-gray-100 overflow-hidden pointer-events-auto">
-        <div class="flex flex-col p-6 gap-4">
-          <NuxtLink to="/medecines" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">
-            Les Médecines
-          </NuxtLink>
-          <NuxtLink to="/trouver-un-praticien" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">
-            Trouver un praticien
-          </NuxtLink>
-          <NuxtLink v-if="!isLoggedIn" to="/praticiens-pro" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">Vous êtes praticien ?</NuxtLink>
-          <NuxtLink v-if="isLoggedIn && !isPro" to="/mes-rendez-vous" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">Mes rendez-vous</NuxtLink>
-          <NuxtLink v-if="isLoggedIn && !isPro" to="/mon-compte" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">Mes informations</NuxtLink>
+      <div v-if="isMenuOpen" class="mx-auto w-[calc(100%-2rem)] mt-3 bg-white rounded-leya-m shadow-douce border border-bleu-100 overflow-hidden pointer-events-auto">
+        <div class="flex flex-col p-6 gap-2">
+          <NuxtLink to="/medecines" class="menu-link" @click="isMenuOpen = false">Médecines</NuxtLink>
+          <NuxtLink to="/trouver-un-praticien" class="menu-link" @click="isMenuOpen = false">Trouver un praticien</NuxtLink>
+          <NuxtLink v-if="!isLoggedIn" to="/praticiens-pro" class="menu-link" @click="isMenuOpen = false">Espace praticien</NuxtLink>
+          <NuxtLink v-if="isLoggedIn && !isPro" to="/mes-rendez-vous" class="menu-link" @click="isMenuOpen = false">Mes rendez-vous</NuxtLink>
+          <NuxtLink v-if="isLoggedIn && !isPro" to="/mon-compte" class="menu-link" @click="isMenuOpen = false">Mes informations</NuxtLink>
 
-          <NuxtLink v-if="!isLoggedIn" to="/login" class="w-full btn-signup text-white py-3 rounded-[12px] font-bold text-center" @click="isMenuOpen = false">Connexion</NuxtLink>
-          <NuxtLink v-else-if="isPro" to="/pro/rendez-vous" class="w-full btn-signup text-white py-3 rounded-[12px] font-bold text-center" @click="isMenuOpen = false">Mon espace praticien</NuxtLink>
-          <button v-if="isLoggedIn" class="w-full border border-gray-300 text-[#012828] py-3 rounded-[12px] font-bold text-center" @click="handleLogout">Déconnexion</button>
-
-          <NuxtLink v-if="!isPro && route.path !== '/chatbot'" to="/chatbot" class="w-full btn-chatbot text-white py-3 rounded-[12px] font-bold text-center" @click="isMenuOpen = false">
-            Chatbot
-          </NuxtLink>
+          <div class="flex flex-col gap-3 pt-3">
+            <NuxtLink v-if="!isLoggedIn" to="/login" class="btn-dark text-center" @click="isMenuOpen = false">Connexion</NuxtLink>
+            <NuxtLink v-else-if="isPro" to="/pro/rendez-vous" class="btn-dark text-center" @click="isMenuOpen = false">Mon espace praticien</NuxtLink>
+            <button v-if="isLoggedIn" class="border border-neutre-200 text-vert-900 px-[25px] py-[10px] rounded-leya-s text-lg text-center" @click="handleLogout">Déconnexion</button>
+            <NuxtLink v-if="!isPro && route.path !== '/chatbot'" to="/chatbot" class="btn-chatbot text-center" @click="isMenuOpen = false">Parler à Léya</NuxtLink>
+          </div>
         </div>
       </div>
     </transition>
@@ -117,7 +89,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { Menu, X, ChevronDown } from 'lucide-vue-next'
+import { Menu, X, ChevronDown, MapPin } from 'lucide-vue-next'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -153,16 +125,56 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.btn-signup {
-  background-color: #012828;
-  border: 2px solid transparent;
+/* Liens de navigation : 16 px (lg), 18 px (xl), 20 px (2xl), graisse 600 comme la maquette */
+.nav-link {
+  color: var(--vert-900);
+  font-weight: 600;
+  font-size: 16px;
+  white-space: nowrap;
+  line-height: 1.3;
+  transition: color 0.15s;
+}
+@media (min-width: 1280px) { .nav-link { font-size: 18px; } }
+@media (min-width: 1536px) { .nav-link { font-size: 20px; } }
+.nav-link:hover { color: var(--vert-600); }
+.nav-link.router-link-active { text-decoration: underline; text-decoration-color: var(--corail-500); text-decoration-thickness: 2px; text-underline-offset: 8px; }
+
+.menu-link {
+  color: var(--vert-900);
+  font-weight: 600;
+  font-size: 17px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--bleu-100);
 }
 
-.btn-chatbot {
-  /* Inner (fill) gradient: #EC7F7A to #F1AEAB */
-  /* Outer (border) gradient: Gray (#90BAD1) to Rose (#EC7F7A) */
-  background: linear-gradient(135deg, #EC7F7A 0%, #F1AEAB 100%) padding-box,
-              linear-gradient(135deg, #90BAD1 0%, #EC7F7A 100%) border-box;
+/* Bouton principal : vert foncé */
+.btn-dark {
+  background-color: var(--vert-900);
+  color: #fff;
   border: 2px solid transparent;
+  border-radius: var(--rayon-s);
+  padding: 10px 25px;
+  font-size: 16px;
+  white-space: nowrap;
+  transition: background-color 0.15s, box-shadow 0.15s;
 }
+@media (min-width: 1280px) { .btn-dark { font-size: 18px; } }
+@media (min-width: 1536px) { .btn-dark { font-size: 20px; } }
+.btn-dark:hover { background-color: var(--vert-600); box-shadow: var(--ombre-douce); }
+
+/* « Parler à Léya » : dégradé corail de la maquette */
+.btn-chatbot {
+  background-image: linear-gradient(138.65deg, #ec7f7a 22.68%, #f1aeab 77.32%);
+  border: 2px solid var(--corail-500);
+  border-radius: var(--rayon-s);
+  color: #fff;
+  padding: 10px 25px;
+  font-size: 16px;
+  white-space: nowrap;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+@media (min-width: 1280px) { .btn-chatbot { font-size: 18px; } }
+@media (min-width: 1536px) { .btn-chatbot { font-size: 20px; } }
+.btn-chatbot:hover { box-shadow: var(--ombre-douce); transform: translateY(-1px); }
+@media (prefers-reduced-motion: reduce) { .btn-chatbot:hover { transform: none; } }
 </style>

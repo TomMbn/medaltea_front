@@ -48,6 +48,22 @@
         <p v-if="exportError" class="text-sm text-red-700 mt-3" role="alert">{{ exportError }}</p>
       </section>
 
+      <!-- Statistiques d'usage (droit d'opposition) -->
+      <section v-if="usage.available" class="card mb-6" aria-labelledby="usage-title">
+        <h2 id="usage-title" class="card-title">Statistiques d'usage</h2>
+        <p class="text-sm text-[#012828]/80 mb-4">
+          Pour améliorer Léya, nous comptons certaines actions de votre compte (connexion, rendez-vous, messages envoyés à l'assistant),
+          sous un identifiant pseudonymisé et sans jamais leur contenu.
+          <NuxtLink to="/politique-de-confidentialite" class="underline">En savoir plus</NuxtLink>
+        </p>
+        <label class="flex items-start gap-3 text-sm cursor-pointer">
+          <input v-model="usage.optOut" type="checkbox" class="mt-0.5 h-4 w-4 accent-[#156F71]" :disabled="usage.saving" @change="saveUsage">
+          <span>Ne pas utiliser mon compte pour ces statistiques (les données déjà enregistrées sont effacées)</span>
+        </label>
+        <p v-if="usage.saved" class="text-sm text-[#156F71] mt-3" role="status">Préférence enregistrée.</p>
+        <p v-if="usage.error" class="text-sm text-red-700 mt-3" role="alert">{{ usage.error }}</p>
+      </section>
+
       <!-- Suppression -->
       <section class="card border border-red-200" aria-labelledby="del-title">
         <h2 id="del-title" class="card-title text-red-800">Supprimer mon compte</h2>
@@ -81,7 +97,7 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 
 definePageMeta({ middleware: ['auth'] })
 useSeoMeta({ title: 'Mon compte — Léya', robots: 'noindex, nofollow' })
@@ -125,6 +141,31 @@ async function saveProfile() {
     profileError.value = apiErrorMessage(e, 'Impossible d\'enregistrer vos informations.')
   } finally {
     saving.value = false
+  }
+}
+
+// --- Statistiques d'usage (droit d'opposition) : section masquée si le suivi est désactivé côté serveur
+const usage = reactive({ available: false, optOut: false, saving: false, saved: false, error: '' })
+onMounted(async () => {
+  try {
+    const pref = await $fetch('/api/backend/tracking/preferences')
+    usage.available = pref.trackingEnabled
+    usage.optOut = pref.optOut
+  } catch { /* préférence indisponible : la section reste masquée */ }
+})
+async function saveUsage() {
+  usage.saved = false
+  usage.error = ''
+  usage.saving = true
+  try {
+    const pref = await $fetch('/api/backend/tracking/preferences', { method: 'PUT', body: { optOut: usage.optOut } })
+    usage.optOut = pref.optOut
+    usage.saved = true
+  } catch (e) {
+    usage.optOut = !usage.optOut
+    usage.error = apiErrorMessage(e, 'Impossible d\'enregistrer votre préférence. Réessayez plus tard.')
+  } finally {
+    usage.saving = false
   }
 }
 

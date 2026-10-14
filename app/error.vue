@@ -14,7 +14,9 @@
 </template>
 
 <script setup>
-defineProps({ error: Object })
+const props = defineProps({ error: Object })
+// Mesure d'audience : pages introuvables et erreurs (l'adresse est enregistrée par la page vue, sans paramètres)
+onMounted(() => trackEventWhenReady('page-error', { status: props.error?.statusCode || 404 }))
 useHead({ htmlAttrs: { lang: 'fr' } })
 useSeoMeta({ title: 'Page introuvable — Léya', robots: 'noindex, nofollow' })
 const handleError = () => clearError({ redirect: '/' })

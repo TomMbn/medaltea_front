@@ -73,7 +73,7 @@
 import { ref, computed } from 'vue'
 import { MapPin, Search, LocateFixed } from 'lucide-vue-next'
 
-defineProps({ geo: { type: Object, default: null } })
+const props = defineProps({ geo: { type: Object, default: null } })
 const emit = defineEmits(['locate', 'unlocate'])
 
 const route = useRoute()
@@ -103,6 +103,12 @@ function search() {
   const params = {}
   if (q) params.q = q
   if (speciality.value) params.specialite = speciality.value
+  // Mesure d'audience (anonyme) : spécialité choisie dans la liste, jamais le texte saisi
+  trackEvent('praticien-search', {
+    specialite: speciality.value || 'aucune',
+    texte: q ? 'oui' : 'non',
+    autour_de_moi: props.geo ? 'oui' : 'non',
+  })
   router.push({ path: '/trouver-un-praticien', query: params, hash: '#resultats' })
 }
 </script>

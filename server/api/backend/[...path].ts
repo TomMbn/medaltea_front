@@ -36,6 +36,9 @@ const RULES: Rule[] = [
     { method: 'GET', pattern: /^users\/me\/export$/, auth: true, own: true },
     // Suppression du compte (mot de passe exigé par le backend ; un compte pro supprime aussi sa fiche)
     { method: 'DELETE', pattern: /^users\/me$/, auth: true, body: ['password'] },
+    // Droit d'opposition au suivi d'usage (statistiques pseudonymisées)
+    { method: 'GET', pattern: /^tracking\/preferences$/, auth: true },
+    { method: 'PUT', pattern: /^tracking\/preferences$/, auth: true, body: ['optOut'] },
 
     // Revendication d'une fiche répertoriée (compte pro)
     { method: 'POST', pattern: /^praticiens\/\d+\/claim-requests$/, auth: true, body: ['message', 'rpps', 'siret'] },

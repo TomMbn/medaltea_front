@@ -40,8 +40,9 @@
         <tr>
           <td>Mesure d'audience anonyme</td>
           <td>
-            Pages consultées (sans les paramètres de l'adresse), site de provenance, type d'appareil, navigateur,
-            système, langue, pays et ville approximative. L'adresse IP n'est pas conservée
+            Pages consultées (sans les paramètres de l'adresse, hormis les codes de campagne « utm »), site de
+            provenance, type d'appareil, navigateur, système, langue, pays et ville approximative, vitesse d'affichage
+            des pages, étapes de la recherche et de la réservation (sans le texte saisi). L'adresse IP n'est pas conservée
           </td>
           <td>Intérêt légitime</td>
           <td>13 mois, puis suppression automatique</td>
@@ -50,11 +51,11 @@
           <td>Statistiques d'usage du service (comptes connectés)</td>
           <td>
             Type d'action et date, rôle (patient ou praticien), identifiant de compte pseudonymisé, identifiant de la
-            fiche pour les praticiens. Jamais le contenu des messages, les symptômes, les motifs de rendez-vous,
+            fiche et activité de planning pour les praticiens (prestations, horaires, confirmation et suivi des rendez-vous). Jamais le contenu des messages, les symptômes, les motifs de rendez-vous,
             l'email ou le nom
           </td>
           <td>Intérêt légitime (amélioration du service)</td>
-          <td>13 mois au plus ; supprimées avec votre compte</td>
+          <td>13 mois au plus ; supprimées avec votre compte ou dès votre opposition</td>
         </tr>
         <tr>
           <td>Recherche « autour de moi » (facultative)</td>
@@ -119,8 +120,11 @@
     <p>
       La fréquentation du site est mesurée avec Umami, un logiciel libre installé sur le serveur de
       {{ legal.brandName }} : ces données ne sont transmises à aucun tiers et servent uniquement à produire des
-      statistiques. La mesure ne dépose aucun cookie, n'enregistre pas les paramètres des adresses visitées et
-      respecte le signal « Do Not Track » de votre navigateur. Votre adresse IP sert seulement à déduire le pays et la
+      statistiques. La mesure ne dépose aucun cookie, n'enregistre pas les paramètres des adresses visitées (à
+      l'exception des codes de campagne « utm » qui indiquent d'où provient un lien, par exemple une newsletter) et
+      respecte le signal « Do Not Track » de votre navigateur. Elle compte aussi les étapes de la recherche d'un
+      praticien et de la réservation (spécialité choisie dans la liste, mode de consultation), jamais le texte que vous
+      saisissez, ainsi que la vitesse d'affichage des pages. Votre adresse IP sert seulement à déduire le pays et la
       ville, et à calculer un identifiant de visite renouvelé chaque mois ; elle n'est pas conservée. Les requêtes de
       mesure transitent par notre hébergeur, {{ legal.hostName }}, avant d'atteindre notre serveur.
     </p>
@@ -128,12 +132,14 @@
     <p>
       Lorsque vous êtes connecté, nos serveurs enregistrent aussi certaines actions (création de compte, connexion,
       prise ou annulation d'un rendez-vous, envoi d'un message à l'assistant virtuel, limite quotidienne de messages
-      atteinte, revendication d'une fiche, suppression du compte), afin de comprendre l'usage du service et de
-      l'améliorer. Elles sont associées à un identifiant pseudonymisé, calculé à partir de votre compte, qui ne contient
+      atteinte, revendication d'une fiche, suppression du compte ; pour les praticiens : ajout de prestations et
+      d'horaires, confirmation et suivi des rendez-vous), afin de comprendre l'usage du service et de l'améliorer. Elles sont associées à un identifiant pseudonymisé, calculé à partir de votre compte, qui ne contient
       ni votre email ni votre nom. Ces statistiques ne contiennent jamais le contenu de vos messages, vos symptômes ni
       le motif de vos rendez-vous. Elles sont conservées 13 mois au plus et supprimées lorsque vous supprimez votre
-      compte. Aucun cookie ni traceur n'est utilisé dans votre navigateur pour ce suivi. Vous pouvez vous y opposer en
-      écrivant à <a :href="`mailto:${legal.contactEmail}`">{{ legal.contactEmail }}</a>.
+      compte. Aucun cookie ni traceur n'est utilisé dans votre navigateur pour ce suivi. Vous pouvez vous y opposer à
+      tout moment depuis <NuxtLink to="/mon-compte">Mon compte</NuxtLink> (rubrique « Statistiques d'usage ») : plus
+      aucune action n'est alors enregistrée et celles déjà conservées sont effacées. Vous pouvez aussi écrire à
+      <a :href="`mailto:${legal.contactEmail}`">{{ legal.contactEmail }}</a>.
     </p>
 
     <h2>Destinataires et sous-traitants</h2>

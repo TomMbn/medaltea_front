@@ -337,7 +337,11 @@ function setQuery(patch) {
   for (const k of Object.keys(query)) if (query[k] == null) delete query[k]
   router.replace({ query })
 }
+// Mesure d'audience (anonyme) : étapes de la réservation, avec le mode de consultation seulement
+const bookingMode = () => (selectedType.value?.mode === 'visio' ? 'visio' : 'cabinet')
+
 function choose(slot) {
+  if (slot !== selectedSlot.value) trackEvent('booking-slot-selected', { mode: bookingMode() })
   selectedSlot.value = slot
   slotGone.value = false
   submitError.value = ''
@@ -383,6 +387,7 @@ async function submit() {
   if (submitting.value || !selectedSlot.value) return
   submitting.value = true
   submitError.value = ''
+  trackEvent('booking-submitted', { mode: bookingMode() })
   try {
     booked.value = await $fetch('/api/backend/appointments', {
       method: 'POST',
@@ -394,7 +399,9 @@ async function submit() {
       },
     })
     booked.value = { ...booked.value, startAt: booked.value?.startAt ?? selectedSlot.value }
+    trackEvent('booking-success', { mode: bookingMode() })
   } catch (e) {
+    trackEvent('booking-error', { status: apiStatus(e) ?? 0 })
     if (apiStatus(e) === 401) {
       await useSession().logout()
       await navigateTo({ path: '/login', query: { redirect: route.fullPath } })

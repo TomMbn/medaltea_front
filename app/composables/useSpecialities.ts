@@ -1,15 +1,15 @@
 export interface Speciality {
   id: number
   name: string
+  // Identifiant stable, identique au slug des pages /medecines (ex : hypnotherapie)
+  slug: string
 }
 
-/** « Ostéopathie » → « osteopathie » : clé stable utilisée dans les URL (?specialite=osteopathie). */
-export const specialityKey = (name: unknown) =>
-  String(name ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim()
-
-// Les pages de médecines utilisent parfois un autre nom que l'API (hypnothérapie ↔ Hypnose).
-const ALIASES: Record<string, string> = { hypnotherapie: 'hypnose' }
-export const specialityKeyForSlug = (slug: string) => ALIASES[slug] ?? slug
+export interface Discipline {
+  slug: string
+  name: string
+  praticienCount: number
+}
 
 export async function useSpecialities() {
   const { data } = await useAsyncData<Speciality[]>(
@@ -20,27 +20,19 @@ export async function useSpecialities() {
 
   const specialities = computed<Speciality[]>(() => (Array.isArray(data.value) ? data.value : []))
 
-  const findBySlug = (slug?: string | null) => {
-    if (!slug) return undefined
-    const key = ALIASES[slug] ?? slug
-    return specialities.value.find(s => specialityKey(s.name) === key)
-  }
+  const findBySlug = (slug?: string | null) => (slug ? specialities.value.find(s => s.slug === slug) : undefined)
 
   return { specialities, findBySlug }
 }
 
-/** Nombre réel de praticiens par médecine (remplace les anciens chiffres fixes de medecines.ts). */
+/** Nombre réel de praticiens par médecine, calculé par l'API (GET /disciplines). */
 export async function useSpecialityCounts() {
-  const { data } = await useAsyncData<any[]>(
-    'praticiens-all',
-    () => $fetch<any[]>('/api/backend/praticiens').catch(() => []),
+  const { data } = await useAsyncData<Discipline[]>(
+    'disciplines',
+    () => $fetch<Discipline[]>('/api/backend/disciplines').catch(() => []),
     { default: () => [] },
   )
-  const countFor = (slug: string) => {
-    const key = specialityKeyForSlug(slug)
-    return (Array.isArray(data.value) ? data.value : []).filter(
-      p => (p.specialities || []).some((s: Speciality) => specialityKey(s.name) === key),
-    ).length
-  }
+  const countFor = (slug: string) =>
+    (Array.isArray(data.value) ? data.value : []).find(d => d.slug === slug)?.praticienCount ?? 0
   return { countFor }
 }

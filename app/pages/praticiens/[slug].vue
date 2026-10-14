@@ -23,6 +23,8 @@
           <p class="flex items-center gap-1.5 text-sm text-[#012828]/70 mt-3">
             <MapPin :size="15" aria-hidden="true" /> {{ praticien.city }}<template v-if="praticien.postalCode"> ({{ formatPostalCode(praticien.postalCode) }})</template>
           </p>
+          <!-- Note Google en direct (distincte des avis Léya) : seulement si la fiche est liée à un lieu Google -->
+          <GoogleRating v-if="praticien.hasGoogleRating" :praticien-id="id" class="mt-2" />
         </div>
         <div v-if="bookable && nextSlot" class="sm:text-right sm:max-w-[240px]">
           <p class="text-xs font-semibold uppercase tracking-wide text-[#012828]/50">Prochaine disponibilité</p>

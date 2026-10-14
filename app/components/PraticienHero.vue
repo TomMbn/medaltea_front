@@ -43,7 +43,7 @@
         <div class="hidden sm:flex items-center px-4 border-l border-gray-100 max-w-[200px]">
           <select v-model="speciality" aria-label="Spécialité" class="bg-transparent text-sm text-gray-600 focus:outline-none w-full appearance-none cursor-pointer">
             <option value="">Toutes les spécialités</option>
-            <option v-for="sp in specialities" :key="sp.id" :value="specialityKey(sp.name)">{{ sp.name }}</option>
+            <option v-for="sp in specialities" :key="sp.id" :value="sp.slug">{{ sp.name }}</option>
           </select>
         </div>
         <div class="shrink-0 pr-1.5">

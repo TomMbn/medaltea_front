@@ -1,25 +1,17 @@
 <template>
   <div 
     :class="[
-      'flex flex-col bg-[#e0ecf2] font-sans antialiased selection:bg-[#EC7F7A]/30 overflow-x-hidden',
-      isChatPage ? 'h-[100dvh] overflow-hidden' : 'min-h-screen overflow-y-auto'
+      'relative flex flex-col font-sans antialiased selection:bg-[#EC7F7A]/30 overflow-x-hidden',
+      isChatPage ? 'h-[100dvh] overflow-hidden bg-gradient-to-b from-bleu-50 to-[#e0ecf2]' : 'bg-[#e0ecf2] min-h-screen overflow-y-auto'
     ]"
   >
     <!-- Navbar (Hidden on Auth pages) -->
     <TheNavbar v-if="!isAuthPage" />
     
-    <!-- MODE: Chat (Constrained Grid with Sidebar) -->
-    <main v-if="isChatPage" class="mx-auto w-11/12 max-w-[1440px] pt-28 pb-10 flex-1 flex flex-col min-h-0 overflow-hidden">
-      <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-[112px] min-h-0 overflow-hidden">
-        <!-- Sidebar Illustration -->
-        <div class="hidden lg:block lg:col-span-4 flex flex-col min-h-0 overflow-hidden">
-          <ChatbotIllustration />
-        </div>
-        <!-- Main Chat Area -->
-        <div class="col-span-1 lg:col-span-8 flex flex-col h-full min-h-0 overflow-hidden">
-          <slot />
-        </div>
-      </div>
+    <!-- MODE: Chat (panneau latéral et discussion, pleine hauteur) -->
+    <img v-if="isChatPage" src="/images/medecines/rond-corail.svg" alt="" aria-hidden="true" class="hidden xl:block absolute -left-[15%] top-[420px] w-[37%] max-w-[640px] pointer-events-none select-none" style="animation: none;" />
+    <main v-if="isChatPage" class="relative flex-1 min-h-0 overflow-hidden flex flex-col w-full px-4 xl:px-[39px] pt-28 xl:pt-[138px] pb-4 xl:pb-8">
+      <slot />
     </main>
 
     <!-- MODE: Auth (Clean 50/50 Layout - Slot is full-page) -->

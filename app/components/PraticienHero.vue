@@ -29,26 +29,38 @@
       </h1>
 
       <!-- Barre de recherche -->
-      <form class="bg-white rounded-full shadow-md flex items-center h-14 overflow-hidden" role="search" @submit.prevent="search">
-        <div class="flex items-center gap-2 px-5 flex-1 min-w-0">
+      <form class="focus-ring-within bg-white rounded-full shadow-md flex items-center h-14 sm:-mx-12 lg:-mx-20" role="search" @submit.prevent="search">
+        <label for="hero-q" class="flex items-center gap-2 px-5 max-[419px]:px-3 flex-1 min-w-0 self-stretch cursor-text">
           <MapPin :size="15" class="text-gray-400 shrink-0" aria-hidden="true" />
           <input
+            id="hero-q"
             v-model="query"
             type="text"
             aria-label="Ville, code postal ou nom du praticien"
             placeholder="Ville, code postal ou nom"
-            class="bg-transparent text-sm text-gray-700 placeholder-gray-400 focus:outline-none min-w-0 w-full"
+            class="focus-in-parent bg-transparent text-sm text-gray-700 placeholder-gray-400 focus:outline-none min-w-0 w-full"
           />
-        </div>
+        </label>
+        <button
+          type="button"
+          class="shrink-0 mr-2 inline-flex items-center gap-1.5 rounded-full px-3 h-11 min-w-[44px] justify-center text-xs font-semibold transition-colors"
+          :class="geo ? 'bg-[#156F71] text-white' : 'text-[#156F71] hover:bg-[#e0ecf2]'"
+          :aria-pressed="geo ? 'true' : 'false'"
+          aria-label="Autour de moi"
+          @click="emit(geo ? 'unlocate' : 'locate')"
+        >
+          <LocateFixed :size="15" aria-hidden="true" />
+          <span class="hidden lg:inline">Autour de moi</span>
+        </button>
         <div class="hidden sm:flex items-center px-4 border-l border-gray-100 max-w-[200px]">
-          <select v-model="speciality" aria-label="Spécialité" class="bg-transparent text-sm text-gray-600 focus:outline-none w-full appearance-none cursor-pointer">
+          <select v-model="speciality" aria-label="Spécialité" class="focus-in-parent bg-transparent text-sm text-gray-600 focus:outline-none w-full appearance-none cursor-pointer">
             <option value="">Toutes les spécialités</option>
             <option v-for="sp in specialities" :key="sp.id" :value="sp.slug">{{ sp.name }}</option>
           </select>
         </div>
         <div class="shrink-0 pr-1.5">
-          <button type="submit" class="bg-[#156F71] text-white text-sm font-semibold h-11 px-5 rounded-full flex items-center gap-2 hover:bg-[#0f5557] transition-colors whitespace-nowrap">
-            Rechercher <Search :size="14" aria-hidden="true" />
+          <button type="submit" aria-label="Rechercher" class="bg-[#156F71] text-white text-sm font-semibold h-11 px-5 max-[419px]:px-3.5 rounded-full flex items-center gap-2 hover:bg-[#0f5557] transition-colors whitespace-nowrap">
+            <span class="max-[419px]:hidden">Rechercher</span> <Search :size="14" aria-hidden="true" />
           </button>
         </div>
       </form>
@@ -59,7 +71,10 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { MapPin, Search } from 'lucide-vue-next'
+import { MapPin, Search, LocateFixed } from 'lucide-vue-next'
+
+const props = defineProps({ geo: { type: Object, default: null } })
+const emit = defineEmits(['locate', 'unlocate'])
 
 const route = useRoute()
 const router = useRouter()
@@ -88,6 +103,12 @@ function search() {
   const params = {}
   if (q) params.q = q
   if (speciality.value) params.specialite = speciality.value
+  // Mesure d'audience (anonyme) : spécialité choisie dans la liste, jamais le texte saisi
+  trackEvent('praticien-search', {
+    specialite: speciality.value || 'aucune',
+    texte: q ? 'oui' : 'non',
+    autour_de_moi: props.geo ? 'oui' : 'non',
+  })
   router.push({ path: '/trouver-un-praticien', query: params, hash: '#resultats' })
 }
 </script>

@@ -50,6 +50,8 @@ useSeoMeta({
   twitterImage: 'https://leya-sante.fr/og-image.jpg',
 })
 
+useWebPageSchema({ name: 'Léya — La médecine alternative, intelligente et accessible', description: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.', type: 'WebPage' })
+
 useHead({
   script: [{
     type: 'application/ld+json',
@@ -63,6 +65,12 @@ useHead({
           url: 'https://leya-sante.fr',
           logo: 'https://leya-sante.fr/favicon.png',
           email: 'contact@leya-sante.fr',
+          contactPoint: {
+            '@type': 'ContactPoint',
+            contactType: 'customer support',
+            email: 'contact@leya-sante.fr',
+            availableLanguage: 'French',
+          },
           sameAs: [
             'https://www.facebook.com/LeyaSante/',
             'https://www.instagram.com/leya.sante/',

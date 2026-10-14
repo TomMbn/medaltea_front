@@ -13,10 +13,9 @@
               width="1000"
               height="800"
               format="webp"
-              quality="80"
-              loading="lazy"
-              placeholder
-              sizes="sm:100vw md:50vw lg:600px"
+              quality="75"
+              loading="eager"
+              sizes="xs:400px md:800px lg:940px"
             />
           </div>
           
@@ -44,9 +43,11 @@
             <ul class="space-y-4 mb-10">
               <li v-for="item in features" :key="item" class="flex items-center gap-4">
                 <div class="w-6 h-6 flex items-center justify-center shrink-0">
-                  <NuxtImg 
-                    src="/images/landing-intro.svg" 
-                    alt="Check Icon" 
+                  <img
+                    src="/images/landing-intro.svg"
+                    alt="Check Icon"
+                    width="24"
+                    height="24"
                     class="w-full h-full object-contain"
                   />
                 </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-[1080px] mx-auto">
-    <ul v-if="praticiens.length" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <ul v-if="praticiens.length" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <PraticienCard v-for="p in praticiens" :key="p.id" :praticien="p" />
     </ul>
     <p v-else class="text-center text-[#012828]/70 bg-white rounded-2xl p-6 font-sans">
@@ -32,7 +32,7 @@ const speciality = computed(() => findBySlug(props.slug))
 const { data } = await useAsyncData(
   `praticiens-${props.slug}`,
   () => (speciality.value
-    ? $fetch('/api/backend/praticiens', { query: { specialityId: speciality.value.id } }).catch(() => [])
+    ? $fetch('/api/backend/praticiens', { query: { specialityId: speciality.value.id, limit: 6 } }).catch(() => [])
     : []),
   { default: () => [] },
 )

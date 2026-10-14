@@ -107,6 +107,8 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 })
 
+useWebPageSchema({ name: title, description, breadcrumbs: [{ name: 'Espace praticiens', path: '/praticiens-pro' }] })
+
 const benefits = [
   { icon: Search, title: 'Soyez trouvé près de chez vous', text: 'Votre fiche apparaît dans la recherche par ville et par spécialité, avec vos coordonnées, vos prestations et vos tarifs.' },
   { icon: CalendarCheck, title: 'Un agenda en ligne', text: 'Vos patients réservent sur vos créneaux libres, à toute heure. Vous recevez les demandes dans votre espace.' },

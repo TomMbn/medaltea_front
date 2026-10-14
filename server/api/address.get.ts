@@ -19,6 +19,8 @@ export default defineEventHandler(async (event) => {
             street: f.properties?.name,
             postalCode: f.properties?.postcode,
             city: f.properties?.city,
+            latitude: Number(f.geometry?.coordinates?.[1]),
+            longitude: Number(f.geometry?.coordinates?.[0]),
         })).filter((a: any) => a.label && a.street && a.postalCode && a.city)
     } catch {
         // Service indisponible : l'interface bascule sur la saisie manuelle.

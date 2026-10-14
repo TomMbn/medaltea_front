@@ -5,7 +5,7 @@
       
       <!-- Left Zone: Logo -->
       <div class="flex items-center shrink-0">
-        <NuxtLink to="/" class="flex items-center">
+        <NuxtLink to="/" class="flex items-center min-h-[44px]">
             <img src="/images/logo.svg" alt="Léya" class="h-10 w-auto" />
         </NuxtLink>
       </div>
@@ -61,6 +61,7 @@
           <div v-if="isAccountOpen" role="menu" class="absolute right-0 mt-2 w-56 bg-white rounded-[16px] shadow-xl border border-gray-100 py-2">
             <NuxtLink to="/mes-rendez-vous" role="menuitem" class="block px-5 py-2.5 text-sm font-semibold text-[#012828] hover:bg-gray-50" @click="isAccountOpen = false">Mes rendez-vous</NuxtLink>
             <NuxtLink to="/trouver-un-praticien" role="menuitem" class="block px-5 py-2.5 text-sm font-semibold text-[#012828] hover:bg-gray-50" @click="isAccountOpen = false">Prendre rendez-vous</NuxtLink>
+            <NuxtLink to="/mon-compte" role="menuitem" class="block px-5 py-2.5 text-sm font-semibold text-[#012828] hover:bg-gray-50" @click="isAccountOpen = false">Mes informations</NuxtLink>
             <button role="menuitem" class="w-full text-left px-5 py-2.5 text-sm font-semibold text-red-700 hover:bg-gray-50 border-t border-gray-100" @click="handleLogout">Déconnexion</button>
           </div>
         </div>
@@ -73,9 +74,9 @@
 
       <!-- Mobile Menu Button -->
       <div class="lg:hidden flex items-center">
-        <button aria-label="Ouvrir le menu" :aria-expanded="isMenuOpen" @click="isMenuOpen = !isMenuOpen" class="text-[#012828] hover:text-[#1c6c63] focus:outline-none p-1">
-          <Menu v-if="!isMenuOpen" :size="32" />
-          <X v-else :size="32" />
+        <button aria-label="Ouvrir le menu" :aria-expanded="isMenuOpen" @click="isMenuOpen = !isMenuOpen" class="text-[#012828] hover:text-[#1c6c63] focus:outline-none p-2">
+          <Menu v-if="!isMenuOpen" :size="28" />
+          <X v-else :size="28" />
         </button>
       </div>
     </nav>
@@ -99,6 +100,7 @@
           </NuxtLink>
           <NuxtLink v-if="!isLoggedIn" to="/praticiens-pro" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">Vous êtes praticien ?</NuxtLink>
           <NuxtLink v-if="isLoggedIn && !isPro" to="/mes-rendez-vous" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">Mes rendez-vous</NuxtLink>
+          <NuxtLink v-if="isLoggedIn && !isPro" to="/mon-compte" class="text-[#012828] font-semibold text-[15px] py-2 border-b border-gray-100" @click="isMenuOpen = false">Mes informations</NuxtLink>
 
           <NuxtLink v-if="!isLoggedIn" to="/login" class="w-full btn-signup text-white py-3 rounded-[12px] font-bold text-center" @click="isMenuOpen = false">Connexion</NuxtLink>
           <NuxtLink v-else-if="isPro" to="/pro/rendez-vous" class="w-full btn-signup text-white py-3 rounded-[12px] font-bold text-center" @click="isMenuOpen = false">Mon espace praticien</NuxtLink>

@@ -87,7 +87,7 @@
           <p class="text-xs text-gray-600">
             {{ selectedType.durationMin }} min · {{ selectedType.mode === 'visio' ? 'En visio' : 'Au cabinet' }}<template v-if="selectedType.price != null"> · {{ selectedType.price }} €</template>
           </p>
-          <a v-if="types.length > 1" href="#prestations" class="lg:hidden text-xs underline text-[#156F71] mt-1 inline-block">Changer de prestation</a>
+          <a v-if="types.length > 1" href="#prestations" class="lg:hidden text-sm underline text-[#156F71] mt-1 inline-block py-3">Changer de prestation</a>
         </div>
 
         <p v-if="slotGone" class="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl p-3 mb-3" role="status">Ce créneau n'est plus disponible. Choisissez-en un autre.</p>
@@ -121,9 +121,9 @@
             <div class="grid gap-2" :style="gridStyle">
               <div v-for="d in columns" :key="d.key" class="min-w-0" role="group" :aria-label="d.long">
                 <div class="text-center mb-2 leading-tight">
-                  <p class="text-[11px] uppercase text-gray-500">{{ d.weekday }}</p>
+                  <p class="text-xs uppercase text-gray-500">{{ d.weekday }}</p>
                   <p class="text-base font-bold" :class="d.slots.length ? '' : 'text-gray-300'">{{ d.day }}</p>
-                  <p class="text-[10px] text-gray-400">{{ d.month }}</p>
+                  <p class="text-xs text-gray-400">{{ d.month }}</p>
                 </div>
                 <div v-if="d.slots.length" class="grid gap-1.5">
                   <button
@@ -337,7 +337,11 @@ function setQuery(patch) {
   for (const k of Object.keys(query)) if (query[k] == null) delete query[k]
   router.replace({ query })
 }
+// Mesure d'audience (anonyme) : étapes de la réservation, avec le mode de consultation seulement
+const bookingMode = () => (selectedType.value?.mode === 'visio' ? 'visio' : 'cabinet')
+
 function choose(slot) {
+  if (slot !== selectedSlot.value) trackEvent('booking-slot-selected', { mode: bookingMode() })
   selectedSlot.value = slot
   slotGone.value = false
   submitError.value = ''
@@ -383,6 +387,7 @@ async function submit() {
   if (submitting.value || !selectedSlot.value) return
   submitting.value = true
   submitError.value = ''
+  trackEvent('booking-submitted', { mode: bookingMode() })
   try {
     booked.value = await $fetch('/api/backend/appointments', {
       method: 'POST',
@@ -394,7 +399,9 @@ async function submit() {
       },
     })
     booked.value = { ...booked.value, startAt: booked.value?.startAt ?? selectedSlot.value }
+    trackEvent('booking-success', { mode: bookingMode() })
   } catch (e) {
+    trackEvent('booking-error', { status: apiStatus(e) ?? 0 })
     if (apiStatus(e) === 401) {
       await useSession().logout()
       await navigateTo({ path: '/login', query: { redirect: route.fullPath } })
@@ -418,9 +425,9 @@ async function submit() {
 </script>
 
 <style scoped>
-.nav-btn { width: 2.25rem; height: 2.25rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; transition: background-color .15s; }
+.nav-btn { width: 2.75rem; height: 2.75rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; transition: background-color .15s; }
 .nav-btn:hover:not(:disabled) { background: #f3f4f6; }
 .nav-btn:disabled { opacity: .3; cursor: not-allowed; }
-.slot { width: 100%; padding: 0.5rem 0; border-radius: 0.5rem; background: rgb(224 236 242 / 0.7); font-size: 0.875rem; font-weight: 600; color: #012828; transition: background-color .15s, color .15s; }
+.slot { width: 100%; padding: 0.75rem 0; border-radius: 0.5rem; background: rgb(224 236 242 / 0.7); font-size: 0.875rem; font-weight: 600; color: #012828; transition: background-color .15s, color .15s; }
 .slot:hover, .slot:focus-visible { background: #156F71; color: #fff; outline: none; }
 </style>

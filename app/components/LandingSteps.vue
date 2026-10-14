@@ -28,7 +28,7 @@
             Recevez des recommandations
           </h3>
           <p class="text-[#012828] text-[16px] lg:text-[17px] leading-relaxed font-sans opacity-80">
-            Obtenez des suggestions personnalisées de thérapies naturelles et de praticiens qualifiés près de chez vous.
+            Obtenez des suggestions personnalisées de thérapies naturelles et de praticiens près de chez vous.
           </p>
         </div>
 

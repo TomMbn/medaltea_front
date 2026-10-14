@@ -35,7 +35,7 @@
             ></div>
             
             <!-- White Inner Container -->
-            <div class="flex-1 bg-white rounded-[17.5px] flex flex-col p-6 justify-between shadow-xl">
+            <div class="flex-1 bg-white rounded-[17.5px] flex flex-col p-6 justify-between shadow-xl focus-ring-within">
               <!-- Input Row -->
               <div class="flex items-center gap-4">
                 <textarea 
@@ -43,14 +43,14 @@
                   aria-label="Votre message à Léya"
                   :rows="1"
                   @keydown.enter.prevent="handleSubmit"
-                  class="flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans w-full overflow-hidden"
+                  class="focus-in-parent flex-1 text-lg border-none focus:ring-0 focus:outline-none placeholder-gray-300 text-[#012828] resize-none py-2 bg-transparent font-sans w-full overflow-hidden"
                   placeholder="Demander à Léya"
                 ></textarea>
                 
                 <button 
                   aria-label="Envoyer le message"
                   @click="handleSubmit"
-                  class="w-10 h-10 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 cursor-pointer"
+                  class="w-11 h-11 rounded-full bg-[#EC7F7A] flex items-center justify-center text-white shadow-md hover:shadow-lg hover:bg-[#f1aeab] transition-all shrink-0 cursor-pointer"
                 >
                   <ArrowUp :size="20" stroke-width="3" />
                 </button>
@@ -85,9 +85,7 @@
             height="626"
             format="webp"
             quality="80"
-            fetchpriority="high"
-            preload
-            placeholder
+            loading="lazy"
             sizes="sm:100vw md:80vw lg:800px"
           />
         </div>
@@ -102,9 +100,7 @@
             height="393"
             format="webp"
             quality="80"
-            fetchpriority="high"
-            preload
-            placeholder
+            loading="lazy"
             sizes="sm:60vw md:50vw lg:600px"
           />
         </div>
@@ -243,6 +239,7 @@ const handleSuggestion = (text) => {
 @media (min-width: 1024px) {
   .hero-section {
     min-height: 100vh;
+    min-height: 100svh;
   }
 
   .images-stack {
@@ -286,8 +283,9 @@ const handleSuggestion = (text) => {
     gap: 60px;
   }
 
+  /* Fluide jusqu'à 54 px : à 54 px fixes le titre passait sur 5 lignes entre 1280 et 1340 px et repoussait la carte hors de l'écran */
   .hero-title {
-    font-size: 54px;
+    font-size: clamp(40px, 3.65vw, 54px);
   }
 
   .hero-content {
@@ -311,6 +309,28 @@ const handleSuggestion = (text) => {
 
   .overlay-card {
     width: 54%;
+  }
+}
+
+/* Écrans peu hauts (portables, barre de favoris, zoom du navigateur) : la carte « Demander à Léya » reste visible sans défiler */
+@media (max-width: 1023px) {
+  .search-bar-wrapper {
+    margin-top: 88px;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 760px) {
+  .hero-section {
+    padding-top: 108px;
+    padding-bottom: 40px;
+  }
+
+  .hero-content {
+    padding-top: 32px;
+  }
+
+  .search-bar-wrapper {
+    margin-top: 40px;
   }
 }
 </style>

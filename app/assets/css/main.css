@@ -83,6 +83,17 @@ h6,
 }
 
 /*
+  Champs de saisie placés dans une « pilule » ou une carte : le repère de focus est porté par le conteneur
+  (focus-within), pas par le champ lui-même, sinon un cadre apparaît à l'intérieur de la barre.
+*/
+.focus-in-parent:focus-visible {
+  outline: none !important;
+}
+.focus-ring-within:focus-within {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #156F71;
+}
+
+/*
   Accessibilité — mouvement réduit
   Pour les personnes qui ont demandé moins d'animations dans leur système.
 */
@@ -94,5 +105,30 @@ h6,
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/*
+  Écrans tactiles : zones à toucher d'au moins 44 px (boutons, listes déroulantes, champs de saisie).
+  Les cases à cocher gardent leur taille mais sont étendues par leur étiquette.
+*/
+@media (pointer: coarse) {
+  button:not(.chip),
+  select,
+  summary,
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='hidden']) {
+    min-height: 44px;
+  }
+  input[type='checkbox'],
+  input[type='radio'] {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+/* Éléments d'accompagnement masqués quand la fenêtre est peu haute (portables avec barre de favoris, zoom) : le formulaire reste dans le premier écran */
+@media (min-width: 768px) and (max-height: 760px) {
+  .hide-short {
+    display: none;
   }
 }

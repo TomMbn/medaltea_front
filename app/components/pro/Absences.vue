@@ -16,7 +16,7 @@
             <input v-if="reason === 'Autre'" v-model="customReason" maxlength="60" class="field mt-2" placeholder="Précisez (facultatif)" aria-label="Précisez le motif" />
           </div>
 
-          <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <label class="flex items-center gap-2 text-sm cursor-pointer min-h-[44px]">
             <input v-model="allDay" type="checkbox" class="accent-[#156F71]" />
             Journée entière
           </label>
@@ -61,7 +61,7 @@
               <p class="text-sm font-semibold">{{ a.label }}</p>
               <p class="text-xs text-gray-500 mt-0.5">{{ a.duration }}</p>
             </div>
-            <span v-if="a.reason" class="text-[11px] font-semibold rounded-full px-2.5 py-1 shrink-0" :class="reasonStyle(a.reason)">{{ a.reason }}</span>
+            <span v-if="a.reason" class="text-xs font-semibold rounded-2xl px-2.5 py-1 max-w-[45%] break-words text-center" :class="reasonStyle(a.reason)">{{ a.reason }}</span>
           </div>
           <div class="mt-2 text-xs">
             <template v-if="confirming === a.id">

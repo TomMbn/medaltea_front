@@ -8,7 +8,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
         <!-- Row 1 -->
         <div class="benefit-card image-card rounded-[30px] overflow-hidden shadow-lg min-h-[280px]">
-          <img src="/images/benefits.jpg" alt="Benefits" class="w-full h-full object-cover" />
+          <NuxtImg src="/images/benefits.jpg" alt="Benefits" class="w-full h-full object-cover" format="webp" quality="80" loading="lazy" sizes="xs:100vw sm:50vw xl:25vw" />
         </div>
         
         <div class="benefit-card text-card bg-[#90BAD1] p-8 rounded-[30px] shadow-lg flex flex-col justify-center min-h-[280px]">
@@ -19,7 +19,7 @@
         </div>
 
         <div class="benefit-card image-card rounded-[30px] overflow-hidden shadow-lg min-h-[280px]">
-          <img src="/images/Rectangle 200.jpg" alt="Transparence" class="w-full h-full object-cover" />
+          <NuxtImg src="/images/rectangle-200.jpg" alt="Transparence" class="w-full h-full object-cover" format="webp" quality="80" loading="lazy" sizes="xs:100vw sm:50vw xl:25vw" />
         </div>
 
         <div class="benefit-card text-card bg-[#156F71] p-8 rounded-[30px] shadow-lg flex flex-col justify-center text-white min-h-[280px]">
@@ -38,7 +38,7 @@
         </div>
 
         <div class="benefit-card image-card rounded-[30px] overflow-hidden shadow-lg min-h-[280px]">
-          <img src="/images/Rectangle 203.jpg" alt="Accès instantané" class="w-full h-full object-cover" />
+          <NuxtImg src="/images/rectangle-203.jpg" alt="Accès instantané" class="w-full h-full object-cover" format="webp" quality="80" loading="lazy" sizes="xs:100vw sm:50vw xl:25vw" />
         </div>
 
         <div class="benefit-card text-card bg-[#90BAD1] p-8 rounded-[30px] shadow-lg flex flex-col justify-center min-h-[280px]">
@@ -49,7 +49,7 @@
         </div>
 
         <div class="benefit-card image-card rounded-[30px] overflow-hidden shadow-lg min-h-[280px]">
-          <img src="/images/Rectangle 205.jpg" alt="Confidentialité" class="w-full h-full object-cover" />
+          <NuxtImg src="/images/rectangle-205.jpg" alt="Confidentialité" class="w-full h-full object-cover" format="webp" quality="80" loading="lazy" sizes="xs:100vw sm:50vw xl:25vw" />
         </div>
       </div>
     </div>

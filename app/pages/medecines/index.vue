@@ -31,7 +31,7 @@
           :src="img.src"
           :alt="img.alt"
           class="w-full h-full object-cover"
-          width="350" height="220" format="webp" quality="80" loading="lazy"
+          width="350" height="220" format="webp" quality="80" loading="lazy" sizes="xs:300px md:340px lg:420px xl:600px 3xl:780px"
         />
       </div>
     </div>
@@ -40,7 +40,7 @@
     <div class="w-11/12 max-w-[1200px] mx-auto pb-12">
 
       <!-- Barre de filtres -->
-      <div class="flex items-center gap-3 mb-8">
+      <div class="flex flex-wrap items-center gap-3 mb-8">
         <button class="flex items-center gap-2 border border-[#012828]/20 text-[#012828] text-sm font-medium px-5 py-2.5 rounded-full hover:border-[#012828]/50 transition-colors">
           Filtrer par <ChevronDown :size="15" />
         </button>
@@ -65,14 +65,14 @@
               :src="med.heroImage"
               :alt="med.name"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              width="429" height="260" format="webp" quality="80" loading="lazy"
+              width="429" height="260" format="webp" quality="80" loading="lazy" sizes="xs:360px lg:300px xl:390px"
             />
             <!-- Icon: pinned bottom-right of image, always proportional -->
             <div
-              class="absolute z-10 flex items-center justify-center text-3xl"
+              class="absolute z-10 flex items-center justify-center"
               style="bottom: 8px; right: 12px; width: 64px; height: 64px; border-radius: 14px; background: #B8CFD8;"
             >
-              {{ med.icon }}
+              <img :src="med.icon" alt="" width="36" height="36" class="w-9 h-9 object-contain" />
             </div>
           </div>
 
@@ -96,7 +96,7 @@
 
       <!-- Pagination -->
       <div class="flex justify-end mt-10">
-        <button class="flex items-center gap-2 text-[#EC7F7A] text-sm font-semibold hover:opacity-70 transition-opacity">
+        <button class="flex items-center gap-2 text-[#EC7F7A] text-sm font-semibold hover:opacity-70 transition-opacity py-3">
           Page suivante <ArrowRight :size="15" />
         </button>
       </div>
@@ -125,10 +125,12 @@ const stripImages = [
 ]
 
 useSeoMeta({
-  title: 'Les Médecines alternatives — Découvrez toutes les disciplines | Léya',
+  title: 'Médecines alternatives : les disciplines à découvrir | Léya',
   description: 'Explorez l\'annuaire des médecines alternatives sur Léya : ostéopathie, naturopathie, sophrologie, acupuncture, hypnothérapie et plus encore.',
-  ogTitle: 'Les Médecines alternatives — Léya',
+  ogTitle: 'Médecines alternatives : les disciplines à découvrir — Léya',
   ogDescription: 'Explorez toutes les disciplines de médecines alternatives sur Léya et trouvez le praticien adapté à vos besoins.',
   ogUrl: 'https://leya-sante.fr/medecines',
 })
+
+useWebPageSchema({ name: 'Médecines alternatives : les disciplines à découvrir', description: 'Explorez l\'annuaire des médecines alternatives sur Léya : ostéopathie, naturopathie, sophrologie, acupuncture, hypnothérapie et plus encore.', type: 'CollectionPage', breadcrumbs: [{ name: "Médecines", path: '/medecines' }] })
 </script>

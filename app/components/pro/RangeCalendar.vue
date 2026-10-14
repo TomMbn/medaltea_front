@@ -6,7 +6,7 @@
       <button type="button" class="w-9 h-9 rounded-full hover:bg-gray-100" aria-label="Mois suivant" @click="shift(1)">›</button>
     </div>
 
-    <div class="grid grid-cols-7 text-center text-[11px] font-semibold text-gray-400 mb-1" aria-hidden="true">
+    <div class="grid grid-cols-7 text-center text-xs font-semibold text-gray-400 mb-1" aria-hidden="true">
       <span v-for="d in DAYS" :key="d.n">{{ d.short }}</span>
     </div>
 
@@ -31,7 +31,7 @@
       </button>
     </div>
 
-    <ul class="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-[11px] text-gray-500">
+    <ul class="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-gray-500">
       <li class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-[#156F71]" aria-hidden="true" /> Sélection</li>
       <li class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500" aria-hidden="true" /> Absence déjà prévue</li>
       <li class="flex items-center gap-1.5"><span class="text-gray-300" aria-hidden="true">12</span> Jour fermé</li>

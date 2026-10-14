@@ -5,6 +5,8 @@ Disallow: /register
 Disallow: /coming-soon
 Disallow: /pro
 Disallow: /mes-rendez-vous
+Disallow: /mon-compte
+Disallow: /compte-supprime
 Disallow: /api/
 
 Sitemap: https://leya-sante.fr/sitemap.xml

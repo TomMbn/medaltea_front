@@ -7,17 +7,20 @@
         :src="medicine.heroImage"
         :alt="medicine.name"
         class="w-full h-full object-cover"
-        width="1440" height="520" format="webp" quality="85"
+        width="1440" height="520" format="webp" quality="85" sizes="xs:640px md:820px lg:1024px xl:1440px 3xl:1920px"
         fetchpriority="high"
       />
       <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
       <div class="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-6">
-        <div class="bg-white/20 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center text-3xl mb-8">
-          {{ medicine.icon }}
+        <div class="bg-white/20 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center mb-8">
+          <!-- Pictogramme passé en blanc pour rester lisible sur la photo (le filtre est sur le conteneur : l'animation globale des images occupe déjà celui de l'image) -->
+          <span class="inline-flex" style="filter: brightness(0) invert(1);">
+            <img :src="medicine.icon" alt="" width="32" height="32" class="w-8 h-8 object-contain" />
+          </span>
         </div>
         <h1 class="font-unbounded font-bold text-4xl md:text-5xl mb-10">{{ medicine.name }}</h1>
         <button
-          class="bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-2 hover:bg-white/90 transition-colors whitespace-nowrap"
+          class="bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-3 hover:bg-white/90 transition-colors whitespace-nowrap"
           @click="scrollToPractitioners"
         >
           Trouvez {{ medicine.ctaLabel }}
@@ -33,7 +36,7 @@
             :src="medicine.definitionImage"
             :alt="`${medicine.name} — définition`"
             class="w-full h-full object-cover"
-            width="600" height="380" format="webp" quality="80" loading="lazy"
+            width="600" height="380" format="webp" quality="80" sizes="xs:400px md:680px lg:600px xl:660px" loading="lazy"
           />
         </div>
         <div>
@@ -48,7 +51,7 @@
             {{ para }}
           </p>
           <h3 class="font-unbounded font-bold text-[17px] text-[#012828] mt-8 mb-4">
-            Pour qui est-ce recommandé ?
+            Motifs de consultation fréquents
           </h3>
           <div class="flex flex-wrap gap-3">
             <span
@@ -74,7 +77,7 @@
               :src="medicine.mosaicImage1"
               :alt="medicine.name"
               class="w-full h-full object-cover"
-              width="460" height="280" format="webp" quality="80" loading="lazy"
+              width="460" height="280" format="webp" quality="80" sizes="xs:400px md:450px lg:440px" loading="lazy"
             />
           </div>
           <div class="flex-1 lg:flex-none bg-[#90BAD1] rounded-[20px] h-[180px] lg:h-[160px] flex flex-col justify-between p-5 lg:p-6">
@@ -92,7 +95,7 @@
             :src="medicine.mosaicImage2"
             :alt="medicine.mosaicImage2Tagline"
             class="w-full h-full object-cover"
-            width="460" height="476" format="webp" quality="80" loading="lazy"
+            width="460" height="476" format="webp" quality="80" sizes="xs:280px md:860px lg:640px" loading="lazy"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           <span class="absolute bottom-5 left-5 text-white font-unbounded font-bold text-xl">
@@ -105,7 +108,7 @@
           <div class="flex-1 lg:flex-none relative bg-[#156F71] rounded-[20px] h-[180px] lg:h-[160px] flex items-center p-5 lg:p-6 overflow-hidden">
             <NuxtLink
               :to="`/trouver-un-praticien?specialite=${medicine.slug}#resultats`"
-              class="absolute top-5 right-5 bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-2 hover:bg-white/90 transition-colors whitespace-nowrap"
+              class="absolute top-5 right-5 bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-3 hover:bg-white/90 transition-colors whitespace-nowrap"
             >
               Voir la liste →
             </NuxtLink>
@@ -119,7 +122,7 @@
               :src="medicine.mosaicImage3"
               :alt="medicine.name"
               class="w-full h-full object-cover"
-              width="460" height="280" format="webp" quality="80" loading="lazy"
+              width="460" height="280" format="webp" quality="80" sizes="xs:400px md:450px lg:440px" loading="lazy"
             />
           </div>
         </div>
@@ -157,14 +160,14 @@
             :src="medicine.heroImage"
             :alt="medicine.name"
             class="w-full h-full object-cover"
-            width="1440" height="420" format="webp" quality="60" loading="lazy"
+            width="1440" height="420" format="webp" quality="75" sizes="xs:640px md:820px lg:1024px xl:1440px 3xl:1920px" loading="lazy"
           />
         </div>
         <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(90deg, #156F71 46.59%, rgba(0,0,0,0) 100%)" />
         <div class="w-11/12 max-w-[1200px] mx-auto relative z-10">
         <div class="max-w-lg">
           <h2 class="font-unbounded font-bold text-2xl md:text-3xl text-white mb-8">
-            Principaux bienfaits
+            Ce que cette pratique peut apporter
           </h2>
           <ul class="space-y-3 mb-10">
             <li
@@ -176,8 +179,11 @@
               <span>{{ benefit }}</span>
             </li>
           </ul>
+          <p class="text-white/80 text-[13px] leading-relaxed mb-6">
+            Cette pratique ne remplace pas un avis ou un traitement médical. En cas de symptôme persistant ou inquiétant, consultez un professionnel de santé.
+          </p>
           <button
-            class="bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-2 hover:bg-white/90 transition-colors whitespace-nowrap"
+            class="bg-white text-[#012828] text-sm font-medium rounded-full px-4 py-3 hover:bg-white/90 transition-colors whitespace-nowrap"
             @click="scrollToPractitioners"
           >
             Trouvez {{ medicine.ctaLabel }}

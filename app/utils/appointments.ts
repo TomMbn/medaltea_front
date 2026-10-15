@@ -37,6 +37,7 @@ export interface Appointment {
   price: number | null
   mode: string | null
   kind: string | null
+  typeId: number | null
   patientName: string | null
   patientContact: string | null
   isGuest: boolean
@@ -67,6 +68,7 @@ export function normalizeAppointment(raw: any): Appointment {
     price: type?.price ?? raw?.price ?? null,
     mode: type?.mode ?? raw?.mode ?? null,
     kind: type?.kind ?? raw?.kind ?? null,
+    typeId: type?.id != null ? Number(type.id) : (raw?.consultationTypeId != null ? Number(raw.consultationTypeId) : null),
     patientName: fullName(patient) || patient?.name || raw?.patientName || null,
     // Invité : l'e-mail et le téléphone sont les seuls moyens de contacter la personne
     patientContact: raw?.isGuest === true

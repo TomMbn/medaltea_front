@@ -1,136 +1,106 @@
 <template>
-  <div class="registration-page-v2">
-    <!-- Left Pane: Illustration -->
-    <div class="pane-left">
-      <AuthIllustration />
+  <div class="min-h-screen min-h-[100svh] bg-bleu-50 text-vert-900 lg:flex lg:gap-10 xl:gap-20 lg:p-10">
+    <!-- Panneau d'illustration -->
+    <div class="hidden lg:block lg:w-[42vw] xl:w-[36vw] max-w-[620px] shrink-0 lg:sticky lg:top-10 lg:h-[calc(100svh-80px)]">
+      <AuthIllustration logo message="Expliquez-nous ce que vous ressentez, on vous guide." />
     </div>
 
-    <!-- Right Pane: Form -->
-    <div class="pane-right">
-      <div class="form-container">
-        <!-- Logo Header -->
-        <div class="header-section">
-          <NuxtLink to="/">
-            <img 
-              src="/images/logo.svg" 
-              alt="Léya"
-              class="logo-img"
-            />
-          </NuxtLink>
-          <h1 class="auth-title mb-4">
-            Créer un compte
-          </h1>
-          <p class="auth-subtitle">
-            Rejoignez Léya pour un accompagnement personnalisé.
-          </p>
-        </div>
+    <!-- Formulaire -->
+    <div class="flex-1 min-w-0 flex flex-col px-5 sm:px-8 py-8 lg:p-0 lg:pt-6 lg:min-h-[calc(100svh-80px)]">
+      <NuxtLink to="/" class="lg:hidden self-start" aria-label="Léya, retour à l'accueil">
+        <img src="/images/logo.svg" alt="Léya" width="120" height="54" class="w-[100px] h-auto" style="animation: none;" />
+      </NuxtLink>
 
-        <!-- Registration Form -->
-        <form @submit.prevent="handleRegister" class="auth-form">
-          <div class="field-group">
-            <label class="input-label" for="register-mail">Adresse mail</label>
-            <input 
+      <div class="mt-8 lg:mt-0">
+        <h1 class="font-unbounded font-normal text-[30px] sm:text-[34px] lg:text-[40px] leading-[normal] text-vert-900">Créez votre compte</h1>
+        <p class="mt-[10px] text-[18px] lg:text-[20px] leading-[normal] text-neutre-600 max-w-[820px]">
+          Retrouvez vos médecines et praticiens favoris. Vos conversations avec Léya, elles, ne sont jamais enregistrées.
+        </p>
+      </div>
+
+      <form class="mt-8 lg:mt-[48px] flex-1 flex flex-col" @submit.prevent="handleRegister">
+        <div class="grid sm:grid-cols-2 gap-4 max-w-[776px]">
+          <div class="flex flex-col gap-2">
+            <label for="register-mail" class="text-[16px] font-medium leading-[normal]">Adresse e-mail</label>
+            <div class="relative">
+            <input
               id="register-mail"
               v-model="mail"
               type="email"
               autocomplete="email"
-              inputmode="email" 
-              class="form-input"
+              inputmode="email"
               required
+              maxlength="150"
               placeholder="votre@email.com"
               :disabled="isLoading"
+              class="h-[52px] w-full rounded-[12px] border border-[#c8c8c8] bg-white pl-4 pr-11 text-[16px] text-vert-900 placeholder:text-neutre-500 focus:outline-none focus:border-2 focus:border-vert-600 focus:shadow-[0_0_0_4px_#cde4df] transition-shadow"
             />
+            <Check v-if="mailLooksValid" :size="20" class="absolute right-4 top-1/2 -translate-y-1/2 text-vert-600 pointer-events-none" aria-hidden="true" />
+            </div>
+            <p class="max-w-[260px] text-[16px] leading-[normal] text-neutre-600">Nous ne partageons jamais votre e-mail.</p>
           </div>
-
-          <div class="field-group">
-            <label class="input-label" for="register-password">Mot de passe</label>
-            <input 
+          <div class="flex flex-col gap-2">
+            <label for="register-password" class="text-[16px] font-medium leading-[normal]">Mot de passe</label>
+            <input
               id="register-password"
               v-model="password"
               type="password"
               autocomplete="new-password"
-              minlength="6" 
-              class="form-input"
+              minlength="8"
+              maxlength="200"
+              pattern=".*[0-9].*"
+              title="8 caractères minimum, dont un chiffre."
               required
               placeholder="••••••••"
               :disabled="isLoading"
+              aria-describedby="register-password-hint"
+              class="h-[52px] w-full rounded-[12px] border border-[#c8c8c8] bg-white px-4 text-[16px] text-vert-900 placeholder:text-neutre-500 focus:outline-none focus:border-2 focus:border-vert-600 focus:shadow-[0_0_0_4px_#cde4df] transition-shadow"
             />
+            <p id="register-password-hint" class="max-w-[260px] text-[16px] leading-[normal] text-neutre-600">8 caractères minimum, dont un chiffre.</p>
           </div>
-
-          <label class="flex items-start gap-3 text-sm text-[#012828] cursor-pointer">
-            <input v-model="accepted" type="checkbox" required :disabled="isLoading" class="mt-1 shrink-0" />
-            <span>
-              J'ai lu et j'accepte les
-              <NuxtLink to="/cgu" target="_blank" class="underline">CGU</NuxtLink> et la
-              <NuxtLink to="/politique-de-confidentialite" target="_blank" class="underline">politique de confidentialité</NuxtLink>.
-            </span>
-          </label>
-
-          <!-- Error Message -->
-          <div v-if="errorMsg" class="error-box">
-            {{ errorMsg }}
-          </div>
-
-          <!-- Success Message -->
-          <div v-if="successMsg" class="success-box">
-            {{ successMsg }}
-          </div>
-
-          <!-- Submit Button -->
-          <div class="submit-wrapper">
-            <button 
-              type="submit"
-              class="btn-submit"
-              :disabled="isLoading"
-            >
-              <span v-if="!isLoading">Créer un compte</span>
-              <span v-else class="loading-state">
-                <Loader2 class="spinner" :size="20" />
-                Création...
-              </span>
-            </button>
-          </div>
-        </form>
-
-<!--
-        <div class="separator-group">
-          <div class="line"></div>
-          <div class="label-or">ou</div>
         </div>
 
-        <div class="social-row mb-8">
-          <button class="social-btn" :disabled="isLoading">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="logo-icon">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="currentColor"/>
-              <path d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84z" fill="currentColor"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="currentColor"/>
-            </svg>
-          </button>
-          <button class="social-btn" :disabled="isLoading">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="22" height="22" class="apple-icon">
-              <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" fill="currentColor"/>
-            </svg>
-          </button>
-        </div>
--->
+        <label class="mt-6 flex items-start gap-3 text-[16px] lg:text-[18px] leading-snug cursor-pointer">
+          <input v-model="accepted" type="checkbox" required :disabled="isLoading" class="peer sr-only" />
+          <span class="mt-0.5 w-6 h-6 shrink-0 rounded-[6px] border-2 border-vert-600 bg-white text-white flex items-center justify-center peer-checked:bg-vert-600 peer-focus-visible:shadow-[0_0_0_4px_#cde4df] [&>svg]:opacity-0 peer-checked:[&>svg]:opacity-100" aria-hidden="true"><Check :size="16" /></span>
+          <span>
+            J’accepte les <NuxtLink to="/cgu" target="_blank" class="underline">conditions d’utilisation</NuxtLink>
+            et la <NuxtLink to="/politique-de-confidentialite" target="_blank" class="underline">politique de confidentialité</NuxtLink>.
+          </span>
+        </label>
 
-        <p class="text-center font-semibold mb-0 font-futura text-[#012828]">
-          Déjà un compte ? 
-          <NuxtLink :to="{ path: '/login', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="text-rose-500 hover:underline">Se connecter</NuxtLink>
-        </p>
-        <p class="text-center text-sm mt-3 text-[#012828]/70">
-          Vous êtes praticien ?
-          <NuxtLink to="/inscription-pro" class="underline text-[#156F71]">Créer un compte praticien</NuxtLink>
-        </p>
-      </div>
+        <div v-if="errorMsg" class="mt-6 max-w-[776px] rounded-[12px] border border-[#fed7d7] bg-[#fff5f5] p-4 text-[14px] font-semibold text-[#c53030]" role="alert">{{ errorMsg }}</div>
+        <div v-if="successMsg" class="mt-6 max-w-[776px] rounded-[12px] border border-[#c6f6d5] bg-[#f0fff4] p-4 text-[14px] font-semibold text-[#2f855a]" role="status">{{ successMsg }}</div>
+
+        <div class="flex-1 min-h-10" />
+
+        <div class="flex flex-wrap items-center gap-x-5 gap-y-4">
+          <button type="submit" :disabled="isLoading" class="inline-flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:shadow-douce transition-shadow disabled:opacity-80 disabled:cursor-wait">
+            <template v-if="!isLoading">Créer mon compte</template>
+            <span v-else class="inline-flex items-center gap-2"><Loader2 class="animate-spin" :size="20" aria-hidden="true" /> Création…</span>
+            <span class="w-10 h-10 rounded-full bg-corail-500 flex items-center justify-center"><ArrowUpRight :size="20" aria-hidden="true" /></span>
+          </button>
+          <NuxtLink to="/trouver-un-praticien" class="text-[16px] font-medium text-vert-600 hover:underline">Continuer sans compte →</NuxtLink>
+        </div>
+
+        <div class="mt-8 pb-2 flex flex-col gap-1 text-[16px]">
+          <p>
+            Déjà un compte ?
+            <NuxtLink :to="{ path: '/login', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="font-semibold text-corail-700 hover:underline">Se connecter</NuxtLink>
+          </p>
+          <p class="text-neutre-600">
+            Vous êtes praticien ?
+            <NuxtLink to="/inscription-pro" class="underline text-vert-600">Créer un compte praticien</NuxtLink>
+          </p>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { Apple, Loader2 } from 'lucide-vue-next'
+import { ref, computed } from 'vue'
+import { ArrowUpRight, Check, Loader2 } from 'lucide-vue-next'
 
 definePageMeta({ middleware: 'guest' })
 useSeoMeta({ title: 'Créer un compte — Léya', robots: 'noindex, nofollow' })
@@ -141,6 +111,7 @@ const route = useRoute()
 const mail = ref('')
 const password = ref('')
 const accepted = ref(false)
+const mailLooksValid = computed(() => /^\S+@\S+\.\S{2,}$/.test(mail.value.trim()))
 const isLoading = ref(false)
 const errorMsg = ref('')
 const successMsg = ref('')
@@ -189,239 +160,3 @@ async function handleRegister() {
   }
 }
 </script>
-
-<style scoped>
-.registration-page-v2 {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 100vh;
-  min-height: 100svh;
-  background-color: #e0ecf2;
-  color: #012828;
-}
-
-.pane-left {
-  display: none;
-}
-
-.pane-right {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 24px;
-}
-
-.form-container {
-  width: 100%;
-  max-width: 440px;
-}
-
-/* Desktop styles */
-@media (min-width: 1024px) {
-  .registration-page-v2 {
-    flex-direction: row;
-  }
-  
-  .pane-left {
-    display: block;
-    width: 50%;
-    height: 100vh;
-    height: 100svh;
-    position: sticky;
-    top: 0;
-    padding: 16px;
-  }
-  
-  .pane-right {
-    width: 50%;
-    height: 100vh;
-    height: 100svh;
-    padding: 32px;
-    overflow-y: auto;
-  }
-}
-
-.header-section {
-  margin-bottom: 24px;
-}
-
-.logo-img {
-  width: 120px;
-  height: auto;
-}
-
-.auth-title {
-  font-family: 'Unbounded', cursive;
-  font-size: 36px;
-  font-weight: 700;
-  line-height: 1.05;
-  margin-top: 24px;
-}
-
-.auth-subtitle {
-  font-family: 'Futura PT', sans-serif;
-  font-size: 18px;
-  color: rgba(1, 40, 40, 0.6);
-  line-height: 1.5;
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.input-label {
-  display: block;
-  font-family: 'Futura PT', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  margin-left: 4px;
-}
-
-.form-input {
-  width: 100%;
-  height: 58px;
-  padding: 0 24px;
-  border-radius: 18px;
-  border: 1px solid #90BAD1;
-  background-color: white;
-  font-size: 16px;
-  outline: none;
-  transition: all 0.2s;
-  font-family: 'Futura PT', sans-serif;
-}
-
-.form-input:focus {
-  border-color: #012828;
-}
-
-.btn-submit {
-  width: 100%;
-  height: 58px;
-  background-color: #012828;
-  color: white;
-  font-weight: 700;
-  font-size: 17px;
-  border-radius: 50px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 10px 25px -5px rgba(1, 40, 40, 0.2);
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Futura PT', sans-serif;
-}
-
-.btn-submit:hover:not(:disabled) {
-  background-color: #023a3a;
-  transform: translateY(-1px);
-}
-
-.btn-submit:disabled {
-  opacity: 0.8;
-  cursor: wait;
-}
-
-.loading-state {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.spinner {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.error-box {
-  background-color: #fff5f5;
-  color: #c53030;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  border: 1px solid #fed7d7;
-}
-
-.success-box {
-  background-color: #f0fff4;
-  color: #2f855a;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  border: 1px solid #c6f6d5;
-}
-
-.separator-group {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24px;
-}
-
-.separator-group .line {
-  width: 100%;
-  height: 1px;
-  background-color: #E5E5E5;
-}
-
-.separator-group .label-or {
-  position: absolute;
-  background-color: #e0ecf2;
-  padding: 0 20px;
-  color: rgba(1, 40, 40, 0.3);
-  font-size: 15px;
-  font-weight: 600;
-  font-family: 'Futura PT', sans-serif;
-}
-
-.social-row {
-  display: flex;
-  gap: 16px;
-}
-
-.social-btn {
-  flex: 1;
-  height: 58px;
-  background-color: white;
-  border: 1px solid #E5E5E5;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.social-btn:hover {
-  background-color: #f9fafb;
-}
-
-.social-btn .logo-icon,
-.social-btn .apple-icon {
-  color: #000;
-  transition: transform 0.2s;
-}
-
-.social-btn:hover .logo-icon,
-.social-btn:hover .apple-icon {
-  transform: scale(1.1);
-}
-
-.font-futura {
-  font-family: 'Futura PT', sans-serif;
-}
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-illustration relative w-full h-full overflow-hidden rounded-[40px] bg-[#e0ecf2]">
+  <div class="auth-illustration relative w-full h-full overflow-hidden bg-[#e0ecf2]" :class="logo ? 'rounded-[32px]' : 'rounded-[40px]'">
     <!-- Background Image -->
     <NuxtImg 
       src="/images/landscape.webp" 
@@ -16,8 +16,16 @@
     <!-- Gradient Overlay for Text Readability -->
     <div class="absolute inset-0 bg-gradient-to-t from-[#012828]/80 via-transparent to-transparent"></div>
 
+    <!-- Variante V5 : logo en haut, accroche en bas à gauche -->
+    <template v-if="logo">
+      <NuxtLink to="/" class="absolute left-10 top-10" aria-label="Léya, retour à l'accueil">
+        <img src="/images/footer/logo-blanc.svg" alt="" width="89" height="40" class="h-10 w-auto" style="animation: none;" />
+      </NuxtLink>
+      <p class="absolute left-10 bottom-10 right-10 max-w-[520px] font-unbounded font-normal text-[26px] xl:text-[32px] leading-[normal] text-white">{{ message }}</p>
+    </template>
+
     <!-- Quote Content -->
-    <div class="absolute bottom-0 left-0 w-full p-12 pb-16 max-w-[850px]">
+    <div v-else class="absolute bottom-0 left-0 w-full p-12 pb-16 max-w-[850px]">
       <div class="quote-wrapper pl-6">
         <p class="text-white text-[32px] md:text-[38px] font-bold leading-[1.25] font-unbounded">
           {{ message }}
@@ -29,6 +37,7 @@
 
 <script setup>
 defineProps({
+  logo: { type: Boolean, default: false },
   message: { type: String, default: 'Expliquez-nous ce que vous ressentez, nous vous guidons !' },
 })
 </script>

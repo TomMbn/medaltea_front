@@ -44,17 +44,18 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { LayoutDashboard, CalendarDays, CalendarCheck, Leaf, Clock3, CalendarOff, ListChecks, Settings, LogOut } from 'lucide-vue-next'
+import { LayoutDashboard, CalendarDays, Activity, CalendarCheck, Leaf, Clock3, CalendarOff, ListChecks, Settings, LogOut } from 'lucide-vue-next'
 
 defineEmits(['logout'])
 
-// Entrées reliées à des pages qui fonctionnent. « Avis », « Statistiques » et « Facturation » de la maquette
-// sont masqués : les fonctions correspondantes ne sont pas embarquées (plan V5, N9, N14, N1).
+// Entrées reliées à des pages qui fonctionnent. « Avis » et « Facturation » de la maquette
+// sont masqués : les fonctions correspondantes ne sont pas embarquées (plan V5, N9, N1).
 const items = [
   { to: '/pro', label: 'Tableau de bord', icon: LayoutDashboard, exact: true },
   { to: '/pro/agenda', label: 'Agenda', icon: CalendarDays },
   { to: '/pro/rendez-vous', label: 'Rendez-vous', icon: CalendarCheck },
   { to: '/pro/fiche', label: 'Ma fiche', icon: Leaf },
+  { to: '/pro/statistiques', label: 'Statistiques', icon: Activity },
   { to: '/pro/horaires', label: 'Horaires', icon: Clock3 },
   { to: '/pro/absences', label: 'Absences', icon: CalendarOff },
   { to: '/pro/prestations', label: 'Prestations', icon: ListChecks },

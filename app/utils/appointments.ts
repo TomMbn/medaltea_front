@@ -38,6 +38,7 @@ export interface Appointment {
   mode: string | null
   kind: string | null
   typeId: number | null
+  createdAt: string | null
   patientName: string | null
   patientContact: string | null
   isGuest: boolean
@@ -74,6 +75,7 @@ export function normalizeAppointment(raw: any): Appointment {
     patientContact: raw?.isGuest === true
       ? ([patient?.email, patient?.phoneNumber].filter(Boolean).join(' · ') || null)
       : (patient?.mail ?? patient?.email ?? patient?.phoneNumber ?? raw?.patientMail ?? null),
+    createdAt: raw?.createdAt ?? null,
     isGuest: raw?.isGuest === true,
     proposal: raw?.proposal?.startAt ? { startAt: String(raw.proposal.startAt), endAt: raw.proposal.endAt ?? null, expiresAt: raw.proposal.expiresAt ?? null } : null,
   }

@@ -371,6 +371,18 @@ onNuxtReady(async () => {
     if (typeof result?.rating === 'number' && result.userRatingCount > 0) google.value = result
   } catch { /* rien à afficher */ }
 })
+// Compteur de vues : une fois par fiche et par session, fiches revendiquées seulement. Aucune donnée personnelle
+// n'est envoyée ni stockée (le backend ne garde qu'un total par jour). Pas de comptage en développement.
+onNuxtReady(() => {
+  if (import.meta.dev || !praticien.value.claimed) return
+  const key = `leya_vue_${id}`
+  try {
+    if (sessionStorage.getItem(key)) return
+    sessionStorage.setItem(key, '1')
+  } catch { /* stockage indisponible : on compte quand même */ }
+  $fetch(`/api/backend/praticiens/${id}/view`, { method: 'POST' }).catch(() => { /* sans effet pour le visiteur */ })
+})
+
 const googleRating = computed(() => google.value?.rating.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }))
 
 // Modes de consultation (d'après les prestations)

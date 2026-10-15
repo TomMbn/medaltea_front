@@ -1,11 +1,11 @@
 <template>
-  <div class="relative bg-gradient-to-b from-bleu-50 to-[#e0ecf2] min-h-screen overflow-x-clip">
+  <div ref="pageRoot" class="relative bg-gradient-to-b from-bleu-50 to-[#e0ecf2] min-h-screen overflow-x-clip">
     <!-- Décors : rond corail et illustration de fond (placés comme dans la maquette) -->
     <img src="/images/medecines/rond-corail.svg" alt="" aria-hidden="true" class="hidden xl:block absolute -left-[15%] top-[420px] w-[37%] max-w-[640px] pointer-events-none select-none" style="animation: none;" />
     <img src="/images/medecines/illu-naturopathie.svg" alt="" aria-hidden="true" class="hidden xl:block absolute right-[-3%] top-[1484px] w-[35%] max-w-[605px] opacity-[0.08] pointer-events-none select-none" style="animation: none;" />
 
     <!-- Bandeau vert -->
-    <div class="absolute inset-x-0 top-0 h-[640px] bg-vert-600 overflow-hidden" :class="fullName.length > 14 ? 'sm:h-[540px]' : 'sm:h-[470px]'" aria-hidden="true">
+    <div class="absolute inset-x-0 top-0 h-[640px] bg-vert-600 overflow-hidden" :class="fullName.length > 14 ? 'sm:h-[540px]' : 'sm:h-[470px]'" :style="bandHeight ? { height: `${bandHeight}px` } : undefined" aria-hidden="true">
       <img src="/images/footer/feuille-2.svg" alt="" class="hidden lg:block absolute left-[40%] top-[40px] w-[11%] opacity-60" style="animation: none;" />
       <img src="/images/footer/feuille-1.svg" alt="" class="hidden lg:block absolute left-[3.5%] top-[140px] w-[12.5%] opacity-60" style="animation: none;" />
       <img src="/images/footer/feuille-5.svg" alt="" class="hidden lg:block absolute right-0 top-[180px] w-[15%] opacity-60" style="animation: none;" />
@@ -53,7 +53,7 @@
                 </span>
                 <span class="font-unbounded text-[20px] lg:text-[26px] leading-[normal] text-vert-900">{{ mainSpeciality.name }}</span>
               </p>
-              <p class="mt-4 flex items-center gap-2 text-[17px] lg:text-[20px] text-white leading-[normal]">
+              <p ref="locationLine" class="mt-4 flex items-center gap-2 text-[17px] lg:text-[20px] text-white leading-[normal]">
                 <MapPin :size="18" class="shrink-0" aria-hidden="true" />
                 <span>{{ [praticien.city, modesLabel].filter(Boolean).join(' · ') }}</span>
               </p>
@@ -280,7 +280,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { MapPin, Phone, Navigation, Globe, Star, Check, Clock, Leaf, ArrowUpRight, X, Languages, CreditCard, Accessibility } from 'lucide-vue-next'
 import { getMedecineBySlug, medecinePictogram } from '~/data/medecines'
 
@@ -352,6 +352,25 @@ const isHttps = (value) => { try { return new URL(value).protocol === 'https:' }
 const photo = computed(() => (isHttps(praticien.value.photoUrl) ? praticien.value.photoUrl : ''))
 const photoFailed = ref(false)
 const photoEl = ref(null)
+
+// Le bandeau vert doit toujours descendre sous la ligne de localisation (blanche) : sa hauteur suit le contenu réel,
+// quelle que soit la longueur du nom (une ou plusieurs lignes). Mesure faite à partir de 640 px de large ;
+// en dessous, la hauteur fixe du bandeau convient (disposition en colonne).
+const pageRoot = ref(null)
+const locationLine = ref(null)
+const bandHeight = ref(0)
+function fitBand() {
+  if (!pageRoot.value || !locationLine.value || !window.matchMedia('(min-width: 640px)').matches) { bandHeight.value = 0; return }
+  bandHeight.value = Math.round(locationLine.value.getBoundingClientRect().bottom - pageRoot.value.getBoundingClientRect().top + 28)
+}
+let bandObserver
+onMounted(() => {
+  fitBand()
+  window.addEventListener('resize', fitBand)
+  document.fonts?.ready.then(fitBand)
+  if (window.ResizeObserver && locationLine.value) { bandObserver = new ResizeObserver(fitBand); bandObserver.observe(locationLine.value.parentElement) }
+})
+onBeforeUnmount(() => { window.removeEventListener('resize', fitBand); bandObserver?.disconnect() })
 // L'erreur de chargement peut survenir avant l'hydratation (rendu serveur) : on la revérifie au montage.
 onNuxtReady(() => { const el = photoEl.value; if (el?.complete && el.naturalWidth === 0) photoFailed.value = true })
 

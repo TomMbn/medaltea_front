@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-screen min-h-[100svh] px-5 sm:px-8 lg:px-12 xl:px-[96px] py-8 lg:pt-[clamp(24px,5.5vh,72px)] lg:pb-[clamp(10px,2vh,40px)]">
+  <div class="flex flex-col min-h-screen lg:min-h-full px-5 sm:px-8 lg:px-12 xl:px-[96px] py-8 lg:pt-[clamp(24px,5.5vh,72px)] lg:pb-[clamp(10px,2vh,40px)]">
     <NuxtLink to="/" class="lg:hidden self-start" aria-label="Léya, retour à l'accueil">
       <img src="/images/logo.svg" alt="Léya" width="120" height="54" class="w-[100px] h-auto" style="animation: none;" />
     </NuxtLink>

@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen min-h-[100svh] bg-bleu-50 text-vert-900 lg:flex">
+  <div class="min-h-screen bg-bleu-50 text-vert-900 lg:fixed lg:inset-0 lg:min-h-0 lg:flex">
     <!-- Panneau praticien (collé au bord de l'écran, comme sur la maquette) -->
-    <div class="hidden lg:block lg:w-[40vw] xl:w-[36vw] max-w-[620px] shrink-0 lg:sticky lg:top-0 lg:h-screen lg:h-[100svh]">
+    <div class="hidden lg:block lg:w-[40vw] xl:w-[36vw] max-w-[620px] shrink-0 lg:h-full">
       <ProSignupPanel />
     </div>
 
     <!-- Le formulaire défile seul (le panneau reste en place) et sa barre d'actions reste visible en bas -->
-    <div class="flex-1 min-w-0 lg:h-screen lg:h-[100svh] lg:overflow-y-auto" data-scroll>
+    <div class="flex-1 min-w-0 lg:h-full lg:overflow-y-auto" data-scroll>
       <ProSignupWizard />
     </div>
   </div>

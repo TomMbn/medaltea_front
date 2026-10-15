@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen min-h-[100svh] bg-bleu-50 text-vert-900 lg:flex lg:gap-10 xl:gap-20 lg:p-10">
+  <div class="min-h-screen bg-bleu-50 text-vert-900 lg:flex lg:gap-10 xl:gap-20 lg:p-10">
     <!-- Panneau d'illustration -->
-    <div class="hidden lg:block lg:w-[42vw] xl:w-[36vw] max-w-[620px] shrink-0 lg:sticky lg:top-10 lg:h-[calc(100svh-80px)]">
+    <div class="hidden lg:block lg:w-[42vw] xl:w-[36vw] max-w-[620px] shrink-0 lg:sticky lg:top-10 lg:h-[calc(100vh-80px)]">
       <AuthIllustration logo message="Expliquez-nous ce que vous ressentez, on vous guide." />
     </div>
 
     <!-- Formulaire -->
-    <div class="flex-1 min-w-0 flex flex-col lg:justify-center px-5 sm:px-8 py-8 lg:p-0 lg:min-h-[calc(100svh-80px)]">
+    <div class="flex-1 min-w-0 flex flex-col lg:justify-center px-5 sm:px-8 py-8 lg:p-0 lg:min-h-[calc(100vh-80px)]">
       <NuxtLink to="/" class="lg:hidden self-start" aria-label="Léya, retour à l'accueil">
         <img src="/images/logo.svg" alt="Léya" width="120" height="54" class="w-[100px] h-auto" style="animation: none;" />
       </NuxtLink>

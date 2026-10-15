@@ -10,9 +10,9 @@
     </NuxtLink>
 
     <!-- Bascule patient / praticien : dans le panneau pour garder le formulaire identique à la maquette -->
-    <AuthAudienceSwitch class="absolute right-10 xl:right-16 top-10 xl:top-16" page="register" current="pro" />
+    <AuthAudienceSwitch class="absolute left-10 top-[100px] xl:left-auto xl:right-16 xl:top-16" page="register" current="pro" />
 
-    <img src="/images/chatbot-mascotte-accueil.webp" alt="" aria-hidden="true" width="254" height="300" class="absolute left-[58%] top-[120px] w-[150px] xl:left-[371px] xl:top-[140px] xl:w-[186px] h-auto -rotate-6 pointer-events-none select-none" style="animation: none;" />
+    <img src="/images/chatbot-mascotte-accueil.webp" alt="" aria-hidden="true" width="254" height="300" class="absolute left-[58%] top-[170px] w-[130px] xl:left-[371px] xl:top-[140px] xl:w-[186px] h-auto -rotate-6 pointer-events-none select-none" style="animation: none;" />
 
     <div class="relative mt-auto">
       <p class="font-unbounded font-normal text-[24px] xl:text-[32px] leading-[normal] max-w-[492px]">Rejoignez les praticiens qui reçoivent des patients sur Léya</p>

@@ -158,12 +158,15 @@
               </label>
             </div>
 
-            <p v-if="submitError" class="text-[16px] text-red-700 bg-red-50 rounded-2xl p-3" role="alert">{{ submitError }}</p>
+            <p v-if="submitError" class="text-[16px] text-red-700 bg-red-50 rounded-2xl p-3" role="alert">
+              {{ submitError }}
+              <NuxtLink v-if="needsProfile" to="/mon-compte" class="block mt-1 font-semibold underline">Compléter mon profil</NuxtLink>
+            </p>
 
             <button
               type="button"
               class="w-full flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:bg-vert-600 transition-colors disabled:opacity-50 text-left"
-              :disabled="submitting || (note.trim() && !consent)"
+              :disabled="submitting || (!!note.trim() && !consent)"
               @click="submit"
             >
               <span class="flex-1 min-w-0 truncate leading-[normal]">{{ submitting ? 'Envoi…' : `Confirmer ${confirmLabel}` }}</span>
@@ -260,6 +263,7 @@ const showNote = ref(false)
 const consent = ref(false)
 const submitting = ref(false)
 const submitError = ref('')
+const needsProfile = ref(false)
 const booked = ref(null)
 
 const windowStart = ref(wantedSlot.value ? dayStartFor(wantedSlot.value) : minDay)
@@ -473,6 +477,7 @@ async function submit() {
   if (submitting.value || !selectedSlot.value) return
   submitting.value = true
   submitError.value = ''
+  needsProfile.value = false
   trackEvent('booking-submitted', { mode: bookingMode() })
   try {
     booked.value = await $fetch('/api/backend/appointments', {
@@ -506,6 +511,10 @@ async function submit() {
       setQuery({ slot: null })
       slotGone.value = true
       await refreshWindow()
+    } else if (apiStatus(e) === 422) {
+      // Le backend exige le prénom et le nom du patient (transmis au praticien) avant une première réservation
+      needsProfile.value = true
+      submitError.value = 'Votre prénom et votre nom sont nécessaires pour réserver : le praticien en a besoin pour vous accueillir. Votre créneau reste sélectionné.'
     } else {
       submitError.value = apiErrorMessage(e, 'La réservation a échoué. Réessayez dans un instant.')
     }

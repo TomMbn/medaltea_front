@@ -32,6 +32,16 @@
           >
             Réservable en ligne
           </button>
+          <button
+            v-if="prefsAvailable"
+            type="button"
+            class="rounded-full px-4 py-[9px] transition-colors"
+            :class="usePrefs ? 'bg-vert-600 text-white' : 'bg-white text-vert-900 hover:bg-white/70'"
+            :aria-pressed="usePrefs ? 'true' : 'false'"
+            @click="emit('update:usePrefs', !usePrefs)"
+          >
+            Selon mes préférences
+          </button>
           <label class="relative inline-flex items-center gap-2 rounded-full pl-4 pr-3 py-[9px] cursor-pointer focus-ring-within transition-colors" :class="mode ? 'bg-vert-600 text-white' : 'bg-white text-vert-900 hover:bg-white/70'">
             <span>{{ mode ? modeLabels[mode] : 'Type de séance' }}</span>
             <ChevronDown :size="14" aria-hidden="true" />
@@ -76,13 +86,14 @@
 
       <p v-else-if="!praticiens.length && !loading" class="mt-8 bg-white text-vert-900 rounded-[28px] p-6 text-[18px]">
         <template v-if="geo">Aucun praticien dans un rayon de {{ radius }} km autour de vous. Élargissez le rayon, ou retirez « Autour de moi » pour voir tous les praticiens.</template>
-        <template v-else-if="q || specialityName || onlyBookable || mode || soon || rated || accessible">Aucun praticien ne correspond à cette recherche. Essayez une autre ville, un autre code postal ou une autre spécialité.</template>
+        <template v-else-if="usePrefs">Aucun praticien ne correspond à vos préférences (ville et distance). Retirez « Selon mes préférences » ou élargissez-les dans <NuxtLink to="/mon-compte" class="underline font-semibold">Mon profil</NuxtLink>.</template>
+        <template v-else-if="q || specialityName || onlyBookable || mode || soon || rated || accessible || usePrefs">Aucun praticien ne correspond à cette recherche. Essayez une autre ville, un autre code postal ou une autre spécialité.</template>
         <template v-else>Les premiers praticiens arrivent bientôt.</template>
       </p>
 
       <template v-else>
         <ul class="mt-6 lg:mt-8 flex flex-col gap-4" :aria-busy="loading ? 'true' : 'false'">
-          <PraticienResultCard v-for="p in praticiens" :key="p.id" :praticien="p" />
+          <PraticienResultCard v-for="p in praticiens" :key="p.id" :praticien="p" :budget="budget" />
         </ul>
 
         <!-- Pagination -->
@@ -119,6 +130,9 @@ const props = defineProps({
   sort: { type: String, default: 'pertinence' },
   onlyBookable: { type: Boolean, default: false },
   mode: { type: String, default: '' },
+  prefsAvailable: { type: Boolean, default: false },
+  usePrefs: { type: Boolean, default: false },
+  budget: { type: String, default: null },
   soon: { type: Boolean, default: false },
   rated: { type: Boolean, default: false },
   accessible: { type: Boolean, default: false },
@@ -126,7 +140,7 @@ const props = defineProps({
   geoError: { type: String, default: '' },
   radius: { type: Number, default: 30 },
 })
-const emit = defineEmits(['update:sort', 'update:onlyBookable', 'update:mode', 'update:soon', 'update:rated', 'update:accessible', 'update:radius', 'locate', 'unlocate'])
+const emit = defineEmits(['update:sort', 'update:onlyBookable', 'update:mode', 'update:soon', 'update:rated', 'update:accessible', 'update:usePrefs', 'update:radius', 'locate', 'unlocate'])
 
 const modeLabels = { cabinet: 'Au cabinet', visio: 'En visio', domicile: 'À domicile' }
 const toggles = computed(() => [

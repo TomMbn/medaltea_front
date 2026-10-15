@@ -5,7 +5,7 @@
     <img src="/images/landing/med-hypnotherapie.svg" alt="" aria-hidden="true" class="hidden xl:block absolute right-[-3%] top-[420px] w-[37%] max-w-[650px] opacity-[0.08] pointer-events-none select-none" style="animation: none;" />
 
     <!-- Chargement -->
-    <div v-if="status === 'pending'" class="relative pt-40 pb-40 text-center text-[18px] text-neutre-600" role="status">Chargement de votre rendez-vous…</div>
+    <div v-if="status === 'pending' || status === 'idle'" class="relative pt-40 pb-40 text-center text-[18px] text-neutre-600" role="status">Chargement de votre rendez-vous…</div>
 
     <!-- Rendez-vous introuvable -->
     <div v-else-if="!appointment" class="relative mx-auto w-[calc(100%-2rem)] max-w-[640px] pt-40 pb-40 text-center">

@@ -2,7 +2,7 @@
   <div class="relative overflow-x-hidden bg-gradient-to-b from-bleu-50 to-[#e0ecf2] min-h-screen">
     <div class="relative mx-auto w-[calc(100%-2rem)] max-w-[760px] pt-32 lg:pt-[170px] pb-20 lg:pb-[120px]">
       <!-- Chargement -->
-      <p v-if="status === 'pending'" class="text-center text-[18px] text-neutre-600" role="status">Chargement de votre rendez-vous…</p>
+      <p v-if="status === 'pending' || status === 'idle'" class="text-center text-[18px] text-neutre-600" role="status">Chargement de votre rendez-vous…</p>
 
       <!-- Données effacées -->
       <div v-else-if="erased" role="status">

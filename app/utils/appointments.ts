@@ -39,6 +39,8 @@ export interface Appointment {
   patientName: string | null
   patientContact: string | null
   isGuest: boolean
+  /** Autre créneau proposé par le praticien, en attente de la réponse du patient */
+  proposal: { startAt: string; endAt: string | null; expiresAt: string | null } | null
 }
 
 const fullName = (o: any) => [o?.firstName, o?.lastName].filter(Boolean).join(' ') || null
@@ -69,6 +71,7 @@ export function normalizeAppointment(raw: any): Appointment {
       ? ([patient?.email, patient?.phoneNumber].filter(Boolean).join(' · ') || null)
       : (patient?.mail ?? patient?.email ?? patient?.phoneNumber ?? raw?.patientMail ?? null),
     isGuest: raw?.isGuest === true,
+    proposal: raw?.proposal?.startAt ? { startAt: String(raw.proposal.startAt), endAt: raw.proposal.endAt ?? null, expiresAt: raw.proposal.expiresAt ?? null } : null,
   }
 }
 

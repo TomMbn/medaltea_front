@@ -41,7 +41,10 @@
       </div>
 
       <div class="flex sm:flex-col items-center sm:items-end justify-between sm:self-stretch gap-3 shrink-0 leading-[normal]">
-        <span v-if="bookable && price" class="text-[18px] font-semibold text-vert-600 whitespace-nowrap">dès {{ price }} €</span>
+        <span v-if="bookable && price" class="flex flex-col items-end gap-1">
+          <span class="text-[18px] font-semibold text-vert-600 whitespace-nowrap">dès {{ price }} €</span>
+          <span v-if="withinBudget" class="rounded-full bg-bleu-50 px-3 py-1 text-[14px] font-medium text-vert-600 whitespace-nowrap">Dans votre budget</span>
+        </span>
         <span v-else-if="!bookable" class="text-[16px] text-neutre-600">Réservation indisponible</span>
         <span v-else></span>
         <span class="inline-flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 whitespace-nowrap group-hover:bg-vert-600 transition-colors">
@@ -55,9 +58,10 @@
 
 <script setup>
 import { computed, ref } from 'vue'
+import { inBudget } from '~/composables/usePreferences'
 import { MapPin, ArrowUpRight, Leaf, Star, Check } from 'lucide-vue-next'
 
-const props = defineProps({ praticien: { type: Object, required: true } })
+const props = defineProps({ praticien: { type: Object, required: true }, budget: { type: String, default: null } })
 
 // Photo 640 px fournie par l'API (https uniquement), sinon la vignette ; initiales si absente ou illisible.
 const photoFailed = ref(false)
@@ -71,6 +75,7 @@ const initials = computed(() => `${(props.praticien.firstName || '?')[0]}${(prop
 const bookable = computed(() => props.praticien.bookable !== false)
 // Uniquement ce que l'API fournit : rien n'est affiché sinon.
 const price = computed(() => props.praticien.priceFrom ?? props.praticien.price ?? null)
+const withinBudget = computed(() => inBudget(props.budget, price.value))
 const rating = computed(() => (props.praticien.averageRating && props.praticien.reviewCount > 0
   ? String(Number(props.praticien.averageRating).toFixed(1)).replace('.', ',')
   : ''))

@@ -70,7 +70,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { usePreferences } from '~/composables/usePreferences'
 import { MapPin, Search, ChevronDown } from 'lucide-vue-next'
 
 const props = defineProps({ geo: { type: Object, default: null } })
@@ -79,6 +80,9 @@ const emit = defineEmits(['locate', 'unlocate'])
 const route = useRoute()
 const router = useRouter()
 const query = ref(String(route.query.q ?? ''))
+// Patient connecté : la ville des préférences est proposée (sans écraser une saisie)
+const { prefs, load: loadPrefs } = usePreferences()
+onMounted(async () => { await loadPrefs(); if (!query.value && prefs.value?.city) query.value = prefs.value.city })
 const speciality = ref(String(route.query.specialite ?? ''))
 const { specialities, findBySlug } = await useSpecialities()
 

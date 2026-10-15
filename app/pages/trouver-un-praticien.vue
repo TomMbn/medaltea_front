@@ -29,6 +29,9 @@
           :soon="soon"
           :rated="rated"
           :accessible="accessible"
+          :prefs-available="prefsUsable"
+          :use-prefs="usePrefs"
+          :budget="usePrefs ? (prefs?.budgetBand ?? null) : null"
           :geo="geo"
           :geo-error="geoError"
           :radius="radius"
@@ -38,6 +41,7 @@
           @update:soon="setSoon"
           @update:rated="setRated"
           @update:accessible="setAccessible"
+          @update:use-prefs="setUsePrefs"
           @update:radius="radius = $event"
           @locate="locate"
           @unlocate="unlocate"
@@ -48,6 +52,8 @@
 </template>
 
 <script setup>
+import { usePreferences } from '~/composables/usePreferences'
+
 const PAGE_SIZE = 10
 const SORTS = { pertinence: undefined, disponibilite: 'nextAvailability', prix: 'price', distance: 'distance' }
 
@@ -64,7 +70,14 @@ const mode = computed(() => (MODES.includes(String(route.query.mode)) ? String(r
 const soon = computed(() => route.query.dispo === '7')
 const rated = computed(() => route.query.note === '4')
 const accessible = computed(() => route.query.pmr === '1')
-const RESULT_KEYS = ['q', 'specialite', 'tri', 'reservable', 'mode', 'dispo', 'note', 'pmr', 'page', 'tous']
+// Préférences du compte (patient connecté) : ville localisée + distance (filtre) et budget (repère « Dans votre budget »).
+// Le type de consultation n'est pas un filtre ici : seules les fiches de praticiens inscrits en ont, il exclurait tout l'annuaire.
+const { prefs, load: loadPrefs } = usePreferences()
+onMounted(loadPrefs)
+const usePrefs = computed(() => route.query.prefs === '1')
+const prefLocation = computed(() => (prefs.value?.latitude != null && prefs.value?.longitude != null ? { lat: prefs.value.latitude, lng: prefs.value.longitude } : null))
+const prefsUsable = computed(() => !!prefs.value && (!!prefLocation.value || !!prefs.value.budgetBand))
+const RESULT_KEYS = ['q', 'specialite', 'tri', 'reservable', 'mode', 'dispo', 'note', 'pmr', 'prefs', 'page', 'tous']
 const isResults = computed(() => Object.keys(route.query).some(k => RESULT_KEYS.includes(k)))
 const page = computed(() => Math.max(1, Math.floor(Number(route.query.page)) || 1))
 // Remet à zéro la barre de recherche quand on arrive d'un autre critère (lien, retour arrière)
@@ -87,6 +100,8 @@ const apiQuery = computed(() => ({
   ...(SORTS[sort.value] ? { sort: SORTS[sort.value] } : {}),
   ...(onlyBookable.value ? { bookable: true } : {}),
   ...(mode.value ? { mode: mode.value } : {}),
+  // Position choisie à la main (« Autour de moi ») prioritaire sur celle des préférences
+  ...(usePrefs.value && prefLocation.value && !geo.value ? { ...prefLocation.value, ...(prefs.value?.radiusKm ? { radiusKm: prefs.value.radiusKm } : {}) } : {}),
   ...(soon.value ? { availableWithinDays: 7 } : {}),
   ...(rated.value ? { minRating: 4 } : {}),
   ...(accessible.value ? { wheelchairAccessible: true } : {}),
@@ -119,6 +134,7 @@ watch([geo, radius], () => { if (page.value > 1) setQuery({ page: undefined }) }
 // Changer le tri ou un filtre ramène à la première page
 const setSort = (value) => setQuery({ tri: value === 'pertinence' ? undefined : value, page: undefined })
 const setOnlyBookable = (value) => setQuery({ reservable: value ? '1' : undefined, page: undefined })
+const setUsePrefs = (value) => setQuery({ prefs: value ? '1' : undefined, page: undefined })
 const setMode = (value) => setQuery({ mode: value || undefined, page: undefined })
 const setSoon = (value) => setQuery({ dispo: value ? '7' : undefined, page: undefined })
 const setRated = (value) => setQuery({ note: value ? '4' : undefined, page: undefined })

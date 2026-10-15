@@ -38,9 +38,8 @@
             Mon compte <ChevronDown :size="16" aria-hidden="true" />
           </button>
           <div v-if="isAccountOpen" role="menu" class="absolute right-0 mt-2 w-60 bg-white rounded-leya-m shadow-douce border border-bleu-100 py-2">
-            <NuxtLink to="/mes-rendez-vous" role="menuitem" class="block px-5 py-3 text-base font-semibold text-vert-900 hover:bg-bleu-50" @click="isAccountOpen = false">Mes rendez-vous</NuxtLink>
-            <NuxtLink to="/trouver-un-praticien" role="menuitem" class="block px-5 py-3 text-base font-semibold text-vert-900 hover:bg-bleu-50" @click="isAccountOpen = false">Prendre rendez-vous</NuxtLink>
-            <NuxtLink to="/mon-compte" role="menuitem" class="block px-5 py-3 text-base font-semibold text-vert-900 hover:bg-bleu-50" @click="isAccountOpen = false">Mes informations</NuxtLink>
+            <!-- Mes rendez-vous, préférences et données sont accessibles depuis la page « Mon profil » -->
+            <NuxtLink to="/mon-compte" role="menuitem" class="block px-5 py-3 text-base font-semibold text-vert-900 hover:bg-bleu-50" @click="isAccountOpen = false">Mon profil</NuxtLink>
             <button role="menuitem" class="w-full text-left px-5 py-3 text-base font-semibold text-red-700 hover:bg-bleu-50 border-t border-bleu-100" @click="handleLogout">Déconnexion</button>
           </div>
         </div>

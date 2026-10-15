@@ -1,17 +1,17 @@
 <template>
-  <div class="min-h-screen bg-bleu-50 text-vert-900 lg:flex lg:gap-10 xl:gap-20 lg:p-10">
+  <div class="auth-root min-h-screen bg-bleu-50 text-vert-900 lg:flex lg:gap-10 xl:gap-20 lg:p-10">
     <!-- Panneau d'illustration -->
-    <div class="hidden lg:block lg:w-[42vw] xl:w-[36vw] max-w-[620px] shrink-0 lg:sticky lg:top-10 lg:h-[calc(100vh-80px)]">
+    <div class="auth-ill hidden lg:block lg:w-[42vw] xl:w-[36vw] max-w-[620px] shrink-0 lg:sticky lg:top-10 lg:h-[calc(100vh-80px)]">
       <AuthIllustration logo :message="isProContext ? 'Votre agenda et vos patients, en toute simplicité.' : 'Expliquez-nous ce que vous ressentez, on vous guide.'" />
     </div>
 
     <!-- Formulaire -->
-    <div class="flex-1 min-w-0 flex flex-col lg:justify-center px-5 sm:px-8 py-8 lg:p-0 lg:min-h-[calc(100vh-80px)]">
+    <div class="auth-col flex-1 min-w-0 flex flex-col lg:justify-center px-5 sm:px-8 py-8 lg:p-0 lg:min-h-[calc(100vh-80px)]">
       <NuxtLink to="/" class="lg:hidden self-start" aria-label="Léya, retour à l'accueil">
         <img src="/images/logo.svg" alt="Léya" width="120" height="54" class="w-[100px] h-auto" style="animation: none;" />
       </NuxtLink>
 
-      <AuthAudienceSwitch class="mt-6 lg:mt-0 mb-6 lg:mb-8" page="login" :current="isProContext ? 'pro' : 'patient'" :redirect="isProContext ? '' : String(route.query.redirect ?? '')" />
+      <AuthAudienceSwitch class="auth-switch mt-6 lg:mt-0 mb-6 lg:mb-8" page="login" :current="isProContext ? 'pro' : 'patient'" :redirect="isProContext ? '' : String(route.query.redirect ?? '')" />
 
       <div>
         <h1 class="font-unbounded font-normal text-[30px] sm:text-[34px] lg:text-[40px] leading-[normal] text-vert-900">
@@ -71,7 +71,7 @@
           </p>
         </div>
 
-        <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-4">
+        <div class="auth-actions mt-8 flex flex-wrap items-center gap-x-5 gap-y-4">
           <button type="submit" :disabled="isLoading" class="inline-flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:shadow-douce transition-shadow disabled:opacity-80 disabled:cursor-wait">
             <template v-if="!isLoading">Se connecter</template>
             <span v-else class="inline-flex items-center gap-2"><Loader2 class="animate-spin" :size="20" aria-hidden="true" /> Connexion…</span>

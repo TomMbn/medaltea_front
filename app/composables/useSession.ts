@@ -37,6 +37,10 @@ export const useSession = () => {
   }
 
   async function logout() {
+    // La conversation avec l'assistant appartient à la personne connectée : elle ne reste pas pour le compte suivant
+    useState<any[]>('leya-chat-messages', () => []).value = []
+    useState<boolean>('leya-chat-typing', () => false).value = false
+    useState<number>('leya-chat-epoch', () => 0).value++
     if (inDemo.value) { forgetDemo(); demo.value = null; return }
     try {
       // Appareil partagé : le compte suivant ne doit pas recevoir les notifications de celui-ci

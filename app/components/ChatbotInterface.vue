@@ -45,18 +45,18 @@
                     aria-label="Votre message à Léya"
                     rows="1"
                     maxlength="2000"
-                    :disabled="isTyping || isLimitReached"
+                    :disabled="isBusy || isLimitReached"
                     class="focus-in-parent flex-1 [field-sizing:content] max-h-40 text-[18px] lg:text-[26px] leading-[normal] text-vert-900 placeholder-neutre-500 resize-none bg-transparent focus:outline-none disabled:opacity-50"
                     :placeholder="isLimitReached ? 'Limite quotidienne atteinte (10/10)' : 'Je n’arrive plus à m’endormir, qui consulter ?'"
                     @keydown.enter.exact.prevent="sendMessage"
                   ></textarea>
-                  <button type="button" aria-label="Envoyer le message" :disabled="isTyping || !userInput.trim() || isLimitReached" class="send-btn" @click="sendMessage">
+                  <button type="button" aria-label="Envoyer le message" :disabled="isBusy || !userInput.trim() || isLimitReached" class="send-btn" @click="sendMessage">
                     <ArrowUp v-if="!isLimitReached" :size="22" stroke-width="2.5" aria-hidden="true" />
                     <Ban v-else :size="22" stroke-width="2.5" aria-hidden="true" />
                   </button>
                 </div>
                 <div class="flex flex-wrap gap-3 lg:gap-[22px]">
-                  <button v-for="chip in suggestions" :key="chip" type="button" class="h-12 lg:h-[61px] px-[10px] min-w-[0] bg-white border border-neutre-200 rounded-[20px] text-[16px] lg:text-[20px] text-black leading-[normal] hover:bg-bleu-50 transition-colors disabled:opacity-50" :disabled="isTyping || isLimitReached" @click="userInput = chip; sendMessage()">{{ chip }}</button>
+                  <button v-for="chip in suggestions" :key="chip" type="button" class="h-12 lg:h-[61px] px-[10px] min-w-[0] bg-white border border-neutre-200 rounded-[20px] text-[16px] lg:text-[20px] text-black leading-[normal] hover:bg-bleu-50 transition-colors disabled:opacity-50" :disabled="isBusy || isLimitReached" @click="userInput = chip; sendMessage()">{{ chip }}</button>
                 </div>
               </div>
             </div>
@@ -94,8 +94,8 @@
             </div>
 
             <template v-if="!msg.isStreaming && !msg.isError">
-              <div v-if="mentionedMedicines(msg).length" class="mt-7">
-                <p class="text-[18px] font-semibold text-vert-900 leading-[normal]">Médecines mentionnées</p>
+              <div v-if="mentionedMedicines(msg).length && !isUrgent(msg)" class="mt-7">
+                <p class="text-[18px] font-semibold text-vert-900 leading-[normal]">Médecines qui peuvent aider</p>
                 <ul class="mt-3 flex flex-wrap gap-[10px]">
                   <li v-for="m in mentionedMedicines(msg)" :key="m.slug">
                     <NuxtLink :to="`/medecines/${m.slug}`" class="inline-flex items-center gap-[10px] bg-white border border-bleu-100 rounded-full pl-2 pr-4 py-2 text-[16px] font-medium text-vert-900 leading-[normal] hover:bg-bleu-50 transition-colors">
@@ -105,6 +105,8 @@
                   </li>
                 </ul>
               </div>
+              <!-- Praticiens proches : seulement sur la dernière réponse, jamais en cas d'urgence -->
+              <ChatPraticiens v-if="msg === lastModelMessage && !isUrgent(msg)" :key="mentionedMedicines(msg).map(m => m.slug).join()" :slugs="mentionedMedicines(msg).map(m => m.slug)" />
               <div class="mt-6 flex items-center gap-1.5">
                 <button type="button" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-vert-900 hover:bg-bleu-50 transition-colors" :aria-label="copiedIndex === index ? 'Réponse copiée' : 'Copier la réponse'" @click="copyMessage(msg, index)">
                   <Check v-if="copiedIndex === index" :size="16" aria-hidden="true" />
@@ -135,7 +137,7 @@
       <!-- Barre de saisie (conversation) -->
       <div v-if="isChatActive" class="flex-none pt-3">
         <div v-if="canSuggestPractitioners" class="mb-4 flex flex-wrap gap-2.5">
-          <NuxtLink to="/trouver-un-praticien" class="inline-flex bg-white text-vert-900 text-[16px] font-medium rounded-full px-4 py-[9px] leading-[normal] hover:bg-bleu-50 transition-colors">Trouver un praticien</NuxtLink>
+          <NuxtLink :to="otherPractitionersLink" class="inline-flex bg-white text-vert-900 text-[16px] font-medium rounded-full px-4 py-[9px] leading-[normal] hover:bg-bleu-50 transition-colors">{{ otherPractitionersLink === '/trouver-un-praticien' ? 'Trouver un praticien' : 'Voir d’autres praticiens' }}</NuxtLink>
         </div>
         <div class="relative">
           <div class="hidden md:block absolute right-0 lg:right-[-4px] bottom-[calc(100%-28px)] w-[150px] lg:w-[223px] -scale-x-100 pointer-events-none select-none" aria-hidden="true">
@@ -149,12 +151,12 @@
                 type="text"
                 aria-label="Votre message à Léya"
                 maxlength="2000"
-                :disabled="isTyping || isLimitReached"
+                :disabled="isBusy || isLimitReached"
                 class="focus-in-parent flex-1 min-w-0 text-[18px] lg:text-[20px] text-vert-900 placeholder-neutre-500 bg-transparent focus:outline-none disabled:opacity-50"
                 :placeholder="isLimitReached ? 'Limite quotidienne atteinte (10/10)' : 'Posez votre question…'"
                 @keydown.enter.exact.prevent="sendMessage"
               />
-              <button type="button" aria-label="Envoyer le message" :disabled="isTyping || !userInput.trim() || isLimitReached" class="send-btn" @click="sendMessage">
+              <button type="button" aria-label="Envoyer le message" :disabled="isBusy || !userInput.trim() || isLimitReached" class="send-btn" @click="sendMessage">
                 <ArrowUp v-if="!isLimitReached" :size="22" stroke-width="2.5" aria-hidden="true" />
                 <Ban v-else :size="22" stroke-width="2.5" aria-hidden="true" />
               </button>
@@ -177,13 +179,17 @@ import { useRoute } from 'vue-router'
 import { medecines, medecinePictogram } from '~/data/medecines'
 
 const route = useRoute()
-const isChatActive = ref(false)
-const isTyping = ref(false)
+// La conversation vit en mémoire de l'application (pas sur le serveur, pas sur le disque) : elle survit à un changement de page
+// (fiche d'un praticien, médecine…) et disparaît à la fermeture ou au rechargement de la page, comme annoncé.
+const messages = useState('leya-chat-messages', () => [])
+const isTyping = useState('leya-chat-typing', () => false)
+const epochState = useState('leya-chat-epoch', () => 0)
+const isChatActive = computed(() => messages.value.length > 0)
+const isBusy = computed(() => isTyping.value || messages.value.some(m => m.isStreaming))
 const userInput = ref('')
 const chatHistoryRef = ref(null)
 const copiedIndex = ref(-1)
 
-const messages = ref([])
 
 // --- RATE LIMITING / USAGE (CLIENT SIDE) ---
 const MAX_DAILY_MESSAGES = 10
@@ -215,6 +221,7 @@ const saveUsage = () => {
 }
 
 const incrementUsage = () => {
+  loadUsage()
   userUsage.value.count++
   saveUsage()
 }
@@ -229,13 +236,11 @@ const scrollToBottom = async () => {
 }
 
 // --- Nouveau chat : repart de zéro (rien n'est conservé)
-let epoch = 0
 let typingInterval = null
 function resetChat() {
-  epoch++
+  epochState.value++
   if (typingInterval) { clearInterval(typingInterval); typingInterval = null }
   messages.value = []
-  isChatActive.value = false
   isTyping.value = false
   userInput.value = ''
   copiedIndex.value = -1
@@ -260,8 +265,19 @@ const mentionedMedicines = (msg) => {
     .map(m => ({ slug: m.slug, name: m.name, pictogram: medecinePictogram(m) }))
 }
 
+// Urgence médicale : la consigne de l'assistant est de recommander le 15 AVANT tout autre conseil. On regarde donc le début de la réponse
+// (la mention « en cas d'urgence, appelez le 15 » en fin de réponse ne compte pas) : pas de pastilles ni de praticiens dans ce cas.
+const isUrgent = (msg) => /\b(SAMU|urgences?|le\s+15)\b/i.test((msg.parts?.[0]?.text || '').slice(0, 250))
+
 const lastModelMessage = computed(() => [...messages.value].reverse().find(m => m.role === 'model'))
 const canSuggestPractitioners = computed(() => !!lastModelMessage.value && !lastModelMessage.value.isStreaming && !lastModelMessage.value.isError && !isTyping.value)
+
+// « Voir d'autres praticiens » : la recherche s'ouvre sur la première médecine citée
+const otherPractitionersLink = computed(() => {
+  const msg = lastModelMessage.value
+  const first = msg && !isUrgent(msg) ? mentionedMedicines(msg)[0] : null
+  return first ? { path: '/trouver-un-praticien', query: { specialite: first.slug }, hash: '#resultats' } : '/trouver-un-praticien'
+})
 
 async function copyMessage(msg, index) {
   try {
@@ -273,8 +289,8 @@ async function copyMessage(msg, index) {
 
 const sendMessage = async () => {
   const text = userInput.value.trim()
-  if (!text || isTyping.value || isLimitReached.value) return
-  const myEpoch = epoch
+  if (!text || isBusy.value || isLimitReached.value) return
+  const myEpoch = epochState.value
 
   // Add user message
   messages.value.push({
@@ -283,7 +299,6 @@ const sendMessage = async () => {
   })
 
   userInput.value = ''
-  isChatActive.value = true
   isTyping.value = true
 
   await scrollToBottom()
@@ -315,7 +330,7 @@ const sendMessage = async () => {
     }
 
     if (!response.body) throw new Error('No response body')
-    if (myEpoch !== epoch) return
+    if (myEpoch !== epochState.value) return
 
     // Prepare AI message bubble
     const aiMsg = {
@@ -340,7 +355,7 @@ const sendMessage = async () => {
       if (typingInterval) return
       typingInterval = setInterval(() => {
         const target = messages.value[aiMsgIndex]
-        if (!target || myEpoch !== epoch) { clearInterval(typingInterval); typingInterval = null; return }
+        if (!target || myEpoch !== epochState.value) { clearInterval(typingInterval); typingInterval = null; return }
         const diff = currentText.length - displayedLength
         if (diff > 0) {
           const increment = diff > 300 ? 50 : diff > 100 ? 15 : 4
@@ -370,18 +385,20 @@ const sendMessage = async () => {
     while (true) {
       const { value, done } = await reader.read()
       if (done) break
-      if (myEpoch !== epoch) { reader.cancel().catch(() => {}); return }
+      if (myEpoch !== epochState.value) { reader.cancel().catch(() => {}); return }
 
       const chunk = decoder.decode(value, { stream: true })
       currentText += chunk
       aiMsg.parts[0].text = currentText
     }
 
-    aiMsg.isStreaming = false
+    // Via le tableau réactif : modifier l'objet d'origine ne déclencherait pas l'affichage des pastilles ni du bouton « Voir d'autres praticiens »
+    const done = messages.value[aiMsgIndex]
+    if (done) done.isStreaming = false
 
   } catch (error) {
     console.error('Chat Error:', error)
-    if (myEpoch !== epoch) return
+    if (myEpoch !== epochState.value) return
     isTyping.value = false
 
     let errorText = 'Désolée, une erreur est survenue lors de la communication avec Léya. Veuillez réessayer.'
@@ -395,7 +412,7 @@ const sendMessage = async () => {
       isError: true
     })
   } finally {
-    if (myEpoch === epoch) {
+    if (myEpoch === epochState.value) {
       incrementUsage()
       await nextTick()
       await scrollToBottom()
@@ -407,6 +424,7 @@ const formatMessage = (text) => renderMarkdown(text)
 
 onMounted(() => {
   loadUsage()
+  if (messages.value.length) scrollToBottom()
 
   if (route.query.q) {
     userInput.value = route.query.q
@@ -418,7 +436,7 @@ onMounted(() => {
     window.history.replaceState({}, '', url.pathname)
   }
 })
-onBeforeUnmount(() => { epoch++; if (typingInterval) clearInterval(typingInterval) })
+// Pas d'interruption au changement de page : la réponse en cours continue de s'écrire dans la conversation conservée
 </script>
 
 <style scoped>

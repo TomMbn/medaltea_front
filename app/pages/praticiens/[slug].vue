@@ -5,7 +5,7 @@
     <img src="/images/medecines/illu-naturopathie.svg" alt="" aria-hidden="true" class="hidden xl:block absolute right-[-3%] top-[1484px] w-[35%] max-w-[605px] opacity-[0.08] pointer-events-none select-none" style="animation: none;" />
 
     <!-- Bandeau vert -->
-    <div class="absolute inset-x-0 top-0 h-[640px] sm:h-[470px] bg-vert-600 overflow-hidden" aria-hidden="true">
+    <div class="absolute inset-x-0 top-0 h-[640px] bg-vert-600 overflow-hidden" :class="fullName.length > 14 ? 'sm:h-[540px]' : 'sm:h-[470px]'" aria-hidden="true">
       <img src="/images/footer/feuille-2.svg" alt="" class="hidden lg:block absolute left-[40%] top-[40px] w-[11%] opacity-60" style="animation: none;" />
       <img src="/images/footer/feuille-1.svg" alt="" class="hidden lg:block absolute left-[3.5%] top-[140px] w-[12.5%] opacity-60" style="animation: none;" />
       <img src="/images/footer/feuille-5.svg" alt="" class="hidden lg:block absolute right-0 top-[180px] w-[15%] opacity-60" style="animation: none;" />

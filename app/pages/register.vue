@@ -6,20 +6,22 @@
     </div>
 
     <!-- Formulaire -->
-    <div class="flex-1 min-w-0 flex flex-col px-5 sm:px-8 py-8 lg:p-0 lg:pt-6 lg:min-h-[calc(100svh-80px)]">
+    <div class="flex-1 min-w-0 flex flex-col lg:justify-center px-5 sm:px-8 py-8 lg:p-0 lg:min-h-[calc(100svh-80px)]">
       <NuxtLink to="/" class="lg:hidden self-start" aria-label="Léya, retour à l'accueil">
         <img src="/images/logo.svg" alt="Léya" width="120" height="54" class="w-[100px] h-auto" style="animation: none;" />
       </NuxtLink>
 
-      <div class="mt-8 lg:mt-0">
+      <AuthAudienceSwitch class="mt-6 lg:mt-0 mb-6 lg:mb-8" page="register" current="patient" :redirect="String(route.query.redirect ?? '')" />
+
+      <div>
         <h1 class="font-unbounded font-normal text-[30px] sm:text-[34px] lg:text-[40px] leading-[normal] text-vert-900">Créez votre compte</h1>
         <p class="mt-[10px] text-[18px] lg:text-[20px] leading-[normal] text-neutre-600 max-w-[820px]">
           Retrouvez vos médecines et praticiens favoris. Vos conversations avec Léya, elles, ne sont jamais enregistrées.
         </p>
       </div>
 
-      <form class="mt-8 lg:mt-[48px] flex-1 flex flex-col" @submit.prevent="handleRegister">
-        <div class="grid sm:grid-cols-2 gap-4 max-w-[776px]">
+      <form class="mt-8 lg:mt-[40px] flex flex-col" @submit.prevent="handleRegister">
+        <div class="flex flex-col gap-5 max-w-[380px]">
           <div class="flex flex-col gap-2">
             <label for="register-mail" class="text-[16px] font-medium leading-[normal]">Adresse e-mail</label>
             <div class="relative">
@@ -37,7 +39,7 @@
             />
             <Check v-if="mailLooksValid" :size="20" class="absolute right-4 top-1/2 -translate-y-1/2 text-vert-600 pointer-events-none" aria-hidden="true" />
             </div>
-            <p class="max-w-[260px] text-[16px] leading-[normal] text-neutre-600">Nous ne partageons jamais votre e-mail.</p>
+            <p class="text-[16px] leading-[normal] text-neutre-600">Nous ne partageons jamais votre e-mail.</p>
           </div>
           <div class="flex flex-col gap-2">
             <label for="register-password" class="text-[16px] font-medium leading-[normal]">Mot de passe</label>
@@ -56,7 +58,7 @@
               aria-describedby="register-password-hint"
               class="h-[52px] w-full rounded-[12px] border border-[#c8c8c8] bg-white px-4 text-[16px] text-vert-900 placeholder:text-neutre-500 focus:outline-none focus:border-2 focus:border-vert-600 focus:shadow-[0_0_0_4px_#cde4df] transition-shadow"
             />
-            <p id="register-password-hint" class="max-w-[260px] text-[16px] leading-[normal] text-neutre-600">8 caractères minimum, dont un chiffre.</p>
+            <p id="register-password-hint" class="text-[16px] leading-[normal] text-neutre-600">8 caractères minimum, dont un chiffre.</p>
           </div>
         </div>
 
@@ -69,12 +71,10 @@
           </span>
         </label>
 
-        <div v-if="errorMsg" class="mt-6 max-w-[776px] rounded-[12px] border border-[#fed7d7] bg-[#fff5f5] p-4 text-[14px] font-semibold text-[#c53030]" role="alert">{{ errorMsg }}</div>
-        <div v-if="successMsg" class="mt-6 max-w-[776px] rounded-[12px] border border-[#c6f6d5] bg-[#f0fff4] p-4 text-[14px] font-semibold text-[#2f855a]" role="status">{{ successMsg }}</div>
+        <div v-if="errorMsg" class="mt-6 max-w-[380px] rounded-[12px] border border-[#fed7d7] bg-[#fff5f5] p-4 text-[14px] font-semibold text-[#c53030]" role="alert">{{ errorMsg }}</div>
+        <div v-if="successMsg" class="mt-6 max-w-[380px] rounded-[12px] border border-[#c6f6d5] bg-[#f0fff4] p-4 text-[14px] font-semibold text-[#2f855a]" role="status">{{ successMsg }}</div>
 
-        <div class="flex-1 min-h-10" />
-
-        <div class="flex flex-wrap items-center gap-x-5 gap-y-4">
+        <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-4">
           <button type="submit" :disabled="isLoading" class="inline-flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:shadow-douce transition-shadow disabled:opacity-80 disabled:cursor-wait">
             <template v-if="!isLoading">Créer mon compte</template>
             <span v-else class="inline-flex items-center gap-2"><Loader2 class="animate-spin" :size="20" aria-hidden="true" /> Création…</span>
@@ -87,10 +87,6 @@
           <p>
             Déjà un compte ?
             <NuxtLink :to="{ path: '/login', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="font-semibold text-corail-700 hover:underline">Se connecter</NuxtLink>
-          </p>
-          <p class="text-neutre-600">
-            Vous êtes praticien ?
-            <NuxtLink to="/inscription-pro" class="underline text-vert-600">Créer un compte praticien</NuxtLink>
           </p>
         </div>
       </form>

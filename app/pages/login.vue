@@ -1,154 +1,107 @@
 <template>
-  <div class="auth-page-v2">
-    <!-- Left Pane: Illustration -->
-    <div class="pane-left">
-      <AuthIllustration :message="isProContext ? 'Votre agenda et vos patients, en toute simplicité.' : undefined" />
+  <div class="min-h-screen min-h-[100svh] bg-bleu-50 text-vert-900 lg:flex lg:gap-10 xl:gap-20 lg:p-10">
+    <!-- Panneau d'illustration -->
+    <div class="hidden lg:block lg:w-[42vw] xl:w-[36vw] max-w-[620px] shrink-0 lg:sticky lg:top-10 lg:h-[calc(100svh-80px)]">
+      <AuthIllustration logo :message="isProContext ? 'Votre agenda et vos patients, en toute simplicité.' : 'Expliquez-nous ce que vous ressentez, on vous guide.'" />
     </div>
 
-    <!-- Right Pane: Form -->
-    <div class="pane-right">
-      <div class="form-container">
-        <!-- Logo Header -->
-        <div class="header-section">
-          <NuxtLink to="/">
-            <img 
-              src="/images/logo.svg" 
-              alt="Léya"
-              class="logo-img"
-            />
-          </NuxtLink>
-          <p v-if="isProContext" class="pro-tag">Espace praticien</p>
-          <h1 class="auth-title mb-4">
-            {{ isProContext ? 'Connexion praticien' : 'Bon retour !' }}
-          </h1>
-          <p class="auth-subtitle">
-            {{ isProContext ? 'Connectez-vous pour gérer vos rendez-vous et votre agenda.' : 'Ravi de vous revoir. Connectez-vous pour continuer.' }}
-          </p>
-        </div>
+    <!-- Formulaire -->
+    <div class="flex-1 min-w-0 flex flex-col lg:justify-center px-5 sm:px-8 py-8 lg:p-0 lg:min-h-[calc(100svh-80px)]">
+      <NuxtLink to="/" class="lg:hidden self-start" aria-label="Léya, retour à l'accueil">
+        <img src="/images/logo.svg" alt="Léya" width="120" height="54" class="w-[100px] h-auto" style="animation: none;" />
+      </NuxtLink>
 
-        <!-- Login Form -->
-        <form @submit.prevent="handleLogin" class="auth-form">
-          <div class="field-group">
-            <label class="input-label" for="login-mail">Adresse mail</label>
-            <input 
-              id="login-mail"
-              v-model="mail"
-              type="email"
-              autocomplete="username"
-              inputmode="email" 
-              class="form-input"
-              required
-              placeholder="votre@email.com"
-              :disabled="isLoading"
-            />
-          </div>
+      <AuthAudienceSwitch class="mt-6 lg:mt-0 mb-6 lg:mb-8" page="login" :current="isProContext ? 'pro' : 'patient'" :redirect="isProContext ? '' : String(route.query.redirect ?? '')" />
 
-          <div class="field-group">
-            <div class="flex justify-between items-center mb-1">
-              <label class="input-label mb-0" for="login-password">Mot de passe</label>
-<!--
-              <NuxtLink to="/forgot-password" class="text-sm font-semibold text-[#012828] hover:underline opacity-60">
-                Oublié ?
-              </NuxtLink>
--->
+      <div>
+        <h1 class="font-unbounded font-normal text-[30px] sm:text-[34px] lg:text-[40px] leading-[normal] text-vert-900">
+          {{ isProContext ? 'Connexion praticien' : 'Bon retour !' }}
+        </h1>
+        <p class="mt-[10px] text-[18px] lg:text-[20px] leading-[normal] text-neutre-600 max-w-[820px]">
+          {{ isProContext ? 'Connectez-vous pour gérer vos rendez-vous et votre agenda.' : 'Ravi de vous revoir. Connectez-vous pour continuer.' }}
+        </p>
+      </div>
+
+      <form class="mt-8 lg:mt-[40px] flex flex-col" @submit.prevent="handleLogin">
+        <div class="flex flex-col gap-5 max-w-[380px]">
+          <div class="flex flex-col gap-2">
+            <label for="login-mail" class="text-[16px] font-medium leading-[normal]">Adresse e-mail</label>
+            <div class="relative">
+              <input
+                id="login-mail"
+                v-model="mail"
+                type="email"
+                autocomplete="username"
+                inputmode="email"
+                required
+                maxlength="150"
+                placeholder="votre@email.com"
+                :disabled="isLoading"
+                class="h-[52px] w-full rounded-[12px] border border-[#c8c8c8] bg-white pl-4 pr-11 text-[16px] text-vert-900 placeholder:text-neutre-500 focus:outline-none focus:border-2 focus:border-vert-600 focus:shadow-[0_0_0_4px_#cde4df] transition-shadow"
+              />
+              <Check v-if="mailLooksValid" :size="20" class="absolute right-4 top-1/2 -translate-y-1/2 text-vert-600 pointer-events-none" aria-hidden="true" />
             </div>
-            <input 
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="login-password" class="text-[16px] font-medium leading-[normal]">Mot de passe</label>
+            <!-- Pas de « Mot de passe oublié » : la réinitialisation passe par un e-mail, aujourd'hui bloqué -->
+            <input
               id="login-password"
               v-model="password"
               type="password"
-              autocomplete="current-password" 
-              class="form-input"
+              autocomplete="current-password"
               required
+              maxlength="200"
               placeholder="••••••••"
               :disabled="isLoading"
+              class="h-[52px] w-full rounded-[12px] border border-[#c8c8c8] bg-white px-4 text-[16px] text-vert-900 placeholder:text-neutre-500 focus:outline-none focus:border-2 focus:border-vert-600 focus:shadow-[0_0_0_4px_#cde4df] transition-shadow"
             />
           </div>
-
-          <!-- Error Message -->
-          <div v-if="errorMsg" class="error-box">
-            {{ errorMsg }}
-          </div>
-
-          <!-- Connexion réussie, mais avec un compte patient depuis l'entrée praticien -->
-          <div v-if="wrongRole" class="info-box" role="status">
-            <p class="font-semibold mb-1">Ce compte est un compte patient.</p>
-            <p class="mb-2">Il n'a pas accès à l'espace praticien. Utilisez un compte praticien, ou créez-en un avec une autre adresse email.</p>
-            <p class="flex flex-wrap gap-x-4 gap-y-1">
-              <NuxtLink to="/mes-rendez-vous" class="underline">Aller à mon compte patient</NuxtLink>
-              <NuxtLink to="/inscription-pro" class="underline">Créer un compte praticien</NuxtLink>
-            </p>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="submit-wrapper">
-            <button 
-              type="submit"
-              class="btn-submit"
-              :disabled="isLoading"
-            >
-              <span v-if="!isLoading">Se connecter</span>
-              <span v-else class="loading-state">
-                <Loader2 class="spinner" :size="20" />
-                Connexion...
-              </span>
-            </button>
-          </div>
-        </form>
-
-<!--
-        <div class="separator-group">
-          <div class="line"></div>
-          <div class="label-or">ou</div>
         </div>
 
-        <div class="social-row mb-8">
-          <button class="social-btn" :disabled="isLoading">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="logo-icon">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="currentColor"/>
-              <path d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84z" fill="currentColor"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="currentColor"/>
-            </svg>
-          </button>
-          <button class="social-btn" :disabled="isLoading">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="22" height="22" class="apple-icon">
-              <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" fill="currentColor"/>
-            </svg>
+        <div v-if="errorMsg" class="mt-6 max-w-[380px] rounded-[12px] border border-[#fed7d7] bg-[#fff5f5] p-4 text-[14px] font-semibold text-[#c53030]" role="alert">{{ errorMsg }}</div>
+
+        <!-- Connexion réussie, mais avec un compte patient depuis l'entrée praticien -->
+        <div v-if="wrongRole" class="mt-6 max-w-[380px] rounded-[12px] border border-[#fcd34d] bg-[#fffbeb] p-4 text-[14px] text-[#78350f]" role="status">
+          <p class="font-semibold mb-1">Ce compte est un compte patient.</p>
+          <p class="mb-2">Il n'a pas accès à l'espace praticien. Utilisez un compte praticien, ou créez-en un avec une autre adresse e-mail.</p>
+          <p class="flex flex-wrap gap-x-4 gap-y-1">
+            <NuxtLink to="/mes-rendez-vous" class="underline">Aller à mon compte patient</NuxtLink>
+            <NuxtLink to="/inscription-pro" class="underline">Créer un compte praticien</NuxtLink>
+          </p>
+        </div>
+
+        <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-4">
+          <button type="submit" :disabled="isLoading" class="inline-flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:shadow-douce transition-shadow disabled:opacity-80 disabled:cursor-wait">
+            <template v-if="!isLoading">Se connecter</template>
+            <span v-else class="inline-flex items-center gap-2"><Loader2 class="animate-spin" :size="20" aria-hidden="true" /> Connexion…</span>
+            <span class="w-10 h-10 rounded-full bg-corail-500 flex items-center justify-center"><ArrowUpRight :size="20" aria-hidden="true" /></span>
           </button>
         </div>
--->
 
         <!-- Entrée praticien -->
-        <template v-if="isProContext">
-          <p class="text-center font-semibold mb-0 font-futura text-[#012828]">
+        <div v-if="isProContext" class="mt-8 pb-2 flex flex-col gap-1 text-[16px]">
+          <p>
             Pas encore inscrit ?
-            <NuxtLink to="/inscription-pro" class="text-rose-500 hover:underline">Créer mon compte praticien</NuxtLink>
+            <NuxtLink to="/inscription-pro" class="font-semibold text-corail-700 hover:underline">Créer mon compte praticien</NuxtLink>
           </p>
-          <p class="text-center text-sm mt-3 text-[#012828]/70">
-            Vous êtes patient ?
-            <NuxtLink to="/login" class="underline text-[#156F71]">Connexion patient</NuxtLink>
-          </p>
-        </template>
+        </div>
 
         <!-- Entrée patient -->
-        <template v-else>
-          <p class="text-center font-semibold mb-0 font-futura text-[#012828]">
+        <div v-else class="mt-8 pb-2 flex flex-col gap-1 text-[16px]">
+          <p>
             Pas encore de compte ?
-            <NuxtLink :to="{ path: '/register', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="text-rose-500 hover:underline">S'inscrire</NuxtLink>
+            <NuxtLink :to="{ path: '/register', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="font-semibold text-corail-700 hover:underline">S'inscrire</NuxtLink>
           </p>
-          <p class="text-center text-sm mt-3 text-[#012828]/70">
-            Vous êtes praticien ?
-            <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro/rendez-vous' } }" class="underline text-[#156F71]">Connexion praticien</NuxtLink>
-          </p>
-        </template>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Loader2 } from 'lucide-vue-next'
+import { ArrowUpRight, Check, Loader2 } from 'lucide-vue-next'
 
 definePageMeta({ middleware: 'guest' })
 useSeoMeta({ title: 'Connexion — Léya', robots: 'noindex, nofollow' })
@@ -157,6 +110,7 @@ import { useRouter } from '#app'
 const router = useRouter()
 const route = useRoute()
 const mail = ref('')
+const mailLooksValid = computed(() => /^\S+@\S+\.\S{2,}$/.test(mail.value.trim()))
 const password = ref('')
 const isLoading = ref(false)
 const errorMsg = ref('')
@@ -211,255 +165,3 @@ async function handleLogin() {
   }
 }
 </script>
-
-<style scoped>
-.auth-page-v2 {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 100vh;
-  min-height: 100svh;
-  background-color: #e0ecf2;
-  color: #012828;
-}
-
-.pane-left {
-  display: none;
-}
-
-.pane-right {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 24px;
-}
-
-.form-container {
-  width: 100%;
-  max-width: 440px;
-}
-
-/* Desktop styles */
-@media (min-width: 1024px) {
-  .auth-page-v2 {
-    flex-direction: row;
-  }
-  
-  .pane-left {
-    display: block;
-    width: 50%;
-    height: 100vh;
-    height: 100svh;
-    position: sticky;
-    top: 0;
-    padding: 16px;
-  }
-  
-  .pane-right {
-    width: 50%;
-    height: 100vh;
-    height: 100svh;
-    padding: 32px;
-    overflow-y: auto;
-  }
-}
-
-.header-section {
-  margin-bottom: 30px;
-}
-
-.logo-img {
-  width: 120px;
-  height: auto;
-  margin-bottom: 20px;
-}
-
-.auth-title {
-  font-family: 'Unbounded', cursive;
-  font-size: 36px;
-  font-weight: 700;
-  line-height: 1.05;
-}
-
-.auth-subtitle {
-  font-family: 'Futura PT', sans-serif;
-  font-size: 18px;
-  color: rgba(1, 40, 40, 0.6);
-  line-height: 1.5;
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.input-label {
-  display: block;
-  font-family: 'Futura PT', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  margin-left: 4px;
-}
-
-.form-input {
-  width: 100%;
-  height: 58px;
-  padding: 0 24px;
-  border-radius: 18px;
-  border: 1px solid #90BAD1;
-  background-color: white;
-  font-size: 16px;
-  outline: none;
-  transition: all 0.2s;
-  font-family: 'Futura PT', sans-serif;
-}
-
-.form-input:focus {
-  border-color: #012828;
-  box-shadow: 0 0 0 4px rgba(1, 40, 40, 0.05);
-}
-
-.btn-submit {
-  width: 100%;
-  height: 58px;
-  background-color: #012828;
-  color: white;
-  font-weight: 700;
-  font-size: 17px;
-  border-radius: 50px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 10px 25px -5px rgba(1, 40, 40, 0.2);
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Futura PT', sans-serif;
-}
-
-.btn-submit:hover:not(:disabled) {
-  background-color: #023a3a;
-  transform: translateY(-1px);
-}
-
-.btn-submit:active {
-  transform: translateY(0);
-}
-
-.btn-submit:disabled {
-  opacity: 0.8;
-  cursor: wait;
-}
-
-.loading-state {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.spinner {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.pro-tag {
-  display: inline-block;
-  margin: 1rem 0 0.25rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  background: #e0ecf2;
-  color: #156F71;
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-
-.info-box {
-  background: #fffbeb;
-  border: 1px solid #fcd34d;
-  color: #78350f;
-  border-radius: 12px;
-  padding: 0.85rem 1rem;
-  font-size: 0.875rem;
-  margin-top: 0.75rem;
-}
-
-.error-box {
-  background-color: #fff5f5;
-  color: #c53030;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  border: 1px solid #fed7d7;
-}
-
-.separator-group {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24px;
-}
-
-.separator-group .line {
-  width: 100%;
-  height: 1px;
-  background-color: #E5E5E5;
-}
-
-.separator-group .label-or {
-  position: absolute;
-  background-color: #e0ecf2;
-  padding: 0 20px;
-  color: rgba(1, 40, 40, 0.3);
-  font-size: 15px;
-  font-weight: 600;
-  font-family: 'Futura PT', sans-serif;
-}
-
-.social-row {
-  display: flex;
-  gap: 16px;
-}
-
-.social-btn {
-  flex: 1;
-  height: 58px;
-  background-color: white;
-  border: 1px solid #E5E5E5;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.social-btn:hover {
-  background-color: #f9fafb;
-}
-
-.social-btn .logo-icon,
-.social-btn .apple-icon {
-  color: #000;
-  transition: transform 0.2s;
-}
-
-.social-btn:hover .logo-icon,
-.social-btn:hover .apple-icon {
-  transform: scale(1.1);
-}
-
-.font-futura {
-  font-family: 'Futura PT', sans-serif;
-}
-</style>

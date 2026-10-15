@@ -71,8 +71,12 @@
 
       <div class="mt-8 lg:mt-10 flex flex-wrap items-center justify-between gap-4">
       <h1 id="praticien-results-title" class="font-unbounded font-normal text-[22px] lg:text-[24px] leading-tight text-black" role="status" aria-live="polite">
-        {{ total }} praticien{{ total > 1 ? 's' : '' }}<template v-if="specialityName"> en {{ specialityName.toLowerCase() }}</template><template v-if="q"> pour « {{ q }} »</template>
+        {{ total }} praticien{{ total > 1 ? 's' : '' }}<template v-if="specialityName"> en {{ specialityName.toLowerCase() }}</template><template v-if="place"> à moins de {{ placeRadius }} km de {{ place }}</template><template v-else-if="q"> pour « {{ q }} »</template>
       </h1>
+      <p v-if="place || (byName && q)" class="basis-full -mt-2 text-[16px] leading-[normal] text-neutre-600">
+        <template v-if="place">Recherche autour de {{ place }}, triée par distance. <button type="button" class="underline font-medium text-vert-900 hover:text-vert-600" @click="emit('search-by-name')">Chercher plutôt un praticien nommé « {{ q }} »</button></template>
+        <template v-else>Recherche par nom uniquement. <button type="button" class="underline font-medium text-vert-900 hover:text-vert-600" @click="emit('search-by-place')">Chercher plutôt autour de « {{ q }} »</button></template>
+      </p>
 
         <div class="inline-flex gap-1 rounded-full bg-white p-[5px] text-[16px] font-medium leading-[normal]" role="group" aria-label="Affichage des résultats">
           <button type="button" class="inline-flex items-center gap-2 rounded-full px-[30px] py-[9px] min-h-[48px] transition-colors" :class="view !== 'carte' ? 'bg-vert-600 text-white' : 'text-vert-900 hover:bg-bleu-50'" :aria-pressed="view !== 'carte' ? 'true' : 'false'" @click="emit('update:view', 'liste')">
@@ -101,6 +105,7 @@
 
       <p v-else-if="!praticiens.length && !loading" class="mt-8 bg-white text-vert-900 rounded-[28px] p-6 text-[18px]">
         <template v-if="geo">Aucun praticien dans un rayon de {{ radius }} km autour de vous. Élargissez le rayon, ou retirez « Autour de moi » pour voir tous les praticiens.</template>
+        <template v-else-if="place">Aucun praticien à moins de {{ placeRadius }} km de {{ place }} pour le moment. Essayez une autre ville ou une autre spécialité.</template>
         <template v-else-if="usePrefs">Aucun praticien ne correspond à vos préférences (ville et distance). Retirez « Selon mes préférences » ou élargissez-les dans <NuxtLink to="/mon-compte" class="underline font-semibold">Mon profil</NuxtLink>.</template>
         <template v-else-if="q || specialityName || onlyBookable || mode || soon || rated || accessible || usePrefs">Aucun praticien ne correspond à cette recherche. Essayez une autre ville, un autre code postal ou une autre spécialité.</template>
         <template v-else>Les premiers praticiens arrivent bientôt.</template>
@@ -139,6 +144,10 @@ const props = defineProps({
   page: { type: Number, default: 1 },
   pageSize: { type: Number, default: 10 },
   q: { type: String, default: '' },
+  // Ville reconnue dans la recherche : résultats autour d'elle (sinon `q` est un nom ou une adresse)
+  place: { type: String, default: '' },
+  placeRadius: { type: Number, default: 15 },
+  byName: { type: Boolean, default: false },
   specialityName: { type: String, default: '' },
   error: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
@@ -160,7 +169,7 @@ const props = defineProps({
   mapLoading: { type: Boolean, default: false },
   mapSearching: { type: Boolean, default: false },
 })
-const emit = defineEmits(['update:sort', 'update:onlyBookable', 'update:mode', 'update:soon', 'update:rated', 'update:accessible', 'update:usePrefs', 'update:radius', 'update:view', 'map-search', 'map-reset', 'locate', 'unlocate'])
+const emit = defineEmits(['update:sort', 'update:onlyBookable', 'update:mode', 'update:soon', 'update:rated', 'update:accessible', 'update:usePrefs', 'update:radius', 'update:view', 'map-search', 'map-reset', 'locate', 'unlocate', 'search-by-name', 'search-by-place'])
 
 const modeLabels = { cabinet: 'Au cabinet', visio: 'En visio', domicile: 'À domicile' }
 // Ordre de la maquette : Disponible cette semaine · Cabinet · Visio · À domicile · Note 4+ · Accès PMR

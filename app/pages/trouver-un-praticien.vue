@@ -20,6 +20,9 @@
           :page="page"
           :page-size="PAGE_SIZE"
           :q="q"
+          :place="!geo && place ? place.name : ''"
+          :place-radius="PLACE_RADIUS_KM"
+          :by-name="byName"
           :speciality-name="speciality?.name ?? ''"
           :error="!!error"
           :loading="pending"
@@ -53,6 +56,8 @@
           @update:radius="radius = $event"
           @locate="locate"
           @unlocate="unlocate"
+          @search-by-name="searchByName"
+          @search-by-place="searchByPlace"
         />
       </div>
     </template>
@@ -68,6 +73,19 @@ const SORTS = { pertinence: undefined, disponibilite: 'nextAvailability', prix: 
 const route = useRoute()
 const router = useRouter()
 const q = computed(() => String(route.query.q ?? '').trim().slice(0, 100))
+// « Cholet » est une ville, pas un nom de praticien : on cherche alors autour de cette ville (comme les autres annuaires),
+// sans ramener les praticiens qui s'appellent Cholet ou dont l'adresse contient ce mot. `nom=1` force la recherche par nom.
+const PLACE_RADIUS_KM = 15
+const byName = computed(() => route.query.nom === '1')
+const { data: place } = await useAsyncData(
+  'praticiens-place',
+  async () => {
+    if (!q.value || byName.value) return null
+    const found = await $fetch('/api/place', { query: { q: q.value } }).catch(() => null)
+    return found && typeof found === 'object' ? found : null
+  },
+  { watch: [q, byName] },
+)
 const { findBySlug } = await useSpecialities()
 const speciality = computed(() => findBySlug(String(route.query.specialite ?? '')))
 const onlyBookable = computed(() => route.query.reservable === '1')
@@ -85,7 +103,7 @@ onMounted(loadPrefs)
 const usePrefs = computed(() => route.query.prefs === '1')
 const prefLocation = computed(() => (prefs.value?.latitude != null && prefs.value?.longitude != null ? { lat: prefs.value.latitude, lng: prefs.value.longitude } : null))
 const prefsUsable = computed(() => !!prefs.value && (!!prefLocation.value || !!prefs.value.budgetBand))
-const RESULT_KEYS = ['vue', 'q', 'specialite', 'tri', 'reservable', 'mode', 'dispo', 'note', 'pmr', 'prefs', 'page', 'tous']
+const RESULT_KEYS = ['vue', 'q', 'nom', 'specialite', 'tri', 'reservable', 'mode', 'dispo', 'note', 'pmr', 'prefs', 'page', 'tous']
 const isResults = computed(() => Object.keys(route.query).some(k => RESULT_KEYS.includes(k)))
 const page = computed(() => Math.max(1, Math.floor(Number(route.query.page)) || 1))
 // Remet à zéro la barre de recherche quand on arrive d'un autre critère (lien, retour arrière)
@@ -104,12 +122,13 @@ const sort = computed(() => {
 
 const apiQuery = computed(() => ({
   ...(speciality.value ? { specialityId: speciality.value.id } : {}),
-  ...(q.value ? { q: q.value } : {}),
+  ...(q.value && !place.value ? { q: q.value } : {}),
+  ...(place.value && !geo.value ? { lat: place.value.latitude, lng: place.value.longitude, radiusKm: PLACE_RADIUS_KM } : {}),
   ...(SORTS[sort.value] ? { sort: SORTS[sort.value] } : {}),
   ...(onlyBookable.value ? { bookable: true } : {}),
   ...(mode.value ? { mode: mode.value } : {}),
   // Position choisie à la main (« Autour de moi ») prioritaire sur celle des préférences
-  ...(usePrefs.value && prefLocation.value && !geo.value ? { ...prefLocation.value, ...(prefs.value?.radiusKm ? { radiusKm: prefs.value.radiusKm } : {}) } : {}),
+  ...(usePrefs.value && prefLocation.value && !geo.value && !place.value ? { ...prefLocation.value, ...(prefs.value?.radiusKm ? { radiusKm: prefs.value.radiusKm } : {}) } : {}),
   ...(soon.value ? { availableWithinDays: 7 } : {}),
   ...(rated.value ? { minRating: 4 } : {}),
   ...(accessible.value ? { wheelchairAccessible: true } : {}),
@@ -117,7 +136,20 @@ const apiQuery = computed(() => ({
   limit: PAGE_SIZE,
 }))
 
+// Recherche « par nom » : le texte libre de l'API cherche aussi dans la ville et l'adresse. On ne garde ici que les praticiens dont le nom
+// contient tous les mots saisis (limite de l'API : 100 fiches par requête, largement suffisant pour un nom).
+const plain = (t) => String(t ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+function nameMatches(p) {
+  const full = plain(`${p.firstName} ${p.lastName}`)
+  return plain(q.value).split(/\s+/).filter(Boolean).every(word => full.includes(word))
+}
+
 async function fetchPage(offset) {
+  if (byName.value && q.value) {
+    const res = await $fetch.raw('/api/backend/praticiens', { query: { ...apiQuery.value, limit: 100, offset: 0 } })
+    const all = (Array.isArray(res._data) ? res._data : []).filter(nameMatches)
+    return { items: all.slice(offset, offset + PAGE_SIZE), total: all.length }
+  }
   const res = await $fetch.raw('/api/backend/praticiens', { query: { ...apiQuery.value, offset } })
   return { items: Array.isArray(res._data) ? res._data : [], total: Number(res.headers.get('x-total-count')) || 0 }
 }
@@ -146,7 +178,9 @@ const { data: mapData, pending: mapPending } = await useAsyncData(
   async () => {
     if (!(isResults.value && view.value === 'carte')) return { items: [], total: 0 }
     const res = await $fetch.raw('/api/backend/praticiens', { query: mapQuery.value })
-    return { items: Array.isArray(res._data) ? res._data : [], total: Number(res.headers.get('x-total-count')) || 0 }
+    const list = Array.isArray(res._data) ? res._data : []
+    if (byName.value && q.value) { const named = list.filter(nameMatches); return { items: named, total: named.length } }
+    return { items: list, total: Number(res.headers.get('x-total-count')) || 0 }
   },
   { watch: [mapQuery, view, isResults], server: false, lazy: true },
 )
@@ -175,6 +209,10 @@ const setMode = (value) => setQuery({ mode: value || undefined, page: undefined 
 const setSoon = (value) => setQuery({ dispo: value ? '7' : undefined, page: undefined })
 const setRated = (value) => setQuery({ note: value ? '4' : undefined, page: undefined })
 const setAccessible = (value) => setQuery({ pmr: value ? '1' : undefined, page: undefined })
+
+// Texte reconnu comme une ville mais cherché comme un nom (lien « Chercher plutôt un praticien nommé… »)
+const searchByName = () => setQuery({ nom: '1', page: undefined })
+const searchByPlace = () => setQuery({ nom: undefined, page: undefined })
 
 function locate() {
   geoError.value = ''

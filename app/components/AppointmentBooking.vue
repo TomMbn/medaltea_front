@@ -171,6 +171,21 @@
             </button>
           </template>
 
+          <!-- Sans compte (lot 2 du backend) : page « Vos informations » -->
+          <template v-else-if="guestBooking">
+            <NuxtLink
+              :to="{ path: '/rendez-vous/informations', query: { praticien: praticien.slug, type: String(typeId), slot: selectedSlot } }"
+              class="w-full flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:bg-vert-600 transition-colors"
+            >
+              <span class="flex-1 min-w-0 truncate leading-[normal]">Continuer sans compte</span>
+              <span class="w-10 h-10 shrink-0 rounded-full bg-corail-500 flex items-center justify-center"><ArrowUpRight :size="20" aria-hidden="true" /></span>
+            </NuxtLink>
+            <p class="text-[14px] text-neutre-600 text-center leading-[normal]">
+              Vous avez un compte ?
+              <NuxtLink :to="{ path: '/login', query: { redirect: route.fullPath } }" class="underline">Se connecter</NuxtLink>
+            </p>
+          </template>
+
           <template v-else>
             <p class="text-[16px] leading-snug text-neutre-600">Connectez-vous pour réserver ce créneau. Votre sélection sera conservée.</p>
             <NuxtLink
@@ -205,6 +220,7 @@ const props = defineProps({
 const route = useRoute()
 const router = useRouter()
 const { isLoggedIn } = useSession()
+const guestBooking = useRuntimeConfig().public.guestBooking
 
 const HORIZON_DAYS = 120   // on ne cherche pas de créneau au-delà de ~4 mois
 const COLS = 5             // jours affichés

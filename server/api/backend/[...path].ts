@@ -36,6 +36,8 @@ const RULES: Rule[] = [
     // Proposer un autre créneau (praticien), puis l'accepter ou le refuser (patient)
     { method: 'POST', pattern: /^appointments\/\d+\/proposal$/, auth: true, body: ['startAt'] },
     { method: 'POST', pattern: /^appointments\/\d+\/proposal\/(accept|decline)$/, auth: true },
+    // Réservation sans compte (lot 2) : publique, protégée par Turnstile côté backend
+    { method: 'POST', pattern: /^appointments\/guest$/, auth: false, body: ['praticienId', 'consultationTypeId', 'startAt', 'firstName', 'lastName', 'email', 'phoneNumber', 'userNote', 'consentContact', 'consentHealthData', 'captchaToken'] },
     // Compteur de vues de fiche (le backend ignore les fiches non revendiquées)
     { method: 'POST', pattern: /^praticiens\/\d+\/view$/, auth: false },
 
@@ -271,6 +273,30 @@ function validatePushSubscription(body: Record<string, any>) {
     return { endpoint, keys: { p256dh: keys.p256dh, auth: keys.auth } }
 }
 
+/** Réservation invité : formats vérifiés avant d'atteindre le backend ; rien n'est journalisé. */
+function validateGuestBooking(body: Record<string, any>) {
+    const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
+    const praticienId = Number(body.praticienId)
+    const consultationTypeId = Number(body.consultationTypeId)
+    if (!Number.isInteger(praticienId) || !Number.isInteger(consultationTypeId) || typeof body.startAt !== 'string' || Number.isNaN(Date.parse(body.startAt))) throw bad('Demande de rendez-vous invalide.')
+    for (const key of ['firstName', 'lastName']) {
+        if (typeof body[key] !== 'string' || !body[key].trim() || body[key].length > 80) throw bad('Prénom ou nom invalide.')
+    }
+    if (typeof body.email !== 'string' || body.email.length > 150 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(body.email)) throw bad('Adresse e-mail invalide.')
+    if (typeof body.phoneNumber !== 'string' || !/^\+?\d{10,15}$/.test(body.phoneNumber.replace(/[\s.]/g, ''))) throw bad('Téléphone invalide.')
+    if (body.userNote !== undefined && (typeof body.userNote !== 'string' || body.userNote.length > 500)) throw bad('Le motif ne doit pas dépasser 500 caractères.')
+    if (body.consentContact !== true) throw bad('Votre accord est nécessaire pour transmettre vos informations.')
+    if (body.userNote && body.consentHealthData !== true) throw bad('Votre accord est nécessaire pour transmettre le motif.')
+    if (typeof body.captchaToken !== 'string' || !body.captchaToken || body.captchaToken.length > 2100) throw bad('Vérification de sécurité manquante.')
+    return {
+        praticienId, consultationTypeId, startAt: body.startAt,
+        firstName: body.firstName.trim(), lastName: body.lastName.trim(), email: body.email.trim(),
+        phoneNumber: body.phoneNumber.replace(/[\s.]/g, ''),
+        ...(body.userNote ? { userNote: body.userNote, consentHealthData: true } : {}),
+        consentContact: true, captchaToken: body.captchaToken,
+    }
+}
+
 function validateProposal(body: Record<string, any>) {
     if (typeof body.startAt !== 'string' || Number.isNaN(Date.parse(body.startAt))) throw createError({ statusCode: 400, statusMessage: 'Créneau invalide.' })
     return { startAt: body.startAt }
@@ -334,6 +360,7 @@ export default defineEventHandler(async (event) => {
         if (method === 'PUT' && path === 'users/me/preferences') body = validatePreferences(body)
         if (method === 'PATCH' && path === 'users/me/notification-preferences') body = validateNotificationPrefs(body)
         if (path === 'push/subscriptions') body = validatePushSubscription(body)
+        if (path === 'appointments/guest') body = validateGuestBooking(body)
         if (/^appointments\/\d+\/proposal$/.test(path)) body = validateProposal(body)
         if (/^admin\/claim-requests\/\d+$/.test(path)) body = validateDecision(body)
         if (method === 'PATCH' && path === 'users/me') body = validateProfileUpdate(body)

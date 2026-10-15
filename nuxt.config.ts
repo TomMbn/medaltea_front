@@ -65,7 +65,7 @@ export default defineNuxtConfig({
         'Cross-Origin-Opener-Policy': 'same-origin',
         // Politique de sécurité des contenus en mode « rapport seul » : elle ne bloque rien, les écarts sont journalisés
         // (voir server/api/csp-report.post.ts) avant de passer en mode bloquant.
-        'Content-Security-Policy-Report-Only': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self'; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; report-uri /api/csp-report",
+        'Content-Security-Policy-Report-Only': "default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; report-uri /api/csp-report",
       },
     },
   },
@@ -76,6 +76,11 @@ export default defineNuxtConfig({
     // URL du backend (surchargeable avec NUXT_API_BASE)
     apiBase: process.env.NUXT_API_BASE || 'https://vps123922.serveur-vps.net',
     public: {
+      // Réservation sans compte : désactivée tant que le backend (lot 2) n'est pas en production.
+      // NUXT_PUBLIC_GUEST_BOOKING=true l'active en production (toujours active en développement).
+      guestBooking: process.env.NUXT_PUBLIC_GUEST_BOOKING === 'true' || process.env.NODE_ENV !== 'production',
+      // Clé PUBLIQUE Cloudflare Turnstile (NUXT_PUBLIC_TURNSTILE_SITE_KEY) ; la clé secrète reste sur le backend.
+      turnstileSiteKey: process.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY || '',
       // Mesure d'audience (NUXT_PUBLIC_UMAMI_HOST, NUXT_PUBLIC_UMAMI_WEBSITE_ID, NUXT_PUBLIC_UMAMI_DOMAINS).
       // Hôte ou identifiant vide (développement) : pas de script, voir app/plugins/umami.ts
       umami: {

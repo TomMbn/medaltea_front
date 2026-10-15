@@ -1,7 +1,29 @@
 <template>
   <!-- Barre flottante (maquette V5) -->
   <div class="fixed top-0 inset-x-0 z-50 pt-5 pointer-events-none">
-    <nav class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4.5rem)] max-w-[1654px] bg-white rounded-leya-m border border-[rgba(160,160,160,0.38)] shadow-[0_1px_15px_rgba(144,186,209,0.31)] pl-5 pr-3 lg:pl-[30px] lg:pr-[23px] py-2.5 lg:py-[18px] flex items-center justify-between gap-6 pointer-events-auto" aria-label="Navigation principale">
+    <!-- Variante « Pro » : page de présentation de l'espace praticien (visiteurs) -->
+    <nav v-if="isProLanding" class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4.5rem)] max-w-[1600px] bg-white rounded-full shadow-[0_12px_32px_rgba(1,40,40,0.08)] pl-5 pr-2 lg:pl-8 lg:pr-3 py-2 lg:py-3 flex items-center justify-between gap-6 pointer-events-auto" aria-label="Navigation espace praticien">
+      <div class="flex items-center gap-[10px] shrink-0">
+        <NuxtLink to="/" class="flex items-center min-h-[44px]" aria-label="Léya, accueil">
+          <img src="/images/logo.svg" alt="Léya" width="87" height="39" class="h-[34px] w-auto" />
+        </NuxtLink>
+        <span class="rounded-full bg-corail-500 px-4 py-[9px] text-[16px] font-medium leading-[normal] text-vert-900">Pro</span>
+      </div>
+      <div class="hidden lg:flex items-center gap-9 text-[16px] font-medium text-vert-900">
+        <a href="#fonctionnement" class="hover:text-vert-600 transition-colors">Fonctionnement</a>
+        <a href="#etapes" class="hover:text-vert-600 transition-colors">Inscription</a>
+        <a href="#faq" class="hover:text-vert-600 transition-colors">FAQ</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro/rendez-vous' } }" class="hidden sm:inline-flex items-center min-h-[48px] px-6 rounded-full border-[1.5px] border-vert-900 text-vert-900 text-[16px] font-medium hover:bg-vert-900 hover:text-white transition-colors">Se connecter</NuxtLink>
+        <NuxtLink to="/inscription-pro" class="inline-flex items-center gap-[14px] min-h-[48px] pl-6 pr-1 py-1 rounded-full bg-vert-900 text-white text-[16px] font-medium whitespace-nowrap hover:bg-vert-600 transition-colors">
+          Rejoindre<span class="hidden sm:inline"> Léya</span>
+          <span class="w-10 h-10 rounded-full bg-corail-500 text-vert-900 flex items-center justify-center"><ArrowUpRight :size="18" aria-hidden="true" /></span>
+        </NuxtLink>
+      </div>
+    </nav>
+
+    <nav v-else class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4.5rem)] max-w-[1654px] bg-white rounded-leya-m border border-[rgba(160,160,160,0.38)] shadow-[0_1px_15px_rgba(144,186,209,0.31)] pl-5 pr-3 lg:pl-[30px] lg:pr-[23px] py-2.5 lg:py-[18px] flex items-center justify-between gap-6 pointer-events-auto" aria-label="Navigation principale">
 
       <!-- Logo -->
       <NuxtLink to="/" class="flex items-center min-h-[44px] shrink-0" aria-label="Léya, accueil">
@@ -87,8 +109,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { Menu, X, ChevronDown, MapPin } from 'lucide-vue-next'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { Menu, X, ChevronDown, MapPin, ArrowUpRight } from 'lucide-vue-next'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -98,6 +120,7 @@ const isAccountOpen = ref(false)
 const accountRef = ref(null)
 
 const { isLoggedIn, isPro, syncRole, logout } = useSession()
+const isProLanding = computed(() => route.path === '/praticiens-pro' && !isLoggedIn.value)
 
 async function handleLogout() {
   await logout()

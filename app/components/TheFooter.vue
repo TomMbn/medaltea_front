@@ -19,12 +19,24 @@
       <!-- Appel à l'action -->
       <div class="pt-14 lg:pt-[140px] pb-12 lg:pb-[100px] border-b border-white/80">
         <h2 class="font-unbounded font-normal text-[28px] sm:text-[36px] lg:text-[44px] xl:text-h1 leading-[1.15] max-w-[760px]">
-          Parlez à Léya,<br />on vous oriente
+          <template v-if="isProLanding">Prêt à rejoindre<br />Léya ?</template>
+          <template v-else>Parlez à Léya,<br />on vous oriente</template>
         </h2>
         <p class="mt-5 text-lg lg:text-[20px] text-bleu-100 max-w-[560px] leading-snug">
-          Une question sur votre sommeil, votre stress ou une douleur ? Commencez maintenant, c’est gratuit.
+          <template v-if="isProLanding">Créez votre profil gratuitement, sans engagement. Quelques minutes suffisent pour ouvrir votre fiche aux patients.</template>
+          <template v-else>Une question sur votre sommeil, votre stress ou une douleur ? Commencez maintenant, c’est gratuit.</template>
         </p>
-        <div class="mt-9 flex flex-wrap gap-3">
+        <div v-if="isProLanding" class="mt-9 flex flex-wrap gap-3">
+          <NuxtLink to="/inscription-pro" class="pill-btn bg-corail-500 text-vert-900">
+            Créer mon profil
+            <span class="pill-dot bg-white text-corail-500"><ArrowUpRight :size="20" aria-hidden="true" /></span>
+          </NuxtLink>
+          <a href="mailto:contact@leya-sante.fr" class="pill-btn bg-white text-vert-900">
+            Nous contacter
+            <span class="pill-dot bg-vert-900 text-white"><ArrowUpRight :size="20" aria-hidden="true" /></span>
+          </a>
+        </div>
+        <div v-else class="mt-9 flex flex-wrap gap-3">
           <NuxtLink to="/chatbot" class="pill-btn bg-corail-500 text-vert-900">
             Commencer la conversation
             <span class="pill-dot bg-white text-corail-500"><ArrowUpRight :size="20" aria-hidden="true" /></span>
@@ -90,8 +102,12 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { ArrowUpRight, Facebook, Instagram, Linkedin, Mail } from 'lucide-vue-next'
 import { medecines } from '~/data/medecines'
+
+const route = useRoute()
+const isProLanding = computed(() => route.path === '/praticiens-pro')
 
 // Feuilles décoratives : position du centre (en % de la largeur du pied de page, en px depuis le haut), largeur et rotation de la maquette (1 728 px de large)
 const leafDefs = [

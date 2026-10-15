@@ -6,230 +6,319 @@
     <p v-else-if="!form" class="text-sm text-gray-500" role="status">Chargement de votre fiche…</p>
 
     <template v-else>
-      <p v-if="unlocated" class="text-sm bg-amber-50 border border-amber-300 text-amber-900 rounded-xl px-4 py-3 mb-6" role="status">
+      <p v-if="unlocated" class="text-sm bg-amber-50 border border-amber-300 text-amber-900 rounded-xl px-4 py-3 mb-5" role="status">
         Votre adresse n'est pas localisée : votre fiche fonctionne normalement mais n'apparaît pas dans la recherche « autour de moi ».
-        <a href="#cabinet" class="underline font-semibold">Recherchez votre adresse</a> pour la localiser.
+        <button type="button" class="underline font-semibold" @click="toggle('cabinet', true)">Recherchez votre adresse</button> pour la localiser.
       </p>
-      <ProPhotoUpload class="mb-6" :photo-url="fiche.photoUrl || ''" :first-name="form.firstName" :last-name="form.lastName" />
-      <form class="grid gap-6" novalidate @submit.prevent="save">
-        <!-- Présentation -->
-        <section id="presentation" class="card scroll-mt-24" aria-labelledby="f-pres">
-          <h2 id="f-pres" class="card-title">Présentation</h2>
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label for="f-first" class="label">Prénom</label>
-              <input id="f-first" v-model="form.firstName" maxlength="80" autocomplete="given-name" class="field" :aria-invalid="!!errors.firstName" />
-              <p v-if="errors.firstName" class="err" role="alert">{{ errors.firstName }}</p>
-            </div>
-            <div>
-              <label for="f-last" class="label">Nom</label>
-              <input id="f-last" v-model="form.lastName" maxlength="80" autocomplete="family-name" class="field" :aria-invalid="!!errors.lastName" />
-              <p v-if="errors.lastName" class="err" role="alert">{{ errors.lastName }}</p>
-            </div>
-          </div>
 
-          <fieldset class="mt-5">
-            <legend class="label">Spécialités</legend>
-            <div class="flex flex-wrap gap-2">
-              <label v-for="s in specialities" :key="s.id" class="chip" :class="form.specialityIds.includes(s.id) ? 'chip-on' : ''">
-                <input v-model="form.specialityIds" type="checkbox" :value="s.id" class="sr-only" />
-                {{ s.name }}
-              </label>
-            </div>
-            <p v-if="errors.specialityIds" class="err" role="alert">{{ errors.specialityIds }}</p>
-          </fieldset>
+      <!-- État de la fiche -->
+      <div class="mt-[22px] flex flex-wrap gap-3">
+        <span v-if="fiche.isVerified" class="inline-flex items-center gap-2 rounded-full bg-white pl-3 pr-4 py-[9px] text-[16px] font-medium leading-[normal] text-vert-600"><Check :size="14" aria-hidden="true" /> Fiche vérifiée</span>
+        <span class="rounded-full bg-corail-100 px-4 py-[9px] text-[16px] font-medium leading-[normal] text-corail-700">Complétée à {{ percent }} %</span>
+      </div>
 
-          <div class="mt-5">
-            <label for="f-bio" class="label">Votre présentation</label>
-            <textarea id="f-bio" v-model="form.bio" rows="6" maxlength="2000" class="field" aria-describedby="f-bio-help" placeholder="Votre parcours, votre approche, ce qu'un patient peut attendre d'une séance…"></textarea>
-            <p id="f-bio-help" class="help">
-              {{ form.bio.length }} / 2000 caractères.
-              <template v-if="form.bio.trim().length < 50">Une présentation d'au moins 50 caractères permet à votre fiche d'apparaître sur Google.</template>
-              Ne promettez pas de guérison : décrivez votre pratique.
-            </p>
-          </div>
+      <div class="mt-6 grid grid-cols-[minmax(0,1fr)] xl:grid-cols-[minmax(0,620fr)_minmax(0,724fr)] gap-6 items-start">
+        <!-- Sections à renseigner -->
+        <div class="flex flex-col gap-[10px]">
+          <form id="fiche-form" class="hidden" novalidate @submit.prevent="save"></form>
 
-          <div class="mt-5 max-w-[200px]">
-            <label for="f-since" class="label">Exerce depuis (année)</label>
-            <input id="f-since" v-model="form.practicingSince" inputmode="numeric" maxlength="4" class="field" :aria-invalid="!!errors.practicingSince" />
-            <p v-if="errors.practicingSince" class="err" role="alert">{{ errors.practicingSince }}</p>
-          </div>
-        </section>
-
-        <!-- Cabinet -->
-        <section id="cabinet" class="card scroll-mt-24" aria-labelledby="f-cab">
-          <h2 id="f-cab" class="card-title">Cabinet</h2>
-          <div class="grid gap-4">
-            <div>
-              <AddressSuggest id="f-search" v-model="addressSearch" label="Rechercher votre adresse" @select="pickAddress" />
-              <p v-if="form.located" class="text-xs text-emerald-700 mt-1">✓ Adresse localisée.</p>
-              <p v-else class="help">Choisissez une suggestion pour que votre fiche apparaisse dans la recherche « autour de moi ».</p>
-            </div>
-            <div>
-              <label for="f-address" class="label">Adresse</label>
-              <input id="f-address" v-model="form.address" maxlength="200" autocomplete="street-address" class="field" :aria-invalid="!!errors.address" @input="form.located = ''" />
-              <p v-if="errors.address" class="err" role="alert">{{ errors.address }}</p>
-            </div>
-            <div>
-              <label for="f-complement" class="label">Complément d'adresse <span class="opt">(facultatif)</span></label>
-              <input id="f-complement" v-model="form.addressComplement" maxlength="200" class="field" />
-            </div>
-            <div class="grid gap-4 sm:grid-cols-3">
+        <!-- Identité et photo -->
+        <div id="identite" class="rounded-[20px] bg-white scroll-mt-24">
+          <button type="button" class="w-full flex items-center gap-3 pl-5 pr-4 min-h-[69px] py-3 text-left" :aria-expanded="open === 'identite'" aria-controls="panel-identite" @click="toggle('identite')">
+            <span class="w-[30px] h-[30px] shrink-0 rounded-full flex items-center justify-center" :class="done.identite ? 'bg-vert-600 text-white' : 'bg-corail-100 text-corail-700'" aria-hidden="true">
+              <Check v-if="done.identite" :size="14" /><Info v-else :size="14" />
+            </span>
+            <span class="flex-1 min-w-0 text-[18px] font-semibold leading-[normal] text-vert-900">Identité et photo</span>
+            <span class="hidden sm:inline-flex shrink-0 rounded-full px-4 py-[9px] text-[16px] font-medium leading-[normal]" :class="done.identite ? 'bg-bleu-50 text-vert-600' : 'bg-corail-100 text-corail-700'">{{ done.identite ? 'Complété' : 'À compléter' }}</span>
+            <span class="shrink-0 inline-flex items-center gap-1 text-[16px] font-semibold text-vert-900">{{ open === 'identite' ? 'Fermer' : done.identite ? 'Modifier' : 'Compléter' }} <ArrowUpRight :size="16" aria-hidden="true" /></span>
+          </button>
+          <div v-show="open === 'identite'" id="panel-identite" class="px-5 pb-6 pt-1">
+            <ProPhotoUpload class="mb-5" :photo-url="fiche.photoUrl || ''" :first-name="form.firstName" :last-name="form.lastName" />
+            <div class="grid gap-4 sm:grid-cols-2">
               <div>
-                <label for="f-postal" class="label">Code postal</label>
-                <input id="f-postal" v-model="form.postalCode" inputmode="numeric" maxlength="5" autocomplete="postal-code" class="field" :aria-invalid="!!errors.postalCode" @input="form.located = ''" />
-                <p v-if="errors.postalCode" class="err" role="alert">{{ errors.postalCode }}</p>
+                <label for="f-first" class="label">Prénom</label>
+                <input id="f-first" v-model="form.firstName" maxlength="80" autocomplete="given-name" class="field" :aria-invalid="!!errors.firstName" />
+                <p v-if="errors.firstName" class="err" role="alert">{{ errors.firstName }}</p>
               </div>
-              <div class="sm:col-span-2">
-                <label for="f-city" class="label">Ville</label>
-                <input id="f-city" v-model="form.city" maxlength="100" autocomplete="address-level2" class="field" :aria-invalid="!!errors.city" @input="form.located = ''" />
-                <p v-if="errors.city" class="err" role="alert">{{ errors.city }}</p>
-              </div>
-            </div>
-            <div>
-              <p class="label">Accessibilité</p>
-              <div class="flex flex-wrap gap-4 text-sm">
-                <label class="inline-flex items-center gap-2 min-h-[44px]"><input v-model="form.wheelchair" type="radio" value="yes" class="accent-[#156F71]" /> Accessible aux personnes à mobilité réduite</label>
-                <label class="inline-flex items-center gap-2 min-h-[44px]"><input v-model="form.wheelchair" type="radio" value="no" class="accent-[#156F71]" /> Non accessible</label>
+              <div>
+                <label for="f-last" class="label">Nom</label>
+                <input id="f-last" v-model="form.lastName" maxlength="80" autocomplete="family-name" class="field" :aria-invalid="!!errors.lastName" />
+                <p v-if="errors.lastName" class="err" role="alert">{{ errors.lastName }}</p>
               </div>
             </div>
-          </div>
-        </section>
-
-        <!-- Contact -->
-        <section class="card" aria-labelledby="f-contact">
-          <h2 id="f-contact" class="card-title">Contact et réseaux</h2>
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label for="f-phone" class="label">Téléphone</label>
-              <input id="f-phone" v-model="form.phoneNumber" inputmode="tel" maxlength="20" autocomplete="tel" class="field" :aria-invalid="!!errors.phoneNumber" />
-              <p v-if="errors.phoneNumber" class="err" role="alert">{{ errors.phoneNumber }}</p>
+            <div class="mt-4 max-w-[200px]">
+              <label for="f-since" class="label">Exerce depuis (année)</label>
+              <input id="f-since" v-model="form.practicingSince" inputmode="numeric" maxlength="4" class="field" :aria-invalid="!!errors.practicingSince" />
+              <p v-if="errors.practicingSince" class="err" role="alert">{{ errors.practicingSince }}</p>
             </div>
-            <div>
-              <label for="f-web" class="label">Site web</label>
-              <input id="f-web" v-model="form.website" type="url" maxlength="200" placeholder="https://" class="field" :aria-invalid="!!errors.website" />
-              <p v-if="errors.website" class="err" role="alert">{{ errors.website }}</p>
-            </div>
-            <div v-for="n in socials" :key="n.key">
-              <label :for="`f-${n.key}`" class="label">{{ n.label }}</label>
-              <input :id="`f-${n.key}`" v-model="form.social[n.key]" type="url" maxlength="200" placeholder="https://" class="field" :aria-invalid="!!errors[n.key]" />
-              <p v-if="errors[n.key]" class="err" role="alert">{{ errors[n.key] }}</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Pratique -->
-        <section id="pratique" class="card scroll-mt-24" aria-labelledby="f-prat">
-          <h2 id="f-prat" class="card-title">Informations pratiques</h2>
-          <fieldset>
-            <legend class="label">Public accueilli</legend>
-            <div class="flex flex-wrap gap-2">
-              <label v-for="(label, key) in PUBLIC_LABELS" :key="key" class="chip" :class="form.publicTypes.includes(key) ? 'chip-on' : ''">
-                <input v-model="form.publicTypes" type="checkbox" :value="key" class="sr-only" /> {{ label }}
-              </label>
-            </div>
-          </fieldset>
-          <fieldset class="mt-5">
-            <legend class="label">Langues parlées</legend>
-            <div class="flex flex-wrap gap-2">
-              <label v-for="code in languageOptions" :key="code" class="chip" :class="form.languages.includes(code) ? 'chip-on' : ''">
-                <input v-model="form.languages" type="checkbox" :value="code" class="sr-only" /> {{ languageName(code) }}
-              </label>
-            </div>
-          </fieldset>
-          <fieldset class="mt-5">
-            <legend class="label">Moyens de paiement</legend>
-            <div class="flex flex-wrap gap-2">
-              <label v-for="(label, key) in PAYMENT_LABELS" :key="key" class="chip" :class="form.paymentMethods.includes(key) ? 'chip-on' : ''">
-                <input v-model="form.paymentMethods" type="checkbox" :value="key" class="sr-only" /> {{ label }}
-              </label>
-            </div>
-          </fieldset>
-          <div class="mt-5">
-            <label for="f-reimb" class="label">Remboursement <span class="opt">(facultatif)</span></label>
-            <textarea id="f-reimb" v-model="form.reimbursementInfo" rows="2" maxlength="500" class="field" placeholder="Ex. : remboursé par certaines mutuelles, feuille de soins sur demande"></textarea>
-          </div>
-        </section>
-
-        <!-- Identifiants -->
-        <section class="card" aria-labelledby="f-ids">
-          <h2 id="f-ids" class="card-title">Identifiants professionnels</h2>
-          <p class="help mb-4">Ces numéros ne sont jamais affichés sur votre fiche. Ils servent à vérifier votre identité.</p>
-          <div class="grid gap-4 sm:grid-cols-3">
-            <div>
-              <label for="f-rpps" class="label">RPPS <span class="opt">(11 chiffres)</span></label>
-              <input id="f-rpps" v-model="form.rpps" inputmode="numeric" maxlength="11" class="field" :aria-invalid="!!errors.rpps" />
-              <p v-if="errors.rpps" class="err" role="alert">{{ errors.rpps }}</p>
-            </div>
-            <div>
-              <label for="f-adeli" class="label">ADELI <span class="opt">(9 caractères)</span></label>
-              <input id="f-adeli" v-model="form.adeli" maxlength="9" class="field" :aria-invalid="!!errors.adeli" />
-              <p v-if="errors.adeli" class="err" role="alert">{{ errors.adeli }}</p>
-            </div>
-            <div>
-              <label for="f-siret" class="label">SIRET <span class="opt">(14 chiffres)</span></label>
-              <input id="f-siret" v-model="form.siret" inputmode="numeric" maxlength="14" class="field" :aria-invalid="!!errors.siret" />
-              <p v-if="errors.siret" class="err" role="alert">{{ errors.siret }}</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Barre d'enregistrement -->
-        <div class="sticky bottom-0 -mx-1 px-1 pb-2 pt-3 bg-gradient-to-t from-[#e0ecf2] via-[#e0ecf2] to-transparent">
-          <div class="flex flex-wrap items-center gap-3 bg-white rounded-[16px] shadow-md px-4 py-3">
-            <button type="submit" class="bg-[#012828] text-white text-sm font-bold px-6 py-2.5 rounded-[12px] hover:bg-[#156F71] transition-colors disabled:opacity-50" :disabled="saving || !dirty">
-              {{ saving ? 'Enregistrement…' : 'Enregistrer' }}
-            </button>
-            <p v-if="dirty && !saving" class="text-xs text-[#012828]/70">Modifications non enregistrées</p>
-            <p v-if="saved" class="text-sm text-emerald-700" role="status">Fiche enregistrée.</p>
-            <p v-if="saved && locateWarning" class="text-sm text-amber-800" role="status">{{ locateWarning }}</p>
-            <p v-if="errorMessage" class="text-sm text-red-700" role="alert">{{ errorMessage }}</p>
           </div>
         </div>
-      </form>
 
-      <!-- Diplômes : appels séparés, hors du formulaire -->
-      <section id="formation" class="card mt-6 scroll-mt-24" aria-labelledby="f-dip">
-        <h2 id="f-dip" class="card-title">Formation et diplômes</h2>
-        <ul v-if="diplomas.length" class="grid gap-2 mb-5">
-          <li v-for="d in diplomas" :key="d.id" class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 px-4 py-3">
-            <span class="text-sm">
-              <span class="font-semibold">{{ d.title }}</span><template v-if="d.organization"> — {{ d.organization }}</template><template v-if="d.year"> ({{ d.year }})</template>
+        <!-- Spécialité et « Ce que je fais » -->
+        <div id="presentation" class="rounded-[20px] bg-white scroll-mt-24">
+          <button type="button" class="w-full flex items-center gap-3 pl-5 pr-4 min-h-[69px] py-3 text-left" :aria-expanded="open === 'presentation'" aria-controls="panel-presentation" @click="toggle('presentation')">
+            <span class="w-[30px] h-[30px] shrink-0 rounded-full flex items-center justify-center" :class="done.presentation ? 'bg-vert-600 text-white' : 'bg-corail-100 text-corail-700'" aria-hidden="true">
+              <Check v-if="done.presentation" :size="14" /><Info v-else :size="14" />
             </span>
-            <button type="button" class="text-xs px-3 py-1.5 rounded-[10px] border border-gray-300 hover:bg-gray-50 disabled:opacity-50" :disabled="diplomaBusy" :aria-label="`Supprimer le diplôme ${d.title}`" @click="removeDiploma(d)">Supprimer</button>
-          </li>
-        </ul>
-        <p v-else class="text-sm text-gray-500 mb-5">Aucun diplôme renseigné.</p>
+            <span class="flex-1 min-w-0 text-[18px] font-semibold leading-[normal] text-vert-900">Spécialité et « Ce que je fais »</span>
+            <span class="hidden sm:inline-flex shrink-0 rounded-full px-4 py-[9px] text-[16px] font-medium leading-[normal]" :class="done.presentation ? 'bg-bleu-50 text-vert-600' : 'bg-corail-100 text-corail-700'">{{ done.presentation ? 'Complété' : 'À compléter' }}</span>
+            <span class="shrink-0 inline-flex items-center gap-1 text-[16px] font-semibold text-vert-900">{{ open === 'presentation' ? 'Fermer' : done.presentation ? 'Modifier' : 'Compléter' }} <ArrowUpRight :size="16" aria-hidden="true" /></span>
+          </button>
+          <div v-show="open === 'presentation'" id="panel-presentation" class="px-5 pb-6 pt-1">
+            <fieldset>
+              <legend class="label">Spécialités</legend>
+              <div class="flex flex-wrap gap-2">
+                <label v-for="s in specialities" :key="s.id" class="chip" :class="form.specialityIds.includes(s.id) ? 'chip-on' : ''">
+                  <input v-model="form.specialityIds" type="checkbox" :value="s.id" class="sr-only" />
+                  {{ s.name }}
+                </label>
+              </div>
+              <p v-if="errors.specialityIds" class="err" role="alert">{{ errors.specialityIds }}</p>
+            </fieldset>
+            <div class="mt-5">
+              <label for="f-bio" class="label">Ce que je fais</label>
+              <textarea id="f-bio" v-model="form.bio" rows="6" maxlength="2000" class="field" aria-describedby="f-bio-help" placeholder="Votre parcours, votre approche, ce qu'un patient peut attendre d'une séance…"></textarea>
+              <p id="f-bio-help" class="help">
+                {{ form.bio.length }} / 2000 caractères.
+                <template v-if="form.bio.trim().length < 50">Une présentation d'au moins 50 caractères permet à votre fiche d'apparaître sur Google.</template>
+                Ne promettez pas de guérison : décrivez votre pratique.
+              </p>
+            </div>
+          </div>
+        </div>
 
-        <form class="grid gap-3 sm:grid-cols-6" novalidate @submit.prevent="addDiploma">
-          <div class="sm:col-span-3">
-            <label for="d-title" class="label">Intitulé</label>
-            <input id="d-title" v-model="diploma.title" maxlength="150" class="field" />
+        <!-- Pour qui, pour quoi -->
+        <div id="public" class="rounded-[20px] bg-white scroll-mt-24">
+          <button type="button" class="w-full flex items-center gap-3 pl-5 pr-4 min-h-[69px] py-3 text-left" :aria-expanded="open === 'public'" aria-controls="panel-public" @click="toggle('public')">
+            <span class="w-[30px] h-[30px] shrink-0 rounded-full flex items-center justify-center" :class="done.public ? 'bg-vert-600 text-white' : 'bg-corail-100 text-corail-700'" aria-hidden="true">
+              <Check v-if="done.public" :size="14" /><Info v-else :size="14" />
+            </span>
+            <span class="flex-1 min-w-0 text-[18px] font-semibold leading-[normal] text-vert-900">Pour qui, pour quoi</span>
+            <span class="hidden sm:inline-flex shrink-0 rounded-full px-4 py-[9px] text-[16px] font-medium leading-[normal]" :class="done.public ? 'bg-bleu-50 text-vert-600' : 'bg-corail-100 text-corail-700'">{{ done.public ? 'Complété' : 'À compléter' }}</span>
+            <span class="shrink-0 inline-flex items-center gap-1 text-[16px] font-semibold text-vert-900">{{ open === 'public' ? 'Fermer' : done.public ? 'Modifier' : 'Compléter' }} <ArrowUpRight :size="16" aria-hidden="true" /></span>
+          </button>
+          <div v-show="open === 'public'" id="panel-public" class="px-5 pb-6 pt-1">
+            <fieldset>
+              <legend class="label">Public accueilli</legend>
+              <div class="flex flex-wrap gap-2">
+                <label v-for="(label, key) in PUBLIC_LABELS" :key="key" class="chip" :class="form.publicTypes.includes(key) ? 'chip-on' : ''">
+                  <input v-model="form.publicTypes" type="checkbox" :value="key" class="sr-only" /> {{ label }}
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="mt-5">
+              <legend class="label">Langues parlées</legend>
+              <div class="flex flex-wrap gap-2">
+                <label v-for="code in languageOptions" :key="code" class="chip" :class="form.languages.includes(code) ? 'chip-on' : ''">
+                  <input v-model="form.languages" type="checkbox" :value="code" class="sr-only" /> {{ languageName(code) }}
+                </label>
+              </div>
+            </fieldset>
           </div>
-          <div class="sm:col-span-2">
-            <label for="d-org" class="label">Organisme <span class="opt">(facultatif)</span></label>
-            <input id="d-org" v-model="diploma.organization" maxlength="150" class="field" />
+        </div>
+
+        <!-- Modalités et tarifs -->
+        <div id="tarifs" class="rounded-[20px] bg-white scroll-mt-24">
+          <button type="button" class="w-full flex items-center gap-3 pl-5 pr-4 min-h-[69px] py-3 text-left" :aria-expanded="open === 'tarifs'" aria-controls="panel-tarifs" @click="toggle('tarifs')">
+            <span class="w-[30px] h-[30px] shrink-0 rounded-full flex items-center justify-center" :class="done.tarifs ? 'bg-vert-600 text-white' : 'bg-corail-100 text-corail-700'" aria-hidden="true">
+              <Check v-if="done.tarifs" :size="14" /><Info v-else :size="14" />
+            </span>
+            <span class="flex-1 min-w-0 text-[18px] font-semibold leading-[normal] text-vert-900">Modalités et tarifs</span>
+            <span class="hidden sm:inline-flex shrink-0 rounded-full px-4 py-[9px] text-[16px] font-medium leading-[normal]" :class="done.tarifs ? 'bg-bleu-50 text-vert-600' : 'bg-corail-100 text-corail-700'">{{ done.tarifs ? 'Complété' : 'À compléter' }}</span>
+            <span class="shrink-0 inline-flex items-center gap-1 text-[16px] font-semibold text-vert-900">{{ open === 'tarifs' ? 'Fermer' : done.tarifs ? 'Modifier' : 'Compléter' }} <ArrowUpRight :size="16" aria-hidden="true" /></span>
+          </button>
+          <div v-show="open === 'tarifs'" id="panel-tarifs" class="px-5 pb-6 pt-1">
+            <p class="text-[16px] text-neutre-600 mb-4">Vos prestations (durée, lieu, prix) se gèrent dans <NuxtLink to="/pro/prestations" class="underline text-vert-900 font-semibold">Prestations</NuxtLink>. Ici, indiquez comment vos patients vous règlent.</p>
+            <fieldset>
+              <legend class="label">Moyens de paiement</legend>
+              <div class="flex flex-wrap gap-2">
+                <label v-for="(label, key) in PAYMENT_LABELS" :key="key" class="chip" :class="form.paymentMethods.includes(key) ? 'chip-on' : ''">
+                  <input v-model="form.paymentMethods" type="checkbox" :value="key" class="sr-only" /> {{ label }}
+                </label>
+              </div>
+            </fieldset>
+            <div class="mt-5">
+              <label for="f-reimb" class="label">Remboursement <span class="opt">(facultatif)</span></label>
+              <textarea id="f-reimb" v-model="form.reimbursementInfo" rows="2" maxlength="500" class="field" placeholder="Ex. : remboursé par certaines mutuelles, feuille de soins sur demande"></textarea>
+            </div>
           </div>
-          <div>
-            <label for="d-year" class="label">Année</label>
-            <input id="d-year" v-model="diploma.year" inputmode="numeric" maxlength="4" class="field" />
+        </div>
+
+        <!-- Diplômes -->
+        <div id="formation" class="rounded-[20px] bg-white scroll-mt-24">
+          <button type="button" class="w-full flex items-center gap-3 pl-5 pr-4 min-h-[69px] py-3 text-left" :aria-expanded="open === 'formation'" aria-controls="panel-formation" @click="toggle('formation')">
+            <span class="w-[30px] h-[30px] shrink-0 rounded-full flex items-center justify-center" :class="done.diplomes ? 'bg-vert-600 text-white' : 'bg-corail-100 text-corail-700'" aria-hidden="true">
+              <Check v-if="done.diplomes" :size="14" /><Info v-else :size="14" />
+            </span>
+            <span class="flex-1 min-w-0 text-[18px] font-semibold leading-[normal] text-vert-900">Diplômes</span>
+            <span class="hidden sm:inline-flex shrink-0 rounded-full px-4 py-[9px] text-[16px] font-medium leading-[normal]" :class="done.diplomes ? 'bg-bleu-50 text-vert-600' : 'bg-corail-100 text-corail-700'">{{ done.diplomes ? 'Complété' : 'À compléter' }}</span>
+            <span class="shrink-0 inline-flex items-center gap-1 text-[16px] font-semibold text-vert-900">{{ open === 'formation' ? 'Fermer' : done.diplomes ? 'Modifier' : 'Compléter' }} <ArrowUpRight :size="16" aria-hidden="true" /></span>
+          </button>
+          <div v-show="open === 'formation'" id="panel-formation" class="px-5 pb-6 pt-1">
+            <ul v-if="diplomas.length" class="grid gap-2 mb-5">
+              <li v-for="d in diplomas" :key="d.id" class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 px-4 py-3">
+                <span class="text-sm">
+                  <span class="font-semibold">{{ d.title }}</span><template v-if="d.organization"> — {{ d.organization }}</template><template v-if="d.year"> ({{ d.year }})</template>
+                </span>
+                <button type="button" class="text-xs px-3 py-1.5 rounded-[10px] border border-gray-300 hover:bg-gray-50 disabled:opacity-50" :disabled="diplomaBusy" :aria-label="`Supprimer le diplôme ${d.title}`" @click="removeDiploma(d)">Supprimer</button>
+              </li>
+            </ul>
+            <p v-else class="text-sm text-gray-500 mb-5">Aucun diplôme renseigné.</p>
+
+            <form class="grid gap-3 sm:grid-cols-6" novalidate @submit.prevent="addDiploma">
+              <div class="sm:col-span-3">
+                <label for="d-title" class="label">Intitulé</label>
+                <input id="d-title" v-model="diploma.title" maxlength="150" class="field" />
+              </div>
+              <div class="sm:col-span-2">
+                <label for="d-org" class="label">Organisme <span class="opt">(facultatif)</span></label>
+                <input id="d-org" v-model="diploma.organization" maxlength="150" class="field" />
+              </div>
+              <div>
+                <label for="d-year" class="label">Année</label>
+                <input id="d-year" v-model="diploma.year" inputmode="numeric" maxlength="4" class="field" />
+              </div>
+              <div class="sm:col-span-6 flex flex-wrap items-center gap-3">
+                <button type="submit" class="border border-[#012828] text-sm font-bold px-5 py-2 rounded-[12px] hover:bg-[#012828] hover:text-white transition-colors disabled:opacity-50" :disabled="diplomaBusy">Ajouter ce diplôme</button>
+                <p v-if="diplomaError" class="text-sm text-red-700" role="alert">{{ diplomaError }}</p>
+              </div>
+            </form>
+
+            <h3 class="mt-8 text-[16px] font-semibold">Identifiants professionnels</h3>
+            <p class="help mb-4">Ces numéros ne sont jamais affichés sur votre fiche. Ils servent à vérifier votre identité.</p>
+            <div class="grid gap-4 sm:grid-cols-3">
+              <div>
+                <label for="f-rpps" class="label">RPPS <span class="opt">(11 chiffres)</span></label>
+                <input id="f-rpps" v-model="form.rpps" inputmode="numeric" maxlength="11" class="field" :aria-invalid="!!errors.rpps" />
+                <p v-if="errors.rpps" class="err" role="alert">{{ errors.rpps }}</p>
+              </div>
+              <div>
+                <label for="f-adeli" class="label">ADELI <span class="opt">(9 caractères)</span></label>
+                <input id="f-adeli" v-model="form.adeli" maxlength="9" class="field" :aria-invalid="!!errors.adeli" />
+                <p v-if="errors.adeli" class="err" role="alert">{{ errors.adeli }}</p>
+              </div>
+              <div>
+                <label for="f-siret" class="label">SIRET <span class="opt">(14 chiffres)</span></label>
+                <input id="f-siret" v-model="form.siret" inputmode="numeric" maxlength="14" class="field" :aria-invalid="!!errors.siret" />
+                <p v-if="errors.siret" class="err" role="alert">{{ errors.siret }}</p>
+              </div>
+            </div>
           </div>
-          <div class="sm:col-span-6 flex flex-wrap items-center gap-3">
-            <button type="submit" class="border border-[#012828] text-sm font-bold px-5 py-2 rounded-[12px] hover:bg-[#012828] hover:text-white transition-colors disabled:opacity-50" :disabled="diplomaBusy">Ajouter ce diplôme</button>
-            <p v-if="diplomaError" class="text-sm text-red-700" role="alert">{{ diplomaError }}</p>
+        </div>
+
+        <!-- Adresse et horaires -->
+        <div id="cabinet" class="rounded-[20px] bg-white scroll-mt-24">
+          <button type="button" class="w-full flex items-center gap-3 pl-5 pr-4 min-h-[69px] py-3 text-left" :aria-expanded="open === 'cabinet'" aria-controls="panel-cabinet" @click="toggle('cabinet')">
+            <span class="w-[30px] h-[30px] shrink-0 rounded-full flex items-center justify-center" :class="done.cabinet ? 'bg-vert-600 text-white' : 'bg-corail-100 text-corail-700'" aria-hidden="true">
+              <Check v-if="done.cabinet" :size="14" /><Info v-else :size="14" />
+            </span>
+            <span class="flex-1 min-w-0 text-[18px] font-semibold leading-[normal] text-vert-900">Adresse et horaires</span>
+            <span class="hidden sm:inline-flex shrink-0 rounded-full px-4 py-[9px] text-[16px] font-medium leading-[normal]" :class="done.cabinet ? 'bg-bleu-50 text-vert-600' : 'bg-corail-100 text-corail-700'">{{ done.cabinet ? 'Complété' : 'À compléter' }}</span>
+            <span class="shrink-0 inline-flex items-center gap-1 text-[16px] font-semibold text-vert-900">{{ open === 'cabinet' ? 'Fermer' : done.cabinet ? 'Modifier' : 'Compléter' }} <ArrowUpRight :size="16" aria-hidden="true" /></span>
+          </button>
+          <div v-show="open === 'cabinet'" id="panel-cabinet" class="px-5 pb-6 pt-1">
+            <div class="grid gap-4">
+              <div>
+                <AddressSuggest id="f-search" v-model="addressSearch" label="Rechercher votre adresse" @select="pickAddress" />
+                <p v-if="form.located" class="text-xs text-emerald-700 mt-1">✓ Adresse localisée.</p>
+                <p v-else class="help">Choisissez une suggestion pour que votre fiche apparaisse dans la recherche « autour de moi ».</p>
+              </div>
+              <div>
+                <label for="f-address" class="label">Adresse</label>
+                <input id="f-address" v-model="form.address" maxlength="200" autocomplete="street-address" class="field" :aria-invalid="!!errors.address" @input="form.located = ''" />
+                <p v-if="errors.address" class="err" role="alert">{{ errors.address }}</p>
+              </div>
+              <div>
+                <label for="f-complement" class="label">Complément d'adresse <span class="opt">(facultatif)</span></label>
+                <input id="f-complement" v-model="form.addressComplement" maxlength="200" class="field" />
+              </div>
+              <div class="grid gap-4 sm:grid-cols-3">
+                <div>
+                  <label for="f-postal" class="label">Code postal</label>
+                  <input id="f-postal" v-model="form.postalCode" inputmode="numeric" maxlength="5" autocomplete="postal-code" class="field" :aria-invalid="!!errors.postalCode" @input="form.located = ''" />
+                  <p v-if="errors.postalCode" class="err" role="alert">{{ errors.postalCode }}</p>
+                </div>
+                <div class="sm:col-span-2">
+                  <label for="f-city" class="label">Ville</label>
+                  <input id="f-city" v-model="form.city" maxlength="100" autocomplete="address-level2" class="field" :aria-invalid="!!errors.city" @input="form.located = ''" />
+                  <p v-if="errors.city" class="err" role="alert">{{ errors.city }}</p>
+                </div>
+              </div>
+              <div>
+                <p class="label">Accessibilité</p>
+                <div class="flex flex-wrap gap-4 text-sm">
+                  <label class="inline-flex items-center gap-2 min-h-[44px]"><input v-model="form.wheelchair" type="radio" value="yes" class="accent-[#156F71]" /> Accessible aux personnes à mobilité réduite</label>
+                  <label class="inline-flex items-center gap-2 min-h-[44px]"><input v-model="form.wheelchair" type="radio" value="no" class="accent-[#156F71]" /> Non accessible</label>
+                </div>
+              </div>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label for="f-phone" class="label">Téléphone</label>
+                  <input id="f-phone" v-model="form.phoneNumber" inputmode="tel" maxlength="20" autocomplete="tel" class="field" :aria-invalid="!!errors.phoneNumber" />
+                  <p v-if="errors.phoneNumber" class="err" role="alert">{{ errors.phoneNumber }}</p>
+                </div>
+                <div>
+                  <label for="f-web" class="label">Site web</label>
+                  <input id="f-web" v-model="form.website" type="url" maxlength="200" placeholder="https://" class="field" :aria-invalid="!!errors.website" />
+                  <p v-if="errors.website" class="err" role="alert">{{ errors.website }}</p>
+                </div>
+                <div v-for="n in socials" :key="n.key">
+                  <label :for="`f-${n.key}`" class="label">{{ n.label }}</label>
+                  <input :id="`f-${n.key}`" v-model="form.social[n.key]" type="url" maxlength="200" placeholder="https://" class="field" :aria-invalid="!!errors[n.key]" />
+                  <p v-if="errors[n.key]" class="err" role="alert">{{ errors[n.key] }}</p>
+                </div>
+              </div>
+              <p class="text-[16px] text-neutre-600">Vos horaires d'ouverture se gèrent dans <NuxtLink to="/pro/horaires" class="underline text-vert-900 font-semibold">Horaires</NuxtLink>.</p>
+            </div>
           </div>
-        </form>
-      </section>
+        </div>
+
+          <!-- Barre d'enregistrement -->
+          <div class="sticky bottom-0 pb-2 pt-3 bg-gradient-to-t from-bleu-50 via-bleu-50 to-transparent">
+            <div class="flex flex-wrap items-center gap-3 bg-white rounded-[16px] shadow-md px-4 py-3">
+              <button type="submit" form="fiche-form" class="bg-[#012828] text-white text-sm font-bold px-6 py-2.5 rounded-[12px] hover:bg-[#156F71] transition-colors disabled:opacity-50" :disabled="saving || !dirty">
+                {{ saving ? 'Enregistrement…' : 'Enregistrer' }}
+              </button>
+              <p v-if="dirty && !saving" class="text-xs text-[#012828]/70">Modifications non enregistrées</p>
+              <p v-if="saved" class="text-sm text-emerald-700" role="status">Fiche enregistrée.</p>
+              <p v-if="saved && locateWarning" class="text-sm text-amber-800" role="status">{{ locateWarning }}</p>
+              <p v-if="errorMessage" class="text-sm text-red-700" role="alert">{{ errorMessage }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aperçu de la fiche publique (dernière version enregistrée) -->
+        <aside class="hidden xl:block rounded-[28px] bg-white p-5" aria-label="Aperçu de votre fiche publique">
+          <h2 class="font-unbounded font-normal text-[18px] leading-[normal] text-vert-900">Aperçu en direct</h2>
+          <p class="mt-1 text-[14px] text-neutre-600">Version enregistrée de votre fiche, telle que la voient les patients.</p>
+          <div ref="previewBox" class="relative mt-4 h-[780px] overflow-hidden rounded-[20px] border border-bleu-100" aria-hidden="true">
+            <iframe :key="previewKey" :src="previewSrc" title="Aperçu de la fiche publique" tabindex="-1" loading="lazy" class="absolute left-0 top-0 border-0 origin-top-left pointer-events-none" :style="{ width: '1728px', height: `${Math.round(780 / previewScale)}px`, transform: `scale(${previewScale})` }"></iframe>
+          </div>
+        </aside>
+      </div>
     </template>
   </div>
 </template>
 
 <script setup>
-import { computed, reactive, ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { computed, reactive, ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { Check, Info, ArrowUpRight } from 'lucide-vue-next'
 import { onBeforeRouteLeave } from 'vue-router'
 
 const { specialities } = await useSpecialities()
 const { data: fiche, error: loadError, refresh } = await useAsyncData('pro-fiche', () => $fetch('/api/backend/praticiens/me'), { server: false })
+
+// Sections repliables : une seule ouverte à la fois
+const open = ref(null)
+function toggle(id, force) {
+  open.value = force ? id : open.value === id ? null : id
+  if (open.value) nextTick(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }))
+}
+// Les liens d'ancre (#presentation, #pratique, #cabinet, #formation) ouvrent la section correspondante
+const ANCHORS = { presentation: 'presentation', pratique: 'public', cabinet: 'cabinet', formation: 'formation' }
+onMounted(() => { const h = window.location.hash.slice(1); if (ANCHORS[h]) toggle(ANCHORS[h], true) })
+
+const { hasTypes, hasHours, percent } = useProCompletion()
 
 const socials = [
   { key: 'facebook', label: 'Facebook' }, { key: 'instagram', label: 'Instagram' }, { key: 'linkedin', label: 'LinkedIn' },
@@ -404,6 +493,37 @@ async function removeDiploma(d) {
   } finally { diplomaBusy.value = false }
 }
 
+// Etat de chaque section (affiché dans la liste)
+const done = computed(() => {
+  const f = fiche.value ?? {}
+  return {
+    identite: !!(f.firstName && f.lastName && f.photoUrl),
+    presentation: !!((f.specialities ?? []).length && (f.bio ?? '').trim().length >= 50),
+    public: !!(f.publicTypes ?? []).length,
+    tarifs: hasTypes.value,
+    diplomes: diplomas.value.length > 0,
+    cabinet: !!(f.address && f.city && hasHours.value),
+  }
+})
+
+// Aperçu : la page publique de la fiche, réduite ; rechargée après chaque enregistrement
+// La fiche s'affiche sur 1728 px de large puis est réduite pour remplir exactement la zone (qui varie avec la fenêtre)
+const previewBox = ref(null)
+const previewScale = ref(684 / 1728)
+let resizeObs
+function fitPreview() { const w = previewBox.value?.clientWidth; if (w) previewScale.value = w / 1728 }
+// La zone n'existe qu'une fois la fiche chargée : on la suit dès qu'elle apparaît
+watch(previewBox, (el) => {
+  resizeObs?.disconnect()
+  if (!el) return
+  fitPreview()
+  if (window.ResizeObserver) { resizeObs = new ResizeObserver(fitPreview); resizeObs.observe(el) }
+})
+onBeforeUnmount(() => resizeObs?.disconnect())
+const previewKey = ref(0)
+const previewSrc = computed(() => `/praticiens/${fiche.value?.slug || fiche.value?.id}`)
+watch(fiche, () => { previewKey.value++ })
+
 // --- Quitter avec des modifications non enregistrées
 onBeforeRouteLeave(() => (dirty.value && !window.confirm('Quitter sans enregistrer vos modifications ?') ? false : true))
 const warnUnload = (e) => { if (dirty.value) { e.preventDefault(); e.returnValue = '' } }
@@ -413,9 +533,6 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', warnUnload))
 
 <style scoped>
 .font-unbounded { font-family: 'Unbounded', cursive; }
-.card { background: #fff; border-radius: 20px; box-shadow: 0 1px 2px rgb(0 0 0 / 0.05); padding: 1.5rem; }
-@media (min-width: 640px) { .card { padding: 2rem; } }
-.card-title { font-family: 'Unbounded', cursive; font-weight: 700; font-size: 1.05rem; margin-bottom: 1rem; }
 .label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.25rem; }
 .opt { font-weight: 400; color: rgb(1 40 40 / 0.6); }
 .field { width: 100%; border: 1px solid #d1d5db; border-radius: 12px; padding: 0.625rem 0.75rem; font-size: 0.875rem; background: #fff; }

@@ -6,7 +6,7 @@
     <p v-if="error" class="text-sm text-red-700 bg-red-50 rounded-xl p-3 mb-3" role="alert">{{ error }}</p>
 
     <ul v-if="items.length" class="grid gap-2 mb-8">
-      <li v-for="t in items" :key="t.id" class="rounded-xl border border-gray-200 px-4 py-3" :class="t.isActive === false ? 'opacity-50' : ''">
+      <li v-for="t in items" :key="t.id" class="rounded-xl border border-gray-200 px-4 py-3" >
         <template v-if="editing === t.id">
           <form class="grid gap-3 sm:grid-cols-2" @submit.prevent="saveEdit(t)">
             <div class="sm:col-span-2">
@@ -36,12 +36,12 @@
         </template>
         <div v-else class="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p class="text-sm font-semibold">{{ t.name }} <span v-if="t.isActive === false" class="text-xs font-normal text-gray-500">(désactivée)</span></p>
+            <p class="text-sm font-semibold">{{ t.name }}</p>
             <p class="text-xs text-gray-500">{{ t.durationMin }} min · {{ t.mode === 'visio' ? 'Visio' : 'Au cabinet' }}<template v-if="t.price != null"> · {{ t.price }} €</template></p>
           </div>
-          <div v-if="t.isActive !== false" class="flex gap-3 text-sm">
+          <div class="flex gap-3 text-sm">
             <button class="underline" @click="startEdit(t)">Modifier</button>
-            <button class="underline text-red-700" @click="disable(t)">Désactiver</button>
+            <button class="underline text-red-700" @click="disable(t)">Supprimer</button>
           </div>
         </div>
       </li>
@@ -73,7 +73,7 @@
         <button class="w-full bg-[#012828] text-white text-sm font-bold px-5 py-2.5 rounded-[12px] hover:bg-[#156F71] disabled:opacity-50" :disabled="busy">Ajouter</button>
       </div>
     </form>
-    <p class="text-xs text-gray-500 mt-4">Une prestation désactivée n'est plus proposée aux patients ; les rendez-vous déjà pris sont conservés.</p>
+    <p class="text-xs text-gray-500 mt-4">Une prestation supprimée n'est plus proposée aux patients ; les rendez-vous déjà pris sont conservés. Pour la proposer de nouveau, ajoutez-la à nouveau.</p>
   </div>
 </template>
 
@@ -81,7 +81,8 @@
 import { ref, computed } from 'vue'
 
 const { data: loaded, refresh: refreshTypes } = await useAsyncData('pro-types', () => $fetch('/api/backend/praticiens/me/consultation-types'), { server: false, default: () => [] })
-const items = computed(() => (Array.isArray(loaded.value) ? loaded.value : []))
+// L'API ne permet pas de réactiver une prestation désactivée : elle n'est plus affichée (les rendez-vous déjà pris la conservent)
+const items = computed(() => (Array.isArray(loaded.value) ? loaded.value : []).filter(t => t.isActive !== false))
 const error = ref('')
 const busy = ref(false)
 const editing = ref(null)
@@ -130,7 +131,7 @@ async function disable(t) {
   try {
     await $fetch(`/api/backend/praticiens/me/consultation-types/${t.id}`, { method: 'DELETE' })
     await reload()
-  } catch (e) { error.value = apiErrorMessage(e, 'Désactivation impossible.') }
+  } catch (e) { error.value = apiErrorMessage(e, 'Suppression impossible.') }
 }
 </script>
 

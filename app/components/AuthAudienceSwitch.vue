@@ -25,7 +25,7 @@ const tabs = computed(() => {
   return props.page === 'login'
     ? [
         { key: 'patient', label: 'Patient', to: { path: '/login', query: patientQuery } },
-        { key: 'pro', label: 'Praticien', to: { path: '/login', query: { espace: 'pro', redirect: '/pro/rendez-vous' } } },
+        { key: 'pro', label: 'Praticien', to: { path: '/login', query: { espace: 'pro', redirect: '/pro' } } },
       ]
     : [
         { key: 'patient', label: 'Patient', to: { path: '/register', query: patientQuery } },

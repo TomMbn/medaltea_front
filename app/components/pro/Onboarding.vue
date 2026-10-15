@@ -1,5 +1,5 @@
 <template>
-  <section v-if="ready && !done" class="bg-white rounded-[20px] shadow-sm p-5 sm:p-8 border-l-4 border-[#EC7F7A]" aria-labelledby="onboarding-title">
+  <section v-if="ready && !done" class="bg-white rounded-[20px] shadow-sm p-5 sm:p-8" aria-labelledby="onboarding-title">
     <h2 id="onboarding-title" class="font-unbounded font-bold text-lg mb-1">Ouvrez la réservation en ligne</h2>
     <p class="text-sm text-[#012828]/70 mb-5">Deux étapes pour que vos patients puissent prendre rendez-vous.</p>
 

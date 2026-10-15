@@ -15,7 +15,7 @@
         <a href="#faq" class="hover:text-vert-600 transition-colors">FAQ</a>
       </div>
       <div class="flex items-center gap-3">
-        <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro/rendez-vous' } }" class="hidden sm:inline-flex items-center min-h-[48px] px-6 rounded-full border-[1.5px] border-vert-900 text-vert-900 text-[16px] font-medium hover:bg-vert-900 hover:text-white transition-colors">Se connecter</NuxtLink>
+        <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro' } }" class="hidden sm:inline-flex items-center min-h-[48px] px-6 rounded-full border-[1.5px] border-vert-900 text-vert-900 text-[16px] font-medium hover:bg-vert-900 hover:text-white transition-colors">Se connecter</NuxtLink>
         <NuxtLink to="/inscription-pro" class="inline-flex items-center gap-[14px] min-h-[48px] pl-6 pr-1 py-1 rounded-full bg-vert-900 text-white text-[16px] font-medium whitespace-nowrap hover:bg-vert-600 transition-colors">
           Rejoindre<span class="hidden sm:inline"> Léya</span>
           <span class="w-10 h-10 rounded-full bg-corail-500 text-vert-900 flex items-center justify-center"><ArrowUpRight :size="18" aria-hidden="true" /></span>
@@ -45,7 +45,7 @@
 
         <!-- Praticien connecté -->
         <template v-else-if="isPro">
-          <NuxtLink to="/pro/rendez-vous" class="btn-dark">Mon espace praticien</NuxtLink>
+          <NuxtLink to="/pro" class="btn-dark">Mon espace praticien</NuxtLink>
           <button class="nav-link" @click="handleLogout">Déconnexion</button>
         </template>
 
@@ -98,7 +98,7 @@
 
           <div class="flex flex-col gap-3 pt-3">
             <NuxtLink v-if="!isLoggedIn" to="/login" class="btn-dark text-center" @click="isMenuOpen = false">Connexion</NuxtLink>
-            <NuxtLink v-else-if="isPro" to="/pro/rendez-vous" class="btn-dark text-center" @click="isMenuOpen = false">Mon espace praticien</NuxtLink>
+            <NuxtLink v-else-if="isPro" to="/pro" class="btn-dark text-center" @click="isMenuOpen = false">Mon espace praticien</NuxtLink>
             <button v-if="isLoggedIn" class="border border-neutre-200 text-vert-900 px-[25px] py-[10px] rounded-leya-s text-lg text-center" @click="handleLogout">Déconnexion</button>
             <NuxtLink v-if="!isPro && route.path !== '/chatbot'" to="/chatbot" class="btn-chatbot text-center" @click="isMenuOpen = false">Parler à Léya</NuxtLink>
           </div>

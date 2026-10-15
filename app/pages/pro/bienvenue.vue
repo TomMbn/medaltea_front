@@ -95,32 +95,7 @@ const firstName = computed(() => welcome.value?.firstName ?? '')
 const warnings = computed(() => welcome.value?.warnings ?? [])
 const warningLabel = computed(() => warnings.value.map(w => (w === 'prestation' ? 'votre prestation' : 'vos horaires')).join(' et '))
 
-// Clés partagées avec les pages Prestations et Horaires : les données ne sont chargées qu'une fois.
-const { data: types } = await useAsyncData('pro-types', () => $fetch('/api/backend/praticiens/me/consultation-types'), { server: false, default: () => [] })
-const { data: hours } = await useAsyncData('pro-hours', () => $fetch('/api/backend/praticiens/me/availabilities'), { server: false, default: () => [] })
-
-const hasTypes = computed(() => (Array.isArray(types.value) ? types.value : []).some(t => t.isActive !== false))
-const hasHours = computed(() => Array.isArray(hours.value) && hours.value.length > 0)
-const bookable = computed(() => hasTypes.value && hasHours.value)
-
-// Fiche du praticien (champs privés compris) : sert aux jalons de complétude et au lien public
-const { data: fiche } = await useAsyncData('pro-fiche-slug', () => $fetch('/api/backend/praticiens/me'), { server: false, default: () => null })
-const bioOk = computed(() => (fiche.value?.bio ?? '').trim().length >= 50)
-const infosOk = computed(() => !!(fiche.value && (fiche.value.languages?.length || fiche.value.publicTypes?.length || fiche.value.paymentMethods?.length)))
-
-const checklist = computed(() => [
-  { label: 'Compte créé', done: true },
-  { label: 'Fiche et spécialités renseignées', done: true },
-  { label: 'Présentation rédigée', done: bioOk.value, to: '/pro/fiche#presentation', cta: 'Rédiger' },
-  { label: 'Informations pratiques', done: infosOk.value, to: '/pro/fiche#pratique', cta: 'Compléter' },
-  { label: 'Prestation ajoutée', done: hasTypes.value, to: '/pro/prestations', cta: 'Ajouter' },
-  { label: 'Horaires définis', done: hasHours.value, to: '/pro/horaires', cta: 'Définir' },
-])
-const percent = computed(() => {
-  // Six jalons : compte et fiche (créés à l'inscription), présentation, informations pratiques, prestation, horaires.
-  const done = 2 + (bioOk.value ? 1 : 0) + (infosOk.value ? 1 : 0) + (hasTypes.value ? 1 : 0) + (hasHours.value ? 1 : 0)
-  return Math.round((done / 6) * 100)
-})
+const { hasTypes, hasHours, bookable, fiche, bioOk, checklist, percent } = useProCompletion()
 
 const origin = useRequestURL().origin
 // Lien public : le slug de la fiche (l'ancienne adresse numérique redirige, elle sert de repli)

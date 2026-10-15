@@ -324,7 +324,7 @@
         </button>
         <button v-if="step > 1" type="button" class="text-[16px] font-medium text-vert-600 hover:underline disabled:opacity-50" :disabled="submitting" @click="back">Retour</button>
         <button v-if="step === STEPS.length" type="button" class="text-[16px] font-medium text-vert-600 hover:underline disabled:opacity-50" :disabled="submitting" @click="skipAgenda">Je configurerai mes horaires plus tard</button>
-        <NuxtLink v-if="step === 1" :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro/rendez-vous' } }" class="text-[16px] font-medium text-vert-600 hover:underline">Déjà inscrit ? Se connecter</NuxtLink>
+        <NuxtLink v-if="step === 1" :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro' } }" class="text-[16px] font-medium text-vert-600 hover:underline">Déjà inscrit ? Se connecter</NuxtLink>
       </div>
     </form>
   </div>

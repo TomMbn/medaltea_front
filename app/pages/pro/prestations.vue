@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1 class="font-unbounded font-bold text-2xl lg:text-3xl mb-1">Prestations</h1>
-    <p class="text-sm text-[#012828]/60 mb-6">Les types de consultation que vous proposez.</p>
+    <ProPageHead title="Prestations" subtitle="Les types de consultation que vous proposez." class="mb-1" />
     <div class="bg-white rounded-[20px] shadow-sm p-5 sm:p-8">
       <ProServices />
     </div>

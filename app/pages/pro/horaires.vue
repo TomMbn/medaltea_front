@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1 class="font-unbounded font-bold text-2xl lg:text-3xl mb-1">Horaires</h1>
-    <p class="text-sm text-[#012828]/60 mb-6">Votre semaine type : les créneaux proposés aux patients en découlent. Pour un congé ponctuel, utilisez <NuxtLink to="/pro/absences" class="underline">Absences</NuxtLink>.</p>
+    <ProPageHead title="Horaires" subtitle="Votre semaine type : les créneaux proposés aux patients en découlent. Pour un congé ponctuel, utilisez la page Absences." class="mb-1" />
     <div class="bg-white rounded-[20px] shadow-sm p-5 sm:p-8">
       <ProWeeklyHours />
     </div>

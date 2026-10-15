@@ -3,7 +3,7 @@
   <!-- Une seule racine : plusieurs racines (commentaire compris) cassent la transition entre pages -->
   <!-- Compte praticien : habillage actuel (repris avec l'espace praticien) -->
   <template v-if="isPro">
-    <div class="bg-[#e0ecf2]" :class="isPro ? '' : 'min-h-screen overflow-x-hidden'">
+    <div class="bg-[#e0ecf2]" :class="isPro ? '' : 'min-h-screen overflow-x-clip'">
       <div :class="isPro ? '' : 'w-11/12 max-w-[760px] mx-auto pt-32 pb-8'" class="text-[#012828]">
         <h1 class="font-unbounded font-bold text-2xl lg:text-3xl mb-1">Mon compte</h1>
         <p class="text-sm text-[#012828]/60 mb-6">Vos informations, vos données et la suppression de votre compte.</p>
@@ -100,7 +100,7 @@
   </template>
 
   <!-- Compte patient : « Mon profil » -->
-  <div v-else class="relative overflow-x-hidden bg-bleu-50 min-h-screen text-vert-900">
+  <div v-else class="relative overflow-x-clip bg-bleu-50 min-h-screen text-vert-900">
     <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pt-28 lg:pt-[160px] pb-20 lg:pb-[96px]">
       <h1 class="font-unbounded font-normal text-[28px] sm:text-[32px] leading-[normal]">Mon profil</h1>
       <p class="mt-2 text-[18px] leading-[normal] text-neutre-600">Vos informations, vos préférences et vos données, au même endroit.</p>

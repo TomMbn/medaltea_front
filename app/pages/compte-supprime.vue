@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#e0ecf2] min-h-screen overflow-x-hidden">
+  <div class="bg-[#e0ecf2] min-h-screen overflow-x-clip">
     <div class="w-11/12 max-w-[560px] mx-auto pt-40 pb-8 text-[#012828] text-center">
       <h1 class="font-unbounded font-bold text-2xl lg:text-3xl mb-4">Votre compte a été supprimé</h1>
       <p class="text-sm leading-relaxed text-[#012828]/80 mb-8">

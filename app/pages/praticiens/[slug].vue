@@ -1,5 +1,5 @@
 <template>
-  <div class="relative bg-gradient-to-b from-bleu-50 to-[#e0ecf2] min-h-screen overflow-x-hidden">
+  <div class="relative bg-gradient-to-b from-bleu-50 to-[#e0ecf2] min-h-screen overflow-x-clip">
     <!-- Décors : rond corail et illustration de fond (placés comme dans la maquette) -->
     <img src="/images/medecines/rond-corail.svg" alt="" aria-hidden="true" class="hidden xl:block absolute -left-[15%] top-[420px] w-[37%] max-w-[640px] pointer-events-none select-none" style="animation: none;" />
     <img src="/images/medecines/illu-naturopathie.svg" alt="" aria-hidden="true" class="hidden xl:block absolute right-[-3%] top-[1484px] w-[35%] max-w-[605px] opacity-[0.08] pointer-events-none select-none" style="animation: none;" />

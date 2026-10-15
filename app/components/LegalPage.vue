@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#e0ecf2] min-h-screen overflow-x-hidden">
+  <div class="bg-[#e0ecf2] min-h-screen overflow-x-clip">
     <div class="w-11/12 max-w-[900px] mx-auto pt-32 pb-8">
       <article class="bg-white rounded-[20px] shadow-sm p-6 sm:p-10 lg:p-16 text-[#012828]">
         <h1 class="font-unbounded font-bold text-3xl lg:text-4xl mb-3">{{ title }}</h1>

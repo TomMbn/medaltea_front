@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-bleu-50 text-vert-900 overflow-x-hidden">
+  <div class="bg-bleu-50 text-vert-900 overflow-x-clip">
     <!-- Bandeau : compte patient connecté -->
     <div v-if="route.query.compte === 'patient'" class="fixed top-28 inset-x-0 z-40 px-4 pointer-events-none">
       <p class="pointer-events-auto mx-auto max-w-[760px] bg-white rounded-[16px] shadow-lg border border-amber-200 text-sm px-5 py-4 text-vert-900" role="status">

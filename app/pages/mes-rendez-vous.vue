@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-x-hidden bg-bleu-50 min-h-screen text-vert-900">
+  <div class="relative overflow-x-clip bg-bleu-50 min-h-screen text-vert-900">
     <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pt-28 lg:pt-[160px] pb-20 lg:pb-[96px]">
       <h1 class="font-unbounded font-normal text-[28px] sm:text-[32px] leading-[normal]">Mes rendez-vous</h1>
       <p class="mt-2 text-[18px] leading-[normal] text-neutre-600">Vos séances à venir, passées et annulées.</p>

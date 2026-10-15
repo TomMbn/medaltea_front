@@ -1,5 +1,5 @@
 <template>
-  <div class="medicine-page min-h-screen overflow-x-hidden bg-gradient-to-b from-bleu-50 to-[#e0ecf2]">
+  <div class="medicine-page min-h-screen overflow-x-clip bg-gradient-to-b from-bleu-50 to-[#e0ecf2]">
 
     <!-- Hero -->
     <section class="relative pt-[120px] lg:pt-[150px] pb-14 lg:pb-24" aria-labelledby="med-title">

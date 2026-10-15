@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen bg-bleu-50 text-vert-900 font-sans overflow-x-hidden">
+  <div class="relative min-h-screen bg-bleu-50 text-vert-900 font-sans overflow-x-clip">
     <TheNavbar />
 
     <main class="err relative pt-[128px] sm:pt-[160px] pb-16 xl:pb-24 px-4 flex flex-col items-center gap-5 xl:gap-7 text-center">

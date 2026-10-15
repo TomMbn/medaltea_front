@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-x-hidden bg-gradient-to-b from-bleu-50 to-[#e0ecf2]">
+  <div class="relative overflow-x-clip bg-gradient-to-b from-bleu-50 to-[#e0ecf2]">
     <!-- Décors -->
     <img src="/images/medecines/rond-corail.svg" alt="" aria-hidden="true" class="hidden xl:block absolute -left-[15%] top-[420px] w-[37%] max-w-[640px] pointer-events-none select-none" style="animation: none;" />
     <img src="/images/landing/med-hypnotherapie.svg" alt="" aria-hidden="true" class="hidden xl:block absolute right-[-3%] top-[420px] w-[37%] max-w-[650px] opacity-[0.08] pointer-events-none select-none" style="animation: none;" />

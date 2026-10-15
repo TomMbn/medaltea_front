@@ -1,5 +1,5 @@
 <template>
-  <div class="page-search relative overflow-x-hidden min-h-screen bg-gradient-to-b from-bleu-50 to-[#e0ecf2]">
+  <div class="page-search relative overflow-x-clip min-h-screen bg-gradient-to-b from-bleu-50 to-[#e0ecf2]">
     <!-- Page « Recherche » -->
     <template v-if="!isResults">
       <img src="/images/medecines/illu-naturopathie.svg" alt="" aria-hidden="true" class="page-mortar hidden xl:block absolute pointer-events-none select-none opacity-[0.08]" style="animation: none;" />

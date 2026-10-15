@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen overflow-x-hidden bg-gradient-to-b from-bleu-50 to-[#e0ecf2]">
+  <div class="min-h-screen overflow-x-clip bg-gradient-to-b from-bleu-50 to-[#e0ecf2]">
 
     <!-- Hero vert + bandeau de photos -->
     <section class="relative bg-vert-600 pt-36 lg:pt-[177px] pb-8 lg:pb-0" aria-labelledby="med-list-title">

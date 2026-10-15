@@ -22,7 +22,7 @@
           <div>
             <p class="font-bold">{{ formatLongDate(a.startAt) }}</p>
             <p class="text-sm mt-1">
-              {{ a.patientName || 'Patient' }}<template v-if="a.patientContact"> · {{ a.patientContact }}</template>
+              {{ a.patientName || 'Patient' }}<span v-if="a.isGuest" class="ml-2 rounded-full bg-[#e0ecf2] px-2 py-0.5 text-xs font-semibold text-[#156F71]">Sans compte</span><template v-if="a.patientContact"> · {{ a.patientContact }}</template>
             </p>
             <p v-if="a.typeName" class="text-sm text-gray-500 mt-0.5">
               {{ a.typeName }}<template v-if="a.durationMin"> · {{ a.durationMin }} min</template><template v-if="a.mode"> · {{ a.mode === 'visio' ? 'Visio' : 'Au cabinet' }}</template>

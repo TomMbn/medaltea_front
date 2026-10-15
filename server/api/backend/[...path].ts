@@ -37,7 +37,12 @@ const RULES: Rule[] = [
     { method: 'POST', pattern: /^appointments\/\d+\/proposal$/, auth: true, body: ['startAt'] },
     { method: 'POST', pattern: /^appointments\/\d+\/proposal\/(accept|decline)$/, auth: true },
     // Réservation sans compte (lot 2) : publique, protégée par Turnstile côté backend
-    { method: 'POST', pattern: /^appointments\/guest$/, auth: false, body: ['praticienId', 'consultationTypeId', 'startAt', 'firstName', 'lastName', 'email', 'phoneNumber', 'userNote', 'consentContact', 'consentHealthData', 'captchaToken'] },
+    { method: 'POST', pattern: /^appointments\/guest$/, auth: false, body: ['praticienId', 'consultationTypeId', 'startAt', 'firstName', 'lastName', 'email', 'phoneNumber', 'userNote', 'consentContact', 'consentHealthData', 'captchaToken', 'website'] },
+    // Gestion du rendez-vous par le lien secret (43 caractères) : jamais mis en cache ni journalisé
+    { method: 'GET', pattern: /^appointments\/guest\/[A-Za-z0-9_-]{43}$/, auth: false },
+    { method: 'POST', pattern: /^appointments\/guest\/[A-Za-z0-9_-]{43}\/cancel$/, auth: false },
+    { method: 'DELETE', pattern: /^appointments\/guest\/[A-Za-z0-9_-]{43}\/data$/, auth: false },
+    { method: 'GET', pattern: /^appointments\/guest\/[A-Za-z0-9_-]{43}\/ics$/, auth: false },
     // Compteur de vues de fiche (le backend ignore les fiches non revendiquées)
     { method: 'POST', pattern: /^praticiens\/\d+\/view$/, auth: false },
 
@@ -294,6 +299,8 @@ function validateGuestBooking(body: Record<string, any>) {
         phoneNumber: body.phoneNumber.replace(/[\s.]/g, ''),
         ...(body.userNote ? { userNote: body.userNote, consentHealthData: true } : {}),
         consentContact: true, captchaToken: body.captchaToken,
+        // Champ « piège » : invisible pour un humain, donc normalement vide (le backend répond alors 201 sans rien enregistrer s'il est rempli)
+        ...(typeof body.website === 'string' && body.website ? { website: body.website.slice(0, 200) } : {}),
     }
 }
 
@@ -396,6 +403,10 @@ export default defineEventHandler(async (event) => {
         ? 'public, s-maxage=15, stale-while-revalidate=30'
         : 'no-store')
 
+    // Limitation de débit : on relaie le délai d'attente
+    const retryAfter = response.headers.get('retry-after')
+    if (retryAfter && /^\d+$/.test(retryAfter)) setHeader(event, 'Retry-After', retryAfter)
+
     // Total des résultats (pagination de l'annuaire)
     const total = response.headers.get('x-total-count')
     if (total && /^\d+$/.test(total)) setHeader(event, 'X-Total-Count', total)
@@ -405,7 +416,7 @@ export default defineEventHandler(async (event) => {
 
     if (response.status === 204) return sendNoContent(event)
     // Fichier iCal : renvoyé tel quel, en téléchargement
-    if (/^appointments\/\d+\/ics$/.test(path) && response.status === 200 && typeof response._data === 'string') {
+    if (/^appointments\/(\d+|guest\/[A-Za-z0-9_-]{43})\/ics$/.test(path) && response.status === 200 && typeof response._data === 'string') {
         setHeader(event, 'Content-Type', 'text/calendar; charset=utf-8')
         setHeader(event, 'Content-Disposition', 'attachment; filename="rendez-vous-leya.ics"')
         return response._data

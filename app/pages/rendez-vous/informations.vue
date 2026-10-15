@@ -53,6 +53,11 @@
             <p class="mt-3 lg:mt-[14px] text-[18px] leading-[normal] text-neutre-600 max-w-[760px]">Pas besoin de compte : ces informations servent uniquement à votre rendez-vous.</p>
 
             <form class="mt-8 lg:mt-[36px]" novalidate @submit.prevent="submit">
+              <!-- Champ « piège » : invisible et hors parcours clavier ; un robot qui le remplit est ignoré par le backend -->
+              <div class="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+                <label for="g-website">Ne pas remplir</label>
+                <input id="g-website" v-model="honeypot" type="text" name="website" tabindex="-1" autocomplete="off" />
+              </div>
               <div class="grid sm:grid-cols-2 gap-x-4 gap-y-8 lg:gap-y-[49px] max-w-[776px]">
                 <div class="flex flex-col gap-2">
                   <label for="g-name" class="text-[16px] font-medium leading-[normal]">Prénom et nom</label>
@@ -122,6 +127,20 @@
               <template v-if="confirmed">Votre rendez-vous est enregistré.</template>
               <template v-else>Le praticien doit encore confirmer votre rendez-vous. Sans réponse de sa part, la demande expire automatiquement et le créneau est libéré.</template>
             </p>
+
+            <!-- Lien de gestion : renvoyé une seule fois par le backend, aucun e-mail ne le renvoie -->
+            <div v-if="manageUrl" class="mt-8 max-w-[620px] rounded-[20px] bg-white p-5 lg:p-6 shadow-douce">
+              <p class="text-[18px] font-semibold leading-[normal]">Conservez ce lien</p>
+              <p class="mt-2 text-[16px] leading-snug text-neutre-600">C’est le seul moyen de suivre la réponse du praticien, d’ajouter le rendez-vous à votre agenda ou de l’annuler. Il ne sera plus affiché : enregistrez-le ou copiez-le maintenant.</p>
+              <p class="mt-3 break-all rounded-[12px] bg-bleu-50 px-4 py-3 text-[14px] text-vert-900 select-all">{{ manageUrl }}</p>
+              <div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3">
+                <button type="button" class="inline-flex items-center gap-2 rounded-full bg-vert-900 px-5 py-[10px] text-[16px] font-semibold text-white hover:shadow-douce transition-shadow" @click="copyLink">
+                  <Copy :size="16" aria-hidden="true" /> {{ copied ? 'Lien copié' : 'Copier le lien' }}
+                </button>
+                <NuxtLink :to="managePath" class="text-[16px] font-medium text-vert-600 hover:underline">Ouvrir mon rendez-vous →</NuxtLink>
+              </div>
+            </div>
+
             <NuxtLink :to="ficheLink" class="mt-8 inline-flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:shadow-douce transition-shadow">
               Retour à la fiche
               <span class="w-10 h-10 rounded-full bg-corail-500 flex items-center justify-center"><ArrowUpRight :size="20" aria-hidden="true" /></span>
@@ -135,7 +154,7 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
-import { ArrowUpRight, CalendarDays, Check, Info, Loader2, MapPin } from 'lucide-vue-next'
+import { ArrowUpRight, CalendarDays, Check, Copy, Info, Loader2, MapPin } from 'lucide-vue-next'
 
 useSeoMeta({ title: 'Vos informations — Léya', robots: 'noindex, nofollow' })
 
@@ -195,6 +214,10 @@ const typeLabel = computed(() => {
 const steps = ['Créneau', 'Vos informations', 'Confirmation']
 const sent = ref(false)
 const confirmed = ref(false)
+const manageToken = ref('')
+const copied = ref(false)
+const managePath = computed(() => `/rendez-vous/invite/${manageToken.value}`)
+const manageUrl = computed(() => (manageToken.value && import.meta.client ? `${window.location.origin}${managePath.value}` : ''))
 const currentStep = computed(() => (sent.value ? 2 : 1))
 
 const name = ref('')
@@ -204,6 +227,7 @@ const note = ref('')
 const consentContact = ref(false)
 const consentHealth = ref(false)
 const captchaToken = ref('')
+const honeypot = ref('')
 const turnstile = ref(null)
 const submitting = ref(false)
 const submitError = ref('')
@@ -232,6 +256,10 @@ function validate() {
   return !errors.name && !errors.email && !errors.phone && !errors.consent && !errors.captcha
 }
 
+async function copyLink() {
+  try { await navigator.clipboard.writeText(manageUrl.value); copied.value = true; setTimeout(() => { copied.value = false }, 2500) } catch { /* le lien reste sélectionnable à l'écran */ }
+}
+
 async function submit() {
   if (submitting.value || !validate()) return
   submitting.value = true
@@ -250,15 +278,20 @@ async function submit() {
         ...(note.value.trim() ? { userNote: note.value.trim(), consentHealthData: true } : {}),
         consentContact: true,
         captchaToken: captchaToken.value,
+        ...(honeypot.value ? { website: honeypot.value } : {}),
       },
     })
     confirmed.value = res?.status === 'confirmed'
+    manageToken.value = typeof res?.manageToken === 'string' ? res.manageToken : ''
     sent.value = true
     if (import.meta.client) window.scrollTo({ top: 0, behavior: 'smooth' })
   } catch (e) {
     const status = apiStatus(e)
-    if (status === 409) submitError.value = 'Ce créneau vient d’être pris ou n’est plus disponible. Choisissez un autre créneau sur la fiche du praticien.'
+    const code = e?.data?.code ?? e?.response?._data?.code
+    if (status === 409 && code === 'GUEST_LIMIT') submitError.value = 'Vous avez déjà deux rendez-vous en cours avec cette adresse e-mail ou ce numéro de téléphone. Attendez qu’ils soient passés ou annulés pour en demander un autre.'
+    else if (status === 409) submitError.value = 'Ce créneau n’est plus disponible (déjà pris, ou trop proche : il faut réserver au moins 2 h à l’avance). Choisissez un autre créneau sur la fiche du praticien.'
     else if (status === 403) submitError.value = 'La vérification de sécurité a échoué. Réessayez.'
+    else if (status === 503) submitError.value = 'La réservation sans compte est momentanément indisponible. Réessayez plus tard ou connectez-vous.'
     else if (status === 429) submitError.value = 'Trop de tentatives. Patientez quelques minutes puis réessayez.'
     else submitError.value = apiErrorMessage(e, 'La réservation a échoué. Réessayez dans un instant.')
   } finally {

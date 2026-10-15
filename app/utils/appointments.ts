@@ -38,6 +38,7 @@ export interface Appointment {
   mode: string | null
   patientName: string | null
   patientContact: string | null
+  isGuest: boolean
 }
 
 const fullName = (o: any) => [o?.firstName, o?.lastName].filter(Boolean).join(' ') || null
@@ -63,7 +64,11 @@ export function normalizeAppointment(raw: any): Appointment {
     price: type?.price ?? raw?.price ?? null,
     mode: type?.mode ?? raw?.mode ?? null,
     patientName: fullName(patient) || patient?.name || raw?.patientName || null,
-    patientContact: patient?.mail ?? patient?.email ?? patient?.phoneNumber ?? raw?.patientMail ?? null,
+    // Invité : l'e-mail et le téléphone sont les seuls moyens de contacter la personne
+    patientContact: raw?.isGuest === true
+      ? ([patient?.email, patient?.phoneNumber].filter(Boolean).join(' · ') || null)
+      : (patient?.mail ?? patient?.email ?? patient?.phoneNumber ?? raw?.patientMail ?? null),
+    isGuest: raw?.isGuest === true,
   }
 }
 

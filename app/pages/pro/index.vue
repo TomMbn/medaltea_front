@@ -17,8 +17,8 @@
         <h2 id="dash-title" class="font-unbounded font-normal text-[24px] sm:text-[28px] xl:text-[32px] leading-[normal]">{{ todayTitle }}</h2>
         <p class="mt-4 text-[18px] xl:text-[20px] leading-[normal] text-bleu-100">{{ todaySub }}</p>
         <div class="mt-6 flex flex-wrap gap-[10px]">
-          <NuxtLink to="/pro/rendez-vous" class="inline-flex items-center gap-[14px] min-h-[48px] pl-6 pr-1 py-1 rounded-full bg-white text-vert-900 text-[18px] font-semibold hover:shadow-douce transition-shadow">
-            Voir mes rendez-vous
+          <NuxtLink to="/pro/agenda" class="inline-flex items-center gap-[14px] min-h-[48px] pl-6 pr-1 py-1 rounded-full bg-white text-vert-900 text-[18px] font-semibold hover:shadow-douce transition-shadow">
+            Voir l’agenda
             <span class="w-10 h-10 rounded-full bg-vert-900 text-white flex items-center justify-center"><ArrowUpRight :size="20" aria-hidden="true" /></span>
           </NuxtLink>
           <NuxtLink to="/pro/absences" class="inline-flex items-center gap-[14px] min-h-[48px] pl-6 pr-1 py-1 rounded-full bg-corail-500 text-vert-900 text-[18px] font-semibold hover:shadow-douce transition-shadow">

@@ -19,7 +19,7 @@
 
     <template v-else>
       <section class="relative pt-32 lg:pt-[170px] pb-14 lg:pb-[88px]" aria-labelledby="confirm-title">
-        <div class="mx-auto w-[calc(100%-2rem)] max-w-[1328px] flex flex-col items-center text-center">
+        <div class="mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] flex flex-col items-center text-center">
           <span class="w-20 h-20 lg:w-[104px] lg:h-[104px] rounded-full bg-vert-600 text-white flex items-center justify-center" aria-hidden="true"><Check class="w-9 h-9 lg:w-10 lg:h-10" :stroke-width="1.5" /></span>
           <h1 id="confirm-title" class="mt-6 lg:mt-[26px] font-unbounded font-normal text-[34px] sm:text-[44px] lg:text-[56px] leading-[1.23] text-vert-900">{{ confirmed ? 'C’est confirmé !' : 'Demande envoyée !' }}</h1>
           <p class="mt-4 lg:mt-[17px] text-[18px] lg:text-[24px] leading-snug lg:leading-none text-neutre-600 max-w-[828px]">
@@ -61,7 +61,7 @@
       <section class="relative bg-vert-600 overflow-hidden py-14 lg:py-[90px]" aria-labelledby="prepare-title">
         <img src="/images/footer/feuille-1.svg" alt="" aria-hidden="true" class="hidden lg:block absolute left-[3.5%] top-[60px] w-[11%] opacity-50" style="animation: none;" />
         <img src="/images/footer/feuille-5.svg" alt="" aria-hidden="true" class="hidden lg:block absolute right-[1%] top-[180px] w-[13.5%] opacity-50" style="animation: none;" />
-        <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px]">
+        <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px]">
           <h2 id="prepare-title" class="font-unbounded font-normal text-[26px] sm:text-[32px] leading-[normal] text-white">Préparez votre séance</h2>
           <ul class="mt-8 lg:mt-[40px] flex flex-wrap gap-x-[60px] gap-y-4">
             <li v-for="tip in tips" :key="tip" class="flex items-center gap-[10px] text-[18px] lg:text-[20px] text-white leading-[normal]">

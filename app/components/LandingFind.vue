@@ -1,5 +1,5 @@
 <template>
-  <section class="mx-auto w-[calc(100%-1.5rem)] max-w-[1642px] mb-16 lg:mb-24" aria-labelledby="find-title">
+  <section class="mx-auto w-[calc(100%-1.5rem)] lg:w-[calc(100%-4.5rem)] max-w-[1642px] mb-16 lg:mb-24" aria-labelledby="find-title">
     <div class="relative bg-vert-600 rounded-leya-m overflow-hidden lg:min-h-[578px]">
       <!-- Photo (moitié droite) -->
       <div class="relative h-[220px] sm:h-[300px] lg:absolute lg:inset-y-0 lg:right-0 lg:h-auto lg:w-1/2">

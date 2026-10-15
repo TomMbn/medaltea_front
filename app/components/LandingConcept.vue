@@ -1,5 +1,5 @@
 <template>
-  <section class="landing-concept relative mx-auto w-[calc(100%-1.5rem)] max-w-[1642px] pb-14 lg:pb-24" aria-labelledby="concept-title">
+  <section class="landing-concept relative mx-auto w-[calc(100%-1.5rem)] lg:w-[calc(100%-4.5rem)] max-w-[1642px] pb-14 lg:pb-24" aria-labelledby="concept-title">
     <!-- Feuille blanche (démarre sous le haut de la photo) -->
     <div class="absolute inset-x-0 top-[160px] lg:top-[290px] bottom-0 bg-white rounded-leya-m shadow-douce" aria-hidden="true"></div>
 

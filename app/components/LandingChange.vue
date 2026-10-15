@@ -1,5 +1,5 @@
 <template>
-  <section class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pb-16 lg:pb-28" aria-labelledby="change-title">
+  <section class="mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pb-16 lg:pb-28" aria-labelledby="change-title">
     <div class="grid grid-cols-1 lg:grid-cols-[480px_1fr] gap-10 lg:gap-12 items-start">
       <div class="flex flex-col gap-8 lg:gap-12">
         <div class="flex flex-col gap-6">

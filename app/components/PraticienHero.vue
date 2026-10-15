@@ -18,7 +18,7 @@
       </li>
     </ul>
 
-    <div class="hs-content relative z-20 mx-auto w-[calc(100%-2rem)] max-w-[1328px] flex flex-col items-center text-center">
+    <div class="hs-content relative z-20 mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] flex flex-col items-center text-center">
       <h1 id="praticien-hero-title" class="hs-h1 font-unbounded font-normal text-vert-900 text-[30px] sm:text-[40px] xl:text-[56px] leading-[1.23] max-w-[824px]">
         Rechercher parmi des milliers de <span class="text-corail-500">praticiens</span>
       </h1>

@@ -24,7 +24,7 @@
       <img src="/images/landing/med-sophrologie.svg" alt="" aria-hidden="true" class="hidden lg:block absolute right-[-4%] top-[60px] w-[36%] max-w-[630px] opacity-[0.08] pointer-events-none select-none" style="animation: none;" />
       <img src="/images/medecines/illu-naturopathie.svg" alt="" aria-hidden="true" class="hidden lg:block absolute left-[-4%] bottom-[240px] w-[33%] max-w-[573px] opacity-[0.08] pointer-events-none select-none" style="animation: none;" />
 
-      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px]">
+      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px]">
         <form class="flex" role="search" @submit.prevent>
           <label class="flex items-center gap-2.5 bg-white rounded-full px-[18px] py-3 w-full sm:w-[360px] focus-ring-within cursor-text">
             <Search :size="18" class="text-vert-600 shrink-0" aria-hidden="true" />
@@ -60,7 +60,7 @@
     </section>
 
     <!-- Aide au choix -->
-    <section class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pt-24 lg:pt-[165px] pb-20 lg:pb-32" aria-labelledby="med-help-title">
+    <section class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pt-24 lg:pt-[165px] pb-20 lg:pb-32" aria-labelledby="med-help-title">
       <div class="relative">
         <div class="absolute z-0 w-[110px] lg:w-[150px] right-[4%] lg:right-[125px] -top-[84px] lg:-top-[112px] -scale-x-100 pointer-events-none" aria-hidden="true">
           <img src="/images/landing/mascotte-panda.webp" alt="" width="223" height="193" class="w-full h-auto" />

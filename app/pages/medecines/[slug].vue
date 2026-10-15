@@ -7,7 +7,7 @@
       <img src="/images/medecines/feuille-hero.svg" alt="" aria-hidden="true" class="hidden lg:block absolute left-[86.8%] top-[620px] w-[15.3%] opacity-[0.7] pointer-events-none select-none" style="animation: none;" />
       <img src="/images/footer/feuille-2.svg" alt="" aria-hidden="true" class="hidden lg:block absolute left-[51%] top-[40px] w-[8.7%] opacity-[0.7] pointer-events-none select-none" style="animation: none; transform: rotate(-25deg);" />
 
-      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] grid grid-cols-1 lg:grid-cols-[1fr_600px] gap-10 lg:gap-8 items-start">
+      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] grid grid-cols-1 lg:grid-cols-[1fr_600px] gap-10 lg:gap-8 items-start">
         <div>
           <nav aria-label="Fil d'Ariane" class="inline-flex items-center bg-white rounded-full px-4 py-[9px] text-[16px] font-medium text-vert-900">
             <NuxtLink to="/medecines" class="hover:underline">Médecines</NuxtLink>
@@ -57,7 +57,7 @@
     </section>
 
     <!-- Définition -->
-    <section class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pb-16 lg:pb-24" aria-labelledby="med-def">
+    <section class="mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pb-16 lg:pb-24" aria-labelledby="med-def">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
         <div class="rounded-[28px] overflow-hidden aspect-[4/3] lg:aspect-[3/2]">
           <NuxtImg :src="medicine.definitionImage" :alt="`${medicine.name} : définition`" class="w-full h-full object-cover" width="1200" height="800" format="webp" quality="75" sizes="xs:100vw lg:660px" loading="lazy" />
@@ -77,7 +77,7 @@
     </section>
 
     <!-- Mosaïque -->
-    <section class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pb-16 lg:pb-24" aria-label="En images">
+    <section class="mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pb-16 lg:pb-24" aria-label="En images">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-[26px] lg:items-stretch">
         <div class="flex flex-col gap-4 lg:gap-7">
           <div class="relative rounded-[35px] overflow-hidden h-[220px] lg:h-[212px]">
@@ -114,7 +114,7 @@
     <section class="relative bg-vert-600 overflow-hidden pt-14 lg:pt-[72px] pb-16 lg:pb-[100px]" aria-labelledby="med-benefits">
       <img src="/images/footer/feuille-1.svg" alt="" aria-hidden="true" class="hidden lg:block absolute left-[1%] top-[40px] w-[12%] pointer-events-none" style="animation: none; transform: rotate(10deg);" />
       <img src="/images/footer/feuille-5.svg" alt="" aria-hidden="true" class="hidden lg:block absolute right-[2%] top-[-10px] w-[10%] pointer-events-none" style="animation: none; transform: rotate(-40deg);" />
-      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px]">
+      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px]">
         <h2 id="med-benefits" class="font-unbounded font-normal text-[26px] sm:text-[32px] lg:text-[40px] leading-[1.2] text-white max-w-[640px]">Ce que {{ medicine.nameWithArticle }} peut apporter</h2>
         <p class="mt-4 text-[17px] lg:text-[20px] text-bleu-100 max-w-[640px]">Une approche complémentaire, qui ne remplace pas un avis ou un traitement médical.</p>
         <ul class="mt-10 lg:mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
@@ -131,7 +131,7 @@
     </section>
 
     <!-- Séance -->
-    <section class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pt-16 lg:pt-24 pb-16 lg:pb-24" aria-labelledby="med-steps">
+    <section class="mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pt-16 lg:pt-24 pb-16 lg:pb-24" aria-labelledby="med-steps">
       <p class="text-[14px] font-medium uppercase tracking-[0.08em] text-vert-600 mb-4">La séance</p>
       <h2 id="med-steps" class="font-unbounded font-normal text-[26px] sm:text-[32px] lg:text-[40px] leading-[1.2] text-vert-900">Comment se passe une séance ?</h2>
 
@@ -156,7 +156,7 @@
     </section>
 
     <!-- Praticiens + question à Léya -->
-    <section ref="practitionersRef" class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pb-24 lg:pb-32 scroll-mt-28" aria-labelledby="med-pract">
+    <section ref="practitionersRef" class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pb-24 lg:pb-32 scroll-mt-28" aria-labelledby="med-pract">
       <img :src="pictogram" alt="" aria-hidden="true" class="hidden lg:block absolute -left-[6%] -top-[40px] w-[28%] max-w-[420px] opacity-[0.06] pointer-events-none select-none" style="animation: none;" />
       <div class="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10 lg:mb-12">
         <div>

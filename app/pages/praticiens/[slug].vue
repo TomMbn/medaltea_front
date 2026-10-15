@@ -11,7 +11,7 @@
       <img src="/images/footer/feuille-5.svg" alt="" class="hidden lg:block absolute right-0 top-[180px] w-[15%] opacity-60" style="animation: none;" />
     </div>
 
-    <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pt-28 lg:pt-[130px]">
+    <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pt-28 lg:pt-[130px]">
       <div class="xl:grid xl:grid-cols-[minmax(0,1fr)_440px] xl:gap-x-[68px]">
         <!-- Colonne principale : fil d'Ariane, identité, présentation -->
         <div class="min-w-0">
@@ -233,7 +233,7 @@
     <section v-if="google" class="relative mt-16 lg:mt-[110px] bg-vert-600 overflow-hidden py-14 lg:py-[84px]" aria-labelledby="reviews-title">
       <img src="/images/footer/feuille-1.svg" alt="" aria-hidden="true" class="hidden lg:block absolute left-[3%] top-[40px] w-[11%] opacity-50" style="animation: none;" />
       <img src="/images/footer/feuille-5.svg" alt="" aria-hidden="true" class="hidden lg:block absolute right-[4%] bottom-[20px] w-[12%] opacity-50" style="animation: none;" />
-      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px]">
+      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px]">
         <p class="text-[14px] font-medium uppercase tracking-[0.08em] text-bleu-100 leading-[normal]">Avis Google</p>
         <h2 id="reviews-title" class="sr-only">Avis Google</h2>
         <div class="mt-5 flex flex-wrap items-center gap-x-8 gap-y-4">
@@ -252,7 +252,7 @@
     </section>
 
     <!-- La discipline en bref -->
-    <section v-if="medicine" class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pt-16 lg:pt-[110px] pb-20 lg:pb-[140px]" aria-labelledby="discipline-title">
+    <section v-if="medicine" class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pt-16 lg:pt-[110px] pb-20 lg:pb-[140px]" aria-labelledby="discipline-title">
       <div class="grid grid-cols-1 lg:grid-cols-[620px_1fr] gap-10 lg:gap-[88px] items-center">
         <div class="discipline-mask aspect-[620/460] w-full max-w-[620px]">
           <NuxtImg :src="medicine.heroImage" :alt="`${medicine.name} : séance avec un praticien`" class="w-full h-full object-cover" width="1240" height="920" format="webp" quality="75" sizes="xs:100vw lg:620px" loading="lazy" />
@@ -277,7 +277,7 @@
         <NuxtLink to="/cgu" class="underline">En savoir plus</NuxtLink>
       </p>
     </section>
-    <p v-else class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] mt-14 pb-20 text-[14px] text-neutre-600/80 leading-relaxed">
+    <p v-else class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] mt-14 pb-20 text-[14px] text-neutre-600/80 leading-relaxed">
       Fiche professionnelle. Ce praticien exerce sous sa propre responsabilité ; Léya n’est pas partie à la relation de soin et ne remplace pas un avis médical.
       <NuxtLink to="/cgu" class="underline">En savoir plus</NuxtLink>
     </p>

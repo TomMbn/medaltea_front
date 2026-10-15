@@ -13,7 +13,7 @@
       <img src="/images/footer/feuille-3.svg" alt="" aria-hidden="true" class="hidden xl:block absolute opacity-30 pointer-events-none select-none -rotate-[20deg]" style="animation: none; left: calc(var(--u) * 860); top: calc(var(--u) * 18); width: calc(var(--u) * 180);" />
       <img src="/images/medecines/rond-corail.svg" alt="" aria-hidden="true" class="hidden lg:block absolute -left-[15%] top-[420px] w-[37%] max-w-[640px] pointer-events-none select-none" style="animation: none;" />
 
-      <div class="relative mx-auto w-[calc(100%-2rem)] max-w-[1328px] xl:max-w-none xl:w-full xl:px-0">
+      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] xl:max-w-none xl:w-full xl:px-0">
         <div class="pro-hero-text">
           <p class="text-[14px] font-medium uppercase tracking-[0.08em] text-vert-600">Espace praticien</p>
           <h1 id="pro-hero-title" class="mt-4 font-unbounded font-normal text-[32px] sm:text-[44px] xl:text-[56px] leading-[1.23]">
@@ -70,7 +70,7 @@
     </section>
 
     <!-- Pensé pour votre quotidien -->
-    <section class="mx-auto w-[calc(100%-2rem)] max-w-[1328px] pt-10 pb-10 xl:pt-[60px] xl:pb-[80px]" aria-labelledby="pro-quotidien-title">
+    <section class="mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pt-10 pb-10 xl:pt-[60px] xl:pb-[80px]" aria-labelledby="pro-quotidien-title">
       <div class="relative h-[420px] sm:h-[520px] xl:h-[620px] rounded-[32px] overflow-hidden bg-vert-900">
         <NuxtImg src="/images/pro/photo-quotidien.webp" alt="" class="absolute inset-0 w-full h-full object-cover" width="1328" height="620" format="webp" quality="80" loading="lazy" />
         <div class="absolute inset-0 bg-gradient-to-r from-black/45 to-transparent to-[55%]"></div>
@@ -85,7 +85,7 @@
     <section id="fonctionnement" class="relative scroll-mt-32 pt-12 pb-12 xl:pt-20 xl:pb-[64px]" aria-labelledby="pro-change-title">
       <img src="/images/footer/feuille-1.svg" alt="" aria-hidden="true" class="hidden xl:block absolute left-0 bottom-[30px] w-[150px] opacity-30 rotate-[15deg] pointer-events-none select-none" style="animation: none;" />
       <img src="/images/footer/feuille-5.svg" alt="" aria-hidden="true" class="hidden xl:block absolute right-[40px] top-0 w-[160px] opacity-30 -rotate-[20deg] pointer-events-none select-none" style="animation: none;" />
-      <div class="relative mx-auto w-[calc(100%-2rem)] max-w-[1328px]">
+      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px]">
         <p class="text-[14px] font-medium uppercase tracking-[0.08em] text-vert-600">Ce que Léya change</p>
         <h2 id="pro-change-title" class="mt-3 font-unbounded font-normal text-[26px] sm:text-[32px] xl:text-[40px] leading-[normal]">Tout votre cabinet au même endroit</h2>
 
@@ -137,7 +137,7 @@
     <section id="etapes" class="relative scroll-mt-32 bg-vert-600 text-white overflow-hidden" aria-labelledby="pro-steps-title">
       <img src="/images/footer/feuille-1.svg" alt="" aria-hidden="true" class="hidden xl:block absolute left-[10px] top-[60px] w-[170px] opacity-20 rotate-[15deg] pointer-events-none select-none" style="animation: none;" />
       <img src="/images/footer/feuille-4.svg" alt="" aria-hidden="true" class="hidden xl:block absolute right-[40px] top-[135px] w-[190px] opacity-20 -rotate-[20deg] pointer-events-none select-none" style="animation: none;" />
-      <div class="relative mx-auto w-[calc(100%-2rem)] max-w-[1328px] py-14 xl:pt-[90px] xl:pb-[100px]">
+      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] py-14 xl:pt-[90px] xl:pb-[100px]">
         <h2 id="pro-steps-title" class="font-unbounded font-normal text-[26px] sm:text-[32px] xl:text-[40px] leading-[normal]">Rejoindre Léya en 3 étapes</h2>
         <ol class="mt-10 xl:mt-[86px] grid gap-5 xl:gap-6 md:grid-cols-3">
           <li v-for="(s, i) in steps" :key="s.title" class="bg-white rounded-[28px] p-7 min-h-[200px] xl:h-[240px] flex flex-col gap-3 text-vert-900" :class="s.tilt">
@@ -151,7 +151,7 @@
 
     <!-- Questions fréquentes -->
     <section id="faq" class="scroll-mt-32 py-14 xl:py-[100px]" aria-labelledby="pro-faq-title">
-      <div class="mx-auto w-[calc(100%-2rem)] max-w-[1328px]">
+      <div class="mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px]">
         <h2 id="pro-faq-title" class="font-unbounded font-normal text-[26px] sm:text-[32px] xl:text-[40px] leading-[normal]">Vos questions</h2>
         <div class="mt-8 xl:mt-10 grid gap-3">
           <details v-for="f in faqs" :key="f.q" class="group bg-white rounded-[16px] px-6 py-4">

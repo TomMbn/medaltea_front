@@ -1,5 +1,5 @@
 <template>
-  <form class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] bg-white rounded-[28px] sm:rounded-full shadow-douce p-3 sm:py-2 sm:pl-7 sm:pr-2 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 focus-ring-within" role="search" @submit.prevent="search">
+  <form class="mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] bg-white rounded-[28px] sm:rounded-full shadow-douce p-3 sm:py-2 sm:pl-7 sm:pr-2 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 focus-ring-within" role="search" @submit.prevent="search">
     <label for="results-q" class="flex-1 min-w-0 flex items-center gap-2.5 cursor-text px-2 sm:px-0">
       <MapPin :size="18" class="text-vert-600 shrink-0" aria-hidden="true" />
       <input id="results-q" v-model="query" type="text" aria-label="Ville, code postal ou nom du praticien" placeholder="Ville, code postal, nom" class="focus-in-parent bg-transparent text-[18px] text-vert-900 placeholder-neutre-600 focus:outline-none min-w-0 w-full" />

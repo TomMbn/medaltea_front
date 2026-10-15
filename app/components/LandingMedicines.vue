@@ -1,5 +1,5 @@
 <template>
-  <section class="landing-medicines relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pb-16 lg:pb-28" aria-labelledby="med-title">
+  <section class="landing-medicines relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pb-16 lg:pb-28" aria-labelledby="med-title">
     <div class="grid grid-cols-1 lg:grid-cols-[620px_1fr] lg:gap-x-10 gap-y-10">
       <!-- Liste des médecines -->
       <div>

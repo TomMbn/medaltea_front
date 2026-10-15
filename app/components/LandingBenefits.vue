@@ -1,5 +1,5 @@
 <template>
-  <section class="landing-benefits mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pt-16 lg:pt-[110px] pb-12 lg:pb-[90px]" aria-labelledby="why-title">
+  <section class="landing-benefits mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pt-16 lg:pt-[110px] pb-12 lg:pb-[90px]" aria-labelledby="why-title">
     <div class="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-4 mb-10 lg:mb-14">
       <h2 id="why-title" class="flex-1 font-unbounded font-normal text-[26px] sm:text-[32px] lg:text-[40px] leading-[1.2] text-black">Pourquoi choisir un praticien sur Léya ?</h2>
       <p class="lg:w-[640px] text-[17px] lg:text-[20px] leading-snug text-neutre-600">Un accompagnement pensé pour vous rassurer, de la première question au rendez-vous.</p>

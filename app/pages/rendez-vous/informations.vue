@@ -4,7 +4,7 @@
     <img src="/images/medecines/rond-corail.svg" alt="" aria-hidden="true" class="hidden xl:block absolute -left-[15%] top-[420px] w-[37%] max-w-[640px] pointer-events-none select-none" style="animation: none;" />
     <img src="/images/landing/med-hypnotherapie.svg" alt="" aria-hidden="true" class="hidden xl:block absolute right-[-3%] top-[714px] w-[37%] max-w-[650px] opacity-[0.08] pointer-events-none select-none" style="animation: none;" />
 
-    <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pt-28 lg:pt-[140px] pb-20 lg:pb-[120px]">
+    <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pt-28 lg:pt-[140px] pb-20 lg:pb-[120px]">
       <NuxtLink :to="ficheLink" class="inline-flex items-center bg-white rounded-full px-4 py-[9px] text-[16px] font-medium leading-[normal] text-vert-900 hover:bg-white/70 transition-colors">
         ← Retour à la fiche de {{ fullName }}
       </NuxtLink>

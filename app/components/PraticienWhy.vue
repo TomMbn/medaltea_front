@@ -2,7 +2,7 @@
   <section class="relative pt-10 lg:pt-0 pb-20 lg:pb-32" aria-labelledby="praticien-why-title">
     <img src="/images/landing/med-osteopathie.svg" alt="" aria-hidden="true" class="hidden lg:block absolute left-[-4%] bottom-[-40px] w-[31%] max-w-[540px] opacity-[0.08] pointer-events-none select-none" style="animation: none;" />
 
-    <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-5 items-center">
+    <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-5 items-center">
       <div class="flex flex-col gap-10 lg:gap-[63px] items-start">
         <div class="flex flex-col gap-8 lg:gap-[47px]">
           <div class="flex flex-col gap-5 lg:gap-7">

@@ -1,5 +1,5 @@
 <template>
-  <section class="landing-faq mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px] pb-20 lg:pb-28" aria-labelledby="faq-title">
+  <section class="landing-faq mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] pb-20 lg:pb-28" aria-labelledby="faq-title">
     <div class="grid grid-cols-1 lg:grid-cols-[520px_1fr] gap-12 lg:gap-[100px] items-start">
       <!-- Titre + bloc d'aide -->
       <div>

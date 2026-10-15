@@ -1,6 +1,6 @@
 // Faux serveur de la démonstration : répond aux routes de l'espace praticien avec des données fictives.
 // Tout vit dans le navigateur (sessionStorage) : rien n'est envoyé au backend, tout disparaît à la fermeture de l'onglet.
-import { DEMO_ID, DEMO_SLUG, demoFiche, demoDiplomas, demoTypes, demoHours, demoSlots } from './demoData'
+import { DEMO_ID, demoFiche, demoDiplomas, demoTypes, demoHours, demoSlots } from './demoData'
 
 export const DEMO_STORAGE_KEY = 'leya-demo-state'
 
@@ -184,8 +184,10 @@ export function demoRequest(path: string, method: string, query: Record<string, 
     return ok({ total: daily.reduce((n, x) => n + x.views, 0), daily })
   }
 
-  // Fiches publiques de la démonstration : servies par la passerelle (aperçu « Ma fiche »)
-  if (m === 'GET' && (path.startsWith(`praticiens/${DEMO_ID}`) || path === `praticiens/slug/${DEMO_SLUG}`)) return undefined
+  // Données publiques (annuaire, fiches, créneaux, réservation sans compte) : servies normalement par la passerelle
+  const isPrivate = /^(praticiens\/me|users\/|appointments\/(me|\d)|tracking\/|push\/|admin\/)/.test(path)
+  if (m === 'GET' && !isPrivate) return undefined
+  if (/^(appointments\/guest|praticiens\/\d+\/view$)/.test(path)) return undefined
   if (m === 'GET') throw new DemoError(404, 'Introuvable dans la démonstration.')
   // Toute autre écriture (photo, suppression de compte, notifications…) : refusée proprement
   throw unavailable()

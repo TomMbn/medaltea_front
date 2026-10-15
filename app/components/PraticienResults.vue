@@ -3,7 +3,7 @@
     <img src="/images/medecines/rond-corail.svg" alt="" aria-hidden="true" class="hidden lg:block absolute -left-[15%] top-[216px] w-[37%] max-w-[640px] pointer-events-none select-none" style="animation: none;" />
     <img src="/images/medecines/illu-naturopathie.svg" alt="" aria-hidden="true" class="hidden lg:block absolute right-[-4%] top-[811px] w-[37%] max-w-[650px] opacity-[0.08] pointer-events-none select-none" style="animation: none;" />
 
-    <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px]">
+    <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px]">
       <!-- Filtres et tri -->
       <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-[16px] font-medium leading-[normal]">
         <div class="flex flex-wrap items-center gap-2">

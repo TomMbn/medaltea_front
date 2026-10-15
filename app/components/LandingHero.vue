@@ -206,7 +206,8 @@ const handleSuggestion = (text) => {
   margin-top: -8px;
 }
 @media (min-width: 1024px) { .hero-lead { font-size: 20px; margin-top: -16px; } }
-@media (min-width: 1280px) { .hero-lead { font-size: 24px; } }
+/* Fluide : 24 px dès 1500 px, plus petit sur portable pour garder deux lignes avec les nouvelles marges */
+@media (min-width: 1280px) { .hero-lead { font-size: clamp(20px, 1.6vw, 24px); } }
 
 .reassurance {
   display: flex;
@@ -287,6 +288,8 @@ const handleSuggestion = (text) => {
   .hero-container {
     flex-direction: row;
     gap: 40px;
+    /* Marges latérales proportionnelles (5 % de chaque côté) : 16 px seulement sur un portable en 1366 px */
+    width: 90%;
   }
 
   .hero-title {
@@ -330,7 +333,8 @@ const handleSuggestion = (text) => {
   }
 
   .images-stack {
-    flex: 0 0 550px;
+    /* 550 px dès que la place le permet ; proportionnelle sur portable (le titre garde ainsi 3 lignes malgré les marges) */
+    flex: 0 0 min(550px, 42%);
     align-self: flex-start;
     /* aspect-ratio 11/10 → height = 550 / 1.1 = 500px */
   }

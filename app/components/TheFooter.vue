@@ -15,7 +15,7 @@
       style="right: 12.8%; top: -150px; width: clamp(220px, 20.55%, 355px); height: auto;"
     />
 
-    <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-[1328px]">
+    <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px]">
       <!-- Appel à l'action -->
       <div class="pt-14 lg:pt-[140px] pb-12 lg:pb-[100px] border-b border-white/80">
         <h2 class="font-unbounded font-normal text-[28px] sm:text-[36px] lg:text-[44px] xl:text-h1 leading-[1.15] max-w-[760px]">

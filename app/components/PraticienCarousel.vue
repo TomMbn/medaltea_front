@@ -1,6 +1,6 @@
 <template>
   <section v-if="items.length" class="pc relative pb-16 lg:pb-24" aria-labelledby="praticien-carousel-title">
-    <div class="mx-auto w-[calc(100%-1.5rem)] max-w-[1673px] bg-vert-600 rounded-leya-m pc-panel px-4 pt-10 pb-12 lg:pt-[58px] lg:pb-[100px]">
+    <div class="mx-auto w-[calc(100%-1.5rem)] lg:w-[calc(100%-4.5rem)] max-w-[1673px] bg-vert-600 rounded-leya-m pc-panel px-4 pt-10 pb-12 lg:pt-[58px] lg:pb-[100px]">
       <h2 id="praticien-carousel-title" class="text-center font-unbounded font-normal text-white text-[24px] sm:text-[28px] lg:text-[32px] leading-tight">
         Des praticiens à <span class="relative inline-block">découvrir<img src="/images/praticiens/soulignement.svg" alt="" aria-hidden="true" class="absolute left-0 right-0 -bottom-2 w-full h-[14px]" style="animation: none;" /></span>
       </h2>

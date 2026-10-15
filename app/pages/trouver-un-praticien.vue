@@ -25,11 +25,19 @@
           :loading="pending"
           :sort="sort"
           :only-bookable="onlyBookable"
+          :mode="mode"
+          :soon="soon"
+          :rated="rated"
+          :accessible="accessible"
           :geo="geo"
           :geo-error="geoError"
           :radius="radius"
           @update:sort="setSort"
           @update:only-bookable="setOnlyBookable"
+          @update:mode="setMode"
+          @update:soon="setSoon"
+          @update:rated="setRated"
+          @update:accessible="setAccessible"
           @update:radius="radius = $event"
           @locate="locate"
           @unlocate="unlocate"
@@ -50,7 +58,13 @@ const { findBySlug } = await useSpecialities()
 const speciality = computed(() => findBySlug(String(route.query.specialite ?? '')))
 const onlyBookable = computed(() => route.query.reservable === '1')
 // Deux écrans : la page « Recherche » (sans critère) et la page « Résultats » (dès qu'un critère est choisi)
-const RESULT_KEYS = ['q', 'specialite', 'tri', 'reservable', 'page', 'tous']
+// Filtres : mode de consultation, disponibilité sous 7 jours, note de 4 et plus, accès à mobilité réduite
+const MODES = ['cabinet', 'visio', 'domicile']
+const mode = computed(() => (MODES.includes(String(route.query.mode)) ? String(route.query.mode) : ''))
+const soon = computed(() => route.query.dispo === '7')
+const rated = computed(() => route.query.note === '4')
+const accessible = computed(() => route.query.pmr === '1')
+const RESULT_KEYS = ['q', 'specialite', 'tri', 'reservable', 'mode', 'dispo', 'note', 'pmr', 'page', 'tous']
 const isResults = computed(() => Object.keys(route.query).some(k => RESULT_KEYS.includes(k)))
 const page = computed(() => Math.max(1, Math.floor(Number(route.query.page)) || 1))
 // Remet à zéro la barre de recherche quand on arrive d'un autre critère (lien, retour arrière)
@@ -72,6 +86,10 @@ const apiQuery = computed(() => ({
   ...(q.value ? { q: q.value } : {}),
   ...(SORTS[sort.value] ? { sort: SORTS[sort.value] } : {}),
   ...(onlyBookable.value ? { bookable: true } : {}),
+  ...(mode.value ? { mode: mode.value } : {}),
+  ...(soon.value ? { availableWithinDays: 7 } : {}),
+  ...(rated.value ? { minRating: 4 } : {}),
+  ...(accessible.value ? { wheelchairAccessible: true } : {}),
   ...(geo.value ? { lat: geo.value.lat, lng: geo.value.lng, radiusKm: radius.value } : {}),
   limit: PAGE_SIZE,
 }))
@@ -101,6 +119,10 @@ watch([geo, radius], () => { if (page.value > 1) setQuery({ page: undefined }) }
 // Changer le tri ou un filtre ramène à la première page
 const setSort = (value) => setQuery({ tri: value === 'pertinence' ? undefined : value, page: undefined })
 const setOnlyBookable = (value) => setQuery({ reservable: value ? '1' : undefined, page: undefined })
+const setMode = (value) => setQuery({ mode: value || undefined, page: undefined })
+const setSoon = (value) => setQuery({ dispo: value ? '7' : undefined, page: undefined })
+const setRated = (value) => setQuery({ note: value ? '4' : undefined, page: undefined })
+const setAccessible = (value) => setQuery({ pmr: value ? '1' : undefined, page: undefined })
 
 function locate() {
   geoError.value = ''

@@ -20,7 +20,7 @@ type Rule = {
 const RULES: Rule[] = [
     { method: 'GET', pattern: /^specialites$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^disciplines$/, auth: false, cacheable: true },
-    { method: 'GET', pattern: /^praticiens$/, auth: false, cacheable: true, query: ['specialityId', 'city', 'q', 'language', 'publicType', 'claimed', 'bookable', 'sort', 'limit', 'offset', 'lat', 'lng', 'radiusKm'] },
+    { method: 'GET', pattern: /^praticiens$/, auth: false, cacheable: true, query: ['specialityId', 'city', 'q', 'language', 'publicType', 'claimed', 'bookable', 'sort', 'limit', 'offset', 'lat', 'lng', 'radiusKm', 'mode', 'availableWithinDays', 'minRating', 'wheelchairAccessible', 'bbox'] },
     { method: 'GET', pattern: /^praticiens\/\d+$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens\/slug\/[a-z0-9-]{1,120}$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens\/\d+\/next-slot$/, auth: false, query: ['consultationTypeId'] },
@@ -33,6 +33,11 @@ const RULES: Rule[] = [
     { method: 'GET', pattern: /^appointments\/\d+\/ics$/, auth: true },
     { method: 'POST', pattern: /^appointments$/, auth: true, body: ['praticienId', 'consultationTypeId', 'startAt', 'userNote'] },
     { method: 'PATCH', pattern: /^appointments\/\d+\/status$/, auth: true, body: ['status', 'reason'] },
+    // Proposer un autre créneau (praticien), puis l'accepter ou le refuser (patient)
+    { method: 'POST', pattern: /^appointments\/\d+\/proposal$/, auth: true, body: ['startAt'] },
+    { method: 'POST', pattern: /^appointments\/\d+\/proposal\/(accept|decline)$/, auth: true },
+    // Compteur de vues de fiche (le backend ignore les fiches non revendiquées)
+    { method: 'POST', pattern: /^praticiens\/\d+\/view$/, auth: false },
 
     // Profil
     // Profil du compte connecté : l'utilisateur reçoit ses propres informations (dont son email)
@@ -45,22 +50,36 @@ const RULES: Rule[] = [
     { method: 'GET', pattern: /^tracking\/preferences$/, auth: true },
     { method: 'PUT', pattern: /^tracking\/preferences$/, auth: true, body: ['optOut'] },
 
+    // Préférences du patient (ville, rayon, budget, modes) et notifications
+    { method: 'GET', pattern: /^users\/me\/preferences$/, auth: true, own: true },
+    { method: 'PUT', pattern: /^users\/me\/preferences$/, auth: true, keepEmpty: true, body: ['city', 'latitude', 'longitude', 'radiusKm', 'budgetBand', 'modes'], own: true },
+    { method: 'GET', pattern: /^users\/me\/notification-preferences$/, auth: true, own: true },
+    { method: 'PATCH', pattern: /^users\/me\/notification-preferences$/, auth: true, keepEmpty: true, body: ['appointmentRequest', 'appointmentDecision', 'reminderDayBefore', 'proposal'], own: true },
+    // Notifications push (abonnement du navigateur)
+    { method: 'GET', pattern: /^push\/public-key$/, auth: false, cacheable: true },
+    { method: 'POST', pattern: /^push\/subscriptions$/, auth: true, keepEmpty: true, body: ['endpoint', 'keys'] },
+    { method: 'DELETE', pattern: /^push\/subscriptions$/, auth: true, body: ['endpoint'] },
+
     // Revendication d'une fiche répertoriée (compte pro)
     { method: 'POST', pattern: /^praticiens\/\d+\/claim-requests$/, auth: true, body: ['message', 'rpps', 'siret'] },
     { method: 'GET', pattern: /^praticiens\/me\/claim-requests$/, auth: true },
 
     // Ma fiche (propriétaire uniquement : le backend vérifie le compte)
     { method: 'GET', pattern: /^praticiens\/me$/, auth: true, own: true },
-    { method: 'PUT', pattern: /^praticiens\/\d+$/, auth: true, keepEmpty: true, body: ['firstName', 'lastName', 'specialityIds', 'bio', 'address', 'addressComplement', 'postalCode', 'city', 'latitude', 'longitude', 'phoneNumber', 'website', 'socialLinks', 'rpps', 'adeli', 'siret', 'practicingSince', 'languages', 'wheelchairAccessible', 'paymentMethods', 'reimbursementInfo', 'publicTypes', 'isActive'] },
+    { method: 'PUT', pattern: /^praticiens\/\d+$/, auth: true, keepEmpty: true, body: ['firstName', 'lastName', 'specialityIds', 'bio', 'address', 'addressComplement', 'postalCode', 'city', 'latitude', 'longitude', 'phoneNumber', 'website', 'socialLinks', 'rpps', 'adeli', 'siret', 'tagline', 'accessInfo', 'practicingSince', 'languages', 'wheelchairAccessible', 'paymentMethods', 'reimbursementInfo', 'publicTypes', 'isActive'] },
     { method: 'POST', pattern: /^praticiens\/me\/diplomas$/, auth: true, body: ['title', 'organization', 'year'] },
     { method: 'DELETE', pattern: /^praticiens\/me\/diplomas\/\d+$/, auth: true },
 
     // Espace praticien
     { method: 'GET', pattern: /^praticiens\/me\/appointments$/, auth: true, query: ['from', 'to', 'status'] },
+    { method: 'GET', pattern: /^praticiens\/me\/stats$/, auth: true, query: ['from', 'to'], own: true },
+    // Abonnement d'agenda (le lien renvoyé est lu par l'application d'agenda, pas par le site)
+    { method: 'POST', pattern: /^praticiens\/me\/calendar-token$/, auth: true, own: true },
+    { method: 'DELETE', pattern: /^praticiens\/me\/calendar-token$/, auth: true },
     { method: 'PATCH', pattern: /^praticiens\/me\/settings$/, auth: true, body: ['autoConfirm'] },
     { method: 'GET', pattern: /^praticiens\/me\/consultation-types$/, auth: true },
-    { method: 'POST', pattern: /^praticiens\/me\/consultation-types$/, auth: true, body: ['name', 'durationMin', 'price', 'mode'] },
-    { method: 'PATCH', pattern: /^praticiens\/me\/consultation-types\/\d+$/, auth: true, body: ['name', 'durationMin', 'price', 'mode'] },
+    { method: 'POST', pattern: /^praticiens\/me\/consultation-types$/, auth: true, body: ['name', 'durationMin', 'price', 'mode', 'kind'] },
+    { method: 'PATCH', pattern: /^praticiens\/me\/consultation-types\/\d+$/, auth: true, body: ['name', 'durationMin', 'price', 'mode', 'kind'] },
     { method: 'DELETE', pattern: /^praticiens\/me\/consultation-types\/\d+$/, auth: true },
     { method: 'GET', pattern: /^praticiens\/me\/availabilities$/, auth: true },
     { method: 'POST', pattern: /^praticiens\/me\/availabilities$/, auth: true, body: ['dayOfWeek', 'startTime', 'endTime'] },
@@ -68,6 +87,10 @@ const RULES: Rule[] = [
     { method: 'GET', pattern: /^praticiens\/me\/unavailabilities$/, auth: true },
     { method: 'POST', pattern: /^praticiens\/me\/unavailabilities$/, auth: true, body: ['startAt', 'endAt', 'reason'] },
     { method: 'DELETE', pattern: /^praticiens\/me\/unavailabilities\/\d+$/, auth: true },
+    // Administration (le backend réserve ces routes au rôle admin)
+    { method: 'GET', pattern: /^admin\/praticiens$/, auth: true, query: ['q', 'claimed', 'isVerified', 'limit', 'offset'], own: true },
+    { method: 'GET', pattern: /^admin\/claim-requests$/, auth: true, query: ['status'], own: true },
+    { method: 'PATCH', pattern: /^admin\/claim-requests\/\d+$/, auth: true, body: ['decision', 'reason'], own: true },
 ]
 
 const PRIVATE_FIELDS = ['mail', 'userId', 'rpps', 'siret', 'adeli', 'googlePlaceId', 'googlePlaceIdRefreshedAt']
@@ -84,6 +107,7 @@ function stripPrivate(data: any): any {
 }
 
 const SORTS = ['distance', 'price', 'nextAvailability']
+const MODES = ['cabinet', 'visio', 'domicile']
 const PUBLIC_TYPES = ['babies', 'children', 'teenagers', 'adults', 'seniors', 'pregnant_women', 'athletes']
 
 function validateListQuery(query?: Record<string, any>) {
@@ -93,6 +117,15 @@ function validateListQuery(query?: Record<string, any>) {
     if (query.offset !== undefined && !/^\d{1,6}$/.test(String(query.offset))) throw bad('Décalage invalide.')
     if (query.sort !== undefined && !SORTS.includes(String(query.sort))) throw bad('Tri invalide.')
     if (query.publicType !== undefined && !PUBLIC_TYPES.includes(String(query.publicType))) throw bad('Public invalide.')
+    if (query.mode !== undefined && !MODES.includes(String(query.mode))) throw bad('Mode invalide.')
+    if (query.availableWithinDays !== undefined && !(/^\d{1,2}$/.test(String(query.availableWithinDays)) && +query.availableWithinDays >= 1 && +query.availableWithinDays <= 30)) throw bad('Délai invalide.')
+    if (query.minRating !== undefined && !(/^[1-5]$/.test(String(query.minRating)))) throw bad('Note invalide.')
+    if (query.wheelchairAccessible !== undefined && String(query.wheelchairAccessible) !== 'true') throw bad('Filtre invalide.')
+    if (query.bbox !== undefined) {
+        const box = String(query.bbox).split(',').map(Number)
+        if (box.length !== 4 || !box.every(Number.isFinite) || Math.abs(box[0]) > 180 || Math.abs(box[2]) > 180 || Math.abs(box[1]) > 90 || Math.abs(box[3]) > 90) throw bad('Zone de carte invalide.')
+        if (query.radiusKm !== undefined) throw bad('La zone de carte est incompatible avec le rayon.')
+    }
     for (const flag of ['claimed', 'bookable']) {
         if (query[flag] !== undefined && !['true', 'false'].includes(String(query[flag]))) throw bad('Filtre invalide.')
     }
@@ -108,7 +141,7 @@ function validateListQuery(query?: Record<string, any>) {
 const PAYMENT_METHODS = ['card', 'cash', 'check', 'transfer']
 const SOCIAL_KEYS = ['facebook', 'instagram', 'linkedin', 'youtube', 'tiktok']
 const TEXT_LIMITS: Record<string, number> = {
-    firstName: 80, lastName: 80, bio: 2000, address: 200, addressComplement: 200, postalCode: 5, city: 100,
+    firstName: 80, lastName: 80, bio: 2000, tagline: 160, accessInfo: 300, address: 200, addressComplement: 200, postalCode: 5, city: 100,
     phoneNumber: 20, website: 200, rpps: 11, adeli: 9, siret: 14, reimbursementInfo: 500,
 }
 
@@ -196,6 +229,60 @@ function validateDiploma(body: Record<string, any>) {
     return out
 }
 
+const BUDGETS = ['lt50', '50_70', 'gt70']
+const nullableNumber = (v: unknown, min: number, max: number) => v === null || (typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max)
+
+/** Préférences du patient : aucune donnée de santé, valeurs bornées. */
+function validatePreferences(body: Record<string, any>) {
+    const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
+    const out: Record<string, any> = {}
+    for (const [key, value] of Object.entries(body)) {
+        if (key === 'city') {
+            if (value !== null && (typeof value !== 'string' || value.length > 100)) throw bad('Ville invalide.')
+        } else if (key === 'latitude') {
+            if (!nullableNumber(value, -90, 90)) throw bad('Latitude invalide.')
+        } else if (key === 'longitude') {
+            if (!nullableNumber(value, -180, 180)) throw bad('Longitude invalide.')
+        } else if (key === 'radiusKm') {
+            if (value !== null && ![5, 10, 20].includes(value as number)) throw bad('Rayon invalide.')
+        } else if (key === 'budgetBand') {
+            if (value !== null && !BUDGETS.includes(value as string)) throw bad('Budget invalide.')
+        } else if (key === 'modes') {
+            if (value !== null && (!Array.isArray(value) || !value.every(v => MODES.includes(v)))) throw bad('Modes invalides.')
+        }
+        out[key] = value
+    }
+    return out
+}
+
+function validateNotificationPrefs(body: Record<string, any>) {
+    for (const value of Object.values(body)) {
+        if (typeof value !== 'boolean') throw createError({ statusCode: 400, statusMessage: 'Préférence invalide.' })
+    }
+    return body
+}
+
+function validatePushSubscription(body: Record<string, any>) {
+    const bad = createError({ statusCode: 400, statusMessage: 'Abonnement invalide.' })
+    const { endpoint, keys } = body
+    if (typeof endpoint !== 'string' || endpoint.length > 1000 || !/^https:\/\/\S+$/.test(endpoint)) throw bad
+    if (keys === undefined) return { endpoint }
+    if (!keys || typeof keys.p256dh !== 'string' || typeof keys.auth !== 'string' || keys.p256dh.length > 200 || keys.auth.length > 100) throw bad
+    return { endpoint, keys: { p256dh: keys.p256dh, auth: keys.auth } }
+}
+
+function validateProposal(body: Record<string, any>) {
+    if (typeof body.startAt !== 'string' || Number.isNaN(Date.parse(body.startAt))) throw createError({ statusCode: 400, statusMessage: 'Créneau invalide.' })
+    return { startAt: body.startAt }
+}
+
+function validateDecision(body: Record<string, any>) {
+    const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
+    if (!['approved', 'rejected'].includes(body.decision)) throw bad('Décision invalide.')
+    if (body.reason !== undefined && (typeof body.reason !== 'string' || body.reason.length > 500)) throw bad('Motif invalide.')
+    return body
+}
+
 function pickKeepEmpty(source: Record<string, any>, keys: string[]) {
     const out: Record<string, any> = {}
     for (const key of keys) if (source?.[key] !== undefined) out[key] = source[key]
@@ -244,6 +331,11 @@ export default defineEventHandler(async (event) => {
         if (path === 'appointments') body = validateAppointment(body)
         if (method === 'PUT' && /^praticiens\/\d+$/.test(path)) body = validatePraticienUpdate(body)
         if (path === 'praticiens/me/diplomas') body = validateDiploma(body)
+        if (method === 'PUT' && path === 'users/me/preferences') body = validatePreferences(body)
+        if (method === 'PATCH' && path === 'users/me/notification-preferences') body = validateNotificationPrefs(body)
+        if (path === 'push/subscriptions') body = validatePushSubscription(body)
+        if (/^appointments\/\d+\/proposal$/.test(path)) body = validateProposal(body)
+        if (/^admin\/claim-requests\/\d+$/.test(path)) body = validateDecision(body)
         if (method === 'PATCH' && path === 'users/me') body = validateProfileUpdate(body)
         if (method === 'DELETE' && path === 'users/me') {
             if (typeof body.password !== 'string' || !body.password || body.password.length > 200) {

@@ -32,6 +32,25 @@
           >
             Réservable en ligne
           </button>
+          <label class="relative inline-flex items-center gap-2 rounded-full pl-4 pr-3 py-[9px] cursor-pointer focus-ring-within transition-colors" :class="mode ? 'bg-vert-600 text-white' : 'bg-white text-vert-900 hover:bg-white/70'">
+            <span>{{ mode ? modeLabels[mode] : 'Type de séance' }}</span>
+            <ChevronDown :size="14" aria-hidden="true" />
+            <select :value="mode" aria-label="Type de séance" class="absolute inset-0 w-full opacity-0 cursor-pointer" @change="emit('update:mode', $event.target.value)">
+              <option value="">Tous types</option>
+              <option v-for="(label, key) in modeLabels" :key="key" :value="key">{{ label }}</option>
+            </select>
+          </label>
+          <button
+            v-for="f in toggles"
+            :key="f.event"
+            type="button"
+            class="rounded-full px-4 py-[9px] transition-colors"
+            :class="f.on ? 'bg-vert-600 text-white' : 'bg-white text-vert-900 hover:bg-white/70'"
+            :aria-pressed="f.on ? 'true' : 'false'"
+            @click="emit(f.event, !f.on)"
+          >
+            {{ f.label }}
+          </button>
         </div>
 
         <label class="relative inline-flex items-center gap-2 bg-white text-vert-900 rounded-full pl-3 pr-4 py-[9px] cursor-pointer focus-ring-within">
@@ -57,7 +76,7 @@
 
       <p v-else-if="!praticiens.length && !loading" class="mt-8 bg-white text-vert-900 rounded-[28px] p-6 text-[18px]">
         <template v-if="geo">Aucun praticien dans un rayon de {{ radius }} km autour de vous. Élargissez le rayon, ou retirez « Autour de moi » pour voir tous les praticiens.</template>
-        <template v-else-if="q || specialityName || onlyBookable">Aucun praticien ne correspond à cette recherche. Essayez une autre ville, un autre code postal ou une autre spécialité.</template>
+        <template v-else-if="q || specialityName || onlyBookable || mode || soon || rated || accessible">Aucun praticien ne correspond à cette recherche. Essayez une autre ville, un autre code postal ou une autre spécialité.</template>
         <template v-else>Les premiers praticiens arrivent bientôt.</template>
       </p>
 
@@ -99,11 +118,22 @@ const props = defineProps({
   loading: { type: Boolean, default: false },
   sort: { type: String, default: 'pertinence' },
   onlyBookable: { type: Boolean, default: false },
+  mode: { type: String, default: '' },
+  soon: { type: Boolean, default: false },
+  rated: { type: Boolean, default: false },
+  accessible: { type: Boolean, default: false },
   geo: { type: Object, default: null },
   geoError: { type: String, default: '' },
   radius: { type: Number, default: 30 },
 })
-const emit = defineEmits(['update:sort', 'update:onlyBookable', 'update:radius', 'locate', 'unlocate'])
+const emit = defineEmits(['update:sort', 'update:onlyBookable', 'update:mode', 'update:soon', 'update:rated', 'update:accessible', 'update:radius', 'locate', 'unlocate'])
+
+const modeLabels = { cabinet: 'Au cabinet', visio: 'En visio', domicile: 'À domicile' }
+const toggles = computed(() => [
+  { event: 'update:soon', label: 'Disponible sous 7 jours', on: props.soon },
+  { event: 'update:rated', label: 'Note 4 et plus', on: props.rated },
+  { event: 'update:accessible', label: 'Accès mobilité réduite', on: props.accessible },
+])
 
 const route = useRoute()
 

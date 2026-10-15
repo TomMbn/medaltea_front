@@ -39,12 +39,14 @@
     <p v-if="saved" class="text-[16px] text-emerald-700 mt-3" role="status">Réglage enregistré.</p>
     <p v-if="error" class="text-[16px] text-red-700 mt-3" role="alert">{{ error }}</p>
 
-    <NotificationSettings class="mt-10" />
+    <NotificationSettings v-if="!demoActive" class="mt-10" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+
+const { active: demoActive } = useDemo()
 
 const auto = ref(null)
 const saving = ref(false)

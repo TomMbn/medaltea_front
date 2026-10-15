@@ -29,6 +29,7 @@
               Créer mon profil gratuitement
               <span class="w-10 h-10 rounded-full bg-corail-500 text-vert-900 flex items-center justify-center"><ArrowUpRight :size="18" aria-hidden="true" /></span>
             </NuxtLink>
+            <NuxtLink to="/demo" class="inline-flex items-center min-h-[48px] px-5 rounded-full border-[1.5px] border-vert-900 text-vert-900 text-[16px] font-medium hover:bg-white transition-colors">Essayer la démo</NuxtLink>
             <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro' } }" class="inline-flex items-center min-h-[48px] px-5 rounded-full text-vert-900 text-[16px] font-medium hover:text-vert-600 transition-colors">Se connecter</NuxtLink>
           </div>
           <ul class="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-[16px] font-medium text-vert-600">

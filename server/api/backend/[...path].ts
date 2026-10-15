@@ -4,6 +4,8 @@
  * - le token (cookie httpOnly) est ajouté en Bearer côté serveur pour les routes protégées ;
  * - champs privés (email, userId, identifiants professionnels) retirés des fiches publiques.
  */
+import { demoPublic } from '../../../app/utils/demoData'
+
 type Rule = {
     method: string
     pattern: RegExp
@@ -353,6 +355,12 @@ export default defineEventHandler(async (event) => {
 
     const rule = RULES.find(r => r.method === method && r.pattern.test(path))
     if (!rule) throw createError({ statusCode: 404, statusMessage: 'Route introuvable.' })
+
+    // Fiche de démonstration (aperçu de l'espace praticien d'essai) : données fictives servies sans appeler le backend
+    if (method === 'GET' && path.startsWith('praticiens/')) {
+        const demo = demoPublic(path.slice('praticiens/'.length), getQuery(event))
+        if (demo !== undefined) return demo
+    }
 
     const headers: Record<string, string> = {}
     if (rule.auth) {

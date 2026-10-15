@@ -6,14 +6,18 @@ export const useSession = () => {
   const roleCookie = useCookie<'pro' | 'patient' | null>('leya_role')
   const praticienCookie = useCookie<string | null>('leya_praticien')
 
-  const isLoggedIn = computed(() => !!flag.value)
-  const role = computed<'pro' | 'patient' | null>(() => (isLoggedIn.value ? roleCookie.value || null : null))
+  // Démonstration : un espace praticien d'essai, sans compte (le vrai cookie de session n'est pas touché)
+  const demo = useCookie<string | null>('leya_demo')
+  const inDemo = computed(() => demo.value === '1')
+
+  const isLoggedIn = computed(() => inDemo.value || !!flag.value)
+  const role = computed<'pro' | 'patient' | null>(() => (inDemo.value ? 'pro' : isLoggedIn.value ? roleCookie.value || null : null))
   const isPro = computed(() => role.value === 'pro')
-  const praticienId = computed<number | null>(() => (isPro.value && Number(praticienCookie.value) > 0 ? Number(praticienCookie.value) : null))
+  const praticienId = computed<number | null>(() => (inDemo.value ? DEMO_ID : isPro.value && Number(praticienCookie.value) > 0 ? Number(praticienCookie.value) : null))
 
   /** Pour les sessions ouvertes avant l'introduction du rôle : le demande au serveur. */
   async function syncRole() {
-    if (!isLoggedIn.value || roleCookie.value) return role.value
+    if (inDemo.value || !isLoggedIn.value || roleCookie.value) return role.value
     try {
       await $fetch('/api/session')
     } finally {
@@ -32,6 +36,7 @@ export const useSession = () => {
   }
 
   async function logout() {
+    if (inDemo.value) { forgetDemo(); demo.value = null; return }
     try {
       // Appareil partagé : le compte suivant ne doit pas recevoir les notifications de celui-ci
       await disablePush()

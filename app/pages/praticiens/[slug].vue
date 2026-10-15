@@ -460,7 +460,7 @@ const contactLinks = computed(() => [
 
 // Indexation : uniquement les fiches revendiquées et suffisamment renseignées (voir shared/utils/praticien.ts).
 // Les autres restent en noindex : fiches nominatives non revendiquées ou pages trop pauvres.
-const indexable = computed(() => isIndexablePraticien(praticien.value))
+const indexable = computed(() => praticien.value?.id !== DEMO_ID && isIndexablePraticien(praticien.value))
 const canonicalUrl = computed(() => `https://leya-sante.fr/praticiens/${praticien.value.slug ?? id}`)
 
 useHead(() => ({

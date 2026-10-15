@@ -119,7 +119,7 @@ h6,
   Les cases à cocher gardent leur taille mais sont étendues par leur étiquette.
 */
 @media (pointer: coarse) {
-  button:not(.chip),
+  button:not(.chip):not(.switch),
   select,
   summary,
   input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='hidden']) {

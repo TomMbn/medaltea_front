@@ -381,8 +381,17 @@ export default defineEventHandler(async (event) => {
     if (query?.specialityId !== undefined && !/^\d+$/.test(String(query.specialityId))) {
         throw createError({ statusCode: 400, statusMessage: 'Spécialité invalide.' })
     }
-    if (query?.city !== undefined) query.city = String(query.city).slice(0, 100)
-    if (query?.q !== undefined) query.q = String(query.q).slice(0, 100)
+    // Recherche tolérante : la ponctuation saisie à la main ne doit pas faire échouer la recherche
+    // (« Angers, », « Angers (49000) », « Angers. »). La casse et les accents sont déjà ignorés par l'API.
+    const looseText = (v: unknown) => String(v)
+        .replace(/[()\[\]{}.,;:!?"“”«»]+/g, ' ')
+        .replace(/(^|\s)[-–—'’]+|[-–—'’]+(?=\s|$)/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 100)
+    if (query?.city !== undefined) query.city = looseText(query.city)
+    if (query?.q !== undefined) query.q = looseText(query.q)
+    if (query && (query.q === '' || query.city === '')) { if (query.q === '') delete query.q; if (query.city === '') delete query.city }
     if (query?.language !== undefined) query.language = String(query.language).slice(0, 10)
     validateListQuery(query)
 

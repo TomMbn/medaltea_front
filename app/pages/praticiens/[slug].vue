@@ -55,7 +55,7 @@
               </p>
               <p class="mt-4 flex items-center gap-2 text-[17px] lg:text-[20px] text-white leading-[normal]">
                 <MapPin :size="18" class="shrink-0" aria-hidden="true" />
-                <span>{{ praticien.city }}<template v-if="modesLabel"> · {{ modesLabel }}</template></span>
+                <span>{{ [praticien.city, modesLabel].filter(Boolean).join(' · ') }}</span>
               </p>
             </div>
           </header>
@@ -169,7 +169,7 @@
       </section>
 
       <!-- Venir au cabinet -->
-      <section class="mt-16 lg:mt-[120px]" aria-labelledby="where-title">
+      <section v-if="praticien.address && praticien.city" class="mt-16 lg:mt-[120px]" aria-labelledby="where-title">
         <p class="text-[14px] font-medium uppercase tracking-[0.08em] text-vert-600 mb-3 leading-[normal]">Infos pratiques</p>
         <h2 id="where-title" class="font-unbounded font-normal text-[28px] lg:text-[40px] leading-[1.2] lg:leading-none text-vert-900">Venir au cabinet</h2>
 
@@ -450,7 +450,7 @@ function jsonLd() {
     '@id': `${canonicalUrl.value}#praticien`,
     name: fullName.value,
     url: canonicalUrl.value,
-    address: { '@type': 'PostalAddress', streetAddress: p.address, postalCode: formatPostalCode(p.postalCode), addressLocality: p.city, addressCountry: 'FR' },
+    ...(p.address && p.city ? { address: { '@type': 'PostalAddress', streetAddress: p.address, postalCode: formatPostalCode(p.postalCode), addressLocality: p.city, addressCountry: 'FR' } } : {}),
     ...(p.phoneNumber ? { telephone: p.phoneNumber } : {}),
     ...(([safeWebsite.value, ...socialLinks.value.map(l => l.href)].filter(Boolean)).length ? { sameAs: [safeWebsite.value, ...socialLinks.value.map(l => l.href)].filter(Boolean) } : {}),
     ...(Array.isArray(p.paymentMethods) && p.paymentMethods.length ? { paymentAccepted: p.paymentMethods.map(m => PAYMENTS[m]).filter(Boolean).join(', ') } : {}),
@@ -477,10 +477,10 @@ function jsonLd() {
 }
 
 useSeoMeta({
-  title: () => bookable.value ? `${fullName.value} — Prendre rendez-vous | Léya` : `${fullName.value} — ${praticien.value.city} | Léya`,
+  title: () => bookable.value ? `${fullName.value} — Prendre rendez-vous | Léya` : `${fullName.value}${praticien.value.city ? ` — ${praticien.value.city}` : ''} | Léya`,
   description: () => bookable.value
-    ? `Prenez rendez-vous en ligne avec ${fullName.value} à ${praticien.value.city}.`
-    : `Fiche de ${fullName.value}, ${praticien.value.city}.`,
+    ? `Prenez rendez-vous en ligne avec ${fullName.value}${praticien.value.city ? ` à ${praticien.value.city}` : ''}.`
+    : `Fiche de ${fullName.value}${praticien.value.city ? `, ${praticien.value.city}` : ''}.`,
   robots: () => indexable.value ? 'index, follow' : 'noindex, nofollow',
 })
 </script>

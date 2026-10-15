@@ -30,7 +30,7 @@
         </ul>
 
         <p class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[16px] text-neutre-600">
-          <span class="inline-flex items-center gap-1.5 min-w-0"><MapPin :size="14" class="shrink-0" aria-hidden="true" /> <span class="truncate">{{ place }}</span></span>
+          <span v-if="place" class="inline-flex items-center gap-1.5 min-w-0"><MapPin :size="14" class="shrink-0" aria-hidden="true" /> <span class="truncate">{{ place }}</span></span>
           <span v-if="rating" class="inline-flex items-center gap-1.5"><Star :size="14" aria-hidden="true" /> {{ rating }}<template v-if="praticien.reviewCount"> ({{ praticien.reviewCount }})</template></span>
           <span v-if="praticien.isVerified" class="inline-flex items-center gap-1.5"><Check :size="14" aria-hidden="true" /> Profil vérifié</span>
         </p>

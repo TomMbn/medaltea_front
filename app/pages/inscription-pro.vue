@@ -1,15 +1,12 @@
 <template>
-  <div class="bg-[#e0ecf2] min-h-screen overflow-x-hidden">
-    <div class="w-11/12 max-w-[680px] mx-auto pt-32 pb-8 text-[#012828]">
-      <NuxtLink to="/praticiens-pro" class="inline-block text-sm text-[#156F71] hover:underline mb-1 py-3">← Espace praticien</NuxtLink>
-      <h1 class="font-unbounded font-bold text-2xl lg:text-3xl mb-2">Rejoindre Léya en tant que praticien</h1>
-      <p class="text-[#012828]/70 font-sans mb-8">
-        Déjà inscrit ?
-        <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro/rendez-vous' } }" class="underline text-[#156F71]">Se connecter</NuxtLink>
-      </p>
+  <div class="min-h-screen min-h-[100svh] bg-bleu-50 text-vert-900 lg:flex lg:gap-10 xl:gap-20 lg:p-10">
+    <!-- Panneau praticien -->
+    <div class="hidden lg:block lg:w-[42vw] xl:w-[36vw] max-w-[620px] shrink-0 lg:sticky lg:top-10 lg:h-[calc(100svh-80px)]">
+      <ProSignupPanel />
+    </div>
 
+    <div class="flex-1 min-w-0">
       <ProSignupWizard />
-
     </div>
   </div>
 </template>
@@ -21,7 +18,3 @@ useSeoMeta({
 })
 useWebPageSchema({ name: "Devenir praticien", description: 'Créez votre fiche praticien sur Léya en 2 minutes et ouvrez la prise de rendez-vous en ligne pour vos patients.', breadcrumbs: [{ name: "Devenir praticien", path: '/inscription-pro' }] })
 </script>
-
-<style scoped>
-.font-unbounded { font-family: 'Unbounded', cursive; }
-</style>

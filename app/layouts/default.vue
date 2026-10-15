@@ -35,7 +35,7 @@ import { computed } from 'vue'
 
 const route = useRoute()
 
-const isAuthPage = computed(() => ['/register', '/login'].includes(route.path))
+const isAuthPage = computed(() => ['/register', '/login', '/inscription-pro'].includes(route.path))
 const isChatPage = computed(() => route.path === '/chatbot')
 const isLandingPage = computed(() => route.path === '/')
 const { isPro } = useSession()

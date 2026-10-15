@@ -1,17 +1,17 @@
 <template>
   <div>
-    <h2 class="font-unbounded font-bold text-lg mb-2">Visibilité de ma fiche</h2>
-    <p v-if="loadError" class="text-sm text-gray-500">Impossible de lire l'état actuel de votre fiche pour le moment.</p>
+    <h2 class="font-unbounded font-normal text-[20px] mb-2">Visibilité de ma fiche</h2>
+    <p v-if="loadError" class="text-[16px] text-neutre-600">Impossible de lire l'état actuel de votre fiche pour le moment.</p>
     <template v-else-if="fiche">
-      <p class="text-sm text-gray-600 mb-4">
+      <p class="text-[16px] text-neutre-600 mb-4">
         <template v-if="active">Votre fiche est visible dans l'annuaire et vos patients peuvent réserver.</template>
         <template v-else>Votre fiche est masquée : elle n'apparaît plus dans l'annuaire et la réservation est impossible. Vos rendez-vous existants ne sont pas modifiés.</template>
       </p>
-      <button type="button" class="border text-sm font-bold px-5 py-2.5 rounded-[12px] transition-colors disabled:opacity-50" :class="active ? 'border-red-700 text-red-800 hover:bg-red-50' : 'border-[#012828] hover:bg-[#012828] hover:text-white'" :disabled="busy" @click="toggle">
+      <button type="button" class="border text-[16px] font-semibold px-6 min-h-[44px] rounded-full transition-colors disabled:opacity-50" :class="active ? 'border-red-700 text-red-800 hover:bg-red-50' : 'border-vert-900 hover:bg-vert-900 hover:text-white'" :disabled="busy" @click="toggle">
         {{ active ? 'Masquer ma fiche' : 'Rendre ma fiche visible' }}
       </button>
-      <p v-if="message" class="text-sm text-emerald-700 mt-3" role="status">{{ message }}</p>
-      <p v-if="error" class="text-sm text-red-700 mt-3" role="alert">{{ error }}</p>
+      <p v-if="message" class="text-[16px] text-emerald-700 mt-3" role="status">{{ message }}</p>
+      <p v-if="error" class="text-[16px] text-red-700 mt-3" role="alert">{{ error }}</p>
     </template>
   </div>
 </template>

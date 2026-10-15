@@ -1,16 +1,16 @@
 <template>
-  <section v-if="requests.length" class="bg-white rounded-[20px] shadow-sm p-5 sm:p-6 mb-6" aria-labelledby="claims-title">
-    <h2 id="claims-title" class="font-unbounded font-bold text-base mb-3">Mes demandes de revendication</h2>
+  <section v-if="requests.length" class="bg-white rounded-[28px] p-5 sm:p-6 mb-6" aria-labelledby="claims-title">
+    <h2 id="claims-title" class="font-unbounded font-normal text-[20px] mb-3">Mes demandes de revendication</h2>
     <ul class="grid gap-2">
-      <li v-for="r in requests" :key="r.id" class="rounded-xl border border-gray-200 px-4 py-3 text-sm">
+      <li v-for="r in requests" :key="r.id" class="rounded-[16px] border border-bleu-100 px-4 py-3 text-[16px]">
         <p class="font-semibold">
           {{ r.praticien?.firstName }} {{ r.praticien?.lastName }}<template v-if="r.praticien?.city"> — {{ r.praticien.city }}</template>
         </p>
         <p class="mt-1">
-          <span class="inline-block text-xs font-semibold rounded-full px-2.5 py-1" :class="STATUS[r.status]?.class ?? 'bg-gray-100'">{{ STATUS[r.status]?.label ?? r.status }}</span>
-          <span v-if="r.createdAt" class="text-xs text-[#012828]/60 ml-2">Envoyée le {{ formatDate(r.createdAt) }}</span>
+          <span class="inline-block text-[14px] font-semibold rounded-full px-2.5 py-1" :class="STATUS[r.status]?.class ?? 'bg-bleu-50'">{{ STATUS[r.status]?.label ?? r.status }}</span>
+          <span v-if="r.createdAt" class="text-[14px] text-neutre-600 ml-2">Envoyée le {{ formatDate(r.createdAt) }}</span>
         </p>
-        <p v-if="r.status === 'rejected' && r.decisionReason" class="text-xs text-[#012828]/70 mt-2">Motif : {{ r.decisionReason }}</p>
+        <p v-if="r.status === 'rejected' && r.decisionReason" class="text-[14px] text-neutre-600 mt-2">Motif : {{ r.decisionReason }}</p>
       </li>
     </ul>
   </section>

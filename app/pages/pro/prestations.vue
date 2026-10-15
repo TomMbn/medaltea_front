@@ -1,7 +1,7 @@
 <template>
   <div>
     <ProPageHead title="Prestations" subtitle="Les types de consultation que vous proposez." class="mb-1" />
-    <div class="bg-white rounded-[20px] shadow-sm p-5 sm:p-8">
+    <div class="bg-white rounded-[28px] p-5 sm:p-8">
       <ProServices />
     </div>
   </div>

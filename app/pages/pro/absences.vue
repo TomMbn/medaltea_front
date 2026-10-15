@@ -1,7 +1,7 @@
 <template>
   <div>
     <ProPageHead title="Absences" subtitle="Congés, formation… Aucun créneau n’est proposé pendant une absence." class="mb-1" />
-    <div class="bg-white rounded-[20px] shadow-sm p-5 sm:p-8">
+    <div class="bg-white rounded-[28px] p-5 sm:p-8">
       <ProAbsences />
     </div>
   </div>

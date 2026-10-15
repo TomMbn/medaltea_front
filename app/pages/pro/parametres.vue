@@ -1,16 +1,16 @@
 <template>
   <div>
     <ProPageHead title="Paramètres" subtitle="Réglages de votre compte praticien." class="mb-1" />
-    <div class="bg-white rounded-[20px] shadow-sm p-5 sm:p-8">
+    <div class="bg-white rounded-[28px] p-5 sm:p-8">
       <ProSettings />
     </div>
-    <div class="bg-white rounded-[20px] shadow-sm p-5 sm:p-8 mt-6">
+    <div class="bg-white rounded-[28px] p-5 sm:p-8 mt-6">
       <ProVisibility />
     </div>
-    <div class="bg-white rounded-[20px] shadow-sm p-5 sm:p-8 mt-6">
-      <h2 class="font-unbounded font-bold text-lg mb-2">Mon compte et mes données</h2>
-      <p class="text-sm text-gray-600 mb-4">Modifier mes informations, télécharger mes données ou supprimer mon compte.</p>
-      <NuxtLink to="/mon-compte" class="inline-block border border-[#012828] text-sm font-bold px-5 py-2.5 rounded-[12px] hover:bg-[#012828] hover:text-white transition-colors">Gérer mon compte</NuxtLink>
+    <div class="bg-white rounded-[28px] p-5 sm:p-8 mt-6">
+      <h2 class="font-unbounded font-normal text-[20px] mb-2">Mon compte et mes données</h2>
+      <p class="text-[16px] text-neutre-600 mb-4">Modifier mes informations, télécharger mes données ou supprimer mon compte.</p>
+      <NuxtLink to="/mon-compte" class="inline-flex items-center border border-vert-900 text-[16px] font-semibold px-6 min-h-[44px] rounded-full hover:bg-vert-900 hover:text-white transition-colors">Gérer mon compte</NuxtLink>
     </div>
   </div>
 </template>

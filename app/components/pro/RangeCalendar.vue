@@ -1,12 +1,12 @@
 <template>
   <div class="select-none" role="group" :aria-label="`Calendrier, ${monthLabel(cursor.y, cursor.m)}`">
     <div class="flex items-center justify-between mb-3">
-      <button type="button" class="w-9 h-9 rounded-full hover:bg-gray-100 disabled:opacity-30" :disabled="!canPrev" aria-label="Mois précédent" @click="shift(-1)">‹</button>
-      <p class="font-semibold capitalize text-sm" aria-live="polite">{{ monthLabel(cursor.y, cursor.m) }}</p>
-      <button type="button" class="w-9 h-9 rounded-full hover:bg-gray-100" aria-label="Mois suivant" @click="shift(1)">›</button>
+      <button type="button" class="w-9 h-9 rounded-full hover:bg-bleu-50 disabled:opacity-30" :disabled="!canPrev" aria-label="Mois précédent" @click="shift(-1)">‹</button>
+      <p class="font-semibold capitalize text-[16px]" aria-live="polite">{{ monthLabel(cursor.y, cursor.m) }}</p>
+      <button type="button" class="w-9 h-9 rounded-full hover:bg-bleu-50" aria-label="Mois suivant" @click="shift(1)">›</button>
     </div>
 
-    <div class="grid grid-cols-7 text-center text-xs font-semibold text-gray-400 mb-1" aria-hidden="true">
+    <div class="grid grid-cols-7 text-center text-[14px] font-semibold text-neutre-500 mb-1" aria-hidden="true">
       <span v-for="d in DAYS" :key="d.n">{{ d.short }}</span>
     </div>
 
@@ -16,7 +16,7 @@
         v-for="c in cells"
         :key="c.key"
         type="button"
-        class="relative h-10 text-sm transition-colors"
+        class="relative h-10 text-[16px] transition-colors"
         :class="cellClass(c)"
         :disabled="c.past"
         :aria-label="cellLabel(c)"
@@ -31,10 +31,10 @@
       </button>
     </div>
 
-    <ul class="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-gray-500">
-      <li class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-[#156F71]" aria-hidden="true" /> Sélection</li>
+    <ul class="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-[14px] text-neutre-600">
+      <li class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-vert-600" aria-hidden="true" /> Sélection</li>
       <li class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500" aria-hidden="true" /> Absence déjà prévue</li>
-      <li class="flex items-center gap-1.5"><span class="text-gray-300" aria-hidden="true">12</span> Jour fermé</li>
+      <li class="flex items-center gap-1.5"><span class="text-neutre-200" aria-hidden="true">12</span> Jour fermé</li>
     </ul>
   </div>
 </template>
@@ -88,11 +88,11 @@ function pick(key) {
 }
 
 function cellClass(c) {
-  if (c.key === props.start || c.key === props.end) return 'bg-[#156F71] text-white font-bold rounded-lg'
-  if (inRange(c.key)) return 'bg-[#e0ecf2] text-[#012828]'
-  if (c.past) return 'text-gray-300 cursor-not-allowed'
-  if (c.closed) return 'text-gray-300 hover:bg-gray-100 rounded-lg'
-  return 'hover:bg-gray-100 rounded-lg' + (c.today ? ' ring-1 ring-[#156F71]' : '')
+  if (c.key === props.start || c.key === props.end) return 'bg-vert-600 text-white font-bold rounded-lg'
+  if (inRange(c.key)) return 'bg-bleu-50 text-vert-900'
+  if (c.past) return 'text-neutre-200 cursor-not-allowed'
+  if (c.closed) return 'text-neutre-200 hover:bg-bleu-50 rounded-lg'
+  return 'hover:bg-bleu-50 rounded-lg' + (c.today ? ' ring-1 ring-vert-600' : '')
 }
 function cellLabel(c) {
   const parts = [formatDay(c.key, true)]

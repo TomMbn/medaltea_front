@@ -1,7 +1,7 @@
 <template>
   <div>
     <ProPageHead title="Horaires" subtitle="Votre semaine type : les créneaux proposés aux patients en découlent. Pour un congé ponctuel, utilisez la page Absences." class="mb-1" />
-    <div class="bg-white rounded-[20px] shadow-sm p-5 sm:p-8">
+    <div class="bg-white rounded-[28px] p-5 sm:p-8">
       <ProWeeklyHours />
     </div>
   </div>

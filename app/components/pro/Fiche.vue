@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p v-if="loadError" class="text-sm text-red-700 bg-red-50 rounded-xl p-3" role="alert">
+    <p v-if="loadError" class="text-[16px] text-red-700 bg-red-50 rounded-[16px] p-3" role="alert">
       Impossible de charger votre fiche pour le moment. Réessayez dans un instant.
     </p>
-    <p v-else-if="!form" class="text-sm text-gray-500" role="status">Chargement de votre fiche…</p>
+    <p v-else-if="!form" class="text-[16px] text-neutre-600" role="status">Chargement de votre fiche…</p>
 
     <template v-else>
-      <p v-if="unlocated" class="text-sm bg-amber-50 border border-amber-300 text-amber-900 rounded-xl px-4 py-3 mb-5" role="status">
+      <p v-if="unlocated" class="text-[16px] bg-amber-50 border border-amber-300 text-amber-900 rounded-[16px] px-4 py-3 mb-5" role="status">
         Votre adresse n'est pas localisée : votre fiche fonctionne normalement mais n'apparaît pas dans la recherche « autour de moi ».
         <button type="button" class="underline font-semibold" @click="toggle('cabinet', true)">Recherchez votre adresse</button> pour la localiser.
       </p>
@@ -156,14 +156,14 @@
           </button>
           <div v-show="open === 'formation'" id="panel-formation" class="px-5 pb-6 pt-1">
             <ul v-if="diplomas.length" class="grid gap-2 mb-5">
-              <li v-for="d in diplomas" :key="d.id" class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 px-4 py-3">
-                <span class="text-sm">
+              <li v-for="d in diplomas" :key="d.id" class="flex flex-wrap items-center justify-between gap-3 rounded-[16px] border border-bleu-100 px-4 py-3">
+                <span class="text-[16px]">
                   <span class="font-semibold">{{ d.title }}</span><template v-if="d.organization"> — {{ d.organization }}</template><template v-if="d.year"> ({{ d.year }})</template>
                 </span>
-                <button type="button" class="text-xs px-3 py-1.5 rounded-[10px] border border-gray-300 hover:bg-gray-50 disabled:opacity-50" :disabled="diplomaBusy" :aria-label="`Supprimer le diplôme ${d.title}`" @click="removeDiploma(d)">Supprimer</button>
+                <button type="button" class="text-[14px] px-4 min-h-[40px] rounded-full border border-neutre-300 hover:bg-bleu-50 disabled:opacity-50" :disabled="diplomaBusy" :aria-label="`Supprimer le diplôme ${d.title}`" @click="removeDiploma(d)">Supprimer</button>
               </li>
             </ul>
-            <p v-else class="text-sm text-gray-500 mb-5">Aucun diplôme renseigné.</p>
+            <p v-else class="text-[16px] text-neutre-600 mb-5">Aucun diplôme renseigné.</p>
 
             <form class="grid gap-3 sm:grid-cols-6" novalidate @submit.prevent="addDiploma">
               <div class="sm:col-span-3">
@@ -179,8 +179,8 @@
                 <input id="d-year" v-model="diploma.year" inputmode="numeric" maxlength="4" class="field" />
               </div>
               <div class="sm:col-span-6 flex flex-wrap items-center gap-3">
-                <button type="submit" class="border border-[#012828] text-sm font-bold px-5 py-2 rounded-[12px] hover:bg-[#012828] hover:text-white transition-colors disabled:opacity-50" :disabled="diplomaBusy">Ajouter ce diplôme</button>
-                <p v-if="diplomaError" class="text-sm text-red-700" role="alert">{{ diplomaError }}</p>
+                <button type="submit" class="border border-vert-900 text-[16px] font-semibold px-6 min-h-[44px] rounded-full hover:bg-vert-900 hover:text-white transition-colors disabled:opacity-50" :disabled="diplomaBusy">Ajouter ce diplôme</button>
+                <p v-if="diplomaError" class="text-[16px] text-red-700" role="alert">{{ diplomaError }}</p>
               </div>
             </form>
 
@@ -220,7 +220,7 @@
             <div class="grid gap-4">
               <div>
                 <AddressSuggest id="f-search" v-model="addressSearch" label="Rechercher votre adresse" @select="pickAddress" />
-                <p v-if="form.located" class="text-xs text-emerald-700 mt-1">✓ Adresse localisée.</p>
+                <p v-if="form.located" class="text-[14px] text-emerald-700 mt-1">✓ Adresse localisée.</p>
                 <p v-else class="help">Choisissez une suggestion pour que votre fiche apparaisse dans la recherche « autour de moi ».</p>
               </div>
               <div>
@@ -246,9 +246,9 @@
               </div>
               <div>
                 <p class="label">Accessibilité</p>
-                <div class="flex flex-wrap gap-4 text-sm">
-                  <label class="inline-flex items-center gap-2 min-h-[44px]"><input v-model="form.wheelchair" type="radio" value="yes" class="accent-[#156F71]" /> Accessible aux personnes à mobilité réduite</label>
-                  <label class="inline-flex items-center gap-2 min-h-[44px]"><input v-model="form.wheelchair" type="radio" value="no" class="accent-[#156F71]" /> Non accessible</label>
+                <div class="flex flex-wrap gap-4 text-[16px]">
+                  <label class="inline-flex items-center gap-2 min-h-[44px]"><input v-model="form.wheelchair" type="radio" value="yes" class="accent-vert-600" /> Accessible aux personnes à mobilité réduite</label>
+                  <label class="inline-flex items-center gap-2 min-h-[44px]"><input v-model="form.wheelchair" type="radio" value="no" class="accent-vert-600" /> Non accessible</label>
                 </div>
               </div>
               <div class="grid gap-4 sm:grid-cols-2">
@@ -276,13 +276,13 @@
           <!-- Barre d'enregistrement -->
           <div class="sticky bottom-0 pb-2 pt-3 bg-gradient-to-t from-bleu-50 via-bleu-50 to-transparent">
             <div class="flex flex-wrap items-center gap-3 bg-white rounded-[16px] shadow-md px-4 py-3">
-              <button type="submit" form="fiche-form" class="bg-[#012828] text-white text-sm font-bold px-6 py-2.5 rounded-[12px] hover:bg-[#156F71] transition-colors disabled:opacity-50" :disabled="saving || !dirty">
+              <button type="submit" form="fiche-form" class="bg-vert-900 text-white text-[16px] font-semibold px-6 min-h-[44px] rounded-full hover:bg-vert-600 transition-colors disabled:opacity-50" :disabled="saving || !dirty">
                 {{ saving ? 'Enregistrement…' : 'Enregistrer' }}
               </button>
-              <p v-if="dirty && !saving" class="text-xs text-[#012828]/70">Modifications non enregistrées</p>
-              <p v-if="saved" class="text-sm text-emerald-700" role="status">Fiche enregistrée.</p>
-              <p v-if="saved && locateWarning" class="text-sm text-amber-800" role="status">{{ locateWarning }}</p>
-              <p v-if="errorMessage" class="text-sm text-red-700" role="alert">{{ errorMessage }}</p>
+              <p v-if="dirty && !saving" class="text-[14px] text-neutre-600">Modifications non enregistrées</p>
+              <p v-if="saved" class="text-[16px] text-emerald-700" role="status">Fiche enregistrée.</p>
+              <p v-if="saved && locateWarning" class="text-[16px] text-amber-800" role="status">{{ locateWarning }}</p>
+              <p v-if="errorMessage" class="text-[16px] text-red-700" role="alert">{{ errorMessage }}</p>
             </div>
           </div>
         </div>
@@ -533,13 +533,13 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', warnUnload))
 
 <style scoped>
 .font-unbounded { font-family: 'Unbounded', cursive; }
-.label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.25rem; }
+.label { display: block; font-size: 1rem; font-weight: 500; margin-bottom: 0.375rem; }
 .opt { font-weight: 400; color: rgb(1 40 40 / 0.6); }
-.field { width: 100%; border: 1px solid #d1d5db; border-radius: 12px; padding: 0.625rem 0.75rem; font-size: 0.875rem; background: #fff; }
+.field { width: 100%; border: 1px solid #c8c8c8; border-radius: 12px; padding: 0.75rem 1rem; min-height: 48px; font-size: 1rem; background: #fff; }
 .field[aria-invalid='true'] { border-color: #b91c1c; }
-.err { color: #b91c1c; font-size: 0.75rem; margin-top: 0.25rem; }
-.help { font-size: 0.75rem; color: rgb(1 40 40 / 0.7); margin-top: 0.375rem; }
-.chip { display: inline-flex; align-items: center; border: 1px solid #d1d5db; border-radius: 999px; padding: 0.4rem 0.9rem; font-size: 0.8125rem; font-weight: 500; cursor: pointer; background: #fff; }
+.err { color: #b91c1c; font-size: 0.875rem; margin-top: 0.25rem; }
+.help { font-size: 0.875rem; color: #626b6b; margin-top: 0.375rem; }
+.chip { display: inline-flex; align-items: center; min-height: 40px; border: 1px solid #c8c8c8; border-radius: 999px; padding: 0.4rem 1rem; font-size: 1rem; font-weight: 500; cursor: pointer; background: #fff; }
 .chip:focus-within { outline: 2px solid #156F71; outline-offset: 2px; }
 .chip-on { background: #012828; color: #fff; border-color: #012828; }
 </style>

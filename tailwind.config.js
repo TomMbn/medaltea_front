@@ -13,7 +13,7 @@ export default {
         corail: { 100: '#fcdedb', 500: '#ec7f7a', 700: '#b5534e' },
         bleu: { 50: '#eef5f8', 100: '#d7e7f0', 300: '#90bad1' },
         jaune: { 400: '#ffdb25' },
-        neutre: { 200: '#d9d9d9', 500: '#959595', 600: '#626b6b' },
+        neutre: { 200: '#d9d9d9', 300: '#c8c8c8', 500: '#959595', 600: '#626b6b' },
       },
       borderRadius: { 'leya-s': '10px', 'leya-m': '20px', 'leya-xl': '50px' },
       boxShadow: { douce: '0 12px 32px rgba(1, 40, 40, 0.08)' },

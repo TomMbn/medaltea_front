@@ -2,21 +2,21 @@
   <section id="photo" class="card scroll-mt-24" aria-labelledby="f-photo">
     <h2 id="f-photo" class="card-title">Photo de profil</h2>
     <div class="flex flex-wrap items-center gap-5">
-      <div class="w-24 h-24 shrink-0 rounded-full overflow-hidden bg-[#e0ecf2] flex items-center justify-center text-[#156F71] font-bold text-xl" :class="busy ? 'opacity-60' : ''">
+      <div class="w-24 h-24 shrink-0 rounded-full overflow-hidden bg-bleu-50 flex items-center justify-center text-vert-600 font-bold text-xl" :class="busy ? 'opacity-60' : ''">
         <img v-if="shown && !broken" :src="shown" alt="Votre photo de profil actuelle" width="96" height="96" class="w-full h-full object-cover" @error="broken = true" />
         <span v-else aria-hidden="true">{{ initials }}</span>
       </div>
       <div class="min-w-0 flex-1">
         <div class="flex flex-wrap items-center gap-3">
-          <label class="inline-flex items-center border border-[#012828] text-sm font-bold px-5 py-2 rounded-[12px] cursor-pointer hover:bg-[#012828] hover:text-white transition-colors focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#156F71]" :class="busy ? 'opacity-50 pointer-events-none' : ''">
+          <label class="inline-flex items-center border border-vert-900 text-[16px] font-semibold px-6 min-h-[44px] rounded-full cursor-pointer hover:bg-vert-900 hover:text-white transition-colors focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-vert-600" :class="busy ? 'opacity-50 pointer-events-none' : ''">
             <input ref="input" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" :disabled="!!busy" aria-describedby="photo-help" @change="onPick" />
             {{ photoUrl ? 'Remplacer la photo' : 'Ajouter une photo' }}
           </label>
-          <button v-if="photoUrl" type="button" class="text-sm px-4 py-2 rounded-[12px] border border-gray-300 hover:bg-gray-50 disabled:opacity-50" :disabled="!!busy" @click="remove">Supprimer</button>
+          <button v-if="photoUrl" type="button" class="text-[16px] px-5 min-h-[44px] rounded-full border border-neutre-300 hover:bg-bleu-50 disabled:opacity-50" :disabled="!!busy" @click="remove">Supprimer</button>
         </div>
         <p id="photo-help" class="help">JPEG, PNG ou WebP, 2 Mo maximum, au moins 400 × 400 pixels. Votre photo est recadrée en carré et ses métadonnées (lieu, appareil) sont retirées.</p>
         <p v-if="busy" class="help" role="status">{{ busy === 'upload' ? 'Envoi en cours…' : 'Suppression…' }}</p>
-        <p v-else-if="done" class="text-xs text-emerald-700 mt-1.5" role="status">{{ done }}</p>
+        <p v-else-if="done" class="text-[14px] text-emerald-700 mt-1.5" role="status">{{ done }}</p>
         <p v-if="error" class="err" role="alert">{{ error }}</p>
       </div>
     </div>

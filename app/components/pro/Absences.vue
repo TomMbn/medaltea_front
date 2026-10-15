@@ -2,47 +2,47 @@
   <div class="grid gap-10 lg:grid-cols-5">
     <!-- Nouvelle absence -->
     <section class="lg:col-span-3" aria-labelledby="new-absence-title">
-      <h2 id="new-absence-title" class="font-unbounded font-bold text-lg mb-4">Déclarer une absence</h2>
+      <h2 id="new-absence-title" class="font-unbounded font-normal text-[20px] mb-4">Déclarer une absence</h2>
 
       <div class="grid gap-6 sm:grid-cols-2">
         <ProRangeCalendar v-model:start="start" v-model:end="end" :marked="markedDays" :closed-weekdays="closedWeekdays" />
 
         <form class="grid gap-4 content-start" @submit.prevent="add">
           <div>
-            <p class="text-sm font-semibold mb-2">Motif</p>
+            <p class="text-[16px] font-semibold mb-2">Motif</p>
             <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="Motif de l'absence">
               <button v-for="r in ABSENCE_REASONS" :key="r" type="button" role="radio" :aria-checked="reason === r" class="chip" :class="reason === r ? 'chip-on' : ''" @click="reason = r">{{ r }}</button>
             </div>
             <input v-if="reason === 'Autre'" v-model="customReason" maxlength="60" class="field mt-2" placeholder="Précisez (facultatif)" aria-label="Précisez le motif" />
           </div>
 
-          <label class="flex items-center gap-2 text-sm cursor-pointer min-h-[44px]">
-            <input v-model="allDay" type="checkbox" class="accent-[#156F71]" />
+          <label class="flex items-center gap-2 text-[16px] cursor-pointer min-h-[44px]">
+            <input v-model="allDay" type="checkbox" class="accent-vert-600" />
             Journée entière
           </label>
-          <div v-if="!allDay" class="flex items-center gap-2 text-sm">
+          <div v-if="!allDay" class="flex items-center gap-2 text-[16px]">
             <input v-model="startTime" type="time" class="field" aria-label="Heure de début" /> <span aria-hidden="true">→</span> <input v-model="endTime" type="time" class="field" aria-label="Heure de fin" />
           </div>
 
-          <div class="rounded-xl bg-[#e0ecf2]/60 px-4 py-3 text-sm min-h-[3.25rem]" aria-live="polite">
+          <div class="rounded-[16px] bg-bleu-50 px-4 py-3 text-[16px] min-h-[3.25rem]" aria-live="polite">
             <template v-if="!start">Cliquez sur un jour du calendrier pour commencer.</template>
             <template v-else-if="!end">Du <strong>{{ formatDay(start) }}</strong>. Cliquez sur le dernier jour, ou validez pour une seule journée.</template>
             <template v-else><strong>{{ summary }}</strong></template>
           </div>
 
-          <div v-if="conflicts.length" class="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm" role="alert">
+          <div v-if="conflicts.length" class="rounded-[16px] border border-amber-300 bg-amber-50 px-4 py-3 text-[16px]" role="alert">
             <p class="font-semibold text-amber-900">
               {{ conflicts.length }} rendez-vous déjà prévu{{ conflicts.length > 1 ? 's' : '' }} sur cette période
             </p>
-            <ul class="mt-1 text-xs text-amber-900/80 list-disc pl-4">
+            <ul class="mt-1 text-[14px] text-amber-900/80 list-disc pl-4">
               <li v-for="a in conflicts.slice(0, 3)" :key="a.id">{{ formatLongDate(a.startAt) }} — {{ a.patientName || 'Patient' }}</li>
             </ul>
-            <p class="text-xs mt-2 text-amber-900/80">Ils ne sont pas annulés automatiquement : pensez à les <NuxtLink to="/pro/rendez-vous" class="underline">traiter</NuxtLink>.</p>
+            <p class="text-[14px] mt-2 text-amber-900/80">Ils ne sont pas annulés automatiquement : pensez à les <NuxtLink to="/pro/rendez-vous" class="underline">traiter</NuxtLink>.</p>
           </div>
 
-          <p v-if="error" class="text-sm text-red-700 bg-red-50 rounded-xl p-3" role="alert">{{ error }}</p>
+          <p v-if="error" class="text-[16px] text-red-700 bg-red-50 rounded-[16px] p-3" role="alert">{{ error }}</p>
 
-          <button class="bg-[#012828] text-white text-sm font-bold px-6 py-3 rounded-[12px] hover:bg-[#156F71] transition-colors disabled:opacity-50" :disabled="!start || busy">
+          <button class="bg-vert-900 text-white text-[16px] font-semibold px-6 min-h-[44px] rounded-full hover:bg-vert-600 transition-colors disabled:opacity-50" :disabled="!start || busy">
             {{ busy ? 'Enregistrement…' : 'Ajouter l\'absence' }}
           </button>
         </form>
@@ -51,19 +51,19 @@
 
     <!-- Absences à venir -->
     <section class="lg:col-span-2" aria-labelledby="upcoming-absences-title">
-      <h2 id="upcoming-absences-title" class="font-unbounded font-bold text-lg mb-4">Absences à venir</h2>
-      <p v-if="listError" class="text-sm text-red-700 bg-red-50 rounded-xl p-3 mb-3" role="alert">{{ listError }}</p>
-      <p v-if="!absences.length" class="text-sm text-gray-500 bg-[#e0ecf2]/60 rounded-xl p-4">Aucune absence prévue. Vos créneaux sont ouverts selon vos horaires.</p>
+      <h2 id="upcoming-absences-title" class="font-unbounded font-normal text-[20px] mb-4">Absences à venir</h2>
+      <p v-if="listError" class="text-[16px] text-red-700 bg-red-50 rounded-[16px] p-3 mb-3" role="alert">{{ listError }}</p>
+      <p v-if="!absences.length" class="text-[16px] text-neutre-600 bg-bleu-50 rounded-[16px] p-4">Aucune absence prévue. Vos créneaux sont ouverts selon vos horaires.</p>
       <ul v-else class="grid gap-2">
-        <li v-for="a in absences" :key="a.id" class="rounded-xl border border-gray-200 px-4 py-3">
+        <li v-for="a in absences" :key="a.id" class="rounded-[16px] border border-bleu-100 px-4 py-3">
           <div class="flex items-start justify-between gap-3">
             <div>
-              <p class="text-sm font-semibold">{{ a.label }}</p>
-              <p class="text-xs text-gray-500 mt-0.5">{{ a.duration }}</p>
+              <p class="text-[16px] font-semibold">{{ a.label }}</p>
+              <p class="text-[14px] text-neutre-600 mt-0.5">{{ a.duration }}</p>
             </div>
-            <span v-if="a.reason" class="text-xs font-semibold rounded-2xl px-2.5 py-1 max-w-[45%] break-words text-center" :class="reasonStyle(a.reason)">{{ a.reason }}</span>
+            <span v-if="a.reason" class="text-[14px] font-semibold rounded-2xl px-2.5 py-1 max-w-[45%] break-words text-center" :class="reasonStyle(a.reason)">{{ a.reason }}</span>
           </div>
-          <div class="mt-2 text-xs">
+          <div class="mt-2 text-[14px]">
             <template v-if="confirming === a.id">
               <span class="mr-2">Supprimer cette absence ?</span>
               <button class="font-bold text-red-700 underline mr-3" @click="remove(a)">Oui, supprimer</button>
@@ -135,7 +135,7 @@ const reasonStyle = (r) => ({
   'Congés': 'bg-sky-100 text-sky-800',
   'Formation': 'bg-violet-100 text-violet-800',
   'Maladie': 'bg-rose-100 text-rose-800',
-}[r] || 'bg-gray-100 text-gray-700')
+}[r] || 'bg-bleu-50 text-vert-900')
 
 // --- Nouvelle absence
 const range = computed(() => {

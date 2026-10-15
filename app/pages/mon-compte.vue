@@ -197,6 +197,11 @@
             </div>
           </section>
 
+          <!-- Notifications -->
+          <section class="rounded-[30px] bg-white p-6 sm:p-8 shadow-[0_12px_32px_rgba(1,40,40,0.08)]" aria-label="Notifications">
+            <NotificationSettings />
+          </section>
+
           <!-- Confidentialité et données -->
           <section id="confidentialite" class="scroll-mt-28 rounded-[30px] bg-white p-6 sm:p-8 shadow-[0_12px_32px_rgba(1,40,40,0.08)] flex flex-col gap-5" aria-labelledby="data-title">
             <h2 id="data-title" class="font-unbounded font-normal text-[20px] leading-[normal]">Confidentialité et données</h2>

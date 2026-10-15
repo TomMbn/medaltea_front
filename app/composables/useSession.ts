@@ -33,6 +33,8 @@ export const useSession = () => {
 
   async function logout() {
     try {
+      // Appareil partagé : le compte suivant ne doit pas recevoir les notifications de celui-ci
+      await disablePush()
       await $fetch('/api/logout', { method: 'POST' })
     } finally {
       flag.value = null

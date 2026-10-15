@@ -71,6 +71,8 @@ export default defineNuxtConfig({
         'Content-Security-Policy-Report-Only': CSP,
       },
     },
+    // Service worker (notifications) : toujours revalidé pour que les mises à jour arrivent
+    '/sw.js': { headers: { 'Cache-Control': 'no-cache', 'Service-Worker-Allowed': '/' } },
     // Les fiches publiques peuvent être affichées dans notre propre site (aperçu de « Ma fiche »), jamais ailleurs
     '/praticiens/**': {
       headers: {
@@ -123,6 +125,8 @@ export default defineNuxtConfig({
         { name: 'google-site-verification', content: '6ptMFJEjzSqdeWEAtJY4t7a79p5OQ6816u0Is4HT1_4' },
         { name: 'description', content: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.' },
         { name: 'theme-color', content: '#177070' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-title', content: 'Léya' },
         { property: 'og:type', content: 'website' },
         { property: 'og:locale', content: 'fr_FR' },
         { property: 'og:site_name', content: 'Léya' },
@@ -139,6 +143,7 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/svg+xml', href: '/Favicon.svg' },
         { rel: 'icon', type: 'image/png', sizes: '512x512', href: '/favicon.png' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+        { rel: 'manifest', href: '/manifest.webmanifest' },
         { rel: 'mask-icon', href: '/Favicon.svg', color: '#177070' }
       ]
     },

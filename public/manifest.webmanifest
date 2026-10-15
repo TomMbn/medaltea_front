@@ -1,0 +1,16 @@
+{
+  "name": "Léya",
+  "short_name": "Léya",
+  "description": "Trouvez un praticien en médecines alternatives et prenez rendez-vous.",
+  "lang": "fr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#e0ecf2",
+  "theme_color": "#177070",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

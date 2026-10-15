@@ -38,6 +38,8 @@
     <p v-if="guestMode === null" class="text-[14px] text-neutre-600 mt-1">Réglage actuel non affiché : sélectionnez une option pour l'appliquer.</p>
     <p v-if="saved" class="text-[16px] text-emerald-700 mt-3" role="status">Réglage enregistré.</p>
     <p v-if="error" class="text-[16px] text-red-700 mt-3" role="alert">{{ error }}</p>
+
+    <NotificationSettings class="mt-10" />
   </div>
 </template>
 

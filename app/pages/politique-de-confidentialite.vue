@@ -147,6 +147,7 @@
       <li>Google (Gemini) : génération des réponses de l'assistant virtuel.</li>
       <li>{{ legal.hostName }} : hébergement du site et relais des requêtes de mesure d'audience vers notre serveur.</li>
       <li>Base Adresse Nationale (data.gouv.fr) : saisie assistée de l'adresse du cabinet à l'inscription des praticiens, via notre serveur (seule l'adresse tapée est transmise).</li>
+      <li>OpenStreetMap (fonds de carte) : l'affichage des cartes (fiche d'un praticien, résultats de recherche) charge des images de carte depuis les serveurs d'OpenStreetMap, qui reçoivent alors l'adresse IP de votre navigateur et la zone affichée. Aucun compte ni donnée personnelle n'est transmis.</li>
       <li>{{ legal.backHostName }} (France) : hébergement de l'API et de la base de données (comptes, rendez-vous, fiches, authentification, mesure d'audience et statistiques d'usage).</li>
     </ul>
     <p>

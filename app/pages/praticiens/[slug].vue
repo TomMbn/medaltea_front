@@ -176,13 +176,18 @@
         <div class="mt-8 lg:mt-[50px] grid grid-cols-1 lg:grid-cols-[minmax(0,900px)_minmax(0,1fr)] gap-8 lg:gap-12">
           <!-- Adresse -->
           <div class="relative overflow-hidden rounded-leya-m bg-bleu-100 min-h-[300px] lg:min-h-[480px]">
-            <span class="absolute left-1/2 top-[34%] -translate-x-1/2 w-16 h-16 rounded-full bg-white shadow-douce flex items-center justify-center text-corail-500" aria-hidden="true"><MapPin :size="26" /></span>
+            <!-- Carte du cabinet (OpenStreetMap) ; sans coordonnées, simple repère -->
+            <ClientOnly v-if="hasCoords">
+              <LeyaMap fill zoom-placement="top-right" :markers="[{ id: 'cabinet', lat: Number(praticien.latitude), lng: Number(praticien.longitude), price: null, label: fullName, variant: 'cabinet' }]" :offset-y="90" :rounded="false" :scroll-wheel="false" :zoom="15" :aria-label="`Carte : cabinet de ${fullName}`" />
+            </ClientOnly>
+            <span v-else class="absolute left-1/2 top-[34%] -translate-x-1/2 w-16 h-16 rounded-full bg-white shadow-douce flex items-center justify-center text-corail-500" aria-hidden="true"><MapPin :size="26" /></span>
             <div class="absolute left-4 right-4 bottom-4 lg:left-8 lg:bottom-8 lg:max-w-[524px] bg-white rounded-[20px] shadow-douce p-5 lg:p-6">
               <div class="flex items-start gap-3">
                 <span class="w-10 h-10 rounded-full bg-bleu-50 text-vert-600 flex items-center justify-center shrink-0"><MapPin :size="18" aria-hidden="true" /></span>
                 <span class="text-[17px] lg:text-[18px] leading-snug text-vert-900">
                   <address class="not-italic font-medium">{{ praticien.address }}<template v-if="praticien.address">, </template>{{ formatPostalCode(praticien.postalCode) }} {{ praticien.city }}</address>
                   <span v-if="praticien.addressComplement" class="block text-neutre-600 text-[16px]">{{ praticien.addressComplement }}</span>
+                  <span v-if="praticien.accessInfo" class="block text-neutre-600 text-[16px]">{{ praticien.accessInfo }}</span>
                 </span>
               </div>
               <div class="mt-4 flex flex-wrap gap-2.5">
@@ -190,8 +195,8 @@
                   Ouvrir dans Google Maps
                   <span class="w-10 h-10 rounded-full bg-corail-500 flex items-center justify-center"><ArrowUpRight :size="18" aria-hidden="true" /></span>
                 </a>
-                <a :href="directionsUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-[10px] min-h-[48px] border-[1.5px] border-vert-900 text-vert-900 font-semibold text-[16px] rounded-full pl-5 pr-4 py-1 hover:bg-bleu-50 transition-colors">
-                  Itinéraire <Navigation :size="16" aria-hidden="true" />
+                <a :href="directionsUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-[14px] min-h-[48px] border-[1.5px] border-vert-900 text-vert-900 font-semibold text-[16px] rounded-full pl-5 pr-1 py-1 hover:bg-bleu-50 transition-colors">
+                  Itinéraire <span class="w-10 h-10 rounded-full border-[1.5px] border-vert-900 flex items-center justify-center"><ArrowUpRight :size="18" aria-hidden="true" /></span>
                 </a>
               </div>
             </div>
@@ -338,6 +343,7 @@ const about = computed(() => praticien.value.bio ?? praticien.value.description 
 // Site web : uniquement http(s), sinon on ne l'affiche pas
 const safeWebsite = computed(() => { try { const u = new URL(praticien.value.website); return ['http:', 'https:'].includes(u.protocol) ? u.href : '' } catch { return '' } })
 const addressLine = computed(() => `${praticien.value.address}, ${formatPostalCode(praticien.value.postalCode)} ${praticien.value.city}`)
+const hasCoords = computed(() => Number.isFinite(Number(praticien.value?.latitude)) && Number.isFinite(Number(praticien.value?.longitude)) && praticien.value?.latitude != null && praticien.value?.longitude != null)
 const mapsUrl = computed(() => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressLine.value)}`)
 const directionsUrl = computed(() => `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(addressLine.value)}`)
 

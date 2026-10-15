@@ -120,7 +120,7 @@ const PUBLIC_TYPES = ['babies', 'children', 'teenagers', 'adults', 'seniors', 'p
 function validateListQuery(query?: Record<string, any>) {
     if (!query) return
     const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
-    if (query.limit !== undefined && !(/^\d+$/.test(String(query.limit)) && +query.limit >= 1 && +query.limit <= 50)) throw bad('Limite invalide.')
+    if (query.limit !== undefined && !(/^\d+$/.test(String(query.limit)) && +query.limit >= 1 && +query.limit <= 100)) throw bad('Limite invalide.')
     if (query.offset !== undefined && !/^\d{1,6}$/.test(String(query.offset))) throw bad('Décalage invalide.')
     if (query.sort !== undefined && !SORTS.includes(String(query.sort))) throw bad('Tri invalide.')
     if (query.publicType !== undefined && !PUBLIC_TYPES.includes(String(query.publicType))) throw bad('Public invalide.')

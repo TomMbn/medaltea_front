@@ -35,6 +35,14 @@
           :geo="geo"
           :geo-error="geoError"
           :radius="radius"
+          :view="view"
+          :map-items="mapItems"
+          :map-total="mapTotal"
+          :map-loading="mapPending"
+          :map-searching="!!mapBbox"
+          @update:view="setView"
+          @map-search="mapBbox = $event"
+          @map-reset="mapBbox = null"
           @update:sort="setSort"
           @update:only-bookable="setOnlyBookable"
           @update:mode="setMode"
@@ -77,11 +85,11 @@ onMounted(loadPrefs)
 const usePrefs = computed(() => route.query.prefs === '1')
 const prefLocation = computed(() => (prefs.value?.latitude != null && prefs.value?.longitude != null ? { lat: prefs.value.latitude, lng: prefs.value.longitude } : null))
 const prefsUsable = computed(() => !!prefs.value && (!!prefLocation.value || !!prefs.value.budgetBand))
-const RESULT_KEYS = ['q', 'specialite', 'tri', 'reservable', 'mode', 'dispo', 'note', 'pmr', 'prefs', 'page', 'tous']
+const RESULT_KEYS = ['vue', 'q', 'specialite', 'tri', 'reservable', 'mode', 'dispo', 'note', 'pmr', 'prefs', 'page', 'tous']
 const isResults = computed(() => Object.keys(route.query).some(k => RESULT_KEYS.includes(k)))
 const page = computed(() => Math.max(1, Math.floor(Number(route.query.page)) || 1))
 // Remet à zéro la barre de recherche quand on arrive d'un autre critère (lien, retour arrière)
-const searchKey = computed(() => `${route.query.q ?? ''}|${route.query.specialite ?? ''}`)
+const searchKey = computed(() => `${route.query.q ?? ''}|${route.query.specialite ?? ''}|${route.query.dispo ?? ''}`)
 
 // Position (facultative) : gardée en mémoire seulement, jamais dans l'adresse de la page.
 const geo = ref(null)
@@ -119,6 +127,34 @@ const { data: first, error, pending } = await useAsyncData(
   () => (isResults.value ? fetchPage((page.value - 1) * PAGE_SIZE) : Promise.resolve({ items: [], total: 0 })),
   { watch: [apiQuery, isResults, page] },
 )
+
+// Vue « Carte » : jusqu'à 100 praticiens (mêmes filtres), puis la zone choisie sur la carte (« Rechercher dans cette zone »)
+const view = computed(() => (route.query.vue === 'carte' ? 'carte' : 'liste'))
+const mapBbox = ref(null)
+const mapQuery = computed(() => {
+  const { limit, ...rest } = apiQuery.value
+  if (mapBbox.value) {
+    // Une zone remplace la position et le rayon (incompatibles avec bbox)
+    const { lat, lng, radiusKm, ...zone } = rest
+    const { sort: s, ...noSort } = zone
+    return { ...noSort, ...(s && s !== 'distance' ? { sort: s } : {}), bbox: mapBbox.value.map(n => Number(n).toFixed(5)).join(','), limit: 100 }
+  }
+  return { ...rest, limit: 100 }
+})
+const { data: mapData, pending: mapPending } = await useAsyncData(
+  'praticiens-map',
+  async () => {
+    if (!(isResults.value && view.value === 'carte')) return { items: [], total: 0 }
+    const res = await $fetch.raw('/api/backend/praticiens', { query: mapQuery.value })
+    return { items: Array.isArray(res._data) ? res._data : [], total: Number(res.headers.get('x-total-count')) || 0 }
+  },
+  { watch: [mapQuery, view, isResults], server: false, lazy: true },
+)
+const mapItems = computed(() => mapData.value?.items ?? [])
+const mapTotal = computed(() => mapData.value?.total ?? 0)
+// Un nouveau critère de recherche efface la zone choisie sur la carte
+watch([() => route.query.q, () => route.query.specialite], () => { mapBbox.value = null })
+const setView = (value) => setQuery({ vue: value === 'carte' ? 'carte' : undefined, page: undefined })
 
 const items = computed(() => first.value?.items ?? [])
 const total = computed(() => first.value?.total ?? 0)

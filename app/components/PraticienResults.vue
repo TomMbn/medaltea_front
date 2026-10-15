@@ -7,6 +7,18 @@
       <!-- Filtres et tri -->
       <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-[16px] font-medium leading-[normal]">
         <div class="flex flex-wrap items-center gap-2">
+          <!-- Filtres de la maquette : disponibilité, type de séance (une pastille par type), note, accès -->
+          <button
+            v-for="f in chips"
+            :key="f.key"
+            type="button"
+            class="rounded-full px-4 py-[9px] transition-colors"
+            :class="f.on ? 'bg-vert-600 text-white' : 'bg-white text-vert-900 hover:bg-white/70'"
+            :aria-pressed="f.on ? 'true' : 'false'"
+            @click="f.toggle()"
+          >
+            {{ f.label }}
+          </button>
           <button
             type="button"
             class="inline-flex items-center gap-2 rounded-full pl-3 pr-4 py-[9px] transition-colors"
@@ -42,25 +54,6 @@
           >
             Selon mes préférences
           </button>
-          <label class="relative inline-flex items-center gap-2 rounded-full pl-4 pr-3 py-[9px] cursor-pointer focus-ring-within transition-colors" :class="mode ? 'bg-vert-600 text-white' : 'bg-white text-vert-900 hover:bg-white/70'">
-            <span>{{ mode ? modeLabels[mode] : 'Type de séance' }}</span>
-            <ChevronDown :size="14" aria-hidden="true" />
-            <select :value="mode" aria-label="Type de séance" class="absolute inset-0 w-full opacity-0 cursor-pointer" @change="emit('update:mode', $event.target.value)">
-              <option value="">Tous types</option>
-              <option v-for="(label, key) in modeLabels" :key="key" :value="key">{{ label }}</option>
-            </select>
-          </label>
-          <button
-            v-for="f in toggles"
-            :key="f.event"
-            type="button"
-            class="rounded-full px-4 py-[9px] transition-colors"
-            :class="f.on ? 'bg-vert-600 text-white' : 'bg-white text-vert-900 hover:bg-white/70'"
-            :aria-pressed="f.on ? 'true' : 'false'"
-            @click="emit(f.event, !f.on)"
-          >
-            {{ f.label }}
-          </button>
         </div>
 
         <label class="relative inline-flex items-center gap-2 bg-white text-vert-900 rounded-full pl-3 pr-4 py-[9px] cursor-pointer focus-ring-within">
@@ -76,11 +69,33 @@
       </div>
       <p v-if="geoError" class="mt-4 bg-white text-vert-900 rounded-2xl p-3 text-[16px]" role="alert">{{ geoError }}</p>
 
-      <h1 id="praticien-results-title" class="mt-8 lg:mt-10 font-unbounded font-normal text-[22px] lg:text-[24px] leading-tight text-black" role="status" aria-live="polite">
+      <div class="mt-8 lg:mt-10 flex flex-wrap items-center justify-between gap-4">
+      <h1 id="praticien-results-title" class="font-unbounded font-normal text-[22px] lg:text-[24px] leading-tight text-black" role="status" aria-live="polite">
         {{ total }} praticien{{ total > 1 ? 's' : '' }}<template v-if="specialityName"> en {{ specialityName.toLowerCase() }}</template><template v-if="q"> pour « {{ q }} »</template>
       </h1>
 
-      <p v-if="error" class="mt-8 bg-white text-vert-900 rounded-[28px] p-6 text-[18px]">
+        <div class="inline-flex gap-1 rounded-full bg-white p-[5px] text-[16px] font-medium leading-[normal]" role="group" aria-label="Affichage des résultats">
+          <button type="button" class="inline-flex items-center gap-2 rounded-full px-[30px] py-[9px] min-h-[48px] transition-colors" :class="view !== 'carte' ? 'bg-vert-600 text-white' : 'text-vert-900 hover:bg-bleu-50'" :aria-pressed="view !== 'carte' ? 'true' : 'false'" @click="emit('update:view', 'liste')">
+            <List :size="16" aria-hidden="true" /> Liste ({{ total }})
+          </button>
+          <button type="button" class="inline-flex items-center gap-2 rounded-full px-[30px] py-[9px] min-h-[48px] transition-colors" :class="view === 'carte' ? 'bg-vert-600 text-white' : 'text-vert-900 hover:bg-bleu-50'" :aria-pressed="view === 'carte' ? 'true' : 'false'" @click="emit('update:view', 'carte')">
+            <MapPin :size="16" aria-hidden="true" /> Carte
+          </button>
+        </div>
+      </div>
+
+      <PraticienMapView
+        v-if="view === 'carte'"
+        class="mt-6 lg:mt-8"
+        :items="mapItems"
+        :total="mapTotal"
+        :loading="mapLoading"
+        :searching="mapSearching"
+        @search-zone="emit('map-search', $event)"
+        @reset="emit('map-reset')"
+      />
+
+      <p v-else-if="error" class="mt-8 bg-white text-vert-900 rounded-[28px] p-6 text-[18px]">
         La liste des praticiens est momentanément indisponible. Merci de réessayer dans un instant.
       </p>
 
@@ -116,7 +131,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { MapPin, ChevronDown } from 'lucide-vue-next'
+import { MapPin, ChevronDown, List } from 'lucide-vue-next'
 
 const props = defineProps({
   praticiens: { type: Array, default: () => [] },
@@ -139,14 +154,21 @@ const props = defineProps({
   geo: { type: Object, default: null },
   geoError: { type: String, default: '' },
   radius: { type: Number, default: 30 },
+  view: { type: String, default: 'liste' },
+  mapItems: { type: Array, default: () => [] },
+  mapTotal: { type: Number, default: 0 },
+  mapLoading: { type: Boolean, default: false },
+  mapSearching: { type: Boolean, default: false },
 })
-const emit = defineEmits(['update:sort', 'update:onlyBookable', 'update:mode', 'update:soon', 'update:rated', 'update:accessible', 'update:usePrefs', 'update:radius', 'locate', 'unlocate'])
+const emit = defineEmits(['update:sort', 'update:onlyBookable', 'update:mode', 'update:soon', 'update:rated', 'update:accessible', 'update:usePrefs', 'update:radius', 'update:view', 'map-search', 'map-reset', 'locate', 'unlocate'])
 
 const modeLabels = { cabinet: 'Au cabinet', visio: 'En visio', domicile: 'À domicile' }
-const toggles = computed(() => [
-  { event: 'update:soon', label: 'Disponible sous 7 jours', on: props.soon },
-  { event: 'update:rated', label: 'Note 4 et plus', on: props.rated },
-  { event: 'update:accessible', label: 'Accès mobilité réduite', on: props.accessible },
+// Ordre de la maquette : Disponible cette semaine · Cabinet · Visio · À domicile · Note 4+ · Accès PMR
+const chips = computed(() => [
+  { key: 'soon', label: 'Disponible cette semaine', on: props.soon, toggle: () => emit('update:soon', !props.soon) },
+  ...Object.entries(modeLabels).map(([key, label]) => ({ key, label: { cabinet: 'Cabinet', visio: 'Visio', domicile: 'À domicile' }[key] ?? label, on: props.mode === key, toggle: () => emit('update:mode', props.mode === key ? '' : key) })),
+  { key: 'rated', label: 'Note 4+', on: props.rated, toggle: () => emit('update:rated', !props.rated) },
+  { key: 'pmr', label: 'Accès PMR', on: props.accessible, toggle: () => emit('update:accessible', !props.accessible) },
 ])
 
 const route = useRoute()

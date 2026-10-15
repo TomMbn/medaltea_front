@@ -20,8 +20,32 @@
       </NuxtLink>
     </div>
 
+    <!-- Vue mensuelle : un clic sur un jour ouvre la vue « Jour » -->
+    <section v-if="view === 'month'" class="mt-6 rounded-[28px] bg-white overflow-x-auto" aria-label="Agenda du mois">
+      <div class="min-w-[760px] p-3">
+        <div class="grid grid-cols-7 text-[16px] font-medium text-neutre-600" aria-hidden="true">
+          <span v-for="w in WEEKDAYS" :key="w" class="px-3 py-3">{{ w }}</span>
+        </div>
+        <div class="grid grid-cols-7 gap-px rounded-[20px] overflow-hidden bg-bleu-100">
+          <button
+            v-for="c in monthCells"
+            :key="c.key"
+            type="button"
+            class="min-h-[124px] bg-white p-2 text-left align-top flex flex-col gap-1 hover:bg-bleu-50 transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-vert-600"
+            :class="c.inMonth ? '' : 'bg-bleu-50/60'"
+            :aria-label="`${c.long}, ${c.count} rendez-vous${c.blocked ? ', créneau bloqué' : ''}`"
+            @click="openDay(c.date)"
+          >
+            <span class="self-start rounded-full px-2 h-7 min-w-[28px] flex items-center justify-center text-[16px] font-medium leading-[normal]" :class="c.today ? 'bg-corail-100 text-corail-700' : c.inMonth ? 'text-vert-900' : 'text-neutre-500'">{{ c.day }}</span>
+            <span v-for="e in c.shown" :key="e.key" class="block truncate rounded-[10px] px-2 py-[3px] text-[14px] leading-[normal]" :class="[e.bg, e.nameClass]">{{ e.label }}</span>
+            <span v-if="c.more" class="px-2 text-[14px] text-neutre-600">+ {{ c.more }} autre{{ c.more > 1 ? 's' : '' }}</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- Grille -->
-    <section class="mt-6 rounded-[28px] bg-white overflow-x-auto" aria-label="Agenda de la période">
+    <section v-else class="mt-6 rounded-[28px] bg-white overflow-x-auto" aria-label="Agenda de la période">
       <div class="relative" :style="{ minWidth: `${90 + days.length * 130}px`, height: `${64 + bodyHeight}px` }">
         <!-- En-têtes des jours -->
         <div class="absolute left-[90px] right-0 top-0 h-[64px] grid" :style="{ gridTemplateColumns: `repeat(${days.length}, minmax(0, 1fr))` }">
@@ -76,8 +100,7 @@ definePageMeta({ layout: 'pro', middleware: ['auth', 'pro'] })
 useSeoMeta({ title: 'Agenda — Espace praticien Léya', robots: 'noindex, nofollow' })
 
 const HOUR = 70 // hauteur d'une heure, comme la maquette
-// « Mois » de la maquette est masqué : seules les vues Jour et Semaine sont proposées
-const views = [{ id: 'day', label: 'Jour' }, { id: 'week', label: 'Semaine' }]
+const views = [{ id: 'day', label: 'Jour' }, { id: 'week', label: 'Semaine' }, { id: 'month', label: 'Mois' }]
 const view = ref('week')
 
 const { data: raw, status } = useAsyncData('pro-appointments', () => $fetch('/api/backend/praticiens/me/appointments'), { server: false, lazy: true, default: () => [] })
@@ -177,27 +200,67 @@ const days = computed(() => dateKeys.value.map((day) => {
     nowTop: today && nh >= range.value.lo && nh <= range.value.hi ? (nh - range.value.lo) * HOUR : null,
   }
 }))
-const hasAny = computed(() => days.value.some(d => d.events.length))
+const hasAny = computed(() => (view.value === 'month' ? monthCells.value.some(c => c.shown.length) : days.value.some(d => d.events.length)))
 const hhmm = (d) => d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+
+// --- Vue mensuelle
+const WEEKDAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
+const MAX_PER_CELL = 3
+const monthCells = computed(() => {
+  if (view.value !== 'month' || !anchor.value) return []
+  const y = anchor.value.getFullYear(), m = anchor.value.getMonth()
+  const firstDay = new Date(y, m, 1)
+  const start = addDays(firstDay, -((firstDay.getDay() + 6) % 7))
+  const lastDay = new Date(y, m + 1, 0)
+  const total = Math.ceil((((firstDay.getDay() + 6) % 7) + lastDay.getDate()) / 7) * 7
+  return Array.from({ length: total }, (_, i) => {
+    const date = addDays(start, i)
+    const next = addDays(date, 1)
+    const items = []
+    for (const a of appointments.value) {
+      const st = new Date(a.startAt)
+      if (st >= date && st < next) items.push({ key: `a${a.id}`, start: st, label: `${hhmm(st)} ${shortName(a.patientName)}`, ...colorOf(a) })
+    }
+    let blocked = false
+    for (const b of blocks.value) {
+      if (b.start < next && b.end > date) { blocked = true; items.push({ key: `b${b.id}`, start: b.start < date ? date : b.start, label: `Bloqué${b.reason ? ` · ${b.reason}` : ''}`, bg: 'bg-neutre-200', nameClass: 'text-vert-900' }) }
+    }
+    items.sort((x, y2) => x.start - y2.start)
+    const count = items.filter(it => it.key.startsWith('a')).length
+    return {
+      key: date.getTime(), date, day: date.getDate(), inMonth: date.getMonth() === m, today: !!now.value && sameDay(date, now.value),
+      shown: items.slice(0, MAX_PER_CELL), more: Math.max(0, items.length - MAX_PER_CELL), count, blocked,
+      long: capital(fr(date, { weekday: 'long', day: 'numeric', month: 'long' })),
+    }
+  })
+})
+function openDay(d) { anchor.value = new Date(d); view.value = 'day' }
 
 const first = computed(() => dateKeys.value[0])
 const last = computed(() => dateKeys.value[dateKeys.value.length - 1])
+const monthLabel = computed(() => (anchor.value ? capital(fr(anchor.value, { month: 'long', year: 'numeric' })) : ''))
 const subtitle = computed(() => {
   if (!first.value) return ''
+  if (view.value === 'month') return monthLabel.value
   if (view.value === 'day') return capital(fr(first.value, { weekday: 'long', day: 'numeric', month: 'long' }))
   return `Semaine du ${fr(first.value, { day: 'numeric', ...(first.value.getMonth() !== last.value.getMonth() ? { month: 'long' } : {}) })} au ${fr(last.value, { day: 'numeric', month: 'long' })}`
 })
 const rangeLabel = computed(() => {
   if (!first.value) return '…'
+  if (view.value === 'month') return monthLabel.value
   const short = (d, withMonth = true) => fr(d, { day: 'numeric', ...(withMonth ? { month: 'short' } : {}) })
   if (view.value === 'day') return short(first.value)
   return first.value.getMonth() === last.value.getMonth() ? `${short(first.value, false)} – ${short(last.value)}` : `${short(first.value)} – ${short(last.value)}`
 })
 
-function shift(dir) { anchor.value = addDays(anchor.value, dir * (view.value === 'day' ? 1 : 7)) }
+function shift(dir) {
+  const a = anchor.value
+  anchor.value = view.value === 'month' ? new Date(a.getFullYear(), a.getMonth() + dir, 1) : addDays(a, dir * (view.value === 'day' ? 1 : 7))
+}
 function goToday() { anchor.value = new Date() }
 const isCurrent = computed(() => {
   if (!anchor.value || !now.value) return true
+  if (view.value === 'month') return anchor.value.getFullYear() === now.value.getFullYear() && anchor.value.getMonth() === now.value.getMonth()
   return view.value === 'day' ? sameDay(anchor.value, now.value) : sameDay(monday.value, startOfDay(addDays(now.value, -((now.value.getDay() + 6) % 7))))
 })
 

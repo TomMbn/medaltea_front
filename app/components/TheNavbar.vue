@@ -49,6 +49,12 @@
           <button class="nav-link" @click="handleLogout">Déconnexion</button>
         </template>
 
+        <!-- Administrateur connecté -->
+        <template v-else-if="isAdmin">
+          <NuxtLink to="/admin" class="btn-dark">Administration</NuxtLink>
+          <button class="nav-link" @click="handleLogout">Déconnexion</button>
+        </template>
+
         <!-- Patient connecté -->
         <div v-else ref="accountRef" class="relative">
           <button
@@ -93,12 +99,13 @@
           <NuxtLink to="/medecines" class="menu-link" @click="isMenuOpen = false">Médecines</NuxtLink>
           <NuxtLink to="/trouver-un-praticien" class="menu-link" @click="isMenuOpen = false">Trouver un praticien</NuxtLink>
           <NuxtLink v-if="!isLoggedIn" to="/praticiens-pro" class="menu-link" @click="isMenuOpen = false">Espace praticien</NuxtLink>
-          <NuxtLink v-if="isLoggedIn && !isPro" to="/mes-rendez-vous" class="menu-link" @click="isMenuOpen = false">Mes rendez-vous</NuxtLink>
-          <NuxtLink v-if="isLoggedIn && !isPro" to="/mon-compte" class="menu-link" @click="isMenuOpen = false">Mes informations</NuxtLink>
+          <NuxtLink v-if="isLoggedIn && !isPro && !isAdmin" to="/mes-rendez-vous" class="menu-link" @click="isMenuOpen = false">Mes rendez-vous</NuxtLink>
+          <NuxtLink v-if="isLoggedIn && !isPro && !isAdmin" to="/mon-compte" class="menu-link" @click="isMenuOpen = false">Mes informations</NuxtLink>
 
           <div class="flex flex-col gap-3 pt-3">
             <NuxtLink v-if="!isLoggedIn" to="/login" class="btn-dark text-center" @click="isMenuOpen = false">Connexion</NuxtLink>
             <NuxtLink v-else-if="isPro" to="/pro" class="btn-dark text-center" @click="isMenuOpen = false">Mon espace praticien</NuxtLink>
+            <NuxtLink v-else-if="isAdmin" to="/admin" class="btn-dark text-center" @click="isMenuOpen = false">Administration</NuxtLink>
             <button v-if="isLoggedIn" class="border border-neutre-200 text-vert-900 px-[25px] py-[10px] rounded-leya-s text-lg text-center" @click="handleLogout">Déconnexion</button>
             <NuxtLink v-if="!isPro && route.path !== '/chatbot'" to="/chatbot" class="btn-chatbot text-center" @click="isMenuOpen = false">Parler à Léya</NuxtLink>
           </div>
@@ -119,7 +126,7 @@ const isMenuOpen = ref(false)
 const isAccountOpen = ref(false)
 const accountRef = ref(null)
 
-const { isLoggedIn, isPro, syncRole, logout } = useSession()
+const { isLoggedIn, isPro, isAdmin, syncRole, logout } = useSession()
 const isProLanding = computed(() => route.path === '/praticiens-pro' && !isLoggedIn.value)
 
 async function handleLogout() {

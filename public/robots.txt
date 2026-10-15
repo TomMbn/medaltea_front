@@ -4,6 +4,8 @@ Disallow: /login
 Disallow: /register
 Disallow: /coming-soon
 Disallow: /pro
+Disallow: /admin
+Disallow: /demo
 Disallow: /mes-rendez-vous
 Disallow: /mon-compte
 Disallow: /compte-supprime

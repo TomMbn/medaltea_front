@@ -3,7 +3,7 @@
 // ils ne servent qu'à adapter l'interface, le backend contrôle les accès.
 export const useSession = () => {
   const flag = useCookie('leya_session')
-  const roleCookie = useCookie<'pro' | 'patient' | null>('leya_role')
+  const roleCookie = useCookie<'pro' | 'patient' | 'admin' | null>('leya_role')
   const praticienCookie = useCookie<string | null>('leya_praticien')
 
   // Démonstration : un espace praticien d'essai, sans compte (le vrai cookie de session n'est pas touché)
@@ -11,8 +11,9 @@ export const useSession = () => {
   const inDemo = computed(() => demo.value === '1')
 
   const isLoggedIn = computed(() => inDemo.value || !!flag.value)
-  const role = computed<'pro' | 'patient' | null>(() => (inDemo.value ? 'pro' : isLoggedIn.value ? roleCookie.value || null : null))
+  const role = computed<'pro' | 'patient' | 'admin' | null>(() => (inDemo.value ? 'pro' : isLoggedIn.value ? roleCookie.value || null : null))
   const isPro = computed(() => role.value === 'pro')
+  const isAdmin = computed(() => role.value === 'admin')
   const praticienId = computed<number | null>(() => (inDemo.value ? DEMO_ID : isPro.value && Number(praticienCookie.value) > 0 ? Number(praticienCookie.value) : null))
 
   /** Pour les sessions ouvertes avant l'introduction du rôle : le demande au serveur. */
@@ -48,5 +49,5 @@ export const useSession = () => {
     }
   }
 
-  return { isLoggedIn, role, isPro, praticienId, syncRole, refresh, logout }
+  return { isLoggedIn, role, isPro, isAdmin, praticienId, syncRole, refresh, logout }
 }

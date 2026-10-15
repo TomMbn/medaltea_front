@@ -10,11 +10,11 @@ const baseOptions = () => ({
     maxAge: SESSION_MAX_AGE,
 })
 
-export type Role = 'pro' | 'patient'
+export type Role = 'pro' | 'patient' | 'admin'
 
 /**
  * Pose le token en cookie httpOnly (illisible par JavaScript) + deux témoins non sensibles pour l'interface :
- * `leya_session` (connecté) et `leya_role` (pro / patient). L'accès aux données reste contrôlé par le backend.
+ * `leya_session` (connecté) et `leya_role` (pro / patient / admin). L'accès aux données reste contrôlé par le backend.
  */
 export function setSessionCookies(event: H3Event, token: string, role: Role = 'patient', praticienId: number | null = null) {
     setCookie(event, 'token', token, { ...baseOptions(), httpOnly: true })
@@ -33,11 +33,15 @@ export function clearSessionCookies(event: H3Event) {
 }
 
 /**
- * Un compte praticien est reconnu au fait que l'API de ses prestations lui répond ;
- * un patient reçoit une erreur d'autorisation (403/404).
+ * Le rôle est calculé par le backend (profil du compte : patient, pro ou admin). À défaut, un compte praticien est reconnu
+ * au fait que l'API de ses prestations lui répond ; un patient reçoit une erreur d'autorisation (403/404).
  */
 export async function detectRole(token: string): Promise<Role> {
     const { apiBase } = useRuntimeConfig()
+    try {
+        const me: any = await $fetch(`${apiBase}/users/me`, { headers: { Authorization: `Bearer ${token}` }, timeout: 8000 })
+        if (me?.role === 'admin' || me?.role === 'pro' || me?.role === 'patient') return me.role
+    } catch { /* repli ci-dessous */ }
     try {
         await $fetch(`${apiBase}/praticiens/me/consultation-types`, {
             headers: { Authorization: `Bearer ${token}` },

@@ -97,6 +97,7 @@ const RULES: Rule[] = [
     { method: 'POST', pattern: /^praticiens\/me\/unavailabilities$/, auth: true, body: ['startAt', 'endAt', 'reason'] },
     { method: 'DELETE', pattern: /^praticiens\/me\/unavailabilities\/\d+$/, auth: true },
     // Administration (le backend réserve ces routes au rôle admin)
+    { method: 'PATCH', pattern: /^praticiens\/\d+\/verification$/, auth: true, body: ['isVerified'], own: true },
     { method: 'GET', pattern: /^admin\/praticiens$/, auth: true, query: ['q', 'claimed', 'isVerified', 'limit', 'offset'], own: true },
     { method: 'GET', pattern: /^admin\/claim-requests$/, auth: true, query: ['status'], own: true },
     { method: 'PATCH', pattern: /^admin\/claim-requests\/\d+$/, auth: true, body: ['decision', 'reason'], own: true },
@@ -378,6 +379,7 @@ export default defineEventHandler(async (event) => {
         if (path === 'appointments') body = validateAppointment(body)
         if (method === 'PUT' && /^praticiens\/\d+$/.test(path)) body = validatePraticienUpdate(body)
         if (path === 'praticiens/me/diplomas') body = validateDiploma(body)
+        if (method === 'PATCH' && /^praticiens\/\d+\/verification$/.test(path) && typeof body.isVerified !== 'boolean') throw createError({ statusCode: 400, statusMessage: 'Valeur invalide.' })
         if (method === 'PUT' && path === 'users/me/preferences') body = validatePreferences(body)
         if (method === 'PATCH' && path === 'users/me/notification-preferences') body = validateNotificationPrefs(body)
         if (path === 'push/subscriptions') body = validatePushSubscription(body)

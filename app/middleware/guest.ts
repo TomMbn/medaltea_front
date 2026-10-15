@@ -12,5 +12,5 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // Redirection interne uniquement (évite les redirections ouvertes vers un site externe)
   const safeTarget = redirect.startsWith('/') && !redirect.startsWith('//') && !/^\/(login|register)(\/|\?|$)/.test(redirect) ? redirect : ''
-  return navigateTo(safeTarget || (current === 'pro' ? '/pro' : '/chatbot'), { replace: true })
+  return navigateTo(safeTarget || (current === 'pro' ? '/pro' : current === 'admin' ? '/admin' : '/chatbot'), { replace: true })
 })

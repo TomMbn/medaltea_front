@@ -151,7 +151,7 @@ async function handleLogin() {
     // Redirection interne uniquement (évite les redirections ouvertes vers un site externe)
     const safeTarget = target.startsWith('/') && !target.startsWith('//') ? target : ''
     // Sans destination demandée : un praticien arrive dans son espace, un patient sur le chatbot.
-    router.push(safeTarget || (response?.role === 'pro' ? '/pro' : '/chatbot'))
+    router.push(safeTarget || (response?.role === 'pro' ? '/pro' : response?.role === 'admin' ? '/admin' : '/chatbot'))
 
   } catch (error) {
     if (error.status === 401) {

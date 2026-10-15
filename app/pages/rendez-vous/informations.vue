@@ -184,7 +184,7 @@ if (!valid) await navigateTo(ficheLink.value, { replace: true })
 const { data: praticien } = await useAsyncData(`guest-praticien-${slug}`, () => (valid ? $fetch(`/api/backend/praticiens/slug/${slug}`).catch(() => null) : null))
 const { data: rawTypes } = await useAsyncData(`guest-types-${slug}`, () => (praticien.value?.id ? $fetch(`/api/backend/praticiens/${praticien.value.id}/consultation-types`).catch(() => []) : []))
 const type = computed(() => normalizeTypes(rawTypes.value).find(t => t.id === typeId))
-if (valid && (!praticien.value || praticien.value.bookable === false || !type.value)) await navigateTo(ficheLink.value, { replace: true })
+if (valid && (!praticien.value || praticien.value.bookable === false || praticien.value.guestBookingMode === 'disabled' || !type.value)) await navigateTo(ficheLink.value, { replace: true })
 
 const fullName = computed(() => `${praticien.value?.firstName ?? ''} ${praticien.value?.lastName ?? ''}`.trim())
 const initials = computed(() => `${(praticien.value?.firstName || '?')[0]}${(praticien.value?.lastName || '')[0] || ''}`.toUpperCase())

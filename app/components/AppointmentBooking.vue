@@ -175,7 +175,7 @@
           </template>
 
           <!-- Sans compte (lot 2 du backend) : page « Vos informations » -->
-          <template v-else-if="guestBooking">
+          <template v-else-if="guestAllowed">
             <NuxtLink
               :to="{ path: '/rendez-vous/informations', query: { praticien: praticien.slug, type: String(typeId), slot: selectedSlot } }"
               class="w-full flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:bg-vert-600 transition-colors"
@@ -223,7 +223,8 @@ const props = defineProps({
 const route = useRoute()
 const router = useRouter()
 const { isLoggedIn } = useSession()
-const guestBooking = useRuntimeConfig().public.guestBooking
+// Le praticien peut refuser les réservations sans compte (guestBookingMode = « disabled »)
+const guestAllowed = computed(() => useRuntimeConfig().public.guestBooking && props.praticien?.guestBookingMode !== 'disabled')
 
 const HORIZON_DAYS = 120   // on ne cherche pas de créneau au-delà de ~4 mois
 const COLS = 5             // jours affichés

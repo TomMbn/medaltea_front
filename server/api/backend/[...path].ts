@@ -83,7 +83,7 @@ const RULES: Rule[] = [
     // Abonnement d'agenda (le lien renvoyé est lu par l'application d'agenda, pas par le site)
     { method: 'POST', pattern: /^praticiens\/me\/calendar-token$/, auth: true, own: true },
     { method: 'DELETE', pattern: /^praticiens\/me\/calendar-token$/, auth: true },
-    { method: 'PATCH', pattern: /^praticiens\/me\/settings$/, auth: true, body: ['autoConfirm'] },
+    { method: 'PATCH', pattern: /^praticiens\/me\/settings$/, auth: true, body: ['autoConfirm', 'guestBookingMode'] },
     { method: 'GET', pattern: /^praticiens\/me\/consultation-types$/, auth: true },
     { method: 'POST', pattern: /^praticiens\/me\/consultation-types$/, auth: true, body: ['name', 'durationMin', 'price', 'mode', 'kind'] },
     { method: 'PATCH', pattern: /^praticiens\/me\/consultation-types\/\d+$/, auth: true, body: ['name', 'durationMin', 'price', 'mode', 'kind'] },
@@ -304,6 +304,12 @@ function validateGuestBooking(body: Record<string, any>) {
     }
 }
 
+function validateSettings(body: Record<string, any>) {
+  if ('guestBookingMode' in body && !['manual', 'auto', 'disabled'].includes(body.guestBookingMode)) throw createError({ statusCode: 400, statusMessage: 'Mode de réservation sans compte invalide' })
+  if ('autoConfirm' in body && typeof body.autoConfirm !== 'boolean') throw createError({ statusCode: 400, statusMessage: 'Réglage invalide' })
+  return body
+}
+
 function validateProposal(body: Record<string, any>) {
     if (typeof body.startAt !== 'string' || Number.isNaN(Date.parse(body.startAt))) throw createError({ statusCode: 400, statusMessage: 'Créneau invalide.' })
     return { startAt: body.startAt }
@@ -368,6 +374,7 @@ export default defineEventHandler(async (event) => {
         if (method === 'PATCH' && path === 'users/me/notification-preferences') body = validateNotificationPrefs(body)
         if (path === 'push/subscriptions') body = validatePushSubscription(body)
         if (path === 'appointments/guest') body = validateGuestBooking(body)
+        if (method === 'PATCH' && path === 'praticiens/me/settings') body = validateSettings(body)
         if (/^appointments\/\d+\/proposal$/.test(path)) body = validateProposal(body)
         if (/^admin\/claim-requests\/\d+$/.test(path)) body = validateDecision(body)
         if (method === 'PATCH' && path === 'users/me') body = validateProfileUpdate(body)

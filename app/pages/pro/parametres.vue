@@ -4,6 +4,9 @@
     <div class="bg-white rounded-[28px] p-5 sm:p-8">
       <ProSettings />
     </div>
+    <div id="agenda-externe" class="bg-white rounded-[28px] p-5 sm:p-8 mt-6 scroll-mt-24 transition-shadow duration-500" :class="flash ? 'shadow-[0_0_0_3px_#156F71]' : ''">
+      <ProCalendarLink />
+    </div>
     <div class="bg-white rounded-[28px] p-5 sm:p-8 mt-6">
       <ProVisibility />
     </div>
@@ -16,8 +19,24 @@
 </template>
 
 <script setup>
+import { ref, onMounted, watch } from 'vue'
+
 definePageMeta({ layout: 'pro', middleware: ['auth', 'pro'] })
 useSeoMeta({ title: 'Paramètres — Espace praticien Léya', robots: 'noindex, nofollow' })
+
+// Arrivée depuis le bouton de l'Agenda : on défile jusqu'à la carte du lien d'agenda et on la met en évidence un instant
+const route = useRoute()
+const flash = ref(false)
+function showCalendarCard() {
+  if (route.hash !== '#agenda-externe') return
+  setTimeout(() => {
+    document.getElementById('agenda-externe')?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+    flash.value = true
+    setTimeout(() => { flash.value = false }, 2500)
+  }, 400)
+}
+onMounted(showCalendarCard)
+watch(() => route.hash, showCalendarCard)
 </script>
 
 <style scoped>

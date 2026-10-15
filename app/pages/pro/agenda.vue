@@ -14,6 +14,9 @@
       </div>
       <button v-if="!isCurrent" type="button" class="rounded-full bg-white px-4 py-[9px] min-h-[40px] text-[16px] font-medium text-vert-900 hover:bg-bleu-50" @click="goToday">Aujourd’hui</button>
       <div class="flex-1"></div>
+      <NuxtLink :to="{ path: '/pro/parametres', hash: '#agenda-externe' }" class="inline-flex items-center gap-2 min-h-[48px] px-5 rounded-full border-[1.5px] border-vert-900 text-vert-900 text-[16px] font-medium hover:bg-white transition-colors">
+        <CalendarSync :size="18" aria-hidden="true" /> Synchroniser avec mon agenda
+      </NuxtLink>
       <NuxtLink to="/pro/absences" class="inline-flex items-center gap-[14px] min-h-[48px] pl-6 pr-1 py-1 rounded-full bg-vert-900 text-white text-[18px] font-semibold hover:bg-vert-600 transition-colors">
         Bloquer un créneau
         <span class="w-10 h-10 rounded-full bg-corail-500 flex items-center justify-center"><ArrowUpRight :size="20" aria-hidden="true" /></span>
@@ -93,7 +96,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { ArrowUpRight, CalendarSync, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { NuxtLink } from '#components'
 
 definePageMeta({ layout: 'pro', middleware: ['auth', 'pro'] })

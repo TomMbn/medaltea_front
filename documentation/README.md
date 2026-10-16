@@ -2,6 +2,8 @@
 
 | Document | Contenu |
 |---|---|
+| [guide-utilisateur.md](guide-utilisateur.md) | Mode d'emploi patient, praticien et administrateur |
+| [guide-installation.md](guide-installation.md) | Installation locale, variables, tests, mise en production, dépannage |
 | [architecture.md](architecture.md) | Schéma d'architecture, composants, emplacement des données, choix de conception, limites |
 | [sequences.md](sequences.md) | Diagrammes de séquence : connexion, recherche par ville, réservation, assistant IA, notifications |
 | [deploiement-ci-cd.md](deploiement-ci-cd.md) | Chaîne de livraison, intégration continue, environnements, retour arrière, performances, points à traiter |

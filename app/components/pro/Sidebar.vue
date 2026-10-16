@@ -31,7 +31,8 @@
       </span>
     </NuxtLink>
 
-    <div class="hidden lg:flex items-center gap-3 pt-4">
+    <!-- Compte et déconnexion : toujours visibles, même sur un écran peu haut (la liste des pages défile) -->
+    <div class="hidden lg:flex items-center gap-3 pt-4 mt-auto sticky bottom-0 -mb-6 pb-6 bg-vert-600">
       <span class="w-10 h-10 shrink-0 rounded-full bg-bleu-100 text-vert-900 flex items-center justify-center text-[15px] font-medium" aria-hidden="true">{{ initials }}</span>
       <div class="min-w-0 flex-1 leading-[normal]">
         <p class="text-[16px] font-medium truncate">{{ displayName }}</p>

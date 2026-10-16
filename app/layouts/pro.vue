@@ -4,7 +4,7 @@
 
     <div class="flex-1 min-w-0 lg:h-full lg:overflow-y-auto" data-scroll>
       <!-- Démonstration : données fictives, rien n'est enregistré -->
-      <div v-if="demo.active.value" class="sticky top-0 z-30 flex flex-wrap items-center gap-x-4 gap-y-2 bg-corail-100 px-4 sm:px-6 lg:px-10 py-3 text-[16px] leading-[normal]" role="status">
+      <div v-if="demo.active.value" class="lg:sticky lg:top-0 z-30 flex flex-wrap items-center gap-x-4 gap-y-2 bg-corail-100 px-4 sm:px-6 lg:px-10 py-3 text-[16px] leading-[normal]" role="status">
         <p class="flex-1 min-w-[240px]"><strong class="font-semibold">Mode démonstration.</strong> Les données sont fictives et rien n’est enregistré. Essayez de confirmer une demande ou de modifier votre fiche.</p>
         <div class="flex flex-wrap items-center gap-2">
           <button type="button" class="rounded-full bg-white px-4 py-2 text-[16px] font-medium hover:bg-bleu-50 transition-colors" @click="simulate">Simuler une demande</button>

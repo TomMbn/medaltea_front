@@ -172,7 +172,7 @@ onBeforeUnmount(() => {
   color: var(--vert-900);
   font-weight: 600;
   font-size: 17px;
-  padding: 10px 0;
+  padding: 13px 0;
   border-bottom: 1px solid var(--bleu-100);
 }
 

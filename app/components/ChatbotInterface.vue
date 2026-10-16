@@ -28,8 +28,9 @@
     <!-- Zone de discussion -->
     <section class="flex-1 min-w-0 min-h-0 flex flex-col" :class="isChatActive ? 'xl:pl-[78px] xl:pr-[17px]' : ''" aria-label="Discussion avec Léya">
       <!-- Accueil : logo, titre -->
-      <div v-if="!isChatActive" class="flex-1 min-h-0 overflow-y-auto scrollbar-hide flex flex-col items-center justify-center pb-10 xl:pb-[34px] xl:pl-[28px]">
-        <div class="w-full max-w-[970px] mx-auto flex flex-col items-center">
+      <div v-if="!isChatActive" class="flex-1 min-h-0 overflow-y-auto scrollbar-hide flex flex-col items-center pb-10 xl:pb-[34px] xl:pl-[28px]">
+        <!-- my-auto (et non justify-center) : centré s'il y a de la place, sinon le haut reste accessible en défilant -->
+        <div class="w-full max-w-[970px] mx-auto my-auto flex flex-col items-center">
           <img src="/images/logo.svg" alt="Léya" class="h-12 lg:h-[65px] w-auto" />
           <h2 class="mt-8 lg:mt-[68px] font-unbounded font-normal text-[22px] sm:text-[28px] lg:text-[32px] leading-[normal] text-vert-900 text-center">Posez-moi votre question</h2>
 

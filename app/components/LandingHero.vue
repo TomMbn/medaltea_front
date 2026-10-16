@@ -376,4 +376,20 @@ const handleSuggestion = (text) => {
     margin-top: 190px;
   }
 }
+
+/* Tablettes en paysage et petits portables (1024 à 1279 px) peu hauts : la carte « Demander à Léya » remonte pour rester lisible */
+@media (min-width: 1024px) and (max-width: 1279px) and (min-height: 761px) and (max-height: 900px) {
+  .hero-section {
+    padding-top: 108px;
+    padding-bottom: 40px;
+  }
+
+  .hero-content {
+    padding-top: 32px;
+  }
+
+  .search-bar-wrapper {
+    margin-top: 160px;
+  }
+}
 </style>

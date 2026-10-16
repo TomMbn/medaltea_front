@@ -9,8 +9,8 @@
 
       <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] grid grid-cols-1 lg:grid-cols-[1fr_600px] gap-10 lg:gap-8 items-start">
         <div>
-          <nav aria-label="Fil d'Ariane" class="inline-flex items-center bg-white rounded-full px-4 py-[9px] text-[16px] font-medium text-vert-900">
-            <NuxtLink to="/medecines" class="hover:underline">Médecines</NuxtLink>
+          <nav aria-label="Fil d'Ariane" class="inline-flex items-center bg-white rounded-full px-4 py-[5px] text-[16px] font-medium text-vert-900">
+            <NuxtLink to="/medecines" class="hover:underline py-1">Médecines</NuxtLink>
             <span aria-hidden="true" class="mx-1.5">›</span>
             <span aria-current="page">{{ medicine.name }}</span>
           </nav>

@@ -15,15 +15,15 @@
       <div class="xl:grid xl:grid-cols-[minmax(0,1fr)_440px] xl:gap-x-[68px]">
         <!-- Colonne principale : fil d'Ariane, identité, présentation -->
         <div class="min-w-0">
-          <nav aria-label="Fil d'Ariane" class="inline-flex flex-wrap items-center bg-white rounded-full px-4 py-[9px] text-[16px] font-medium leading-[normal] text-vert-900">
-            <NuxtLink to="/trouver-un-praticien" class="hover:underline">Praticiens</NuxtLink>
+          <nav aria-label="Fil d'Ariane" class="inline-flex flex-wrap items-center bg-white rounded-full px-4 py-[5px] text-[16px] font-medium leading-[normal] text-vert-900">
+            <NuxtLink to="/trouver-un-praticien" class="hover:underline py-1">Praticiens</NuxtLink>
             <template v-if="mainSpeciality">
               <span aria-hidden="true" class="mx-1.5">›</span>
-              <NuxtLink :to="{ path: '/trouver-un-praticien', query: { specialite: mainSpeciality.slug }, hash: '#resultats' }" class="hover:underline">{{ mainSpeciality.name }}</NuxtLink>
+              <NuxtLink :to="{ path: '/trouver-un-praticien', query: { specialite: mainSpeciality.slug }, hash: '#resultats' }" class="hover:underline py-1">{{ mainSpeciality.name }}</NuxtLink>
             </template>
             <template v-if="praticien.city">
               <span aria-hidden="true" class="mx-1.5">›</span>
-              <NuxtLink :to="{ path: '/trouver-un-praticien', query: { q: praticien.city }, hash: '#resultats' }" class="hover:underline">{{ praticien.city }}</NuxtLink>
+              <NuxtLink :to="{ path: '/trouver-un-praticien', query: { q: praticien.city }, hash: '#resultats' }" class="hover:underline py-1">{{ praticien.city }}</NuxtLink>
             </template>
           </nav>
 
@@ -390,7 +390,8 @@ const experience = computed(() => {
 // Chaque lecture est facturée par Google ; en cas d'erreur (pas de fiche liée, Google injoignable), rien n'est affiché.
 const google = ref(null)
 onNuxtReady(async () => {
-  if (!praticien.value.hasGoogleRating) return
+  // La page peut être quittée avant l'exécution de ce rappel : la fiche n'existe alors plus
+  if (!praticien.value?.hasGoogleRating) return
   try {
     const result = await $fetch(`/api/backend/praticiens/${id}/google-rating`)
     if (typeof result?.rating === 'number' && result.userRatingCount > 0) google.value = result
@@ -399,7 +400,7 @@ onNuxtReady(async () => {
 // Compteur de vues : une fois par fiche et par session, fiches revendiquées seulement. Aucune donnée personnelle
 // n'est envoyée ni stockée (le backend ne garde qu'un total par jour). Pas de comptage en développement.
 onNuxtReady(() => {
-  if (import.meta.dev || !praticien.value.claimed) return
+  if (import.meta.dev || !praticien.value?.claimed) return
   const key = `leya_vue_${id}`
   try {
     if (sessionStorage.getItem(key)) return

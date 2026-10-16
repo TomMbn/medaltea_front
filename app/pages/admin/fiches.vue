@@ -29,7 +29,7 @@
 
     <ul class="mt-3 grid gap-3">
       <li v-for="p in items" :key="p.id" class="rounded-[20px] bg-white p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
-        <div class="min-w-0 flex-1">
+        <div class="min-w-0 flex-1 basis-full sm:basis-0">
           <p class="text-[18px] font-semibold leading-[normal]">{{ p.firstName }} {{ p.lastName }}<span v-if="p.city" class="font-normal text-neutre-600"> · {{ p.city }}</span></p>
           <p class="mt-1 flex flex-wrap items-center gap-2 text-[14px] leading-[normal]">
             <span class="rounded-full px-2.5 py-1 font-semibold" :class="p.claimed ? 'bg-bleu-100 text-vert-900' : 'bg-neutre-200 text-neutre-600'">{{ p.claimed ? 'Gérée par un praticien' : 'Répertoriée' }}</span>
@@ -40,7 +40,7 @@
             <NuxtLink v-if="p.slug" :to="`/praticiens/${p.slug}`" target="_blank" class="underline text-vert-900 hover:text-vert-600">Fiche publique</NuxtLink>
           </p>
         </div>
-        <button v-if="p.claimed" type="button" class="min-h-[44px] rounded-full border-[1.5px] px-5 text-[16px] font-semibold transition-colors disabled:opacity-50" :class="p.isVerified ? 'border-red-700 text-red-800 hover:bg-red-50' : 'border-vert-900 text-vert-900 hover:bg-vert-900 hover:text-white'" :disabled="busy === p.id" @click="toggle(p)">
+        <button v-if="p.claimed" type="button" class="w-full sm:w-auto min-h-[44px] rounded-full border-[1.5px] px-5 text-[16px] font-semibold transition-colors disabled:opacity-50" :class="p.isVerified ? 'border-red-700 text-red-800 hover:bg-red-50' : 'border-vert-900 text-vert-900 hover:bg-vert-900 hover:text-white'" :disabled="busy === p.id" @click="toggle(p)">
           {{ busy === p.id ? 'Un instant…' : p.isVerified ? 'Retirer le badge' : 'Accorder le badge' }}
         </button>
       </li>

@@ -23,7 +23,7 @@ export type Rule = {
 export const RULES: Rule[] = [
     { method: 'GET', pattern: /^specialites$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^disciplines$/, auth: false, cacheable: true },
-    { method: 'GET', pattern: /^praticiens$/, auth: false, cacheable: true, query: ['specialityId', 'city', 'q', 'language', 'publicType', 'claimed', 'bookable', 'sort', 'limit', 'offset', 'lat', 'lng', 'radiusKm', 'mode', 'availableWithinDays', 'minRating', 'wheelchairAccessible', 'bbox'] },
+    { method: 'GET', pattern: /^praticiens$/, auth: false, cacheable: true, query: ['specialityId', 'city', 'q', 'name', 'language', 'publicType', 'claimed', 'bookable', 'sort', 'limit', 'offset', 'lat', 'lng', 'radiusKm', 'mode', 'availableWithinDays', 'minRating', 'wheelchairAccessible', 'bbox'] },
     { method: 'GET', pattern: /^praticiens\/\d+$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens\/slug\/[a-z0-9-]{1,120}$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens\/\d+\/next-slot$/, auth: false, query: ['consultationTypeId'] },
@@ -84,12 +84,13 @@ export const RULES: Rule[] = [
     { method: 'GET', pattern: /^praticiens\/me\/appointments$/, auth: true, query: ['from', 'to', 'status'] },
     { method: 'GET', pattern: /^praticiens\/me\/stats$/, auth: true, query: ['from', 'to'], own: true },
     // Abonnement d'agenda (le lien renvoyé est lu par l'application d'agenda, pas par le site)
+    { method: 'GET', pattern: /^praticiens\/me\/calendar-token$/, auth: true, own: true },
     { method: 'POST', pattern: /^praticiens\/me\/calendar-token$/, auth: true, own: true },
     { method: 'DELETE', pattern: /^praticiens\/me\/calendar-token$/, auth: true },
     { method: 'PATCH', pattern: /^praticiens\/me\/settings$/, auth: true, body: ['autoConfirm', 'guestBookingMode'] },
     { method: 'GET', pattern: /^praticiens\/me\/consultation-types$/, auth: true },
     { method: 'POST', pattern: /^praticiens\/me\/consultation-types$/, auth: true, body: ['name', 'durationMin', 'price', 'mode', 'kind'] },
-    { method: 'PATCH', pattern: /^praticiens\/me\/consultation-types\/\d+$/, auth: true, body: ['name', 'durationMin', 'price', 'mode', 'kind'] },
+    { method: 'PATCH', pattern: /^praticiens\/me\/consultation-types\/\d+$/, auth: true, body: ['name', 'durationMin', 'price', 'mode', 'kind', 'isActive'] },
     { method: 'DELETE', pattern: /^praticiens\/me\/consultation-types\/\d+$/, auth: true },
     { method: 'GET', pattern: /^praticiens\/me\/availabilities$/, auth: true },
     { method: 'POST', pattern: /^praticiens\/me\/availabilities$/, auth: true, body: ['dayOfWeek', 'startTime', 'endTime'] },
@@ -386,6 +387,7 @@ export default defineEventHandler(async (event) => {
         if (path === 'push/subscriptions') body = validatePushSubscription(body)
         if (path === 'appointments/guest') body = validateGuestBooking(body)
         if (method === 'PATCH' && path === 'praticiens/me/settings') body = validateSettings(body)
+        if (method === 'PATCH' && /^praticiens\/me\/consultation-types\/\d+$/.test(path) && 'isActive' in body && typeof body.isActive !== 'boolean') throw createError({ statusCode: 400, statusMessage: 'Valeur invalide.' })
         if (/^appointments\/\d+\/proposal$/.test(path)) body = validateProposal(body)
         if (/^admin\/claim-requests\/\d+$/.test(path)) body = validateDecision(body)
         if (method === 'PATCH' && path === 'users/me') body = validateProfileUpdate(body)
@@ -409,7 +411,8 @@ export default defineEventHandler(async (event) => {
         .slice(0, 100)
     if (query?.city !== undefined) query.city = looseText(query.city)
     if (query?.q !== undefined) query.q = looseText(query.q)
-    if (query && (query.q === '' || query.city === '')) { if (query.q === '') delete query.q; if (query.city === '') delete query.city }
+    if (query?.name !== undefined) query.name = looseText(query.name).slice(0, 100)
+    if (query && (query.q === '' || query.city === '' || query.name === '')) { for (const k of ['q', 'city', 'name']) if (query[k] === '') delete query[k] }
     if (query?.language !== undefined) query.language = String(query.language).slice(0, 10)
     validateListQuery(query)
 

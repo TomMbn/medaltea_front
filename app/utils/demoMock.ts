@@ -149,7 +149,7 @@ export function demoRequest(path: string, method: string, query: Record<string, 
   if ((id = num(/^praticiens\/me\/diplomas\/(\d+)$/)) && m === 'DELETE') { st.diplomas = st.diplomas.filter((x: any) => x.id !== id); return ok() }
 
   // Lien d'abonnement à l'agenda : adresse fictive (non fonctionnelle)
-  if (path === 'praticiens/me/calendar-token') return m === 'POST' ? ok({ url: 'https://example.org/calendar/lien-de-demonstration-non-fonctionnel.ics' }) : ok()
+  if (path === 'praticiens/me/calendar-token') return m === 'GET' ? ok({ subscriptionActive: false, createdAt: null }) : m === 'POST' ? ok({ url: 'https://example.org/calendar/lien-de-demonstration-non-fonctionnel.ics' }) : ok()
 
   // Rendez-vous
   if (path === 'praticiens/me/appointments' && m === 'GET') return ok(st.appts)

@@ -19,11 +19,14 @@
       </ul>
     </div>
 
+    <p v-if="active && !url" class="mt-4 rounded-[16px] bg-bleu-50 px-4 py-3 text-[16px] leading-[normal]" role="status">Votre lien d’abonnement est <strong class="font-semibold">actif</strong>. Pour des raisons de sécurité il n’est plus affiché : générez-en un nouveau si vous l’avez perdu (l’ancien cessera de fonctionner).</p>
+
     <div class="mt-4 flex flex-wrap items-center gap-3">
       <button type="button" class="inline-flex items-center border border-vert-900 text-[16px] font-semibold px-6 min-h-[44px] rounded-full hover:bg-vert-900 hover:text-white transition-colors disabled:opacity-50" :disabled="busy" @click="generate">
-        {{ busy ? 'Un instant…' : url ? 'Générer un nouveau lien' : 'Générer mon lien d’agenda' }}
+        {{ busy ? 'Un instant…' : url || active ? 'Générer un nouveau lien' : 'Générer mon lien d’agenda' }}
       </button>
-      <template v-if="!confirmRevoke">
+      <template v-if="!active && !url" />
+      <template v-else-if="!confirmRevoke">
         <button type="button" class="inline-flex items-center border border-red-700 text-red-800 text-[16px] font-semibold px-6 min-h-[44px] rounded-full hover:bg-red-50 transition-colors disabled:opacity-50" :disabled="busy" @click="confirmRevoke = true">Désactiver le lien</button>
       </template>
       <template v-else>
@@ -39,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Copy, Check } from 'lucide-vue-next'
 
 const url = ref('')
@@ -49,6 +52,14 @@ const confirmRevoke = ref(false)
 const message = ref('')
 const error = ref('')
 const field = ref(null)
+// État du lien (l'adresse n'est jamais renvoyée après sa génération)
+const active = ref(false)
+onMounted(async () => {
+  try {
+    const st = await $fetch('/api/backend/praticiens/me/calendar-token')
+    active.value = st?.subscriptionActive === true
+  } catch { /* état inconnu : on propose simplement de générer le lien */ }
+})
 
 const webcal = computed(() => url.value.replace(/^https?:\/\//, 'webcal://'))
 
@@ -68,6 +79,7 @@ async function generate() {
     // Le lien est secret : on n'accepte que l'adresse https renvoyée par notre backend
     if (typeof res?.url !== 'string' || !/^https:\/\/[^\s]+\.ics$/.test(res.url)) throw new Error('lien invalide')
     url.value = res.url
+    active.value = true
   } catch (e) {
     fail(e, 'Impossible de générer le lien pour le moment. Réessayez dans un instant.')
   } finally {
@@ -94,6 +106,7 @@ async function revoke() {
   try {
     await $fetch('/api/backend/praticiens/me/calendar-token', { method: 'DELETE' })
     url.value = ''
+    active.value = false
     confirmRevoke.value = false
     message.value = 'Le lien est désactivé : vos agendas ne reçoivent plus vos rendez-vous.'
   } catch (e) {

@@ -122,7 +122,7 @@ const sort = computed(() => {
 
 const apiQuery = computed(() => ({
   ...(speciality.value ? { specialityId: speciality.value.id } : {}),
-  ...(q.value && !place.value ? { q: q.value } : {}),
+  ...(q.value && !place.value ? (byName.value ? { name: q.value } : { q: q.value }) : {}),
   ...(place.value && !geo.value ? { lat: place.value.latitude, lng: place.value.longitude, radiusKm: PLACE_RADIUS_KM } : {}),
   ...(SORTS[sort.value] ? { sort: SORTS[sort.value] } : {}),
   ...(onlyBookable.value ? { bookable: true } : {}),
@@ -136,20 +136,8 @@ const apiQuery = computed(() => ({
   limit: PAGE_SIZE,
 }))
 
-// Recherche « par nom » : le texte libre de l'API cherche aussi dans la ville et l'adresse. On ne garde ici que les praticiens dont le nom
-// contient tous les mots saisis (limite de l'API : 100 fiches par requête, largement suffisant pour un nom).
-const plain = (t) => String(t ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
-function nameMatches(p) {
-  const full = plain(`${p.firstName} ${p.lastName}`)
-  return plain(q.value).split(/\s+/).filter(Boolean).every(word => full.includes(word))
-}
-
+// Recherche « par nom » : le paramètre `name` de l'API cherche uniquement dans le prénom et le nom (le texte libre `q` cherche aussi la ville et l'adresse).
 async function fetchPage(offset) {
-  if (byName.value && q.value) {
-    const res = await $fetch.raw('/api/backend/praticiens', { query: { ...apiQuery.value, limit: 100, offset: 0 } })
-    const all = (Array.isArray(res._data) ? res._data : []).filter(nameMatches)
-    return { items: all.slice(offset, offset + PAGE_SIZE), total: all.length }
-  }
   const res = await $fetch.raw('/api/backend/praticiens', { query: { ...apiQuery.value, offset } })
   return { items: Array.isArray(res._data) ? res._data : [], total: Number(res.headers.get('x-total-count')) || 0 }
 }
@@ -179,7 +167,6 @@ const { data: mapData, pending: mapPending } = await useAsyncData(
     if (!(isResults.value && view.value === 'carte')) return { items: [], total: 0 }
     const res = await $fetch.raw('/api/backend/praticiens', { query: mapQuery.value })
     const list = Array.isArray(res._data) ? res._data : []
-    if (byName.value && q.value) { const named = list.filter(nameMatches); return { items: named, total: named.length } }
     return { items: list, total: Number(res.headers.get('x-total-count')) || 0 }
   },
   { watch: [mapQuery, view, isResults], server: false, lazy: true },

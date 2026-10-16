@@ -49,6 +49,19 @@
     </ul>
     <p v-else class="text-[16px] text-neutre-600 bg-bleu-50 rounded-[16px] p-4 mb-8">Aucune prestation : ajoutez-en une pour ouvrir la réservation en ligne.</p>
 
+    <div v-if="disabled.length" class="mb-8">
+      <h3 class="font-semibold text-[16px] mb-3">Prestations désactivées</h3>
+      <ul class="grid gap-2">
+        <li v-for="t in disabled" :key="t.id" class="rounded-[16px] border border-neutre-300 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p class="text-[16px] font-semibold text-neutre-600">{{ t.name }}</p>
+            <p class="text-[14px] text-neutre-600">{{ t.durationMin }} min<template v-if="t.price != null"> · {{ t.price }} €</template> · non proposée aux patients</p>
+          </div>
+          <button class="underline text-[16px]" @click="enable(t)">Réactiver</button>
+        </li>
+      </ul>
+    </div>
+
     <h3 class="font-semibold text-[16px] mb-3">Ajouter une prestation</h3>
     <form class="grid gap-3 sm:grid-cols-4" @submit.prevent="add">
       <div class="sm:col-span-4">
@@ -75,7 +88,7 @@
         <button class="w-full bg-vert-900 text-white text-[16px] font-semibold px-6 min-h-[44px] rounded-full hover:bg-vert-600 disabled:opacity-50" :disabled="busy">Ajouter</button>
       </div>
     </form>
-    <p class="text-[14px] text-neutre-600 mt-4">Une prestation supprimée n'est plus proposée aux patients ; les rendez-vous déjà pris sont conservés. Pour la proposer de nouveau, ajoutez-la à nouveau.</p>
+    <p class="text-[14px] text-neutre-600 mt-4">Une prestation supprimée n'est plus proposée aux patients ; les rendez-vous déjà pris sont conservés. Vous pouvez la réactiver à tout moment.</p>
   </div>
 </template>
 
@@ -83,8 +96,10 @@
 import { ref, computed } from 'vue'
 
 const { data: loaded, refresh: refreshTypes } = await useAsyncData('pro-types', () => $fetch('/api/backend/praticiens/me/consultation-types'), { server: false, default: () => [] })
-// L'API ne permet pas de réactiver une prestation désactivée : elle n'est plus affichée (les rendez-vous déjà pris la conservent)
-const items = computed(() => (Array.isArray(loaded.value) ? loaded.value : []).filter(t => t.isActive !== false))
+const all = computed(() => (Array.isArray(loaded.value) ? loaded.value : []))
+const items = computed(() => all.value.filter(t => t.isActive !== false))
+// Prestations désactivées : invisibles pour les patients, réactivables ici
+const disabled = computed(() => all.value.filter(t => t.isActive === false))
 const error = ref('')
 const busy = ref(false)
 const editing = ref(null)
@@ -126,6 +141,14 @@ async function saveEdit(t) {
     await reload()
   } catch (e) { error.value = apiErrorMessage(e, 'Modification impossible.') }
   finally { busy.value = false }
+}
+
+async function enable(t) {
+  error.value = ''
+  try {
+    await $fetch(`/api/backend/praticiens/me/consultation-types/${t.id}`, { method: 'PATCH', body: { isActive: true } })
+    await reload()
+  } catch (e) { error.value = apiErrorMessage(e, 'Réactivation impossible.') }
 }
 
 async function disable(t) {

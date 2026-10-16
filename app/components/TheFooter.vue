@@ -1,5 +1,5 @@
 <template>
-  <footer class="relative mt-20 lg:mt-40 bg-vert-600 text-white" aria-label="Pied de page">
+  <footer class="relative bg-vert-600 text-white" :class="isProLanding ? '' : 'mt-20 lg:mt-40'" aria-label="Pied de page">
     <!-- Décor (maquette V5) : masqué sur petits écrans -->
     <div class="hidden lg:block absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
       <img v-for="leaf in leaves" :key="leaf.src" :src="leaf.src" alt="" loading="lazy" class="leaf" :style="leaf.style" />

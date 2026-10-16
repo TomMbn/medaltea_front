@@ -50,8 +50,8 @@ flowchart LR
 ## Points à traiter
 
 1. **Durées côté API** : le registre reprend la politique publiée ; les durées précises des rendez-vous, des invités et des abonnements push sont à confirmer avec l'équipe qui tient l'API.
-2. **Transferts hors Union européenne** : Google (Gemini) et Vercel sont des sous-traitants américains ; vérifier les clauses contractuelles types et le cadre « Data Privacy Framework ». L'exécution des fonctions Vercel à Washington (voir [deploiement-ci-cd.md](deploiement-ci-cd.md)) accroît ces transferts : à passer en région de Paris si possible.
+2. **Transferts hors Union européenne** : Google (Gemini) et Vercel sont des sous-traitants américains ; vérifier les clauses contractuelles types et le cadre « Data Privacy Framework ». Les fonctions Vercel sont désormais configurées en région de Paris (`vercel.json`, voir [deploiement-ci-cd.md](deploiement-ci-cd.md)) : à vérifier après déploiement.
 3. **Politique de confidentialité à compléter** : notifications push (traitement 8), lien d'agenda (traitement 9) et réservation sans compte (traitement 3) doivent y figurer explicitement.
-4. **Analyse d'impact (AIPD)** : le traitement 4 (messages pouvant révéler de la santé, sous-traitant hors UE) justifie d'en faire une, même légère.
+4. **Analyse d'impact (AIPD)** : le traitement 4 (messages pouvant révéler de la santé, sous-traitant hors UE) justifie d'en faire une, même légère : voir [aipd.md](aipd.md).
 5. **Données de santé** : le motif d'un rendez-vous peut en contenir ; le consentement doit être recueilli au moment de la saisie (c'est le cas pour la réservation sans compte via `consentHealthData`).
 6. **Fiches non revendiquées** : droit d'opposition et de retrait déjà prévus ; vérifier la procédure interne (délai d'un mois).

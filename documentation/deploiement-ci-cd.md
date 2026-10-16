@@ -44,7 +44,7 @@ Posés par `nuxt.config.ts` (`routeRules`) : `Strict-Transport-Security` (Vercel
 
 ## Points d'attention à traiter
 
-1. **Région d'exécution des fonctions.** L'en-tête `x-vercel-id: cdg1::iad1::…` de la production indique des fonctions exécutées à Washington (iad1) alors que l'API est en France : latence supplémentaire à chaque appel serveur et transit des cookies par les États-Unis. À confirmer dans le tableau de bord Vercel ; si c'est le cas, fixer la région de Paris (`cdg1`) dans la configuration Nitro/Vercel.
+1. **Région d'exécution des fonctions.** L'en-tête `x-vercel-id: cdg1::iad1::…` de la production indique des fonctions exécutées à Washington (iad1) alors que l'API est en France : latence supplémentaire à chaque appel serveur et transit des cookies par les États-Unis. **Corrigé le 16/10/2026** : `vercel.json` fixe la région de Paris (`cdg1`). À vérifier après le déploiement : la commande `curl -sI https://leya-sante.fr/api/backend/push/public-key | grep -i x-vercel-id` doit afficher `cdg1::cdg1` ; sinon, régler la région dans Vercel (Settings, Functions).
 2. **Protection de la branche `main`** : exiger que la CI passe avant la fusion.
 3. **CSP bloquante** : à activer après examen des rapports, en autorisant les tuiles OpenStreetMap, Turnstile et Umami.
 4. **Test de charge simple** (par exemple k6 ou Artillery sur l'annuaire et la recherche) pour documenter la capacité.

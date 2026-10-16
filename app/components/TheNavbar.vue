@@ -15,8 +15,11 @@
         <a href="#faq" class="hover:text-vert-600 transition-colors">FAQ</a>
       </div>
       <div class="flex items-center gap-3">
-        <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro' } }" class="hidden sm:inline-flex items-center min-h-[48px] px-6 rounded-full border-[1.5px] border-vert-900 text-vert-900 text-[16px] font-medium hover:bg-vert-900 hover:text-white transition-colors">Se connecter</NuxtLink>
-        <NuxtLink to="/inscription-pro" class="inline-flex items-center gap-[14px] min-h-[48px] pl-6 pr-1 py-1 rounded-full bg-vert-900 text-white text-[16px] font-medium whitespace-nowrap hover:bg-vert-600 transition-colors">
+        <NuxtLink :to="{ path: '/login', query: { espace: 'pro', redirect: '/pro' } }" class="hidden sm:inline-flex items-center gap-[14px] min-h-[48px] pl-6 pr-1 py-1 rounded-full border-[1.5px] border-vert-900 text-vert-900 text-[18px] font-semibold whitespace-nowrap hover:bg-white transition-colors">
+          Se connecter
+          <span class="w-10 h-10 rounded-full border-[1.5px] border-vert-900 flex items-center justify-center"><ArrowUpRight :size="18" aria-hidden="true" /></span>
+        </NuxtLink>
+        <NuxtLink to="/inscription-pro" class="inline-flex items-center gap-[14px] min-h-[48px] pl-6 pr-1 py-1 rounded-full bg-vert-900 text-white text-[18px] font-semibold whitespace-nowrap hover:bg-vert-600 transition-colors">
           Rejoindre<span class="hidden sm:inline"> Léya</span>
           <span class="w-10 h-10 rounded-full bg-corail-500 text-vert-900 flex items-center justify-center"><ArrowUpRight :size="18" aria-hidden="true" /></span>
         </NuxtLink>

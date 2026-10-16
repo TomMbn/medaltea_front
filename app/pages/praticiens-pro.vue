@@ -24,45 +24,21 @@
           <p class="mt-8 text-[18px] xl:text-[24px] leading-[normal] text-neutre-600 max-w-[620px]">
             Léya oriente les patients vers la bonne médecine, puis vers vous. Votre fiche, votre agenda et vos demandes de rendez-vous : tout votre cabinet au même endroit.
           </p>
-          <div class="mt-10 xl:mt-[42px] flex flex-wrap items-center gap-3">
-            <NuxtLink to="/inscription-pro" class="inline-flex items-center gap-[14px] min-h-[48px] pl-6 pr-1 py-1 rounded-full bg-vert-900 text-white text-[16px] font-medium hover:bg-vert-600 transition-colors">
+          <div class="pro-cta mt-10 xl:mt-[42px] flex flex-wrap items-center gap-3">
+            <NuxtLink to="/inscription-pro" class="inline-flex items-center gap-[14px] min-h-[48px] pl-6 pr-1 py-1 rounded-full bg-vert-900 text-white text-[18px] font-semibold hover:bg-vert-600 transition-colors">
               Créer mon profil gratuitement
               <span class="w-10 h-10 rounded-full bg-corail-500 text-vert-900 flex items-center justify-center"><ArrowUpRight :size="18" aria-hidden="true" /></span>
             </NuxtLink>
-            <NuxtLink to="/demo" class="inline-flex items-center min-h-[48px] px-5 rounded-full border-[1.5px] border-vert-900 text-vert-900 text-[16px] font-medium hover:bg-white transition-colors">Essayer la démo</NuxtLink>
+            <NuxtLink to="/demo" class="inline-flex items-center gap-2 py-1 px-2 text-vert-900 text-[18px] font-semibold hover:text-vert-600 transition-colors">Voir une démo <ArrowUpRight :size="18" aria-hidden="true" /></NuxtLink>
           </div>
-          <ul class="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-[16px] font-medium text-vert-600">
+          <ul class="pro-checks mt-6 flex flex-wrap gap-x-5 gap-y-2 text-[16px] font-medium text-vert-600">
             <li v-for="c in checks" :key="c" class="inline-flex items-center gap-2"><Check :size="16" aria-hidden="true" /> {{ c }}</li>
           </ul>
         </div>
 
-        <!-- Aperçu de l'espace praticien : schéma illustratif, sans donnée réelle ni fictive -->
+        <!-- Aperçu de l'espace praticien (exemple d'écran, voir ProHeroMockup) -->
+        <ProHeroMockup class="hidden xl:block" />
         <div class="pro-mock hidden xl:block" aria-hidden="true">
-          <div class="pro-laptop">
-            <div class="pro-screen">
-              <div class="pro-side">
-                <div class="pro-side-logo"><img src="/images/footer/logo-blanc.svg" alt="" style="animation: none;" /><span>Pro</span></div>
-                <span class="pro-nav on">Rendez-vous</span>
-                <span class="pro-nav">Ma fiche</span>
-                <span class="pro-nav">Horaires</span>
-                <span class="pro-nav">Paramètres</span>
-              </div>
-              <div class="pro-main">
-                <p class="pro-h">Vos rendez-vous</p>
-                <div class="pro-row"><i class="t"></i><i class="l w1"></i><b class="ok">Confirmé</b></div>
-                <div class="pro-row"><i class="t"></i><i class="l w2"></i><b class="ok">Confirmé</b></div>
-                <div class="pro-row"><i class="t"></i><i class="l w3"></i><b class="wait">En attente</b></div>
-                <p class="pro-h mt">Demandes à confirmer</p>
-                <div class="pro-req"><i class="l w1"></i><span class="pro-btn">Accepter</span><span class="pro-btn ghost">Autre créneau</span></div>
-                <div class="pro-req"><i class="l w2"></i><span class="pro-btn">Accepter</span><span class="pro-btn ghost">Autre créneau</span></div>
-              </div>
-            </div>
-            <div class="pro-base"></div>
-          </div>
-          <div class="pro-notif">
-            <span class="pro-notif-ico"><CalendarCheck :size="18" /></span>
-            <span><strong>Nouvelle demande de RDV</strong><small>Reçue dans votre espace</small></span>
-          </div>
           <span class="pro-pill">Gratuit pendant le lancement</span>
         </div>
       </div>
@@ -208,39 +184,13 @@ const faqs = [
   .pro-hero { height: calc(var(--u) * 940); padding-top: 0; }
   .pro-hero-text { position: absolute; left: calc(var(--u) * 200); top: calc(var(--u) * 190); width: calc(var(--u) * 700); }
   .pro-hero-text h1 { font-size: calc(var(--u) * 56); margin-top: calc(var(--u) * 20); white-space: nowrap; line-height: 1.25; }
-  .pro-hero-text p:not(:first-child) { font-size: max(18px, calc(var(--u) * 24)); }
+  .pro-hero-text p:not(:first-child) { font-size: max(18px, calc(var(--u) * 24)); margin-top: calc(var(--u) * 24); }
+  .pro-cta { margin-top: calc(var(--u) * 47); }
+  .pro-checks { margin-top: calc(var(--u) * 32); }
 }
 
-/* Aperçu de l'espace praticien : 1em = 10 px de la maquette à 1728 px */
+/* Pastille « Gratuit pendant le lancement » : posée au-dessus de l'aperçu (1em = 10 px de la maquette à 1728 px) */
 .pro-mock { position: absolute; left: calc(var(--u) * 854); top: calc(var(--u) * 230); width: calc(var(--u) * 845); font-size: calc(var(--u) * 10); }
-.pro-laptop { transform: rotate(3deg); filter: drop-shadow(0 1.2em 1.6em rgba(1, 40, 40, 0.08)); width: 72.8em; margin: 3em 0 0 1em; }
-.pro-screen { display: flex; width: 72.8em; height: 48.1em; padding: 1.4em; background: var(--vert-900); border-radius: 2.4em; box-sizing: border-box; }
-.pro-side { width: 11.3em; flex: none; background: var(--vert-600); border-radius: 1.2em 0 0 1.2em; padding: 1.3em .8em; display: flex; flex-direction: column; gap: .4em; }
-.pro-side-logo { display: flex; align-items: center; gap: .4em; padding: 0 .5em 1.1em; }
-.pro-side-logo img { height: 1.4em; width: auto; }
-.pro-side-logo span { background: var(--corail-500); color: var(--vert-900); font-size: .65em; font-weight: 500; padding: .35em .65em; border-radius: 99em; }
-.pro-nav { color: #fff; font-size: .73em; font-weight: 600; padding: .65em .8em; border-radius: 1.4em; }
-.pro-nav.on { background: #fff; color: var(--vert-900); }
-.pro-main { flex: 1; background: var(--bleu-50); border-radius: 0 1.2em 1.2em 0; padding: 2em 2.2em; display: flex; flex-direction: column; gap: .8em; }
-.pro-h { font-size: 1.2em; font-weight: 600; color: var(--vert-900); }
-.pro-h.mt { margin-top: 1em; }
-.pro-row, .pro-req { background: #fff; border-radius: 1em; padding: 1em 1.2em; display: flex; align-items: center; gap: 1.2em; }
-.pro-row .t { width: 4em; height: .9em; border-radius: 1em; background: var(--bleu-100); }
-.pro-req .l, .pro-row .l { height: .9em; border-radius: 1em; background: var(--bleu-100); }
-.l.w1 { width: 14em; } .l.w2 { width: 11em; } .l.w3 { width: 16em; }
-.pro-row b { margin-left: auto; font-size: .9em; font-weight: 600; padding: .3em .9em; border-radius: 99em; }
-.pro-row b.ok { background: #d9efe5; color: var(--vert-600); }
-.pro-row b.wait { background: var(--corail-100); color: var(--corail-700); }
-.pro-req .l { margin-right: auto; }
-.pro-btn { font-size: .9em; font-weight: 600; background: var(--vert-900); color: #fff; padding: .45em 1em; border-radius: 99em; }
-.pro-btn.ghost { background: transparent; color: var(--vert-900); border: 1.5px solid var(--vert-900); }
-.pro-base { height: 1.2em; margin: 0 -6em; background: #c8d6dc; border-radius: 0 0 2em 2em; }
-.pro-notif { position: absolute; left: 0; bottom: 3em; display: flex; align-items: center; gap: 1.2em; background: var(--vert-600); color: #fff; padding: 1.4em 2em 1.4em 1.4em; border-radius: 2em; transform: rotate(-3deg); box-shadow: 0 1.2em 3.2em rgba(1, 40, 40, 0.12); }
-.pro-notif-ico { width: 4.4em; height: 4.4em; border-radius: 50%; background: #fff; color: var(--vert-600); display: flex; align-items: center; justify-content: center; }
-.pro-notif strong { display: block; font-size: 1.8em; font-weight: 600; }
-.pro-notif small { display: block; font-size: 1.6em; color: var(--bleu-100); }
 .pro-pill { position: absolute; right: 1em; top: 0; background: var(--corail-500); color: var(--vert-900); font-size: 1.6em; font-weight: 500; padding: .5em 1em; border-radius: 99em; transform: rotate(-3deg); }
-
-details > summary::-webkit-details-marker { display: none; }
 @media (prefers-reduced-motion: reduce) { details > summary span { transition: none; } }
 </style>

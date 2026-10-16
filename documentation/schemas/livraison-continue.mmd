@@ -1,0 +1,8 @@
+flowchart LR
+  DEV["Poste de développement\nnpm run dev"] -->|"git push develop"| GH["GitHub\nbranche develop"]
+  GH --> CI1["GitHub Actions\ntests unitaires + build + tests de bout en bout"]
+  GH -->|"fusion dans main"| MAIN["GitHub\nbranche main"]
+  MAIN --> CI2["GitHub Actions\nmêmes contrôles"]
+  MAIN -->|"déploiement automatique"| VERCEL["Vercel\nconstruction + mise en production"]
+  VERCEL --> PROD["https://leya-sante.fr"]
+  PROD -->|"mesure d'audience, rapports CSP"| OBS["Umami, journaux Vercel"]

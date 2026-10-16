@@ -1,0 +1,22 @@
+sequenceDiagram
+  actor U as Visiteur
+  participant N as Navigateur
+  participant P as Page (rendu serveur)
+  participant V as Route /api/place
+  participant G as Géoplateforme IGN
+  participant W as Passerelle
+  participant A as API NestJS
+
+  U->>N: saisit « Cholet »
+  N->>P: GET /trouver-un-praticien?q=Cholet
+  P->>V: reconnaître la commune ?
+  V->>G: recherche d'une commune nommée Cholet
+  G-->>V: commune + coordonnées
+  V-->>P: oui (nom exact) : centre de Cholet
+  P->>W: GET praticiens?lat&lng&radiusKm=15
+  W->>W: valide les paramètres
+  W->>A: GET /praticiens (liste blanche)
+  A-->>W: fiches triées par distance
+  W-->>P: sans champs privés
+  P-->>N: page avec résultats
+  Note over V,P: Texte qui n'est pas une commune (un nom) : recherche par nom avec le paramètre q

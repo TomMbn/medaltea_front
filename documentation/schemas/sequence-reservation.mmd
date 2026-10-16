@@ -1,0 +1,23 @@
+sequenceDiagram
+  actor U as Patient
+  participant N as Navigateur
+  participant W as Passerelle
+  participant A as API NestJS
+  actor P as Praticien
+
+  U->>N: ouvre la fiche, choisit une prestation et un jour
+  N->>W: GET praticiens/{id}/slots
+  W->>A: créneaux libres
+  A-->>N: liste de créneaux
+  U->>N: choisit un créneau, motif facultatif (500 caractères)
+  N->>W: POST appointments {praticienId, prestation, startAt, motif}
+  W->>W: valide les types et la longueur du motif
+  W->>A: POST /appointments (Bearer)
+  alt créneau encore libre
+    A-->>N: 201, statut « en attente » ou « confirmé » (confirmation automatique)
+    A--)P: notification push neutre « Nouvelle demande de rendez-vous »<br/>(envoi par l'API, à vérifier de bout en bout avec de vrais comptes)
+  else créneau pris entre-temps
+    A-->>N: 409, le site propose d'autres créneaux
+  end
+  P->>A: confirme, refuse ou propose un autre créneau
+  A--)U: notification push neutre

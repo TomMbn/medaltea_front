@@ -140,5 +140,6 @@ La branche `main` est déployée automatiquement sur Vercel. Le travail se fait 
 
 ## Documentation complémentaire
 
+- [Documentation technique](documentation/README.md) : architecture, séquences, déploiement, données personnelles (RGPD), IA Act, choix technologiques
 - [Stratégie et scénarios de tests](tests/README.md)
 - [Rapport d'exécution des tests](tests/RAPPORT-EXECUTION.md)

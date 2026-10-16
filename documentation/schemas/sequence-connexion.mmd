@@ -1,0 +1,16 @@
+sequenceDiagram
+  actor U as Utilisateur
+  participant N as Navigateur
+  participant S as Route serveur /api/login
+  participant A as API NestJS
+
+  U->>N: e-mail + mot de passe
+  N->>S: POST /api/login
+  S->>S: ne garde que mail et password
+  S->>A: POST /auth/login
+  A-->>S: jeton d'accès
+  S->>A: GET /users/me (jeton)
+  A-->>S: rôle (patient, pro ou admin)
+  S-->>N: Set-Cookie token (httpOnly) + témoins d'interface<br/>corps : rôle seulement, jamais le jeton
+  N->>N: redirection selon le rôle (/chatbot, /pro, /admin)
+  Note over N,A: Identifiants faux : l'API répond 401, le site affiche « Identifiants incorrects », aucun cookie n'est posé

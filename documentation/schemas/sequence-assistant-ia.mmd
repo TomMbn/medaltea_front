@@ -1,0 +1,18 @@
+sequenceDiagram
+  actor U as Utilisateur connecté
+  participant N as Navigateur
+  participant C as Route serveur /api/chat
+  participant A as API NestJS
+  participant G as Google Gemini
+
+  U->>N: pose une question
+  N->>C: POST /api/chat {message, historique}
+  C->>A: GET /users/me (vérifie le jeton, mis en cache 60 s)
+  A-->>C: identité
+  C->>C: valide et borne l'entrée, vérifie le quota du jour
+  C->>G: message + historique + consignes (domaine, urgences)
+  G-->>C: réponse en flux
+  C-->>N: texte en flux
+  N->>N: rendu Markdown assaini (DOMPurify)
+  N->>N: pastilles de médecines, bouton praticiens proches
+  Note over C,G: Le site ne stocke ni le message ni la réponse<br/>Google traite le texte selon ses conditions (sous-traitant déclaré)

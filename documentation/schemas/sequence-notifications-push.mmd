@@ -1,0 +1,22 @@
+sequenceDiagram
+  actor U as Utilisateur
+  participant N as Navigateur
+  participant SW as Service worker
+  participant W as Passerelle
+  participant A as API NestJS
+  participant PS as Service push du navigateur
+
+  U->>N: clique « Activer les notifications »
+  N->>N: demande l'autorisation du navigateur
+  N->>W: GET push/public-key
+  W->>A: clé publique VAPID
+  N->>SW: enregistre le service worker
+  N->>PS: crée l'abonnement (clé publique)
+  N->>W: POST push/subscriptions {endpoint, clés}
+  W->>A: stocke l'abonnement du compte
+  A--)PS: événement (nouvelle demande, confirmation, rappel de 18 h)
+  PS--)SW: message neutre (titre, texte court, adresse relative)
+  SW->>U: affiche la notification
+  U->>SW: clique
+  SW->>N: ouvre la page indiquée (même site uniquement)
+  Note over N,A: À la déconnexion, l'abonnement est retiré du compte et du navigateur

@@ -1,0 +1,43 @@
+flowchart TB
+  subgraph Client["Navigateur (ordinateur, téléphone, PWA installée)"]
+    UI["Application Vue 3 / Nuxt\n(pages, composants, Tailwind)"]
+    SW["Service worker\nnotifications push uniquement,\naucune mise en cache"]
+    MEM["Mémoire de l'onglet\nconversation du chat, démo praticien"]
+  end
+
+  subgraph Vercel["Vercel (CDN + fonctions Nitro)"]
+    SSR["Rendu serveur (SSR)\npages publiques indexables"]
+    GW["Passerelle /api/backend/*\nliste blanche, validation, jeton httpOnly"]
+    ROUTES["Routes serveur\nlogin, register, session, logout,\nchat, address, place, sitemap"]
+  end
+
+  subgraph VPS["Serveur dédié (France)"]
+    API["API NestJS"]
+    DB[("PostgreSQL")]
+    JOBS["Tâches planifiées\nrappels, notifications"]
+  end
+
+  subgraph Tiers["Services tiers"]
+    GEM["Google Gemini\nassistant IA"]
+    IGN["Géoplateforme IGN\nadresses, communes"]
+    OSM["OpenStreetMap\ntuiles de carte"]
+    CF["Cloudflare Turnstile\nanti-robot (réservation sans compte)"]
+    UMAMI["Umami (auto-hébergé)\nmesure d'audience"]
+    PUSH["Services web push\ndes navigateurs"]
+  end
+
+  UI -- "HTML, JS, images" --> SSR
+  UI -- "fetch /api/backend/*" --> GW
+  UI -- "fetch /api/*" --> ROUTES
+  UI -- "tuiles" --> OSM
+  UI -- "jeton anti-robot" --> CF
+  UI -- "événements anonymes (relayés par Vercel)" --> UMAMI
+  SW <-- "push" --> PUSH
+  SSR --> GW
+  GW -- "Bearer (jeton du cookie)" --> API
+  ROUTES -- "auth, profil" --> API
+  ROUTES -- "message + historique" --> GEM
+  ROUTES -- "requête de géocodage" --> IGN
+  API --> DB
+  API --- JOBS
+  JOBS --> PUSH

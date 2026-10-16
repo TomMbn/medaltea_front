@@ -1,0 +1,12 @@
+flowchart LR
+  P(("Patient")) -->|"compte, rendez-vous, motif facultatif"| SITE["Site (Vercel)"]
+  PR(("Praticien")) -->|"fiche, horaires, prestations"| SITE
+  SITE -->|"passerelle, jeton httpOnly"| API[("API + PostgreSQL\nFrance")]
+  P -->|"message libre, pouvant révéler de la santé"| SITE
+  SITE -->|"message + historique (non stockés)"| GEM["Google Gemini\nsous-traitant"]
+  P -->|"position arrondie à 1 km, facultative"| SITE
+  SITE -->|"coordonnées du centre de recherche"| API
+  SITE -->|"adresse tapée, ville"| IGN["Géoplateforme IGN"]
+  P -->|"adresse IP, zone de carte vue"| OSM["OpenStreetMap"]
+  P -->|"événements anonymes"| UM["Umami (auto-hébergé)"]
+  API -->|"identifiant d'abonnement"| PUSH["Services push\ndes navigateurs"]

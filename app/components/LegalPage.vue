@@ -3,7 +3,7 @@
     <div class="w-11/12 max-w-[900px] mx-auto pt-32 pb-8">
       <article class="bg-white rounded-[20px] shadow-sm p-6 sm:p-10 lg:p-16 text-[#012828]">
         <h1 class="font-unbounded font-bold text-3xl lg:text-4xl mb-3">{{ title }}</h1>
-        <p class="text-sm opacity-60 mb-10">Dernière mise à jour : {{ legal.lastUpdate }}</p>
+        <p class="text-sm text-neutre-600 mb-10">Dernière mise à jour : {{ legal.lastUpdate }}</p>
         <div class="legal-content font-sans">
           <slot />
         </div>
@@ -37,8 +37,8 @@ defineProps({ title: { type: String, required: true } })
 .font-unbounded { font-family: 'Unbounded', cursive; }
 .legal-content :deep(h2) { font-family: 'Unbounded', cursive; font-weight: 700; font-size: 1.25rem; margin: 2.5rem 0 1rem; }
 .legal-content :deep(h3) { font-weight: 700; margin: 1.5rem 0 0.5rem; }
-.legal-content :deep(p) { line-height: 1.75; margin-bottom: 1rem; opacity: 0.85; }
-.legal-content :deep(ul) { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; line-height: 1.75; opacity: 0.85; }
+.legal-content :deep(p) { line-height: 1.75; margin-bottom: 1rem; color: rgb(1 40 40 / 0.85); }
+.legal-content :deep(ul) { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; line-height: 1.75; color: rgb(1 40 40 / 0.85); }
 .legal-content :deep(a) { color: #156F71; text-decoration: underline; }
 .legal-content :deep(table) { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.9rem; }
 /* Téléphone : les tableaux défilent horizontalement au lieu d'être coupés (colonnes « base légale » et « durée » sinon invisibles) */

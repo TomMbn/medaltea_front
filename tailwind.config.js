@@ -10,7 +10,7 @@ export default {
       // Palette de la maquette V5 (Figma). Les valeurs déjà utilisées sur le site (#012828, #156F71, #EC7F7A, #90BAD1) sont identiques.
       colors: {
         vert: { 600: '#156f71', 900: '#012828' },
-        corail: { 100: '#fcdedb', 500: '#ec7f7a', 700: '#b5534e' },
+        corail: { 100: '#fcdedb', 500: '#ec7f7a', 700: '#a64a45' },
         bleu: { 50: '#eef5f8', 100: '#d7e7f0', 300: '#90bad1' },
         jaune: { 400: '#ffdb25' },
         neutre: { 200: '#d9d9d9', 300: '#c8c8c8', 500: '#959595', 600: '#626b6b' },

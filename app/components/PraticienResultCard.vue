@@ -17,7 +17,7 @@
           class="w-full h-full object-cover bg-bleu-50"
           @error="photoFailed = true"
         />
-        <span v-else class="absolute inset-0 flex items-center justify-center text-white font-unbounded text-[32px]" aria-hidden="true">{{ initials }}</span>
+        <span v-else class="absolute inset-0 flex items-center justify-center font-unbounded text-[32px]" :style="{ color: avatarInk(colors[praticien.id % colors.length]) }" aria-hidden="true">{{ initials }}</span>
       </div>
 
       <div class="flex-1 min-w-0 flex flex-col gap-[10px] leading-[normal]">
@@ -57,6 +57,7 @@
 </template>
 
 <script setup>
+import { AVATAR_COLORS, avatarInk } from '~/utils/avatar'
 import { computed, ref } from 'vue'
 import { inBudget } from '~/composables/usePreferences'
 import { MapPin, ArrowUpRight, Leaf, Star, Check } from 'lucide-vue-next'
@@ -69,7 +70,7 @@ const photo = computed(() => {
   const url = props.praticien.photoUrl || props.praticien.photoThumbUrl
   try { return new URL(url).protocol === 'https:' ? url : '' } catch { return '' }
 })
-const colors = ['#156F71', '#90BAD1', '#EC7F7A', '#012828', '#177070']
+const colors = AVATAR_COLORS
 const initials = computed(() => `${(props.praticien.firstName || '?')[0]}${(props.praticien.lastName || '')[0] || ''}`.toUpperCase())
 
 const bookable = computed(() => props.praticien.bookable !== false)

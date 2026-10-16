@@ -743,14 +743,14 @@ const confirmItems = computed(() => {
 .field::placeholder { color: #959595; }
 .field:focus { outline: none; border: 2px solid #156f71; padding: 0 15px; box-shadow: 0 0 0 4px #cde4df; }
 .field[aria-invalid='true'] { border-color: #ec7f7a; }
-.err { font-size: 16px; line-height: normal; color: #b5534e; margin-top: 8px; }
+.err { font-size: 16px; line-height: normal; color: #a64a45; margin-top: 8px; }
 .err:empty { display: none; }
 
 /* Pastilles de choix (spécialités, durée, public) */
 .chip { display: inline-flex; align-items: center; border-radius: 9999px; padding: 9px 16px; font-size: 16px; font-weight: 500; line-height: normal; cursor: pointer; transition: background-color 0.15s, color 0.15s; }
 .chip:focus-within { box-shadow: 0 0 0 4px #cde4df; }
 .chip-on { background: #156f71; color: #fff; }
-.chip-public-on { background: #fcdedb; color: #b5534e; }
+.chip-public-on { background: #fcdedb; color: #a64a45; }
 .chip-off { background: #fff; color: #012828; }
 .chip-off:hover { background: rgb(255 255 255 / 0.7); }
 

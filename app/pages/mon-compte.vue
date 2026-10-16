@@ -459,7 +459,7 @@ async function deleteAccount() {
 .v5-field:focus { outline: none; border: 2px solid #156f71; padding: 0 15px; box-shadow: 0 0 0 4px #cde4df; }
 .v5-field[aria-invalid='true'] { border-color: #ec7f7a; }
 .v5-field[readonly] { cursor: default; }
-.v5-err { font-size: 16px; line-height: normal; color: #b5534e; }
+.v5-err { font-size: 16px; line-height: normal; color: #a64a45; }
 .v5-err:empty { display: none; }
 .chip { border-radius: 9999px; padding: 10px 18px; font-size: 16px; font-weight: 500; line-height: normal; transition: background-color 0.15s, color 0.15s; }
 .chip:focus-visible { outline: none; box-shadow: 0 0 0 4px #cde4df; }

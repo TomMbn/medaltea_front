@@ -8,6 +8,7 @@
 | [sequences.md](sequences.md) | Diagrammes de séquence : connexion, recherche par ville, réservation, assistant IA, notifications |
 | [deploiement-ci-cd.md](deploiement-ci-cd.md) | Chaîne de livraison, intégration continue, environnements, retour arrière, performances, points à traiter |
 | [donnees-personnelles.md](donnees-personnelles.md) | Flux de données, registre des traitements (RGPD), points à traiter |
+| [test-de-charge.md](test-de-charge.md) | Test de charge : méthode, résultats, lecture et limites |
 | [aipd.md](aipd.md) | Analyse d'impact allégée (assistant IA et motif de rendez-vous) : risques, mesures, risque résiduel, plan d'action |
 | [ia-act.md](ia-act.md) | Classification de l'assistant au regard de l'IA Act, mesures, risques résiduels |
 | [choix-technologiques.md](choix-technologiques.md) | Pile retenue, alternatives, mesures, éco-conception, veille |

@@ -16,6 +16,7 @@ Ce document décrit la **stratégie de tests**, les **scénarios** et la manièr
 | Intégration (passerelle) | Vitest et Playwright (requêtes HTTP) | Liste blanche des routes, validations, réponses 401/404 réelles | `tests/unit/gateway.test.ts`, `tests/e2e/auth.spec.ts` |
 | Système (bout en bout) | Playwright (Chromium) | Parcours complets dans un vrai navigateur sur le site construit | `tests/e2e/` |
 | Accessibilité | axe-core via Playwright | Anomalies WCAG 2.1 A et AA critiques ou sérieuses | `tests/e2e/a11y.spec.ts` |
+| Charge | autocannon, faux backend local | Débit et temps de réponse du rendu serveur et de la passerelle (10, 50 et 100 connexions) | `tests/load/run.mjs`, [résultats](../documentation/test-de-charge.md) |
 
 ## Scénarios
 
@@ -54,6 +55,7 @@ npx playwright install chromium     # une seule fois
 npm run test:unit                   # tests unitaires (rapides, sans réseau)
 npm run test:e2e                    # bout en bout (réutilise `npm run dev` s'il tourne, sinon le lance)
 npm run test:report                 # tout + écrit tests/RAPPORT-EXECUTION.md
+npm run build && npm run test:load  # test de charge (≈ 4 minutes, sur le site construit)
 
 # Comme en intégration continue (site construit) :
 npm run build && CI=1 PORT=3100 npx playwright test
@@ -69,7 +71,7 @@ Les rapports détaillés (HTML, captures et traces des échecs) sont dans `tests
 
 - Les tests de recherche et de connexion interrogent **l'API de production en lecture** (et tentent une connexion avec de faux identifiants) : un test peut échouer si l'API est indisponible, ce qui est le comportement voulu pour un contrôle de bout en bout.
 - La **réservation d'un vrai rendez-vous** et la confirmation par un praticien réel ne sont pas automatisées (elles créeraient des données réelles) ; elles sont couvertes en démo et à la main avant chaque livraison.
-- Pas de **test de charge** ni de test sur de vrais appareils (iOS Safari, Android) ; le responsive est vérifié dans Chromium à plusieurs tailles.
+- Le **test de charge** mesure un seul processus sur un ordinateur de développement, avec un faux backend : il ne remplace pas un essai sur l'hébergement réel (voir [test-de-charge.md](../documentation/test-de-charge.md)). Pas de test sur de vrais appareils (iOS Safari, Android) ; le responsive est vérifié dans Chromium à plusieurs tailles.
 - Les **contrastes de couleurs** de certaines pages ne passent pas encore le seuil AA : relevés dans le rapport, correction soumise à validation de la charte.
 - Les tests du backend (API) sont dans son propre dépôt.
 

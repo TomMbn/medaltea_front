@@ -6,7 +6,7 @@
  */
 import { demoPublic } from '../../../app/utils/demoData'
 
-type Rule = {
+export type Rule = {
     method: string
     pattern: RegExp
     auth: boolean
@@ -19,7 +19,8 @@ type Rule = {
     own?: boolean
 }
 
-const RULES: Rule[] = [
+// Exportés pour les tests unitaires (tests/unit/gateway.test.ts)
+export const RULES: Rule[] = [
     { method: 'GET', pattern: /^specialites$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^disciplines$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens$/, auth: false, cacheable: true, query: ['specialityId', 'city', 'q', 'language', 'publicType', 'claimed', 'bookable', 'sort', 'limit', 'offset', 'lat', 'lng', 'radiusKm', 'mode', 'availableWithinDays', 'minRating', 'wheelchairAccessible', 'bbox'] },
@@ -105,7 +106,7 @@ const RULES: Rule[] = [
 
 const PRIVATE_FIELDS = ['mail', 'userId', 'rpps', 'siret', 'adeli', 'googlePlaceId', 'googlePlaceIdRefreshedAt']
 
-function stripPrivate(data: any): any {
+export function stripPrivate(data: any): any {
     if (Array.isArray(data)) return data.map(stripPrivate)
     if (data && typeof data === 'object') {
         const copy = { ...data }
@@ -120,7 +121,7 @@ const SORTS = ['distance', 'price', 'nextAvailability']
 const MODES = ['cabinet', 'visio', 'domicile']
 const PUBLIC_TYPES = ['babies', 'children', 'teenagers', 'adults', 'seniors', 'pregnant_women', 'athletes']
 
-function validateListQuery(query?: Record<string, any>) {
+export function validateListQuery(query?: Record<string, any>) {
     if (!query) return
     const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
     if (query.limit !== undefined && !(/^\d+$/.test(String(query.limit)) && +query.limit >= 1 && +query.limit <= 100)) throw bad('Limite invalide.')
@@ -156,7 +157,7 @@ const TEXT_LIMITS: Record<string, number> = {
 }
 
 /** Modification de la fiche : types, longueurs et formats vérifiés avant d'atteindre le backend. */
-function validatePraticienUpdate(body: Record<string, any>) {
+export function validatePraticienUpdate(body: Record<string, any>) {
     const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
     const out: Record<string, any> = {}
     for (const [key, value] of Object.entries(body)) {
@@ -209,7 +210,7 @@ function validatePraticienUpdate(body: Record<string, any>) {
 }
 
 /** Profil : texte court, ou null pour effacer une information. */
-function validateProfileUpdate(body: Record<string, any>) {
+export function validateProfileUpdate(body: Record<string, any>) {
     const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
     const out: Record<string, any> = {}
     const limits: Record<string, number> = { firstName: 80, lastName: 80, phoneNumber: 20 }
@@ -224,7 +225,7 @@ function validateProfileUpdate(body: Record<string, any>) {
     return out
 }
 
-function validateDiploma(body: Record<string, any>) {
+export function validateDiploma(body: Record<string, any>) {
     const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
     if (typeof body.title !== 'string' || !body.title.trim() || body.title.length > 150) throw bad('Intitulé du diplôme invalide.')
     const out: Record<string, any> = { title: body.title.trim() }
@@ -243,7 +244,7 @@ const BUDGETS = ['lt50', '50_70', 'gt70']
 const nullableNumber = (v: unknown, min: number, max: number) => v === null || (typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max)
 
 /** Préférences du patient : aucune donnée de santé, valeurs bornées. */
-function validatePreferences(body: Record<string, any>) {
+export function validatePreferences(body: Record<string, any>) {
     const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
     const out: Record<string, any> = {}
     for (const [key, value] of Object.entries(body)) {
@@ -265,14 +266,14 @@ function validatePreferences(body: Record<string, any>) {
     return out
 }
 
-function validateNotificationPrefs(body: Record<string, any>) {
+export function validateNotificationPrefs(body: Record<string, any>) {
     for (const value of Object.values(body)) {
         if (typeof value !== 'boolean') throw createError({ statusCode: 400, statusMessage: 'Préférence invalide.' })
     }
     return body
 }
 
-function validatePushSubscription(body: Record<string, any>) {
+export function validatePushSubscription(body: Record<string, any>) {
     const bad = createError({ statusCode: 400, statusMessage: 'Abonnement invalide.' })
     const { endpoint, keys } = body
     if (typeof endpoint !== 'string' || endpoint.length > 1000 || !/^https:\/\/\S+$/.test(endpoint)) throw bad
@@ -282,7 +283,7 @@ function validatePushSubscription(body: Record<string, any>) {
 }
 
 /** Réservation invité : formats vérifiés avant d'atteindre le backend ; rien n'est journalisé. */
-function validateGuestBooking(body: Record<string, any>) {
+export function validateGuestBooking(body: Record<string, any>) {
     const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
     const praticienId = Number(body.praticienId)
     const consultationTypeId = Number(body.consultationTypeId)
@@ -307,37 +308,37 @@ function validateGuestBooking(body: Record<string, any>) {
     }
 }
 
-function validateSettings(body: Record<string, any>) {
+export function validateSettings(body: Record<string, any>) {
   if ('guestBookingMode' in body && !['manual', 'auto', 'disabled'].includes(body.guestBookingMode)) throw createError({ statusCode: 400, statusMessage: 'Mode de réservation sans compte invalide' })
   if ('autoConfirm' in body && typeof body.autoConfirm !== 'boolean') throw createError({ statusCode: 400, statusMessage: 'Réglage invalide' })
   return body
 }
 
-function validateProposal(body: Record<string, any>) {
+export function validateProposal(body: Record<string, any>) {
     if (typeof body.startAt !== 'string' || Number.isNaN(Date.parse(body.startAt))) throw createError({ statusCode: 400, statusMessage: 'Créneau invalide.' })
     return { startAt: body.startAt }
 }
 
-function validateDecision(body: Record<string, any>) {
+export function validateDecision(body: Record<string, any>) {
     const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
     if (!['approved', 'rejected'].includes(body.decision)) throw bad('Décision invalide.')
     if (body.reason !== undefined && (typeof body.reason !== 'string' || body.reason.length > 500)) throw bad('Motif invalide.')
     return body
 }
 
-function pickKeepEmpty(source: Record<string, any>, keys: string[]) {
+export function pickKeepEmpty(source: Record<string, any>, keys: string[]) {
     const out: Record<string, any> = {}
     for (const key of keys) if (source?.[key] !== undefined) out[key] = source[key]
     return out
 }
 
-function pick(source: Record<string, any>, keys: string[]) {
+export function pick(source: Record<string, any>, keys: string[]) {
     const out: Record<string, any> = {}
     for (const key of keys) if (source?.[key] !== undefined && source[key] !== '') out[key] = source[key]
     return out
 }
 
-function validateAppointment(body: Record<string, any>) {
+export function validateAppointment(body: Record<string, any>) {
     const praticienId = Number(body.praticienId)
     const consultationTypeId = Number(body.consultationTypeId)
     if (!Number.isInteger(praticienId) || !Number.isInteger(consultationTypeId) || typeof body.startAt !== 'string') {

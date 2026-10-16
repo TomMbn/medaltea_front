@@ -1,0 +1,58 @@
+# Intégration continue : tests unitaires, construction du site, tests de bout en bout (navigateur réel).
+# Le déploiement en production est assuré par Vercel à chaque push sur `main` (les contrôles ci-dessous se lancent en parallèle).
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit:
+    name: Tests unitaires
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx vitest run --reporter=default --reporter=json --outputFile=tests/reports/unit.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rapport-tests-unitaires
+          path: tests/reports/unit.json
+
+  e2e:
+    name: Tests de bout en bout
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Construction du site (comme en production)
+        run: npm run build
+      - name: Tests de bout en bout
+        run: npx playwright test
+        env:
+          CI: 'true'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rapport-tests-bout-en-bout
+          path: |
+            tests/reports/e2e
+            test-results
+          retention-days: 14

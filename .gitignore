@@ -29,3 +29,8 @@ data/
 # Copies de conflit iCloud (« fichier 2.ext ») : ne jamais commiter
 * 2.*
 * 3.*
+
+# Résultats des tests (régénérés à chaque exécution ; le rapport de synthèse tests/RAPPORT-EXECUTION.md, lui, est versionné)
+test-results
+playwright-report
+tests/reports

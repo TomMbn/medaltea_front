@@ -7,7 +7,11 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:report": "vitest run --reporter=json --outputFile=tests/reports/unit.json ; playwright test ; node tests/report.mjs"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -24,6 +28,11 @@
     "vue-router": "^5.0.4"
   },
   "devDependencies": {
-    "@nuxt/image": "^2.0.0"
+    "@axe-core/playwright": "^4.14.0",
+    "@nuxt/image": "^2.0.0",
+    "@playwright/test": "^1.64.1",
+    "happy-dom": "^21.0.3",
+    "jsdom": "^29.1.1",
+    "vitest": "^3.2.7"
   }
 }

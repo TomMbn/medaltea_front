@@ -141,9 +141,9 @@ h6,
 
 /* Connexion et inscription : sur un écran de portable peu haut (barre du navigateur comprise), le formulaire tient sans défilement */
 @media (min-width: 1024px) and (max-height: 760px) {
-  .auth-root { padding: 24px; }
-  .auth-ill { top: 24px; height: calc(100vh - 48px); }
-  .auth-col { min-height: calc(100vh - 48px); }
+  .auth-root { padding: 20px; }
+  .auth-ill { top: 20px; height: calc(100vh - 40px); }
+  .auth-col { min-height: calc(100vh - 40px); }
   .auth-col h1 { font-size: 32px; }
   .auth-col .auth-switch { margin-bottom: 16px; }
   .auth-col form { margin-top: 20px; }
@@ -151,9 +151,10 @@ h6,
   .auth-col form input:not([type='checkbox']) { height: 46px; }
   .auth-col form .auth-accept { margin-top: 16px; }
   .auth-col form .auth-actions { margin-top: 20px; }
-  .auth-col form .auth-foot { margin-top: 14px; padding-bottom: 0; }
+  .auth-col form .auth-foot { margin-top: 10px; padding-bottom: 0; }
+  .auth-col form .auth-actions { margin-top: 16px; }
 }
-@media (min-width: 1024px) and (max-height: 600px) {
+@media (min-width: 1024px) and (max-height: 640px) {
   .auth-col h1 { font-size: 28px; }
   .auth-col h1 + p { display: none; }
   .auth-col form { margin-top: 14px; }

@@ -88,12 +88,13 @@
                 :class="[d.key === selectedDay && d.slots.length ? 'bg-vert-600' : 'bg-bleu-50', d.slots.length ? 'hover:brightness-95' : 'opacity-50 cursor-not-allowed']"
                 :disabled="!d.slots.length"
                 :aria-pressed="d.key === selectedDay ? 'true' : 'false'"
-                :aria-label="`${d.long}, ${d.slots.length} créneau${d.slots.length > 1 ? 'x' : ''}`"
-                @click="selectedDay = d.key; showAll = false"
+                                @click="selectedDay = d.key; showAll = false"
               >
                 <span class="text-[16px]" :class="d.key === selectedDay && d.slots.length ? 'text-bleu-100' : 'text-neutre-600'">{{ d.weekday }}</span>
                 <span class="text-[18px] font-semibold" :class="d.key === selectedDay && d.slots.length ? 'text-white' : 'text-vert-900'">{{ d.day }}</span>
                 <span class="text-[14px] sm:text-[16px] whitespace-nowrap" :class="d.key === selectedDay && d.slots.length ? 'text-bleu-100' : d.slots.length ? 'text-vert-600' : 'text-neutre-600'">{{ d.slots.length ? `${d.slots.length} dispo` : '—' }}</span>
+                <!-- Nom accessible = texte visible + le jour en toutes lettres (WCAG 2.5.3) -->
+                <span class="sr-only">{{ d.slots.length ? `, ${d.long}` : `, ${d.long}, aucun créneau` }}</span>
               </button>
             </div>
 

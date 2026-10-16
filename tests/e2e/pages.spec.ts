@@ -58,5 +58,6 @@ test('en-têtes de sécurité', async ({ request }) => {
   expect(h['x-content-type-options']).toBe('nosniff')
   expect(h['x-frame-options']).toBe('DENY')
   expect(h['referrer-policy']).toBe('strict-origin-when-cross-origin')
-  expect(h['content-security-policy-report-only']).toContain("object-src 'none'")
+  // Bloquante sur le site construit, en « rapport seul » sous le serveur de développement
+  expect(h['content-security-policy'] ?? h['content-security-policy-report-only']).toContain("object-src 'none'")
 })

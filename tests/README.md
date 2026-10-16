@@ -16,6 +16,7 @@ Ce document décrit la **stratégie de tests**, les **scénarios** et la manièr
 | Intégration (passerelle) | Vitest et Playwright (requêtes HTTP) | Liste blanche des routes, validations, réponses 401/404 réelles | `tests/unit/gateway.test.ts`, `tests/e2e/auth.spec.ts` |
 | Système (bout en bout) | Playwright (Chromium) | Parcours complets dans un vrai navigateur sur le site construit | `tests/e2e/` |
 | Accessibilité | axe-core via Playwright | Anomalies WCAG 2.1 A et AA critiques ou sérieuses | `tests/e2e/a11y.spec.ts` |
+| Sécurité (CSP) | Playwright sur le site construit (`CI=1`) | Politique bloquante envoyée ; aucune violation sur 13 pages | `tests/e2e/csp.spec.ts` |
 | Charge | autocannon, faux backend local | Débit et temps de réponse du rendu serveur et de la passerelle (10, 50 et 100 connexions) | `tests/load/run.mjs`, [résultats](../documentation/test-de-charge.md) |
 
 ## Scénarios

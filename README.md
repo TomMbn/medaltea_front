@@ -122,7 +122,7 @@ tests/               Tests unitaires et de bout en bout, rapport d'exécution
 ## Qualité, sécurité, accessibilité
 
 - **Tests** : 46 tests unitaires et 46 tests de bout en bout, relancés à chaque push par GitHub Actions ([détail](tests/README.md)).
-- **Sécurité** : liste blanche des routes, validation stricte des entrées, cookies `httpOnly`/`SameSite=Lax`/`Secure`, en-têtes de sécurité (HSTS, anti-cadre, `nosniff`), CSP en mode rapport seul, aucun secret dans le dépôt. Une revue de sécurité interne du code (16/10/2026) n'a relevé aucune faille exploitable.
+- **Sécurité** : liste blanche des routes, validation stricte des entrées, cookies `httpOnly`/`SameSite=Lax`/`Secure`, en-têtes de sécurité (HSTS, anti-cadre, `nosniff`), CSP bloquante en production (contrôlée par un test), aucun secret dans le dépôt. Une revue de sécurité interne du code (16/10/2026) n'a relevé aucune faille exploitable.
 - **Accessibilité** : libellés et rôles ARIA, animations réduites si demandé, contrôle automatique axe-core (WCAG 2.1 A et AA) dans les tests. Les contrastes de certaines couleurs restent à corriger (liste dans [le rapport](tests/RAPPORT-EXECUTION.md)).
 - **Responsive** : testé de 320 à 2560 px (téléphone, tablette, portable, grand écran), y compris en paysage.
 - **Éco-conception** : images WebP redimensionnées par le CDN, chargement différé, carte légère chargée à la demande, mesure d'audience auto-hébergée (aucun suivi par un tiers).

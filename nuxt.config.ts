@@ -7,7 +7,9 @@ const umamiHost = (process.env.NUXT_PUBLIC_UMAMI_HOST || '').replace(/\/+$/, '')
 // https://nuxt.com/docs/api/configuration/nuxt-config
 const buildDate = new Date().toISOString().slice(0, 10)
 
-// Politique de sécurité des contenus (mode « rapport seul »)
+// Politique de sécurité des contenus : appliquée en production ; en développement elle reste en « rapport seul »
+// (le rechargement à chaud de Vite utilise des WebSocket et eval, que la politique de production refuse).
+const CSP_HEADER = process.env.NODE_ENV === 'development' ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
 const CSP = "default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; report-uri /api/csp-report"
 
 export default defineNuxtConfig({
@@ -66,9 +68,9 @@ export default defineNuxtConfig({
         'Referrer-Policy': 'strict-origin-when-cross-origin',
         'Permissions-Policy': 'camera=(), microphone=(), geolocation=(self), payment=()',
         'Cross-Origin-Opener-Policy': 'same-origin',
-        // Politique de sécurité des contenus en mode « rapport seul » : elle ne bloque rien, les écarts sont journalisés
-        // (voir server/api/csp-report.post.ts) avant de passer en mode bloquant.
-        'Content-Security-Policy-Report-Only': CSP,
+        // Politique de sécurité des contenus (bloquante en production) ; les violations sont aussi journalisées
+        // (voir server/api/csp-report.post.ts). Contrôlée par tests/e2e/csp.spec.ts.
+        [CSP_HEADER]: CSP,
       },
     },
     // Service worker (notifications) : toujours revalidé pour que les mises à jour arrivent
@@ -77,7 +79,7 @@ export default defineNuxtConfig({
     '/praticiens/**': {
       headers: {
         'X-Frame-Options': 'SAMEORIGIN',
-        'Content-Security-Policy-Report-Only': CSP.replace("frame-ancestors 'none'", "frame-ancestors 'self'"),
+        [CSP_HEADER]: CSP.replace("frame-ancestors 'none'", "frame-ancestors 'self'"),
       },
     },
   },

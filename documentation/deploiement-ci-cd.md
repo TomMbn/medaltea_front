@@ -33,7 +33,7 @@ La CI et Vercel s'exécutent en parallèle : Vercel déploie `main` sans attendr
 
 ## En-têtes et sécurité de déploiement
 
-Posés par `nuxt.config.ts` (`routeRules`) : `Strict-Transport-Security` (Vercel), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY` (`SAMEORIGIN` pour l'aperçu de la fiche), `Referrer-Policy`, `Permissions-Policy` (géolocalisation limitée au site), `Cross-Origin-Opener-Policy`, **CSP en mode rapport seul** (violations envoyées à `/api/csp-report`). Le service worker est servi avec `Cache-Control: no-cache`.
+Posés par `nuxt.config.ts` (`routeRules`) : `Strict-Transport-Security` (Vercel), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY` (`SAMEORIGIN` pour l'aperçu de la fiche), `Referrer-Policy`, `Permissions-Policy` (géolocalisation limitée au site), `Cross-Origin-Opener-Policy`, **CSP bloquante en production** (en « rapport seul » sous le serveur de développement ; violations aussi envoyées à `/api/csp-report`). La politique n'autorise que le site lui-même, Cloudflare Turnstile (anti-robot) et les images en HTTPS (tuiles de carte, photos) ; objets, cadres externes et formulaires vers l'extérieur sont refusés. Limite connue : `script-src` garde `'unsafe-inline'` (script de démarrage de Nuxt) ; une version à nonce demanderait un module dédié. Le service worker est servi avec `Cache-Control: no-cache`.
 
 ## Performances et suivi
 
@@ -46,5 +46,5 @@ Posés par `nuxt.config.ts` (`routeRules`) : `Strict-Transport-Security` (Vercel
 
 1. **Région d'exécution des fonctions.** L'en-tête `x-vercel-id: cdg1::iad1::…` de la production indique des fonctions exécutées à Washington (iad1) alors que l'API est en France : latence supplémentaire à chaque appel serveur et transit des cookies par les États-Unis. **Corrigé le 16/10/2026** : `vercel.json` fixe la région de Paris (`cdg1`). À vérifier après le déploiement : la commande `curl -sI https://leya-sante.fr/api/backend/push/public-key | grep -i x-vercel-id` doit afficher `cdg1::cdg1` ; sinon, régler la région dans Vercel (Settings, Functions).
 2. **Protection de la branche `main`** : exiger que la CI passe avant la fusion.
-3. **CSP bloquante** : à activer après examen des rapports, en autorisant les tuiles OpenStreetMap, Turnstile et Umami.
-4. **Test de charge simple** (par exemple k6 ou Artillery sur l'annuaire et la recherche) pour documenter la capacité.
+3. **CSP bloquante** : activée le 16/10/2026 après un relevé sans aucune violation sur 17 pages et 3 parcours (démo, réservation, assistant) ; contrôlée par `tests/e2e/csp.spec.ts`. Reste à surveiller après déploiement : Turnstile et la mesure d'audience, non exercés en local (les journaux `/api/csp-report` signalent tout blocage).
+4. **Test de charge** : fait (voir [test-de-charge.md](test-de-charge.md)) ; à rejouer avant une évolution majeure.

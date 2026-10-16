@@ -2,10 +2,10 @@
   <!-- Barre flottante (maquette V5) -->
   <div class="fixed top-0 inset-x-0 z-50 pt-5 pointer-events-none">
     <!-- Variante « Pro » : page de présentation de l'espace praticien (visiteurs) -->
-    <nav v-if="isProLanding" class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4.5rem)] max-w-[1600px] bg-white rounded-full shadow-[0_12px_32px_rgba(1,40,40,0.08)] pl-5 pr-2 lg:pl-8 lg:pr-3 py-2 lg:py-3 flex items-center justify-between gap-6 pointer-events-auto" aria-label="Navigation espace praticien">
+    <nav v-if="isProLanding" class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4.5rem)] max-w-[1654px] bg-white rounded-leya-m shadow-douce pl-5 pr-2 lg:pl-8 lg:pr-3 py-2 lg:py-3 flex items-center justify-between gap-6 pointer-events-auto" aria-label="Navigation espace praticien">
       <div class="flex items-center gap-[10px] shrink-0">
         <NuxtLink to="/" class="flex items-center min-h-[44px]" aria-label="Léya, accueil">
-          <img src="/images/logo.svg" alt="Léya" width="87" height="39" class="h-[34px] w-auto" />
+          <img src="/images/logo.svg" alt="Léya" width="87" height="39" class="h-[34px] lg:h-[43px] w-auto" />
         </NuxtLink>
         <span class="rounded-full bg-corail-500 px-4 py-[9px] text-[16px] font-medium leading-[normal] text-vert-900">Pro</span>
       </div>
@@ -26,47 +26,50 @@
       </div>
     </nav>
 
-    <nav v-else class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4.5rem)] max-w-[1654px] bg-white rounded-leya-m border border-[rgba(160,160,160,0.38)] shadow-[0_1px_15px_rgba(144,186,209,0.31)] pl-5 pr-3 lg:pl-[30px] lg:pr-[23px] py-2.5 lg:py-[18px] flex items-center justify-between gap-6 pointer-events-auto" aria-label="Navigation principale">
+    <nav v-else class="mx-auto w-[calc(100%-2rem)] lg:w-[calc(100%-4.5rem)] max-w-[1654px] bg-white rounded-leya-m shadow-douce pl-5 pr-3 lg:pl-8 lg:pr-3 py-2.5 lg:py-3 flex items-center justify-between gap-6 pointer-events-auto" aria-label="Navigation principale">
 
       <!-- Logo -->
       <NuxtLink to="/" class="flex items-center min-h-[44px] shrink-0" aria-label="Léya, accueil">
-        <img src="/images/logo.svg" alt="Léya" width="87" height="39" class="h-10 lg:h-[39px] w-auto" />
+        <img src="/images/logo.svg" alt="Léya" width="87" height="39" class="h-10 lg:h-[43px] w-auto" />
       </NuxtLink>
 
-      <!-- Navigation et actions (bureau) -->
-      <div class="hidden lg:flex items-center gap-5 xl:gap-[30px]">
+      <!-- Navigation (bureau) : la page active est repérée par une pastille verte -->
+      <div class="hidden lg:flex items-center gap-1">
         <NuxtLink to="/medecines" class="nav-link">Médecines</NuxtLink>
-        <NuxtLink to="/trouver-un-praticien" class="nav-link inline-flex items-center gap-2 xl:gap-[10px]">
-          <MapPin :size="18" aria-hidden="true" /> Trouver un praticien
-        </NuxtLink>
+        <NuxtLink to="/trouver-un-praticien" class="nav-link">Trouver un praticien</NuxtLink>
         <NuxtLink v-if="!isLoggedIn" to="/praticiens-pro" class="nav-link">Espace praticien</NuxtLink>
+      </div>
 
+      <!-- Actions (bureau) -->
+      <div class="hidden lg:flex items-center gap-3">
         <!-- Visiteur -->
         <template v-if="!isLoggedIn">
-          <NuxtLink v-if="route.path !== '/login' && route.path !== '/register'" to="/login" class="btn-dark">Connexion</NuxtLink>
+          <NuxtLink v-if="route.path !== '/login' && route.path !== '/register'" to="/login" class="btn-sec">
+            Connexion<span class="btn-dot"><ArrowUpRight :size="18" aria-hidden="true" /></span>
+          </NuxtLink>
         </template>
 
         <!-- Praticien connecté -->
         <template v-else-if="isPro">
-          <NuxtLink to="/pro" class="btn-dark">Mon espace praticien</NuxtLink>
           <button class="nav-link" @click="handleLogout">Déconnexion</button>
+          <NuxtLink to="/pro" class="btn-pri">Mon espace praticien<span class="btn-dot"><ArrowUpRight :size="18" aria-hidden="true" /></span></NuxtLink>
         </template>
 
         <!-- Administrateur connecté -->
         <template v-else-if="isAdmin">
-          <NuxtLink to="/admin" class="btn-dark">Administration</NuxtLink>
           <button class="nav-link" @click="handleLogout">Déconnexion</button>
+          <NuxtLink to="/admin" class="btn-pri">Administration<span class="btn-dot"><ArrowUpRight :size="18" aria-hidden="true" /></span></NuxtLink>
         </template>
 
         <!-- Patient connecté -->
         <div v-else ref="accountRef" class="relative">
           <button
-            class="btn-dark inline-flex items-center gap-2"
+            class="btn-sec"
             aria-haspopup="menu"
             :aria-expanded="isAccountOpen"
             @click="isAccountOpen = !isAccountOpen"
           >
-            Mon compte <ChevronDown :size="16" aria-hidden="true" />
+            Mon compte<span class="btn-dot"><ChevronDown :size="18" aria-hidden="true" /></span>
           </button>
           <div v-if="isAccountOpen" role="menu" class="absolute right-0 mt-2 w-60 bg-white rounded-leya-m shadow-douce border border-bleu-100 py-2">
             <!-- Mes rendez-vous, préférences et données sont accessibles depuis la page « Mon profil » -->
@@ -76,7 +79,9 @@
         </div>
 
         <!-- Parler à Léya (patients et visiteurs) -->
-        <NuxtLink v-if="!isPro && route.path !== '/chatbot'" to="/chatbot" class="btn-chatbot">Parler à Léya</NuxtLink>
+        <NuxtLink v-if="!isPro && route.path !== '/chatbot'" to="/chatbot" class="btn-pri">
+          Parler à Léya<span class="btn-dot"><ArrowUpRight :size="18" aria-hidden="true" /></span>
+        </NuxtLink>
       </div>
 
       <!-- Bouton du menu (mobile) -->
@@ -106,11 +111,11 @@
           <NuxtLink v-if="isLoggedIn && !isPro && !isAdmin" to="/mon-compte" class="menu-link" @click="isMenuOpen = false">Mes informations</NuxtLink>
 
           <div class="flex flex-col gap-3 pt-3">
-            <NuxtLink v-if="!isLoggedIn" to="/login" class="btn-dark text-center" @click="isMenuOpen = false">Connexion</NuxtLink>
-            <NuxtLink v-else-if="isPro" to="/pro" class="btn-dark text-center" @click="isMenuOpen = false">Mon espace praticien</NuxtLink>
-            <NuxtLink v-else-if="isAdmin" to="/admin" class="btn-dark text-center" @click="isMenuOpen = false">Administration</NuxtLink>
+            <NuxtLink v-if="!isLoggedIn" to="/login" class="btn-sec justify-between" @click="isMenuOpen = false">Connexion<span class="btn-dot"><ArrowUpRight :size="18" aria-hidden="true" /></span></NuxtLink>
+            <NuxtLink v-else-if="isPro" to="/pro" class="btn-pri justify-between" @click="isMenuOpen = false">Mon espace praticien<span class="btn-dot"><ArrowUpRight :size="18" aria-hidden="true" /></span></NuxtLink>
+            <NuxtLink v-else-if="isAdmin" to="/admin" class="btn-pri justify-between" @click="isMenuOpen = false">Administration<span class="btn-dot"><ArrowUpRight :size="18" aria-hidden="true" /></span></NuxtLink>
             <button v-if="isLoggedIn" class="border border-neutre-200 text-vert-900 px-[25px] py-[10px] rounded-leya-s text-lg text-center" @click="handleLogout">Déconnexion</button>
-            <NuxtLink v-if="!isPro && route.path !== '/chatbot'" to="/chatbot" class="btn-chatbot text-center" @click="isMenuOpen = false">Parler à Léya</NuxtLink>
+            <NuxtLink v-if="!isPro && route.path !== '/chatbot'" to="/chatbot" class="btn-pri justify-between" @click="isMenuOpen = false">Parler à Léya<span class="btn-dot"><ArrowUpRight :size="18" aria-hidden="true" /></span></NuxtLink>
           </div>
         </div>
       </div>
@@ -120,7 +125,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { Menu, X, ChevronDown, MapPin, ArrowUpRight } from 'lucide-vue-next'
+import { Menu, X, ChevronDown, ArrowUpRight } from 'lucide-vue-next'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -157,19 +162,22 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* Liens de navigation : 16 px (lg), 18 px (xl), 20 px (2xl), graisse 600 comme la maquette */
+/* Liens de navigation (maquette) : 16 px, graisse 500, pastille verte sur la page active */
 .nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 999px;
   color: var(--vert-900);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 16px;
   white-space: nowrap;
-  line-height: 1.3;
-  transition: color 0.15s;
+  line-height: normal;
+  transition: background-color 0.15s, color 0.15s;
 }
-@media (min-width: 1280px) { .nav-link { font-size: 18px; } }
-@media (min-width: 1536px) { .nav-link { font-size: 20px; } }
-.nav-link:hover { color: var(--vert-600); }
-.nav-link.router-link-active { text-decoration: underline; text-decoration-color: var(--corail-500); text-decoration-thickness: 2px; text-underline-offset: 8px; }
+.nav-link:hover { background-color: var(--vert-50); }
+.nav-link.router-link-active { background-color: var(--vert-50); }
+@media (max-width: 1279px) { .nav-link { padding: 8px 10px; } }
 
 .menu-link {
   color: var(--vert-900);
@@ -179,34 +187,38 @@ onBeforeUnmount(() => {
   border-bottom: 1px solid var(--bleu-100);
 }
 
-/* Bouton principal : vert foncé */
-.btn-dark {
-  background-color: var(--vert-900);
-  color: #fff;
-  border: 2px solid transparent;
-  border-radius: var(--rayon-s);
-  padding: 10px 25px;
-  font-size: 16px;
+/* Boutons de la maquette : texte + pastille ronde à flèche (principal : vert foncé, secondaire : contour) */
+.btn-pri, .btn-sec {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 48px;
+  padding: 4px 4px 4px 24px;
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: normal;
   white-space: nowrap;
-  transition: background-color 0.15s, box-shadow 0.15s;
+  transition: background-color 0.15s, color 0.15s;
 }
-@media (min-width: 1280px) { .btn-dark { font-size: 18px; } }
-@media (min-width: 1536px) { .btn-dark { font-size: 20px; } }
-.btn-dark:hover { background-color: var(--vert-600); box-shadow: var(--ombre-douce); }
-
-/* « Parler à Léya » : dégradé corail de la maquette */
-.btn-chatbot {
-  background-image: linear-gradient(138.65deg, #ec7f7a 22.68%, #f1aeab 77.32%);
-  border: 2px solid var(--corail-500);
-  border-radius: var(--rayon-s);
-  color: #fff;
-  padding: 10px 25px;
-  font-size: 16px;
-  white-space: nowrap;
-  transition: box-shadow 0.15s, transform 0.15s;
+.btn-pri { background-color: var(--vert-900); color: #fff; }
+.btn-pri:hover { background-color: var(--vert-600); }
+.btn-sec { border: 1.5px solid var(--vert-900); color: var(--vert-900); background: transparent; }
+.btn-sec:hover { background-color: var(--vert-50); }
+.btn-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  color: var(--vert-900);
 }
-@media (min-width: 1280px) { .btn-chatbot { font-size: 18px; } }
-@media (min-width: 1536px) { .btn-chatbot { font-size: 20px; } }
-.btn-chatbot:hover { box-shadow: var(--ombre-douce); transform: translateY(-1px); }
-@media (prefers-reduced-motion: reduce) { .btn-chatbot:hover { transform: none; } }
+.btn-pri .btn-dot { background-color: var(--corail-500); }
+.btn-sec .btn-dot { border: 1.5px solid var(--vert-900); }
+@media (max-width: 1279px) {
+  .btn-pri, .btn-sec { font-size: 16px; padding-left: 16px; gap: 10px; }
+  .btn-dot { width: 36px; height: 36px; }
+}
 </style>

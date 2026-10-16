@@ -117,10 +117,26 @@ function select(p) {
   selectedId.value = p.id
   mapRef.value?.focus(p.id)
 }
+// Hauteur de la barre de navigation fixe : un praticien sélectionné ne doit jamais passer dessous
+const NAV_HEIGHT = 140
 async function selectFromMap(id) {
   selectedId.value = id
   await nextTick()
-  listRef.value?.querySelector(`[data-id="${id}"]`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+  const ul = listRef.value
+  const li = ul?.querySelector(`[data-id="${id}"]`)
+  if (!ul || !li) return
+  const calm = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  const behavior = calm ? 'auto' : 'smooth'
+  // 1. Dans la liste : on fait défiler la liste seule (pas la page)
+  const lr = li.getBoundingClientRect()
+  const ur = ul.getBoundingClientRect()
+  if (lr.top < ur.top) ul.scrollTo({ top: ul.scrollTop - (ur.top - lr.top) - 8, behavior: 'auto' })
+  else if (lr.bottom > ur.bottom) ul.scrollTo({ top: ul.scrollTop + (lr.bottom - ur.bottom) + 8, behavior: 'auto' })
+  // 2. Dans la page : le praticien reste visible, sous la barre de navigation et au-dessus du bas de l'écran
+  await nextTick()
+  const r = li.getBoundingClientRect()
+  if (r.top < NAV_HEIGHT) window.scrollBy({ top: r.top - NAV_HEIGHT - 8, behavior })
+  else if (r.bottom > window.innerHeight) window.scrollBy({ top: r.bottom - window.innerHeight + 16, behavior })
 }
 
 const colors = ['#156F71', '#90BAD1', '#EC7F7A', '#012828', '#177070']

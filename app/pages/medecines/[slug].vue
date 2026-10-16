@@ -22,8 +22,12 @@
           </span>
 
           <h1 id="med-title" class="mt-8 lg:mt-[34px] font-unbounded font-normal text-vert-900 text-[30px] sm:text-[40px] lg:text-[clamp(36px,3.3vw,56px)] leading-[1.15] flex flex-col items-start gap-1 lg:gap-2 lg:max-w-[560px]">
-            <span class="text-balance">{{ medicine.heroTagline }}</span>
-            <span class="whitespace-nowrap bg-corail-100 text-corail-700 rounded-full px-5 lg:px-[22px] pt-0.5 pb-2 lg:pb-[10px]">{{ medicine.name.toLowerCase() }}</span>
+            <span class="text-balance">{{ tagline.lead }}</span>
+            <!-- Article élidé (l’) : il reste collé au nom de la médecine, jamais seul en fin de ligne -->
+            <span class="flex items-center whitespace-nowrap">
+              <span v-if="tagline.elided" class="mr-1">{{ tagline.elided }}</span>
+              <span class="bg-corail-100 text-corail-700 rounded-full px-5 lg:px-[22px] pt-0.5 pb-2 lg:pb-[10px]">{{ medicine.name.toLowerCase() }}</span>
+            </span>
           </h1>
 
           <p class="mt-8 lg:mt-12 text-[18px] lg:text-[24px] leading-snug text-neutre-600 max-w-[640px]">{{ medicine.heroLead ?? `${medicine.shortDescription}.` }}</p>
@@ -258,6 +262,13 @@ const pictograms = {
 const pictogram = pictograms[medicine.slug] ?? medicine.icon
 
 const chipIcons = { wind: Wind, moon: Moon, heart: Heart, info: Info, activity: Activity, leaf: Leaf }
+// « … avec l’ » + « ostéopathie » : l’article élidé passe sur la ligne de la médecine
+const tagline = (() => {
+  const t = medicine.heroTagline
+  const i = t.lastIndexOf(' ')
+  return t.endsWith('’') && i > 0 ? { lead: t.slice(0, i), elided: t.slice(i + 1) } : { lead: t, elided: '' }
+})()
+
 const chips = computed(() => medicine.heroChips
   ? medicine.heroChips.map(c => ({ label: c.label, icon: chipIcons[c.icon] }))
   : (medicine.conditions ?? []).slice(0, 4).map(label => ({ label, icon: Leaf })))

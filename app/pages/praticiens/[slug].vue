@@ -286,7 +286,7 @@
 
 <script setup>
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
-import { MapPin, Phone, Navigation, Globe, Star, Check, Clock, Leaf, ArrowUpRight, X, Languages, CreditCard, Accessibility } from 'lucide-vue-next'
+import { MapPin, Phone, Globe, Star, Check, Clock, Leaf, ArrowUpRight, X, Languages, CreditCard, Accessibility } from 'lucide-vue-next'
 import { getMedecineBySlug, medecinePictogram } from '~/data/medecines'
 
 const route = useRoute()

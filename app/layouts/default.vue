@@ -37,7 +37,6 @@ const route = useRoute()
 
 const isAuthPage = computed(() => ['/register', '/login', '/inscription-pro'].includes(route.path))
 const isChatPage = computed(() => route.path === '/chatbot')
-const isLandingPage = computed(() => route.path === '/')
 const { isPro } = useSession()
 const showFooter = computed(() => !isAuthPage.value && !isChatPage.value && !(isPro.value && route.path === '/mon-compte'))
 </script>

@@ -14,7 +14,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@nuxtjs/sitemap', '@nuxt/fonts'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@nuxtjs/sitemap', '@nuxt/fonts', '@nuxt/eslint'],
 
   site: {
     url: 'https://leya-sante.fr',
@@ -26,7 +26,7 @@ export default defineNuxtConfig({
     // Fiches praticiens indexables (revendiquées et complètes), lues dans l'annuaire
     sources: ['/api/__sitemap__/praticiens'],
     urls: [
-      { loc: '/', priority: 1.0, changefreq: 'weekly', lastmod: buildDate },
+      { loc: '/', priority: 1, changefreq: 'weekly', lastmod: buildDate },
       { loc: '/medecines', priority: 0.9, changefreq: 'weekly', lastmod: buildDate },
       { loc: '/trouver-un-praticien', priority: 0.8, changefreq: 'monthly', lastmod: buildDate },
       { loc: '/mentions-legales', priority: 0.2, changefreq: 'yearly', lastmod: buildDate },
@@ -35,7 +35,7 @@ export default defineNuxtConfig({
       { loc: '/cgu-pro', priority: 0.2, changefreq: 'yearly', lastmod: buildDate },
       { loc: '/praticiens-pro', priority: 0.7, changefreq: 'monthly', lastmod: buildDate },
       // Une entrée par médecine, générée depuis app/data/medecines.ts
-      ...medecines.map(m => ({ loc: `/medecines/${m.slug}`, priority: 0.8, changefreq: 'monthly' as const, lastmod: buildDate })),
+      ...medecines.map(m => ({ loc: `/medecines/${m.slug}`, priority: 0.8 as const, changefreq: 'monthly' as const, lastmod: buildDate })),
     ]
   },
   fonts: {

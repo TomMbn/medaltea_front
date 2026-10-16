@@ -33,7 +33,7 @@ function seed() {
     startAt: start,
     endAt: plus(start, type.durationMin),
     createdAt: at(10, 0, -((n * 3) % 20)),
-    patient: { id: who + 1, firstName: PATIENTS[who][0], lastName: PATIENTS[who][1] },
+    patient: { id: who + 1, firstName: PATIENTS[who]![0], lastName: PATIENTS[who]![1] },
     consultationType: type,
     userNote: null,
     cancelReason: null,
@@ -90,12 +90,12 @@ export function simulateRequest() {
   const st = load()
   const who = Math.floor(Math.random() * PATIENTS.length)
   const day = 1 + Math.floor(Math.random() * 6)
-  const hour = [9, 10, 11, 14, 15, 16][Math.floor(Math.random() * 6)]
+  const hour = [9, 10, 11, 14, 15, 16][Math.floor(Math.random() * 6)]!
   const type = Math.random() < 0.6 ? FIRST : FOLLOW
   const start = at(hour, 0, day)
   st.appts.unshift({
     id: st.apptNext++, status: 'pending', startAt: start, endAt: plus(start, type.durationMin), createdAt: new Date().toISOString(),
-    patient: { id: 200 + who, firstName: PATIENTS[who][0], lastName: PATIENTS[who][1] },
+    patient: { id: 200 + who, firstName: PATIENTS[who]![0], lastName: PATIENTS[who]![1] },
     consultationType: type, userNote: null, cancelReason: null, proposal: null, isGuest: false,
   })
   save()

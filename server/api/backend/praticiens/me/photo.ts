@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
     if (file.data.length > MAX_BYTES) throw fail(413, 'Fichier trop lourd (2 Mo maximum).')
 
     const form = new FormData()
-    form.append('file', new Blob([file.data], { type: file.type }), 'photo')
+    form.append('file', new Blob([new Uint8Array(file.data)], { type: file.type }), 'photo')
 
     let response
     try {
@@ -48,15 +48,15 @@ export default defineEventHandler(async (event) => {
 
     setHeader(event, 'Cache-Control', 'no-store')
     if (response.status === 200) {
-        const { photoUrl, photoThumbUrl } = response._data ?? {}
+        const { photoUrl, photoThumbUrl } = (response._data ?? {}) as Record<string, unknown>
         return { photoUrl, photoThumbUrl }
     }
 
-    const backendMessage = response._data?.message
+    const backendMessage = (response._data as { message?: string | string[] } | undefined)?.message
     const text = Array.isArray(backendMessage) ? backendMessage.join(' ') : backendMessage
     if (response.status === 429) {
         const retry = Number(response.headers.get('retry-after'))
-        if (Number.isFinite(retry) && retry > 0) setHeader(event, 'Retry-After', String(Math.ceil(retry)))
+        if (Number.isFinite(retry) && retry > 0) setHeader(event, 'Retry-After', Math.ceil(retry))
         throw fail(429, 'Trop d\'envois de photo. Réessayez plus tard.')
     }
     if (response.status === 413) throw fail(413, 'Fichier trop lourd (2 Mo maximum).')

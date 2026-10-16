@@ -140,12 +140,12 @@ const TABS = [{ key: 'all', label: 'Tous' }, { key: 'upcoming', label: 'À venir
 const tab = ref('all')
 const visibleGroups = computed(() => groups.value.filter(g => g.items.length && (tab.value === 'all' || tab.value === g.key)))
 
+// Session expirée : déconnexion puis retour à la connexion (effet de bord, donc hors de la propriété calculée)
+watch(error, (e) => {
+  if (e && apiStatus(e) === 401) useSession().logout().then(() => navigateTo({ path: '/login', query: { redirect: '/mes-rendez-vous' } }))
+}, { immediate: true })
 const loadError = computed(() => {
-  if (!error.value) return ''
-  if (apiStatus(error.value) === 401) {
-    useSession().logout().then(() => navigateTo({ path: '/login', query: { redirect: '/mes-rendez-vous' } }))
-    return ''
-  }
+  if (!error.value || apiStatus(error.value) === 401) return ''
   return apiErrorMessage(error.value, 'Impossible de charger vos rendez-vous.')
 })
 

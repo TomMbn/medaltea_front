@@ -32,7 +32,7 @@
 import { ref } from 'vue'
 
 // Recherche d'adresse assistée (Base Adresse Nationale, via notre serveur). L'adresse choisie est renvoyée avec ses coordonnées.
-const props = defineProps({
+defineProps({
   id: { type: String, required: true },
   label: { type: String, default: 'Rechercher une adresse' },
   placeholder: { type: String, default: 'Ex. : 9 quai de la Fosse, Nantes' },

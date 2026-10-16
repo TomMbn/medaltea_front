@@ -73,7 +73,7 @@ function iconFor(m, selected) {
 const PIN = typeof window !== 'undefined' && window.innerWidth < 640 ? 56 : 74
 
 // Appelé depuis le gabarit : `map` n'est pas réactive, on passe par une fonction
-function zoomBy(dir) { if (map) (dir > 0 ? map.zoomIn() : map.zoomOut()) }
+function zoomBy(dir) { if (!map) return; if (dir > 0) map.zoomIn(); else map.zoomOut() }
 
 function drawMarkers() {
   if (!map || !layer) return

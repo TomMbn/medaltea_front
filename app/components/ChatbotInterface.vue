@@ -174,7 +174,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted, onBeforeUnmount, computed } from 'vue'
+import { ref, nextTick, onMounted, computed } from 'vue'
 import { ArrowUp, Ban, Plus, Check, Copy, Info } from 'lucide-vue-next'
 import { useRoute } from 'vue-router'
 import { medecines, medecinePictogram } from '~/data/medecines'

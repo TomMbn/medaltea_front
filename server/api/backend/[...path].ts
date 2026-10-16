@@ -135,7 +135,8 @@ export function validateListQuery(query?: Record<string, any>) {
     if (query.wheelchairAccessible !== undefined && String(query.wheelchairAccessible) !== 'true') throw bad('Filtre invalide.')
     if (query.bbox !== undefined) {
         const box = String(query.bbox).split(',').map(Number)
-        if (box.length !== 4 || !box.every(Number.isFinite) || Math.abs(box[0]) > 180 || Math.abs(box[2]) > 180 || Math.abs(box[1]) > 90 || Math.abs(box[3]) > 90) throw bad('Zone de carte invalide.')
+        const [west = NaN, south = NaN, east = NaN, north = NaN] = box
+        if (box.length !== 4 || !box.every(Number.isFinite) || Math.abs(west) > 180 || Math.abs(east) > 180 || Math.abs(south) > 90 || Math.abs(north) > 90) throw bad('Zone de carte invalide.')
         if (query.radiusKm !== undefined) throw bad('La zone de carte est incompatible avec le rayon.')
     }
     for (const flag of ['claimed', 'bookable']) {
@@ -163,7 +164,7 @@ export function validatePraticienUpdate(body: Record<string, any>) {
     const out: Record<string, any> = {}
     for (const [key, value] of Object.entries(body)) {
         if (key in TEXT_LIMITS) {
-            if (typeof value !== 'string' || value.length > TEXT_LIMITS[key]) throw bad(`Champ « ${key} » invalide.`)
+            if (typeof value !== 'string' || value.length > (TEXT_LIMITS[key] ?? 0)) throw bad(`Champ « ${key} » invalide.`)
             out[key] = value.trim()
         } else if (key === 'specialityIds') {
             if (!Array.isArray(value) || value.length > 10 || !value.every(v => Number.isInteger(v) && v > 0)) throw bad('Spécialités invalides.')
@@ -404,7 +405,7 @@ export default defineEventHandler(async (event) => {
     // Recherche tolérante : la ponctuation saisie à la main ne doit pas faire échouer la recherche
     // (« Angers, », « Angers (49000) », « Angers. »). La casse et les accents sont déjà ignorés par l'API.
     const looseText = (v: unknown) => String(v)
-        .replace(/[()\[\]{}.,;:!?"“”«»]+/g, ' ')
+        .replace(/[()[\]{}.,;:!?"“”«»]+/g, ' ')
         .replace(/(^|\s)[-–—'’]+|[-–—'’]+(?=\s|$)/g, ' ')
         .replace(/\s+/g, ' ')
         .trim()
@@ -435,7 +436,7 @@ export default defineEventHandler(async (event) => {
 
     // Limitation de débit : on relaie le délai d'attente
     const retryAfter = response.headers.get('retry-after')
-    if (retryAfter && /^\d+$/.test(retryAfter)) setHeader(event, 'Retry-After', retryAfter)
+    if (retryAfter && /^\d+$/.test(retryAfter)) setHeader(event, 'Retry-After', Number(retryAfter))
 
     // Total des résultats (pagination de l'annuaire)
     const total = response.headers.get('x-total-count')

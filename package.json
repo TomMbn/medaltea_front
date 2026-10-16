@@ -11,7 +11,9 @@
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "test": "npm run test:unit && npm run test:e2e",
-    "test:report": "vitest run --reporter=json --outputFile=tests/reports/unit.json ; playwright test ; node tests/report.mjs"
+    "test:report": "vitest run --reporter=json --outputFile=tests/reports/unit.json ; playwright test ; node tests/report.mjs",
+    "lint": "eslint .",
+    "typecheck": "nuxt typecheck"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -29,10 +31,14 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
+    "@nuxt/eslint": "^1.17.0",
     "@nuxt/image": "^2.0.0",
     "@playwright/test": "^1.64.1",
+    "eslint": "^10.12.0",
     "happy-dom": "^21.0.3",
     "jsdom": "^29.1.1",
-    "vitest": "^3.2.7"
+    "typescript": "^6.0.3",
+    "vitest": "^3.2.7",
+    "vue-tsc": "^3.3.13"
   }
 }

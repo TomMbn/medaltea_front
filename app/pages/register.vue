@@ -97,10 +97,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { ArrowUpRight, Check, Loader2 } from 'lucide-vue-next'
+import { useRouter } from '#app'
 
 definePageMeta({ middleware: 'guest' })
 useSeoMeta({ title: 'Créer un compte — Léya', robots: 'noindex, nofollow' })
-import { useRouter } from '#app'
 
 const router = useRouter()
 const route = useRoute()

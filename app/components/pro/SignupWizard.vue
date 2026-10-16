@@ -333,7 +333,7 @@
 <script setup>
 import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
 import { ArrowUpRight, Check, Clock, Plus } from 'lucide-vue-next'
-import { DAYS, emptyWeek, PRESETS, validateWeek, weekTotalMinutes } from '~/utils/schedule'
+import { DAYS, PRESETS, validateWeek, weekTotalMinutes } from '~/utils/schedule'
 
 const STEPS = ['Identité', 'Diplômes', 'Pratique', 'Agenda']
 const TITLES = ['Faisons connaissance', 'Vos diplômes', 'Votre pratique', 'Vos disponibilités']
@@ -396,7 +396,7 @@ function saveDraft() {
     localStorage.setItem(DRAFT_KEY, JSON.stringify({ step: step.value, form: rest, week: { ...week }, accepted: false, manualAddress: manualAddress.value }))
   } catch { /* stockage indisponible : pas de brouillon */ }
 }
-function clearDraft() { try { localStorage.removeItem(DRAFT_KEY) } catch {} }
+function clearDraft() { try { localStorage.removeItem(DRAFT_KEY) } catch { /* stockage indisponible */ } }
 
 onMounted(() => {
   try {

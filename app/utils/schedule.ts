@@ -12,16 +12,16 @@ export type Week = Record<number, Range[]>
 export interface ServerRange { id: number; dayOfWeek: number; startTime: string; endTime: string }
 
 export const hhmm = (t: unknown) => String(t ?? '').slice(0, 5)
-export const toMinutes = (t: string) => { const [h, m] = t.split(':').map(Number); return h * 60 + (m || 0) }
+export const toMinutes = (t: string) => { const [h = 0, m = 0] = t.split(':').map(Number); return h * 60 + m }
 export const emptyWeek = (): Week => ({ 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [] })
 export const cloneWeek = (w: Week): Week => Object.fromEntries(Object.entries(w).map(([k, v]) => [k, v.map(r => ({ ...r }))])) as unknown as Week
 
 export function weekFromServer(list: ServerRange[]): Week {
   const week = emptyWeek()
   for (const r of Array.isArray(list) ? list : []) {
-    if (week[r.dayOfWeek]) week[r.dayOfWeek].push({ start: hhmm(r.startTime), end: hhmm(r.endTime) })
+    week[r.dayOfWeek]?.push({ start: hhmm(r.startTime), end: hhmm(r.endTime) })
   }
-  for (const d of DAYS) week[d.n].sort((a, b) => a.start.localeCompare(b.start))
+  for (const d of DAYS) (week[d.n] ?? []).sort((a, b) => a.start.localeCompare(b.start))
   return week
 }
 
@@ -29,12 +29,12 @@ export function weekFromServer(list: ServerRange[]): Week {
 export function validateWeek(week: Week): Record<number, string> {
   const errors: Record<number, string> = {}
   for (const d of DAYS) {
-    const ranges = [...week[d.n]].sort((a, b) => a.start.localeCompare(b.start))
+    const ranges = [...(week[d.n] ?? [])].sort((a, b) => a.start.localeCompare(b.start))
     for (let i = 0; i < ranges.length; i++) {
-      const r = ranges[i]
+      const r = ranges[i]!
       if (!r.start || !r.end) { errors[d.n] = 'Renseignez une heure de début et de fin.'; break }
       if (toMinutes(r.end) <= toMinutes(r.start)) { errors[d.n] = "L'heure de fin doit être après l'heure de début."; break }
-      if (i > 0 && toMinutes(r.start) < toMinutes(ranges[i - 1].end)) { errors[d.n] = 'Deux plages se chevauchent.'; break }
+      if (i > 0 && toMinutes(r.start) < toMinutes(ranges[i - 1]!.end)) { errors[d.n] = 'Deux plages se chevauchent.'; break }
     }
   }
   return errors
@@ -45,7 +45,7 @@ const key = (day: number, r: Range) => `${day}|${r.start}|${r.end}`
 /** Compare la semaine saisie à l'état du serveur : seules les différences sont envoyées. */
 export function diffWeek(server: ServerRange[], week: Week) {
   const wanted = new Map<string, { dayOfWeek: number; startTime: string; endTime: string }>()
-  for (const d of DAYS) for (const r of week[d.n]) wanted.set(key(d.n, r), { dayOfWeek: d.n, startTime: r.start, endTime: r.end })
+  for (const d of DAYS) for (const r of week[d.n] ?? []) wanted.set(key(d.n, r), { dayOfWeek: d.n, startTime: r.start, endTime: r.end })
 
   const existing = new Map<string, ServerRange>()
   for (const s of Array.isArray(server) ? server : []) existing.set(key(s.dayOfWeek, { start: hhmm(s.startTime), end: hhmm(s.endTime) }), s)
@@ -57,7 +57,7 @@ export function diffWeek(server: ServerRange[], week: Week) {
 
 export function weekTotalMinutes(week: Week): number {
   let total = 0
-  for (const d of DAYS) for (const r of week[d.n]) if (r.start && r.end && toMinutes(r.end) > toMinutes(r.start)) total += toMinutes(r.end) - toMinutes(r.start)
+  for (const d of DAYS) for (const r of week[d.n] ?? []) if (r.start && r.end && toMinutes(r.end) > toMinutes(r.start)) total += toMinutes(r.end) - toMinutes(r.start)
   return total
 }
 

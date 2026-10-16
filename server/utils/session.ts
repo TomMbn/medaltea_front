@@ -75,7 +75,7 @@ export async function findPraticienId(token: string, mail?: string, response?: a
         if (Number.isInteger(fromProfile) && fromProfile > 0) return fromProfile
 
         const userId = me?.id ?? me?.sub ?? me?.userId
-        const list: any[] = await $fetch(`${apiBase}/praticiens`, { timeout: 8000 })
+        const list = await ($fetch as (url: string, opts: object) => Promise<any[]>)(`${apiBase}/praticiens`, { timeout: 8000 })
         const fiches = Array.isArray(list) ? list : []
         // L'email saisi à l'inscription ou à la connexion est le critère le plus direct ; l'identifiant utilisateur sert de repli.
         const byMail = mail ? fiches.find(p => p?.mail && String(p.mail).toLowerCase() === mail.toLowerCase()) : undefined

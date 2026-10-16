@@ -14,7 +14,7 @@ const PAGES: [string, RegExp][] = [
 ]
 
 for (const [path, title] of PAGES) {
-  test(`page ${path} : balises de base et aucune erreur JavaScript`, async ({ page, baseURL }) => {
+  test(`page ${path} : balises de base et aucune erreur JavaScript`, async ({ page }) => {
     const errors: string[] = []
     page.on('pageerror', e => errors.push(e.message))
     await page.goto(path)

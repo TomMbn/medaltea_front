@@ -1,4 +1,4 @@
-# Intégration continue : tests unitaires, construction du site, tests de bout en bout (navigateur réel).
+# Intégration continue : lint et types, tests unitaires, construction du site, tests de bout en bout (navigateur réel).
 # Le déploiement en production est assuré par Vercel à chaque push sur `main` (les contrôles ci-dessous se lancent en parallèle).
 name: CI
 
@@ -12,6 +12,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  qualite:
+    name: Lint et types
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+
   unit:
     name: Tests unitaires
     runs-on: ubuntu-latest

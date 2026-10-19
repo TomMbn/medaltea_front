@@ -13,20 +13,20 @@
 <script setup>
 
 useSeoMeta({
-  title: 'Léya — La médecine alternative, intelligente et accessible',
+  title: 'Léya - La médecine alternative, intelligente et accessible',
   description: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.',
-  ogTitle: 'Léya — La médecine alternative, intelligente et accessible',
+  ogTitle: 'Léya - La médecine alternative, intelligente et accessible',
   ogDescription: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.',
   ogImage: 'https://leya-sante.fr/og-image.jpg',
   ogUrl: 'https://leya-sante.fr',
   ogType: 'website',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Léya — La médecine alternative, intelligente et accessible',
+  twitterTitle: 'Léya - La médecine alternative, intelligente et accessible',
   twitterDescription: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.',
   twitterImage: 'https://leya-sante.fr/og-image.jpg',
 })
 
-useWebPageSchema({ name: 'Léya — La médecine alternative, intelligente et accessible', description: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.', type: 'WebPage' })
+useWebPageSchema({ name: 'Léya - La médecine alternative, intelligente et accessible', description: 'Léya connecte patients et praticiens en médecines alternatives. Chatbot IA, prise de rendez-vous et thérapies naturelles adaptées à vos besoins.', type: 'WebPage' })
 
 useHead({
   script: [{

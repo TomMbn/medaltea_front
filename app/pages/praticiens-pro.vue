@@ -10,11 +10,11 @@
 
     <!-- Hero (réplique proportionnelle de la maquette jusqu'à 1728 px) -->
     <section class="pro-hero relative pt-32 pb-16 xl:pb-0" aria-labelledby="pro-hero-title">
-      <img src="/images/footer/feuille-5.svg" alt="" aria-hidden="true" class="hidden xl:block absolute opacity-30 pointer-events-none select-none rotate-[15deg]" style="animation: none; left: calc(var(--u) * 1482); top: calc(var(--u) * 620); width: calc(var(--u) * 200);" />
-      <img src="/images/footer/feuille-3.svg" alt="" aria-hidden="true" class="hidden xl:block absolute opacity-30 pointer-events-none select-none -rotate-[20deg]" style="animation: none; left: calc(var(--u) * 860); top: calc(var(--u) * 18); width: calc(var(--u) * 180);" />
       <img src="/images/medecines/rond-corail.svg" alt="" aria-hidden="true" class="hidden lg:block absolute -left-[15%] top-[420px] w-[37%] max-w-[640px] pointer-events-none select-none" style="animation: none;" />
 
-      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] xl:max-w-none xl:w-full xl:px-0">
+      <div class="relative mx-auto w-[calc(100%-2rem)] lg:w-[90%] max-w-[1328px] xl:max-w-[1728px] xl:w-full xl:px-0">
+        <img src="/images/footer/feuille-5.svg" alt="" aria-hidden="true" class="hidden xl:block absolute opacity-30 pointer-events-none select-none rotate-[15deg]" style="animation: none; left: calc(var(--u) * 1482); top: calc(var(--u) * 620); width: calc(var(--u) * 200);" />
+        <img src="/images/footer/feuille-3.svg" alt="" aria-hidden="true" class="hidden xl:block absolute opacity-30 pointer-events-none select-none -rotate-[20deg]" style="animation: none; left: calc(var(--u) * 860); top: calc(var(--u) * 18); width: calc(var(--u) * 180);" />
         <div class="pro-hero-text">
           <p class="text-[14px] font-medium uppercase tracking-[0.08em] text-vert-600">Espace praticien</p>
           <h1 id="pro-hero-title" class="mt-4 font-unbounded font-normal text-[32px] sm:text-[44px] xl:text-[56px] leading-[1.23]">

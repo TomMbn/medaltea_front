@@ -1,4 +1,4 @@
-# Léya — le site (front)
+# Léya - le site (front)
 
 Léya met en relation des **patients** et des **praticiens en médecines douces** (ostéopathie, sophrologie, naturopathie, hypnose, massage bien-être, acupuncture…) : un assistant IA oriente le patient, l'annuaire permet de trouver un praticien près de chez soi (liste et carte) et de prendre rendez-vous en ligne ; les praticiens gèrent leur fiche, leur agenda et leurs demandes dans un espace dédié.
 

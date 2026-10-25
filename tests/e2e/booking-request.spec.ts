@@ -64,3 +64,14 @@ test('lien de l\'e-mail au praticien (?revendiquer=1) : la page défile jusqu\'a
   await page.goto(`/praticiens/${slug}?revendiquer=1`)
   await expect(claim).toBeInViewport()
 })
+
+// Lien « Ne plus recevoir ces e-mails » : un simple chargement (ou le préchargement par un antivirus) ne désinscrit pas
+test('page de désinscription : bouton de confirmation, aucun appel à l\'API avant le clic', async ({ page }) => {
+  const calls: string[] = []
+  page.on('request', r => { if (/unsubscribe|desinscription-praticien/.test(r.url())) calls.push(`${r.method()} ${r.url()}`) })
+  await page.goto('/praticiens/desinscription?f=1&t=x')
+  await page.waitForLoadState('networkidle')
+  await expect(page.getByRole('button', { name: 'Confirmer : ne plus recevoir ces e-mails' })).toBeVisible()
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/)
+  expect(calls).toEqual([])
+})

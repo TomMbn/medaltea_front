@@ -116,6 +116,28 @@
       vous en devenez le gestionnaire et pouvez la compléter.
     </p>
 
+    <h2>Demandes de rendez-vous auprès de praticiens non inscrits</h2>
+    <p>
+      Sur la fiche d'un praticien qui n'est pas encore inscrit sur {{ legal.brandName }}, un patient connecté peut
+      envoyer une demande de rendez-vous. Cette demande n'est pas un rendez-vous confirmé : le praticien doit l'accepter.
+    </p>
+    <p>
+      <strong>Pour les patients.</strong> La finalité est de transmettre votre demande au praticien. La base légale est
+      l'exécution du service que vous demandez ; le motif, facultatif et pouvant révéler des informations de santé,
+      n'est transmis qu'avec votre consentement explicite. Votre nom et prénom, vos disponibilités et votre motif ne sont
+      communiqués au praticien qu'une fois qu'il a rejoint {{ legal.brandName }} et que sa fiche lui est rattachée. Le
+      motif est effacé à la clôture de la demande (acceptation, refus, expiration ou annulation), et la demande est
+      supprimée 90 jours après sa clôture. Les demandes sont aussi supprimées avec votre compte.
+    </p>
+    <p>
+      <strong>Pour les praticiens répertoriés.</strong> Lorsqu'une demande est envoyée sur votre fiche,
+      {{ legal.brandName }} peut vous adresser un e-mail d'invitation à votre adresse professionnelle publique, pour vous
+      proposer de rejoindre {{ legal.brandName }} et de répondre. Cet envoi repose sur notre intérêt légitime (article
+      6.1.f du RGPD) et ne contient aucune donnée du patient (ni nom, ni motif). Vous pouvez vous y opposer à tout moment
+      par le lien « Ne plus recevoir ces e-mails » présent dans chaque e-mail, ou en écrivant à
+      <a :href="`mailto:${legal.contactEmail}`">{{ legal.contactEmail }}</a>.
+    </p>
+
     <h2>Mesure d'audience et statistiques d'usage</h2>
     <p>
       La fréquentation du site est mesurée avec Umami, un logiciel libre installé sur le serveur de

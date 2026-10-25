@@ -61,7 +61,9 @@ definePageMeta({ layout: 'admin', middleware: ['admin'] })
 useSeoMeta({ title: 'Fiches — Administration Léya', robots: 'noindex, nofollow' })
 
 const PAGE = 50
-const q = ref('')
+// Recherche pré-remplie par les liens « Demandes sans contact » (/admin/fiches?q=<nom>)
+const route = useRoute()
+const q = ref(typeof route.query.q === 'string' ? route.query.q : '')
 const claimed = ref('')
 const verified = ref('')
 const page = ref(1)

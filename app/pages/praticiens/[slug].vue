@@ -35,11 +35,19 @@
                 <span v-else class="w-full h-full flex items-center justify-center text-white font-unbounded text-[56px]" aria-hidden="true">{{ initials }}</span>
               </div>
               <!-- Note Google (lue en direct) -->
-              <div v-if="google" class="absolute -left-4 sm:-left-4 xl:-left-10 -top-6 sm:top-[-10px] -rotate-[8deg] flex items-center gap-4 bg-white rounded-[20px] shadow-douce px-5 py-4">
-                <span class="font-unbounded text-[28px] sm:text-[32px] leading-none text-vert-900">{{ googleRating }}</span>
-                <span class="flex flex-col gap-1">
-                  <span class="text-[18px] leading-none text-jaune-400" aria-hidden="true">★★★★★</span>
-                  <span class="text-[14px] sm:text-[16px] leading-none text-neutre-600 whitespace-nowrap">{{ google.userRatingCount }} avis · Google Maps</span>
+              <div v-if="google" data-testid="google-rating-card" class="absolute -left-4 sm:-left-4 xl:-left-10 -top-6 sm:top-[-10px] -rotate-[8deg] flex flex-col items-start gap-3 bg-white rounded-[20px] shadow-douce px-5 py-4">
+                <div class="flex items-center gap-4">
+                  <span class="font-unbounded text-[28px] sm:text-[32px] leading-none text-vert-900">{{ googleRating }}</span>
+                  <span class="flex flex-col gap-1">
+                    <span class="text-[18px] leading-none text-jaune-400" aria-hidden="true">★★★★★</span>
+                    <span class="text-[14px] sm:text-[16px] leading-none text-neutre-600 whitespace-nowrap">{{ google.userRatingCount }} avis Google</span>
+                    <!-- Attribution exigée par Google : logo Google Maps officiel, non modifié, 16 à 19 px de haut, dans la carte -->
+                    <img src="/images/google/google-maps-logo-gris.svg" alt="Google Maps" width="98" height="18" class="mt-1.5 h-[18px] w-auto" style="animation: none;" />
+                  </span>
+                </div>
+                <span v-if="google.trustedPractitioner" class="inline-flex items-center gap-1.5 bg-vert-600 text-white rounded-full pl-2 pr-3 py-1 text-[14px] font-medium leading-none whitespace-nowrap">
+                  <BadgeCheck :size="16" aria-hidden="true" />
+                  Praticien de confiance
                 </span>
               </div>
             </div>
@@ -90,11 +98,14 @@
 
       <!-- Repères -->
       <ul v-if="highlights.length" class="mt-12 lg:mt-[40px] flex flex-wrap gap-4 lg:gap-6" aria-label="Repères">
-        <li v-for="(h, i) in highlights" :key="h.label" class="flex items-center gap-3 bg-white rounded-[20px] shadow-douce pl-3 pr-[22px] py-3" :class="['rotate-[3deg]', '-rotate-[3deg]', 'rotate-[2deg]'][i % 3]">
-          <span class="w-10 h-10 rounded-full bg-corail-100 text-corail-500 flex items-center justify-center shrink-0"><component :is="h.icon" :size="18" aria-hidden="true" /></span>
-          <span class="text-[16px] lg:text-[18px] font-semibold text-vert-900 leading-[normal]">{{ h.label }}</span>
+        <li v-for="(h, i) in highlights" :key="h.label" class="flex items-center gap-3 rounded-[20px] shadow-douce pl-3 pr-[22px] py-3" :class="[['rotate-[3deg]', '-rotate-[3deg]', 'rotate-[2deg]'][i % 3], h.trust ? 'bg-vert-600' : 'bg-white']">
+          <span class="w-10 h-10 rounded-full flex items-center justify-center shrink-0" :class="h.trust ? 'bg-white text-vert-600' : 'bg-corail-100 text-corail-500'"><component :is="h.icon" :size="18" aria-hidden="true" /></span>
+          <span class="text-[16px] lg:text-[18px] font-semibold leading-[normal]" :class="h.trust ? 'text-white' : 'text-vert-900'">{{ h.label }}</span>
+          <img v-if="h.googleLogo" src="/images/google/google-maps-logo-gris.svg" alt="Google Maps" width="98" height="18" class="h-[18px] w-auto" style="animation: none;" />
         </li>
       </ul>
+      <!-- Seuils fixés côté API (GOOGLE_TRUST_MIN_RATING, GOOGLE_TRUST_MIN_REVIEWS) : texte à garder aligné -->
+      <p v-if="google?.trustedPractitioner" class="mt-4 text-[14px] text-neutre-600 leading-snug">Praticien de confiance : d’après les avis Google, 4,5 ou plus sur au moins 10 avis.</p>
 
       <!-- En pratique -->
       <section v-if="hasPracticalBlocks" class="mt-14 lg:mt-[40px]" aria-labelledby="practical-title">
@@ -240,7 +251,10 @@
           <p class="font-unbounded text-[56px] lg:text-[72px] leading-none text-white">{{ googleRating }}</p>
           <div class="flex flex-col gap-2">
             <p class="text-[24px] leading-none text-jaune-400" aria-hidden="true">★★★★★</p>
-            <p class="text-[17px] lg:text-[20px] text-bleu-100 leading-[normal]">{{ google.userRatingCount }} avis sur Google Maps</p>
+            <p class="flex flex-wrap items-center gap-x-3 gap-y-2 text-[17px] lg:text-[20px] text-bleu-100 leading-[normal]">
+              {{ google.userRatingCount }} avis Google
+              <img src="/images/google/google-maps-logo-blanc.svg" alt="Google Maps" width="98" height="18" class="h-[18px] w-auto" style="animation: none;" />
+            </p>
           </div>
         </div>
         <a v-if="google.googleMapsUri" :href="google.googleMapsUri" target="_blank" rel="noopener noreferrer" class="mt-8 inline-flex items-center gap-[14px] min-h-[48px] bg-white text-vert-900 font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:shadow-douce transition-shadow">
@@ -286,7 +300,7 @@
 
 <script setup>
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
-import { MapPin, Phone, Globe, Star, Check, Clock, Leaf, ArrowUpRight, X, Languages, CreditCard, Accessibility } from 'lucide-vue-next'
+import { MapPin, Phone, Globe, Star, Check, Clock, Leaf, ArrowUpRight, X, Languages, CreditCard, Accessibility, BadgeCheck } from 'lucide-vue-next'
 import { getMedecineBySlug, medecinePictogram } from '~/data/medecines'
 
 const route = useRoute()
@@ -444,7 +458,8 @@ const hasPracticalBlocks = computed(() => !!medicine.value || publicChips.value.
 const highlights = computed(() => {
   const out = []
   if (experience.value) out.push({ label: `Exerce depuis ${experience.value}`, icon: Check })
-  if (google.value) out.push({ label: `${googleRating.value} · ${google.value.userRatingCount} avis Google`, icon: Star })
+  if (google.value) out.push({ label: `${googleRating.value} · ${google.value.userRatingCount} avis Google`, icon: Star, googleLogo: true })
+  if (google.value?.trustedPractitioner) out.push({ label: 'Praticien de confiance', icon: BadgeCheck, trust: true })
   if (praticien.value.isVerified) out.push({ label: 'Profil vérifié', icon: Check })
   return out
 })

@@ -102,6 +102,17 @@ describe('passerelle : validation des écritures', () => {
     }
   })
 
+  it('fiche praticien : l\'e-mail de la fiche (renseigné par l\'admin) est relayé au bon format, jamais renvoyé', () => {
+    const rule = find('PUT', 'praticiens/12')
+    expect(rule?.body).toContain('mail')
+    expect(rule?.own, 'la réponse reste sans champs privés').toBeFalsy()
+    expect(validatePraticienUpdate({ mail: ' contact@cabinet.fr ' })).toEqual({ mail: 'contact@cabinet.fr' })
+    expect(validatePraticienUpdate({ mail: '' }), '« » efface, comme les autres champs facultatifs').toEqual({ mail: '' })
+    for (const bad of [{ mail: 'pas-un-email' }, { mail: 'a@b' }, { mail: 'contact @cabinet.fr' }, { mail: 42 }, { mail: null }, { mail: `${'a'.repeat(250)}@cabinet.fr` }]) {
+      expect(() => validatePraticienUpdate(bad as any), JSON.stringify(bad)).toThrow()
+    }
+  })
+
   it('préférences du patient : valeurs connues uniquement', () => {
     expect(() => validatePreferences({ budgetBand: 'gratuit' })).toThrow()
     expect(() => validatePreferences({ modes: ['cabinet', 'ovni'] })).toThrow()

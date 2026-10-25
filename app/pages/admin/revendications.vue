@@ -72,7 +72,7 @@
             <div><dt class="text-neutre-600">Date limite</dt><dd>{{ formatDate(u.oldestExpiresAt) }}</dd></div>
           </dl>
 
-          <NuxtLink :to="{ path: '/admin/fiches', query: { q: `${u.praticien.firstName ?? ''} ${u.praticien.lastName ?? ''}`.trim() } }" class="mt-5 inline-flex items-center min-h-[44px] rounded-full border border-vert-900 px-6 text-[16px] font-semibold text-vert-900 hover:bg-vert-900 hover:text-white transition-colors">Retrouver la fiche dans l’administration</NuxtLink>
+          <NuxtLink :to="{ path: '/admin/fiches', query: { q: `${u.praticien.firstName ?? ''} ${u.praticien.lastName ?? ''}`.trim() } }" class="mt-5 inline-flex items-center min-h-[44px] rounded-full border border-vert-900 px-6 text-[16px] font-semibold text-vert-900 hover:bg-vert-900 hover:text-white transition-colors">Retrouver la fiche pour renseigner l’e-mail</NuxtLink>
         </li>
       </ul>
     </section>

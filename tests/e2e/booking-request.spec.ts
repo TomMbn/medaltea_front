@@ -75,3 +75,61 @@ test('page de désinscription : bouton de confirmation, aucun appel à l\'API av
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/)
   expect(calls).toEqual([])
 })
+
+// « Demandes sans contact » : l'admin retrouve la fiche, puis renseigne son e-mail (édition existante PUT praticiens/<id>).
+// Rôle simulé par les témoins d'interface. Toute requête vers la passerelle est servie par le test, le reste est
+// coupé : rien n'atteint l'API (aucune écriture). Service worker bloqué pour que l'interception soit certaine.
+test.describe('administration (API simulée dans le navigateur)', () => {
+  test.use({ serviceWorkers: 'block' })
+
+  test('demandes sans contact : l\'admin retrouve la fiche et renseigne son e-mail', async ({ page, context, baseURL }) => {
+    const fiche = { id: 987654, slug: 'claire-essai-angers', firstName: 'Claire', lastName: 'Essai', city: 'Angers', phoneNumber: '02 41 00 00 00', claimed: false, isVerified: false, mail: null }
+    const searches: (string | null)[] = []
+    const writes: string[] = []
+    const unexpected: string[] = []
+    await page.route(/\/api\/backend\//, (route) => {
+      const request = route.request()
+      const url = new URL(request.url())
+      const call = `${request.method()} ${url.pathname.replace('/api/backend/', '')}`
+      if (call === 'GET admin/claim-requests') return route.fulfill({ json: [] })
+      if (call === 'GET admin/booking-requests/uncontacted') {
+        return route.fulfill({ json: [{ praticien: fiche, pendingCount: 2, oldestExpiresAt: '2026-11-01T09:00:00.000Z', reason: 'no_email' }] })
+      }
+      if (call === 'GET admin/praticiens') {
+        searches.push(url.searchParams.get('q'))
+        return route.fulfill({ json: [fiche], headers: { 'X-Total-Count': '1' } })
+      }
+      if (call === `PUT praticiens/${fiche.id}`) {
+        writes.push(request.postData() ?? '')
+        return route.fulfill({ json: { id: fiche.id } })
+      }
+      unexpected.push(call)
+      return route.abort()
+    })
+    await context.addCookies(['leya_session', 'leya_role'].map((name, i) => ({ name, value: i ? 'admin' : '1', url: baseURL! })))
+
+    await page.goto('/admin/revendications')
+    await expect(page.getByText('Pas d’e-mail connu')).toBeVisible()
+    await page.getByRole('link', { name: 'Retrouver la fiche pour renseigner l’e-mail' }).click()
+    await expect(page.getByRole('searchbox', { name: 'Recherche' })).toHaveValue('Claire Essai')
+    await expect(page.getByText('Aucun e-mail connu')).toBeVisible()
+    expect(searches).toEqual(['Claire Essai'])
+
+    await page.getByRole('button', { name: 'Renseigner l’e-mail' }).click()
+    const results = await new AxeBuilder({ page }).exclude('nuxt-devtools-frame').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
+    const blocking = results.violations.filter(v => (v.impact === 'critical' || v.impact === 'serious') && v.id !== 'color-contrast')
+    expect(blocking.map(v => `${v.id} : ${v.help}`)).toEqual([])
+    await page.getByRole('textbox', { name: 'E-mail professionnel de la fiche' }).fill('contact@cabinet-essai.fr')
+    await page.getByRole('button', { name: 'Enregistrer' }).click()
+    await expect(page.getByText('E-mail enregistré pour Claire Essai.')).toBeVisible()
+    await expect(page.getByText('E-mail : contact@cabinet-essai.fr')).toBeVisible()
+    expect(writes.map(w => JSON.parse(w))).toEqual([{ mail: 'contact@cabinet-essai.fr' }])
+
+    // Téléphone : le formulaire rouvert reprend l'e-mail enregistré, sans défilement horizontal
+    await page.setViewportSize({ width: 320, height: 700 })
+    await page.getByRole('button', { name: 'Modifier l’e-mail' }).click()
+    await expect(page.getByRole('textbox', { name: 'E-mail professionnel de la fiche' })).toHaveValue('contact@cabinet-essai.fr')
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0)
+    expect(unexpected).toEqual([])
+  })
+})

@@ -88,7 +88,8 @@ export const RULES: Rule[] = [
 
     // Ma fiche (propriétaire uniquement : le backend vérifie le compte)
     { method: 'GET', pattern: /^praticiens\/me$/, auth: true, own: true },
-    { method: 'PUT', pattern: /^praticiens\/\d+$/, auth: true, keepEmpty: true, body: ['firstName', 'lastName', 'specialityIds', 'bio', 'address', 'addressComplement', 'postalCode', 'city', 'latitude', 'longitude', 'phoneNumber', 'website', 'socialLinks', 'rpps', 'adeli', 'siret', 'tagline', 'accessInfo', 'practicingSince', 'languages', 'wheelchairAccessible', 'paymentMethods', 'reimbursementInfo', 'publicTypes', 'isActive'] },
+    // mail : e-mail de la fiche, renseigné par l'admin (« Demandes sans contact ») ; le backend réserve la route à l'admin et au propriétaire
+    { method: 'PUT', pattern: /^praticiens\/\d+$/, auth: true, keepEmpty: true, body: ['firstName', 'lastName', 'specialityIds', 'bio', 'address', 'addressComplement', 'postalCode', 'city', 'latitude', 'longitude', 'phoneNumber', 'website', 'socialLinks', 'rpps', 'adeli', 'siret', 'tagline', 'accessInfo', 'practicingSince', 'languages', 'wheelchairAccessible', 'paymentMethods', 'reimbursementInfo', 'publicTypes', 'isActive', 'mail'] },
     { method: 'POST', pattern: /^praticiens\/me\/diplomas$/, auth: true, body: ['title', 'organization', 'year'] },
     { method: 'DELETE', pattern: /^praticiens\/me\/diplomas\/\d+$/, auth: true },
 
@@ -167,7 +168,7 @@ const PAYMENT_METHODS = ['card', 'cash', 'check', 'transfer']
 const SOCIAL_KEYS = ['facebook', 'instagram', 'linkedin', 'youtube', 'tiktok']
 const TEXT_LIMITS: Record<string, number> = {
     firstName: 80, lastName: 80, bio: 2000, tagline: 160, accessInfo: 300, address: 200, addressComplement: 200, postalCode: 5, city: 100,
-    phoneNumber: 20, website: 200, rpps: 11, adeli: 9, siret: 14, reimbursementInfo: 500,
+    phoneNumber: 20, website: 200, rpps: 11, adeli: 9, siret: 14, reimbursementInfo: 500, mail: 255,
 }
 
 /** Modification de la fiche : types, longueurs et formats vérifiés avant d'atteindre le backend. */
@@ -220,6 +221,7 @@ export function validatePraticienUpdate(body: Record<string, any>) {
     if (out.adeli && !/^[0-9A-Za-z]{9}$/.test(out.adeli)) throw bad('ADELI invalide (9 caractères).')
     if (out.website && !/^https?:\/\/\S+$/.test(out.website)) throw bad('Site web invalide (http ou https).')
     if (out.phoneNumber && !/^\+?\d{10,15}$/.test(out.phoneNumber.replace(/[\s.]/g, ''))) throw bad('Téléphone invalide.')
+    if (out.mail && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(out.mail)) throw bad('Adresse e-mail invalide.')
     return out
 }
 

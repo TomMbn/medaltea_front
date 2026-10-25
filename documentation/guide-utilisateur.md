@@ -21,6 +21,13 @@ Ce guide présente Léya du point de vue de ses trois profils : **patient** (ou 
 ### S'inscrire
 `/praticiens-pro` présente l'offre (gratuite pendant le lancement). Le bouton d'inscription ouvre le parcours `/inscription-pro` : identité, profession, puis création du compte. Une fiche existante peut être **revendiquée** ; elle est alors vérifiée par l'administration (badge « Profil vérifié »).
 
+**Fiche déjà répertoriée à son nom** : si une fiche existante ressemble à la nouvelle (nom et ville, SIREN, RPPS ou téléphone), la nouvelle fiche reste masquée de l'annuaire et le tableau de bord `/pro` propose un choix :
+- **Reprendre et modifier cette fiche** : le praticien garde la fiche existante ; sa nouvelle fiche y est fusionnée puis supprimée ;
+- **Repartir de ma nouvelle fiche** : la nouvelle fiche remplace l'existante, qui est supprimée ; sa note Google et ses informations manquantes (SIRET, etc.) sont reprises ;
+- **Aucune de ces fiches n'est la mienne** : la fiche est publiée (refusé si la fiche existante a le même nom et la même adresse).
+
+Les deux premiers choix sont vérifiés par l'administration. Dans tous les cas, il ne reste qu'une fiche : l'adresse de la fiche supprimée redirige vers celle qui reste. Le même choix est proposé quand un praticien qui a déjà sa fiche en revendique une autre.
+
 ### Découvrir sans s'engager
 `/demo` ouvre l'espace praticien avec des **données fictives**, entièrement dans le navigateur. Rien n'est envoyé au serveur ; un bandeau permet de quitter la démo.
 
@@ -42,7 +49,7 @@ Ce guide présente Léya du point de vue de ses trois profils : **patient** (ou 
 ## 3. Administrateur
 
 Le rôle est attribué côté serveur (aucune inscription publique). Après connexion, `/admin` donne accès à :
-- **Revendications** : approuver ou refuser les demandes de rattachement d'un praticien à une fiche.
+- **Revendications** : approuver ou refuser les demandes de rattachement d'un praticien à une fiche. Chaque demande indique ce que fera l'approbation : reprise de la fiche, ou remplacement par la fiche du demandeur.
 - **Fiches** : consulter les fiches et le badge « Profil vérifié ».
 
 ## 4. Installer l'application (PWA)

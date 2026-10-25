@@ -23,8 +23,9 @@
 
           <h1 id="med-title" class="mt-8 lg:mt-[34px] font-unbounded font-normal text-vert-900 text-[30px] sm:text-[40px] lg:text-[clamp(36px,3.3vw,56px)] leading-[1.15] flex flex-col items-start gap-1 lg:gap-2 lg:max-w-[560px]">
             <span class="text-balance">{{ tagline.lead }}</span>
-            <!-- Article élidé (l’) : il reste collé au nom de la médecine, jamais seul en fin de ligne -->
-            <span class="flex items-center whitespace-nowrap">
+            <!-- Article élidé (l’) : il reste collé au nom de la médecine, jamais seul en fin de ligne.
+                 Sans article, un nom long (médecine traditionnelle chinoise) peut passer à la ligne sur mobile. -->
+            <span class="flex items-center" :class="{ 'whitespace-nowrap': tagline.elided }">
               <span v-if="tagline.elided" class="mr-1">{{ tagline.elided }}</span>
               <span class="bg-corail-100 text-corail-700 rounded-full px-5 lg:px-[22px] pt-0.5 pb-2 lg:pb-[10px]">{{ medicine.name.toLowerCase() }}</span>
             </span>
@@ -54,7 +55,7 @@
           </div>
           <div v-if="practitionerCount > 0" class="absolute left-0 lg:-left-12 bottom-6 lg:-bottom-10 -rotate-[5deg] bg-white rounded-[24px] shadow-douce px-6 lg:px-8 py-5 lg:py-6 flex flex-col gap-1">
             <span class="font-unbounded font-medium text-[44px] lg:text-[56px] leading-none text-vert-600">{{ practitionerCount }}</span>
-            <span class="text-[15px] lg:text-[16px] text-neutre-600 whitespace-nowrap">praticiens référencés en {{ medicine.name.toLowerCase() }}</span>
+            <span class="text-[15px] lg:text-[16px] text-neutre-600">praticiens référencés en {{ medicine.name.toLowerCase() }}</span>
           </div>
         </div>
       </div>

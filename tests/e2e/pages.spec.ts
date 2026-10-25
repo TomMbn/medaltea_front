@@ -6,6 +6,12 @@ const PAGES: [string, RegExp][] = [
   ['/medecines', /médecines/i],
   ['/medecines/sophrologie', /sophrolog/i],
   ['/medecines/osteopathie', /ostéopath/i],
+  ['/medecines/reflexologie', /réflexolog/i],
+  ['/medecines/kinesiologie', /kinésiolog/i],
+  ['/medecines/shiatsu', /shiatsu/i],
+  ['/medecines/chiropraxie', /chiropra/i],
+  ['/medecines/etiopathie', /étiopath/i],
+  ['/medecines/medecine-traditionnelle-chinoise', /médecine chinoise/i],
   ['/trouver-un-praticien', /praticien/i],
   ['/praticiens-pro', /praticien/i],
   ['/cgu', /utilisation/i],
@@ -33,6 +39,7 @@ test('robots.txt et sitemap : pages privées exclues, pages publiques listées',
   const sitemap = await (await request.get('/sitemap.xml')).text()
   const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => new URL(m[1]).pathname)
   expect(locs).toEqual(expect.arrayContaining(['/', '/medecines', '/medecines/sophrologie', '/trouver-un-praticien']))
+  for (const slug of ['reflexologie', 'kinesiologie', 'shiatsu', 'chiropraxie', 'etiopathie', 'medecine-traditionnelle-chinoise']) expect(locs).toContain(`/medecines/${slug}`)
   for (const priv of ['/pro', '/demo', '/admin', '/login', '/mon-compte', '/chatbot']) expect(locs).not.toContain(priv)
 })
 

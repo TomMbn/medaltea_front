@@ -180,7 +180,7 @@
       <!-- Question à Léya -->
       <div class="relative mt-28 lg:mt-[130px] mx-auto max-w-[520px]">
         <div class="absolute z-0 w-[110px] sm:w-[150px] right-[8%] sm:right-[43px] -top-[84px] sm:-top-[112px] -scale-x-100 pointer-events-none" aria-hidden="true">
-          <img src="/images/landing/mascotte-panda.webp" alt="" width="223" height="193" class="w-full h-auto" />
+          <img src="/images/landing/mascotte-panda.webp" alt="" width="223" height="193" class="panda--sur-vert w-full h-auto" />
         </div>
         <div class="relative z-10 bg-vert-600 rounded-[32px] p-8 lg:p-10 text-white">
           <h2 class="font-unbounded font-normal text-[22px] lg:text-[26px] leading-tight">Une question sur {{ medicine.nameWithArticle }} ?</h2>

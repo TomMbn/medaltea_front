@@ -6,11 +6,11 @@
 
     <div class="max-w-[800px] w-full flex flex-col items-center text-center relative z-10 -mt-12 lg:mt-0">
       <!-- Mascot -->
-      <div class="mb-6 lg:mb-10 animate-float translate-y-0">
+      <div class="panda-zone mb-6 lg:mb-10 animate-float translate-y-0">
         <NuxtImg 
           src="/images/panda-standing.webp" 
           alt="Léya Panda"
-          class="w-32 lg:w-48 h-auto drop-shadow-xl"
+          class="panda w-32 lg:w-48 h-auto drop-shadow-xl"
           width="256"
           height="256"
         />

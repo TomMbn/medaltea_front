@@ -11,7 +11,7 @@
       width="355"
       height="420"
       loading="lazy"
-      class="hidden lg:block absolute pointer-events-none z-10"
+      class="panda--sur-vert hidden lg:block absolute pointer-events-none z-10"
       style="right: 12.8%; top: -150px; width: clamp(220px, 20.55%, 355px); height: auto;"
     />
 

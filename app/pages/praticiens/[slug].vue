@@ -98,7 +98,7 @@
 
       <!-- Repères -->
       <ul v-if="highlights.length" class="mt-12 lg:mt-[40px] flex flex-wrap gap-4 lg:gap-6" aria-label="Repères">
-        <li v-for="(h, i) in highlights" :key="h.label" class="flex items-center gap-3 rounded-[20px] shadow-douce pl-3 pr-[22px] py-3" :class="[['rotate-[3deg]', '-rotate-[3deg]', 'rotate-[2deg]'][i % 3], h.trust ? 'bg-vert-600' : 'bg-white']">
+        <li v-for="h in highlights" :key="h.label" class="flex items-center gap-3 rounded-[20px] shadow-douce pl-3 pr-[22px] py-3" :class="h.trust ? 'bg-vert-600' : 'bg-white'">
           <span class="w-10 h-10 rounded-full flex items-center justify-center shrink-0" :class="h.trust ? 'bg-white text-vert-600' : 'bg-corail-100 text-corail-500'"><component :is="h.icon" :size="18" aria-hidden="true" /></span>
           <span class="text-[16px] lg:text-[18px] font-semibold leading-[normal]" :class="h.trust ? 'text-white' : 'text-vert-900'">{{ h.label }}</span>
           <img v-if="h.googleLogo" src="/images/google/google-maps-logo-gris.svg" alt="Google Maps" width="98" height="18" class="h-[18px] w-auto" style="animation: none;" />

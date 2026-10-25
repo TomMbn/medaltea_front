@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { PERIODS, requestStatusLabel, slotLabel, dateBounds } from '~/utils/bookingRequests'
+import { PERIODS, requestStatusLabel, slotLabel, dateBounds, sortRequests } from '~/utils/bookingRequests'
 
 describe('demandes de rendez-vous (utils/bookingRequests)', () => {
   it('propose les trois moments de la journée', () => {
@@ -33,5 +33,18 @@ describe('demandes de rendez-vous (utils/bookingRequests)', () => {
     expect(dateBounds(new Date('2026-07-14T22:30:00Z'))).toEqual({ min: '2026-07-16', max: '2026-09-13' })
     // Fin d'année
     expect(dateBounds(new Date('2026-12-31T12:00:00Z'))).toEqual({ min: '2027-01-01', max: '2027-03-01' })
+  })
+
+  it('trie les demandes : en attente d\'abord, puis les plus récentes', () => {
+    const requests = [
+      { id: 1, status: 'declined', createdAt: '2026-10-20T10:00:00.000Z' },
+      { id: 2, status: 'pending', createdAt: '2026-10-18T10:00:00.000Z' },
+      { id: 3, status: 'accepted', createdAt: '2026-10-24T10:00:00.000Z' },
+      { id: 4, status: 'pending', createdAt: '2026-10-22T10:00:00.000Z' },
+      { id: 5, status: 'expired', createdAt: '2026-10-10T10:00:00.000Z' },
+    ]
+    expect(sortRequests(requests).map(r => r.id)).toEqual([4, 2, 3, 1, 5])
+    // La liste reçue n'est pas modifiée
+    expect(requests.map(r => r.id)).toEqual([1, 2, 3, 4, 5])
   })
 })

@@ -56,3 +56,9 @@ export function dateBounds(now: Date = new Date()): { min: string; max: string }
   const today = parisDayFmt.format(now)
   return { min: addDays(today, 1), max: addDays(today, PREFERRED_DATE_MAX_DAYS) }
 }
+
+/** Demandes en attente d'abord, puis les plus récentes ; renvoie une copie triée. */
+export function sortRequests<T extends { status: string; createdAt: string }>(requests: T[]): T[] {
+  const rank = (r: T) => (r.status === 'pending' ? 0 : 1)
+  return [...requests].sort((a, b) => rank(a) - rank(b) || b.createdAt.localeCompare(a.createdAt))
+}

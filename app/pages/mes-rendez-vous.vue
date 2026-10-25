@@ -8,6 +8,8 @@
         <PatientSidebar active="rdv" :me="me" />
 
         <div class="flex-1 min-w-0 flex flex-col gap-5">
+          <PatientBookingRequests />
+
           <!-- Onglets -->
           <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrer les rendez-vous">
             <button v-for="t in TABS" :key="t.key" type="button" class="chip" :class="tab === t.key ? 'chip-on' : 'chip-off'" :aria-pressed="tab === t.key" @click="tab = t.key">{{ t.label }}</button>

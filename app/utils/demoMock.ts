@@ -1,6 +1,6 @@
 // Faux serveur de la démonstration : répond aux routes de l'espace praticien avec des données fictives.
 // Tout vit dans le navigateur (sessionStorage) : rien n'est envoyé au backend, tout disparaît à la fermeture de l'onglet.
-import { DEMO_ID, demoFiche, demoDiplomas, demoTypes, demoHours, demoSlots } from './demoData'
+import { DEMO_ID, demoFiche, demoDiplomas, demoTypes, demoHours, demoSlots, demoBookingRequest } from './demoData'
 
 export const DEMO_STORAGE_KEY = 'leya-demo-state'
 
@@ -71,6 +71,7 @@ function seed() {
     hours: demoHours.map(h => ({ ...h })),
     abs: [{ id: 1, startAt: at(14, 0, 5), endAt: at(18, 0, 5), reason: 'Formation' }],
     appts,
+    bookingRequests: [demoBookingRequest()],
   }
 }
 
@@ -166,6 +167,36 @@ export function demoRequest(path: string, method: string, query: Record<string, 
       a.proposal = { startAt: start.toISOString(), endAt: new Date(start.getTime() + dur).toISOString(), expiresAt: new Date(Date.now() + 48 * 3600000).toISOString() }
     }
     return ok(a)
+  }
+  // Demandes reçues avant l'inscription : l'acceptation crée un rendez-vous confirmé, comme le vrai serveur
+  const requests: any[] = (st.bookingRequests ??= []) // état d'une démo ouverte avant l'ajout des demandes
+  const pendingRequest = (reqId: number) => {
+    const r = requests.find(x => x.id === reqId)
+    if (!r) throw new DemoError(404, 'Introuvable dans la démonstration.')
+    if (r.status !== 'pending') throw new DemoError(409, 'Cette demande a déjà été traitée ou a expiré.')
+    return r
+  }
+  if (path === 'praticiens/me/booking-requests' && m === 'GET') return ok(requests.filter(r => r.status === 'pending'))
+  if ((id = num(/^praticiens\/me\/booking-requests\/(\d+)\/accept$/)) && m === 'POST') {
+    const r = pendingRequest(id)
+    const start = new Date(body.startAt).toISOString()
+    const end = plus(start, body.durationMin)
+    if (st.appts.some((a: any) => (a.status === 'pending' || a.status === 'confirmed') && a.startAt < end && a.endAt > start)) {
+      throw new DemoError(409, 'Ce créneau chevauche un autre rendez-vous.')
+    }
+    const appt = {
+      id: st.apptNext++, status: 'confirmed', startAt: start, endAt: end, createdAt: new Date().toISOString(),
+      patient: { id: 300 + r.id, ...r.patient }, consultationType: st.types.find((t: any) => t.id === body.consultationTypeId) ?? null,
+      userNote: r.userNote, cancelReason: null, proposal: null, isGuest: false,
+    }
+    st.appts.push(appt)
+    Object.assign(r, { status: 'accepted', appointmentId: appt.id, decidedAt: new Date().toISOString(), userNote: null })
+    return ok(appt)
+  }
+  if ((id = num(/^praticiens\/me\/booking-requests\/(\d+)\/decline$/)) && m === 'POST') {
+    const r = pendingRequest(id)
+    Object.assign(r, { status: 'declined', declineReason: body?.reason?.trim() || null, decidedAt: new Date().toISOString(), userNote: null })
+    return ok(r)
   }
   // Créneaux proposés pour « autre horaire »
   if (new RegExp(`^praticiens/${DEMO_ID}/slots$`).test(path)) {

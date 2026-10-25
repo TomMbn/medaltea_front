@@ -9,9 +9,16 @@
 
     <p v-if="status === 'pending' || !ready" class="mt-6 text-[16px] text-neutre-600">Chargement…</p>
     <p v-else-if="error" class="mt-6 rounded-[20px] bg-white p-4 text-[16px] text-red-700" role="alert">{{ apiErrorMessage(error, 'Impossible de charger les rendez-vous.') }}</p>
-    <p v-else-if="!list.length" class="mt-6 rounded-[20px] bg-white p-6 text-[18px] text-neutre-600">{{ emptyText }}</p>
+    <p v-else-if="!list.length && !showBookingRequests" class="mt-6 rounded-[20px] bg-white p-6 text-[18px] text-neutre-600">{{ emptyText }}</p>
 
-    <div v-else class="mt-6 flex flex-col xl:flex-row gap-5 items-start">
+    <!-- Onglet « Demandes » : demandes reçues avant l'inscription, au-dessus des rendez-vous en attente -->
+    <template v-if="loaded && tab === 'requests'">
+      <p v-if="notice" class="mt-6 rounded-[20px] bg-bleu-50 px-5 py-4 text-[16px] text-vert-900" role="status">{{ notice }}</p>
+      <p v-if="requestsLoadError" class="mt-6 rounded-[20px] bg-white p-4 text-[16px] text-red-700" role="alert">{{ requestsLoadError }}</p>
+      <ProBookingRequests v-if="bookingRequests.length" class="mt-6" :requests="bookingRequests" @decided="onRequestDecided" />
+    </template>
+
+    <div v-if="loaded && list.length" class="mt-6 flex flex-col xl:flex-row gap-5 items-start">
       <!-- Liste -->
       <ul class="w-full xl:w-[560px] xl:shrink-0 flex flex-col gap-[10px]" aria-label="Liste des rendez-vous">
         <li v-for="a in list" :key="a.id">
@@ -112,11 +119,17 @@ import { ChevronDown, ArrowUpRight } from 'lucide-vue-next'
 
 const { praticienId } = useSession()
 const { data: raw, status, error, refresh } = useAsyncData('pro-appointments', () => $fetch('/api/backend/praticiens/me/appointments'), { server: false, lazy: true, default: () => [] })
+// Demandes reçues quand la fiche n'était pas réservable (clé partagée avec le tableau de bord)
+const { data: rawRequests, error: requestsError, refresh: refreshRequests } = useAsyncData('pro-booking-requests', () => $fetch('/api/backend/praticiens/me/booking-requests'), { server: false, lazy: true, default: () => [] })
+const bookingRequests = computed(() => (Array.isArray(rawRequests.value) ? rawRequests.value : []))
+// Session expirée (401) : le middleware de l'espace pro gère déjà la déconnexion
+const requestsLoadError = computed(() => (requestsError.value && apiStatus(requestsError.value) !== 401 ? apiErrorMessage(requestsError.value, 'Impossible de charger les demandes reçues avant votre inscription.') : ''))
 
 // Les dates dépendent du navigateur : calculées après l'affichage (pas de décalage à l'hydratation)
 const now = ref(null)
 onMounted(() => { now.value = new Date() })
 const ready = computed(() => !!now.value)
+const loaded = computed(() => ready.value && status.value !== 'pending' && !error.value)
 
 const all = computed(() => normalizeAppointments(raw.value))
 const upcoming = (a) => new Date(a.endAt ?? a.startAt).getTime() >= (now.value?.getTime() ?? 0)
@@ -130,13 +143,15 @@ const buckets = computed(() => {
   }
 })
 
-const tab = ref('upcoming')
+// `?onglet=demandes` (lien du tableau de bord) ouvre directement l'onglet « Demandes »
+const tab = ref(useRoute().query.onglet === 'demandes' ? 'requests' : 'upcoming')
 const tabs = computed(() => [
   { id: 'upcoming', label: 'À venir', count: buckets.value.upcoming.length },
-  { id: 'requests', label: 'Demandes', count: buckets.value.requests.length },
+  { id: 'requests', label: 'Demandes', count: buckets.value.requests.length + bookingRequests.value.length },
   { id: 'past', label: 'Passés', count: null },
 ])
 const list = computed(() => buckets.value[tab.value])
+const showBookingRequests = computed(() => tab.value === 'requests' && (bookingRequests.value.length > 0 || !!requestsLoadError.value || !!notice.value))
 const emptyText = computed(() => ({
   upcoming: 'Aucun rendez-vous à venir.',
   requests: 'Aucune demande en attente.',
@@ -147,7 +162,7 @@ const emptyText = computed(() => ({
 const selectedId = ref(null)
 const selected = computed(() => list.value.find(a => a.id === selectedId.value) ?? list.value[0] ?? null)
 const detailRef = ref(null)
-watch(tab, () => { selectedId.value = null; pendingAction.value = null; proposing.value = null })
+watch(tab, () => { selectedId.value = null; pendingAction.value = null; proposing.value = null; notice.value = '' })
 async function select(a) {
   selectedId.value = a.id
   pendingAction.value = null
@@ -211,6 +226,13 @@ async function apply(a, newStatus, motif) {
   } finally {
     busyId.value = null
   }
+}
+
+// Demande acceptée ou refusée : le rendez-vous créé apparaît dans « À venir », la demande quitte la liste
+const notice = ref('')
+async function onRequestDecided(message) {
+  notice.value = message
+  await Promise.all([refresh(), refreshRequests()])
 }
 
 // Proposition d'un autre créneau : parmi les créneaux libres des 14 prochains jours, pour la même prestation

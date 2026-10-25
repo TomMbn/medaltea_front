@@ -21,6 +21,11 @@ export const MAX_PREFERRED_SLOTS = 3
 /** Dernier jour proposable, compté depuis aujourd'hui (même limite que le backend). */
 export const PREFERRED_DATE_MAX_DAYS = 60
 
+/** Durée du rendez-vous fixée par le praticien à l'acceptation, en minutes (mêmes bornes que le backend). */
+export const ACCEPT_DURATION_MIN = 15
+export const ACCEPT_DURATION_MAX = 240
+export const ACCEPT_DURATION_DEFAULT = 60
+
 const STATUS_LABELS: Record<BookingRequestStatus, string> = {
   pending: 'En attente du praticien',
   accepted: 'Acceptée',

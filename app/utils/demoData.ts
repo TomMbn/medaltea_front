@@ -48,6 +48,25 @@ export const demoHours = [1, 2, 3, 5]
   .map(d => ({ id: d, dayOfWeek: d, startTime: '09:00:00', endTime: '18:00:00' }))
   .concat([{ id: 6, dayOfWeek: 6, startTime: '09:00:00', endTime: '12:00:00' }])
 
+/** Demande de rendez-vous fictive « reçue avant l'inscription » : disponibilités et échéance relatives à `now`. */
+export function demoBookingRequest(now: Date = new Date()) {
+  const day = (n: number) => new Date(now.getTime() + n * 864e5).toISOString().slice(0, 10)
+  return {
+    id: 1,
+    status: 'pending',
+    preferredSlots: [{ date: day(2), period: 'morning' }, { date: day(3), period: 'evening' }],
+    userNote: 'Anxiété avant les examens, je souhaite apprendre à me détendre.',
+    consentHealthData: true,
+    declineReason: null,
+    appointmentId: null,
+    expiresAt: new Date(now.getTime() + 5 * 864e5).toISOString(),
+    createdAt: new Date(now.getTime() - 2 * 864e5).toISOString(),
+    decidedAt: null,
+    praticien: { id: DEMO_ID, slug: DEMO_SLUG, firstName: demoFiche.firstName, lastName: demoFiche.lastName, city: demoFiche.city, claimed: true },
+    patient: { firstName: 'Camille', lastName: 'Fontaine' },
+  }
+}
+
 /** Créneaux libres de la fiche publique de démonstration (jeudi complet, mercredi réduit), à venir uniquement. */
 export function demoSlots(from: string, to: string): string[] {
   const out: string[] = []

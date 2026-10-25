@@ -2,6 +2,8 @@
   <div>
     <ProPageHead :title="greeting" :subtitle="dateLine" />
 
+    <ProDuplicates />
+
     <ProOnboarding class="mb-5" />
 
     <!-- Bandeau d'accueil -->

@@ -27,6 +27,7 @@
           <div><dt class="text-neutre-600">Reçue le</dt><dd>{{ formatDate(r.createdAt) }}</dd></div>
           <div><dt class="text-neutre-600">RPPS</dt><dd>{{ r.rpps || '—' }}</dd></div>
           <div><dt class="text-neutre-600">SIRET</dt><dd>{{ r.siret || '—' }}</dd></div>
+          <div class="sm:col-span-2"><dt class="text-neutre-600">À l’approbation</dt><dd>{{ r.mode === 'replace' ? 'la fiche du demandeur remplace cette fiche (supprimée, son adresse redirige)' : 'le demandeur reprend cette fiche (sa fiche actuelle y est fusionnée)' }}</dd></div>
           <div v-if="r.message" class="sm:col-span-2"><dt class="text-neutre-600">Message</dt><dd class="whitespace-pre-line">{{ r.message }}</dd></div>
           <div v-if="r.status !== 'pending' && r.decisionReason" class="sm:col-span-2"><dt class="text-neutre-600">Motif de la décision</dt><dd>{{ r.decisionReason }}</dd></div>
         </dl>

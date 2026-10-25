@@ -120,6 +120,8 @@ export function demoRequest(path: string, method: string, query: Record<string, 
   if (new RegExp(`^praticiens/${DEMO_ID}$`).test(path) && m === 'PUT') { const { specialityIds, ...rest } = body ?? {}; Object.assign(st.fiche, rest); return ok(st.fiche) }
   if (path === 'praticiens/me/settings' && m === 'PATCH') { Object.assign(st.settings, body); return ok(st.settings) }
   if (path === 'praticiens/me/claim-requests') return ok([])
+  // La fiche de démonstration n'a pas de doublon : rien à reprendre ni à écarter
+  if (path === 'praticiens/me/duplicates' && m === 'GET') return ok([])
   if (path === 'tracking/preferences') return ok({ trackingEnabled: false, optOut: true })
 
   // Prestations

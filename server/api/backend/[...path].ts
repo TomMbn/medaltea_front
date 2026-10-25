@@ -71,8 +71,12 @@ export const RULES: Rule[] = [
     { method: 'DELETE', pattern: /^push\/subscriptions$/, auth: true, body: ['endpoint'] },
 
     // Revendication d'une fiche répertoriée (compte pro)
-    { method: 'POST', pattern: /^praticiens\/\d+\/claim-requests$/, auth: true, body: ['message', 'rpps', 'siret'] },
+    // mode : takeover (reprendre cette fiche) ou replace (la remplacer par la mienne)
+    { method: 'POST', pattern: /^praticiens\/\d+\/claim-requests$/, auth: true, body: ['message', 'rpps', 'siret', 'mode'] },
     { method: 'GET', pattern: /^praticiens\/me\/claim-requests$/, auth: true },
+    // Fiches répertoriées qui ressemblent à la mienne (doublons possibles) ; « ce n'est pas moi »
+    { method: 'GET', pattern: /^praticiens\/me\/duplicates$/, auth: true },
+    { method: 'POST', pattern: /^praticiens\/me\/duplicates\/dismiss$/, auth: true },
 
     // Ma fiche (propriétaire uniquement : le backend vérifie le compte)
     { method: 'GET', pattern: /^praticiens\/me$/, auth: true, own: true },
@@ -328,6 +332,11 @@ export function validateDecision(body: Record<string, any>) {
     return body
 }
 
+export function validateClaim(body: Record<string, any>) {
+    if (body.mode !== undefined && !['takeover', 'replace'].includes(body.mode)) throw createError({ statusCode: 400, statusMessage: 'Choix invalide.' })
+    return body
+}
+
 export function pickKeepEmpty(source: Record<string, any>, keys: string[]) {
     const out: Record<string, any> = {}
     for (const key of keys) if (source?.[key] !== undefined) out[key] = source[key]
@@ -391,6 +400,7 @@ export default defineEventHandler(async (event) => {
         if (method === 'PATCH' && /^praticiens\/me\/consultation-types\/\d+$/.test(path) && 'isActive' in body && typeof body.isActive !== 'boolean') throw createError({ statusCode: 400, statusMessage: 'Valeur invalide.' })
         if (/^appointments\/\d+\/proposal$/.test(path)) body = validateProposal(body)
         if (/^admin\/claim-requests\/\d+$/.test(path)) body = validateDecision(body)
+        if (/^praticiens\/\d+\/claim-requests$/.test(path)) body = validateClaim(body)
         if (method === 'PATCH' && path === 'users/me') body = validateProfileUpdate(body)
         if (method === 'DELETE' && path === 'users/me') {
             if (typeof body.password !== 'string' || !body.password || body.password.length > 200) {

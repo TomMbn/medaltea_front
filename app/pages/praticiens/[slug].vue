@@ -304,7 +304,8 @@ import { MapPin, Phone, Globe, Star, Check, Clock, Leaf, ArrowUpRight, X, Langua
 import { getMedecineBySlug, medecinePictogram } from '~/data/medecines'
 
 const route = useRoute()
-// L'adresse publique est le slug. Les anciennes adresses numériques (/praticiens/12) redirigent vers elle.
+// L'adresse publique est le slug. Les anciennes adresses (numériques comme /praticiens/12, ou slug d'une fiche
+// fusionnée dans une autre) redirigent vers elle.
 const param = String(route.params.slug)
 const legacyId = /^\d+$/.test(param)
 if (!legacyId && !/^[a-z0-9-]{1,120}$/.test(param)) {
@@ -317,7 +318,7 @@ const { data: praticien, error } = await useAsyncData(`praticien-${param}`, () =
 if (error.value || !praticien.value) {
   throw createError({ statusCode: 404, statusMessage: 'Praticien introuvable', fatal: true })
 }
-if (legacyId && praticien.value.slug) {
+if (praticien.value.slug && praticien.value.slug !== param) {
   await navigateTo({ path: `/praticiens/${praticien.value.slug}`, query: route.query }, { redirectCode: 301, replace: true })
 }
 const id = praticien.value.id

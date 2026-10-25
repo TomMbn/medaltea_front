@@ -1,6 +1,7 @@
 <template>
   <div>
     <ProPageHead title="Ma fiche" subtitle="Ces informations apparaissent sur votre fiche publique." />
+    <ProDuplicates />
     <ProClaimRequests />
     <ProFiche />
   </div>

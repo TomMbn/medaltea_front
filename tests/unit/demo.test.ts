@@ -44,8 +44,12 @@ describe('démonstration praticien (faux serveur)', () => {
     expect(call('praticiens/me/consultation-types')).toHaveLength(before + 1)
   })
 
-  it('refuse proprement ce qui exige le vrai serveur (photo, suppression de compte, notifications)', () => {
-    for (const [path, method] of [['praticiens/me/photo', 'POST'], ['users/me', 'DELETE'], ['push/subscriptions', 'POST']] as const) {
+  it('ne propose aucun doublon pour la fiche de démonstration', () => {
+    expect(call('praticiens/me/duplicates')).toEqual([])
+  })
+
+  it('refuse proprement ce qui exige le vrai serveur (photo, suppression de compte, notifications, doublons)', () => {
+    for (const [path, method] of [['praticiens/me/photo', 'POST'], ['users/me', 'DELETE'], ['push/subscriptions', 'POST'], ['praticiens/me/duplicates/dismiss', 'POST']] as const) {
       expect(() => demoRequest(path, method, {}, {}), `${method} ${path}`).toThrow(DemoError)
     }
   })

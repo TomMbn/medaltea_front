@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { RULES, stripPrivate, validateListQuery, validateAppointment, validatePraticienUpdate, validatePreferences, pick } from '../../server/api/backend/[...path]'
+import { RULES, stripPrivate, validateListQuery, validateAppointment, validatePraticienUpdate, validatePreferences, validateClaim, pick } from '../../server/api/backend/[...path]'
 
 // Passerelle front → backend : seules les routes listées sont relayées. Ces tests protègent la liste blanche.
 const find = (method: string, path: string) => RULES.find(r => r.method === method && r.pattern.test(path))
@@ -19,6 +19,7 @@ describe('passerelle : liste blanche des routes', () => {
       ['GET', 'praticiens/me'], ['GET', 'praticiens/me/appointments'], ['GET', 'praticiens/me/stats'],
       ['POST', 'push/subscriptions'], ['POST', 'praticiens/me/calendar-token'],
       ['GET', 'admin/praticiens'], ['GET', 'admin/claim-requests'], ['PATCH', 'admin/claim-requests/3'], ['PATCH', 'praticiens/4/verification'],
+      ['GET', 'praticiens/me/duplicates'], ['POST', 'praticiens/me/duplicates/dismiss'], ['POST', 'praticiens/4/claim-requests'],
     ]
     for (const [method, path] of protectedRoutes) expect(find(method, path)?.auth, `${method} ${path}`).toBe(true)
   })
@@ -104,5 +105,15 @@ describe('passerelle : validation des écritures', () => {
   it('préférences du patient : valeurs connues uniquement', () => {
     expect(() => validatePreferences({ budgetBand: 'gratuit' })).toThrow()
     expect(() => validatePreferences({ modes: ['cabinet', 'ovni'] })).toThrow()
+  })
+})
+
+describe('passerelle : doublons de fiches', () => {
+  it('relaie le choix reprendre / remplacer de la revendication, et rien d’autre', () => {
+    expect(find('POST', 'praticiens/4/claim-requests')!.body).toContain('mode')
+    expect(validateClaim({ mode: 'takeover' })).toEqual({ mode: 'takeover' })
+    expect(validateClaim({ mode: 'replace', message: 'm' })).toEqual({ mode: 'replace', message: 'm' })
+    expect(validateClaim({})).toEqual({})
+    expect(() => validateClaim({ mode: 'delete' })).toThrow()
   })
 })

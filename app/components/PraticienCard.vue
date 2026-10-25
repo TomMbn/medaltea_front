@@ -49,8 +49,7 @@
     </p>
 
     <div class="flex flex-wrap items-center justify-between gap-2 mt-auto">
-      <span v-if="praticien.bookable === false" class="text-[#012828]/60 text-xs">Réservation indisponible</span>
-      <span v-else-if="price" class="text-[#E8755A] text-sm font-semibold">À partir de {{ price }} €</span>
+      <span v-if="praticien.bookable !== false && price" class="text-[#E8755A] text-sm font-semibold">À partir de {{ price }} €</span>
       <span v-else />
       <NuxtLink
         :to="`/praticiens/${praticien.slug || praticien.id}`"

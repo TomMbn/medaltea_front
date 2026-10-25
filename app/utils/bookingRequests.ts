@@ -15,6 +15,9 @@ export const PERIODS: { value: DayPeriod; label: string }[] = [
   { value: 'evening', label: 'Soir' },
 ]
 
+/** Nombre maximal de disponibilités par demande (même limite que le backend). */
+export const MAX_PREFERRED_SLOTS = 3
+
 /** Dernier jour proposable, compté depuis aujourd'hui (même limite que le backend). */
 export const PREFERRED_DATE_MAX_DAYS = 60
 

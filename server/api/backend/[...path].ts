@@ -5,7 +5,7 @@
  * - champs privés (email, userId, identifiants professionnels) retirés des fiches publiques.
  */
 import { demoPublic } from '../../../app/utils/demoData'
-import { PERIODS } from '../../../app/utils/bookingRequests'
+import { MAX_PREFERRED_SLOTS, PERIODS } from '../../../app/utils/bookingRequests'
 
 export type Rule = {
     method: string
@@ -340,7 +340,6 @@ export function validateDecision(body: Record<string, any>) {
     return body
 }
 
-const MAX_PREFERRED_SLOTS = 3
 const PERIOD_VALUES: string[] = PERIODS.map(p => p.value)
 const ACCEPT_DURATION_MIN = 15
 const ACCEPT_DURATION_MAX = 240

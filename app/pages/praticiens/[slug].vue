@@ -40,7 +40,7 @@
                   <span class="font-unbounded text-[28px] sm:text-[32px] leading-none text-vert-900">{{ googleRating }}</span>
                   <span class="flex flex-col gap-1">
                     <span class="text-[18px] leading-none text-jaune-400" aria-hidden="true">★★★★★</span>
-                    <span class="text-[14px] sm:text-[16px] leading-none text-neutre-600 whitespace-nowrap">{{ google.userRatingCount }} avis Google</span>
+                    <span class="text-[14px] sm:text-[16px] leading-none text-neutre-600 whitespace-nowrap">{{ google.userRatingCount }} avis</span>
                     <!-- Attribution exigée par Google : logo Google Maps officiel, non modifié, 16 à 19 px de haut, dans la carte -->
                     <img src="/images/google/google-maps-logo-gris.svg" alt="Google Maps" width="98" height="18" class="mt-1.5 h-[18px] w-auto" style="animation: none;" />
                   </span>
@@ -252,7 +252,7 @@
           <div class="flex flex-col gap-2">
             <p class="text-[24px] leading-none text-jaune-400" aria-hidden="true">★★★★★</p>
             <p class="flex flex-wrap items-center gap-x-3 gap-y-2 text-[17px] lg:text-[20px] text-bleu-100 leading-[normal]">
-              {{ google.userRatingCount }} avis Google
+              {{ google.userRatingCount }} avis
               <img src="/images/google/google-maps-logo-blanc.svg" alt="Google Maps" width="98" height="18" class="h-[18px] w-auto" style="animation: none;" />
             </p>
           </div>
@@ -458,7 +458,7 @@ const hasPracticalBlocks = computed(() => !!medicine.value || publicChips.value.
 const highlights = computed(() => {
   const out = []
   if (experience.value) out.push({ label: `Exerce depuis ${experience.value}`, icon: Check })
-  if (google.value) out.push({ label: `${googleRating.value} · ${google.value.userRatingCount} avis Google`, icon: Star, googleLogo: true })
+  if (google.value) out.push({ label: `${googleRating.value} · ${google.value.userRatingCount} avis`, icon: Star, googleLogo: true })
   if (google.value?.trustedPractitioner) out.push({ label: 'Praticien de confiance', icon: BadgeCheck, trust: true })
   if (praticien.value.isVerified) out.push({ label: 'Profil vérifié', icon: Check })
   return out

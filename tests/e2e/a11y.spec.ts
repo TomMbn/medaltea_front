@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
 // Accessibilité (WCAG 2.1 A et AA, moteur axe-core) : aucune anomalie critique ou sérieuse.
-const PAGES = ['/', '/medecines', '/medecines/sophrologie', '/trouver-un-praticien', '/praticiens-pro', '/login', '/register', '/cgu', '/praticiens/demo-claire-fictive']
+const PAGES = ['/', '/medecines', '/medecines/sophrologie', '/medecines/medecine-traditionnelle-chinoise', '/trouver-un-praticien', '/praticiens-pro', '/login', '/register', '/cgu', '/praticiens/demo-claire-fictive']
 
 for (const path of PAGES) {
   test(`accessibilité de ${path}`, async ({ page }) => {

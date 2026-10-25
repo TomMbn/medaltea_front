@@ -74,7 +74,7 @@ const pictograms = {
   hypnotherapie: '/images/landing/med-hypnotherapie.svg',
   massage: '/images/landing/med-massage.svg',
 }
-const order = ['osteopathie', 'sophrologie', 'naturopathie', 'acupuncture', 'hypnotherapie', 'massage']
+const order = ['osteopathie', 'sophrologie', 'naturopathie', 'acupuncture', 'hypnotherapie', 'massage', 'reflexologie', 'kinesiologie', 'shiatsu', 'chiropraxie', 'etiopathie', 'medecine-traditionnelle-chinoise']
 // Médecine mise en avant : celle sur laquelle on a cliqué (sophrologie au départ, comme la maquette)
 const selected = ref('sophrologie')
 

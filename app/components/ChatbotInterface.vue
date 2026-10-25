@@ -179,6 +179,7 @@ import { ref, nextTick, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 import { ArrowUp, Ban, Plus, Check, Copy, Info } from 'lucide-vue-next'
 import { useRoute } from 'vue-router'
 import { medecines, medecinePictogram } from '~/data/medecines'
+import { mentionedMedicineSlugs } from '~/utils/mentions'
 
 const route = useRoute()
 // La conversation vit en mémoire de l'application (pas sur le serveur, pas sur le disque) : elle survit à un changement de page
@@ -287,19 +288,10 @@ function resetChat() {
 }
 
 // --- Médecines citées dans la réponse (reconnues dans le texte, rien n'est inventé)
-const MENTIONS = [
-  { slug: 'sophrologie', re: /sophrolog/i },
-  { slug: 'naturopathie', re: /naturopath/i },
-  { slug: 'osteopathie', re: /ost[ée]opath/i },
-  { slug: 'acupuncture', re: /acupunct/i },
-  { slug: 'hypnotherapie', re: /hypno/i },
-  { slug: 'massage', re: /massage/i },
-]
 const mentionedMedicines = (msg) => {
   const text = msg.parts?.[0]?.text || ''
-  return MENTIONS
-    .filter(m => m.re.test(text))
-    .map(m => medecines.find(x => x.slug === m.slug))
+  return mentionedMedicineSlugs(text)
+    .map(slug => medecines.find(x => x.slug === slug))
     .filter(Boolean)
     .slice(0, 3)
     .map(m => ({ slug: m.slug, name: m.name, pictogram: medecinePictogram(m) }))

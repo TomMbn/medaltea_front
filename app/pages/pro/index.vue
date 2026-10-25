@@ -11,7 +11,7 @@
         <img src="/images/footer/feuille-3.svg" alt="" class="hidden lg:block absolute left-[45%] -top-[60px] w-[140px] opacity-20 -rotate-[25deg]" style="animation: none;" />
         <img src="/images/footer/feuille-5.svg" alt="" class="hidden lg:block absolute left-[67%] top-[120px] w-[160px] opacity-20 rotate-[20deg]" style="animation: none;" />
       </div>
-      <img src="/images/pro/mascotte-pro.webp" alt="" aria-hidden="true" width="195" height="230" class="hidden lg:block absolute right-6 -top-10 w-[195px] h-auto rotate-[4deg] pointer-events-none select-none" style="animation: none;" />
+      <img src="/images/pro/mascotte-pro.webp" alt="" aria-hidden="true" width="195" height="230" class="panda--sur-vert hidden lg:block absolute right-6 -top-10 w-[195px] h-auto rotate-[4deg] pointer-events-none select-none" />
 
       <div class="relative">
         <h2 id="dash-title" class="font-unbounded font-normal text-[24px] sm:text-[28px] xl:text-[32px] leading-[normal]">{{ todayTitle }}</h2>

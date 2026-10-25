@@ -54,7 +54,7 @@
         </div>
 
         <!-- Mascotte -->
-        <img src="/images/chatbot-mascotte-accueil.webp" alt="" aria-hidden="true" width="254" height="300" class="hidden xl:block absolute right-[14%] bottom-[-140px] w-[254px] h-auto z-10 pointer-events-none select-none" style="animation: none;" />
+        <img src="/images/chatbot-mascotte-accueil.webp" alt="" aria-hidden="true" width="254" height="300" class="panda--sur-vert hidden xl:block absolute right-[14%] bottom-[-140px] w-[254px] h-auto z-10 pointer-events-none select-none" />
       </section>
 
       <!-- Préparer sa séance -->

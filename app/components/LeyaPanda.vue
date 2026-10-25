@@ -1,0 +1,242 @@
+<template>
+  <!-- Panda Léya animé : SVG découpé en parties (tête, oreilles, yeux, bouche, pattes) et accessoires (nuage, ampoule, goutte…) -->
+  <svg class="lp" :class="{ 'lp--miroir': miroir, 'lp--salut': salue }" viewBox="0 0 1000 866" :data-etat="etat" aria-hidden="true" focusable="false">
+    <g class="lp-perso">
+      <g class="lp-corps"><path fill="#176f71" d="M233 573L234 573L235 573L237 575L239 577L242 580L244 583L245 585L246 586L246 588L246 589L246 591L247 592L249 594L251 596L253 599L257 603L261 607L265 611L269 615L273 620L278 624L283 628L289 632L296 637L304 642L311 647L318 651L325 654L331 657L338 660L346 663L354 666L364 668L373 671L383 673L393 675L404 676L415 677L427 678L440 679L453 679L465 678L475 678L483 677L489 676L494 675L500 673L505 672L511 670L516 668L522 666L527 665L533 664L538 663L543 661L547 660L550 658L554 657L557 656L559 655L562 655L564 654L566 654L567 653L568 652L569 651L571 651L573 651L575 651L576 650L577 650L578 649L578 649L579 648L580 648L581 647L583 647L587 645L593 643L601 639L611 634L618 630L624 627L628 625L630 623L631 622L632 621L633 620L633 620L633 619L635 618L637 617L641 616L643 615L645 614L646 613L646 612L647 611L649 609L651 608L654 606L656 604L658 603L659 601L660 600L661 598L663 596L666 595L670 593L673 591L674 589L675 587L675 585L675 584L676 583L677 583L678 583L680 582L681 581L682 580L683 579L684 577L686 576L688 575L691 574L694 574L698 576L703 578L708 582L714 586L720 591L726 597L732 603L738 609L743 615L748 621L753 627L757 633L761 640L766 647L770 655L774 661L780 666L787 669L795 671L802 673L807 675L812 677L816 679L819 681L823 683L826 685L828 688L831 691L834 696L837 701L841 708L843 715L845 722L846 729L846 736L843 742L837 746L829 748L817 748L807 747L801 745L798 743L798 741L797 739L797 739L796 741L795 743L791 745L785 747L776 748L764 748L755 747L749 745L746 742L746 738L745 736L745 736L744 738L743 742L740 745L734 747L727 748L717 748L709 747L704 745L700 742L698 739L697 734L696 729L695 722L695 714L695 708L695 703L696 700L697 699L698 697L698 695L699 693L699 691L700 689L701 688L703 686L706 686L708 685L709 683L711 682L711 680L711 679L710 679L708 679L704 679L702 679L699 678L698 675L696 672L695 669L694 667L693 665L692 665L691 666L691 669L692 674L692 681L692 687L692 692L690 697L688 700L686 703L685 706L685 709L685 711L684 712L683 713L682 713L681 713L680 712L679 711L679 710L679 709L678 707L676 705L673 703L669 700L664 698L659 695L652 692L644 688L636 686L628 683L621 681L613 680L605 679L597 678L590 678L582 678L574 678L565 679L555 681L545 683L534 685L523 688L511 692L500 696L488 700L475 706L463 713L449 720L439 727L430 732L424 737L420 740L414 743L405 745L394 746L380 746L369 744L361 740L357 734L356 726L355 720L354 715L353 711L352 708L351 706L350 705L348 703L347 703L346 702L345 700L345 699L345 697L344 695L343 693L342 691L341 689L339 687L337 685L336 684L334 683L332 682L331 680L330 679L329 677L328 676L327 674L326 673L324 671L323 670L321 670L320 670L318 670L317 669L316 669L315 668L315 667L312 666L308 664L302 663L294 661L285 659L277 659L268 659L260 659L252 661L244 662L238 665L232 667L227 670L225 671L224 672L226 672L227 672L228 672L230 672L231 671L232 671L233 670L234 669L234 669L237 668L242 667L249 667L259 666L268 666L275 666L281 666L287 667L292 668L297 669L302 670L306 672L310 673L313 675L314 676L315 677L316 678L318 679L320 681L324 682L326 684L328 685L329 686L329 688L330 689L332 691L334 693L337 695L339 697L341 699L342 701L342 703L343 705L344 706L345 708L347 709L348 711L349 713L350 715L350 718L350 720L350 723L351 726L353 729L353 732L354 735L354 739L353 742L351 745L346 747L339 748L331 748L324 747L319 745L316 743L315 739L314 738L314 738L313 739L313 743L310 745L303 747L294 748L282 748L273 747L266 746L263 744L262 741L262 740L261 740L261 741L261 744L258 746L251 747L242 748L230 748L220 746L213 744L208 740L206 735L204 732L203 732L203 734L203 739L200 742L195 744L188 746L178 746L170 744L164 742L160 738L159 733L158 728L157 722L156 717L156 711L156 705L156 699L157 694L157 688L158 683L160 678L161 673L163 667L166 661L170 653L175 643L182 632L189 621L197 610L206 600L216 589L223 581L228 576L231 573L231 573L232 573L232 573Z"/><path fill="#166666" d="M265 547L266 547L268 547L269 549L271 552L272 556L275 561L279 567L284 575L290 584L297 592L304 600L312 607L320 613L328 619L337 624L347 629L358 634L369 638L380 641L391 644L402 646L414 648L425 649L435 650L446 651L458 651L473 650L489 648L508 645L524 643L538 640L551 637L561 633L569 631L575 629L579 629L581 629L583 628L584 628L585 627L585 627L587 625L592 623L598 621L606 617L613 615L618 614L621 613L623 613L624 613L625 613L626 612L627 610L628 609L631 607L635 606L640 604L645 601L651 598L657 595L663 591L668 588L672 586L675 586L678 586L680 586L681 586L682 587L682 589L680 591L676 595L670 599L662 605L656 609L652 613L650 615L650 616L649 617L647 618L645 619L641 620L639 621L637 622L636 623L636 624L635 625L634 626L633 627L632 628L628 630L622 633L615 637L605 642L597 646L591 648L587 650L585 650L584 651L583 651L582 652L582 652L581 653L580 653L579 654L577 654L575 654L573 654L572 655L571 656L570 657L568 657L566 658L563 658L561 659L558 660L554 661L551 663L547 664L542 666L537 667L531 668L526 669L520 671L515 673L509 675L504 676L498 678L493 679L487 680L478 681L467 681L454 682L439 682L425 681L413 681L403 680L395 679L386 677L376 675L365 673L354 669L343 666L334 663L325 659L318 655L310 651L302 646L294 641L285 635L277 628L270 622L263 616L257 610L252 605L248 601L246 598L244 596L243 595L243 593L243 592L243 590L242 589L241 587L239 585L236 582L234 580L233 578L233 576L233 574L234 571L238 567L244 563L251 557L257 552L261 549L263 547L263 547L263 547L264 547Z"/><path fill="#e9eae5" d="M582 676L590 676L599 676L607 676L615 677L622 679L629 680L636 682L642 684L648 686L654 688L659 690L664 693L670 696L674 698L677 700L679 702L679 702L680 704L680 705L681 707L681 709L680 712L680 715L679 718L677 721L676 725L676 729L675 733L675 738L658 741L625 744L576 745L511 745L462 745L429 745L413 744L413 742L413 741L415 739L418 736L422 733L426 730L431 726L436 723L442 719L448 715L455 711L463 707L472 703L481 699L491 695L501 691L512 688L523 685L533 682L543 680L553 679L560 678L565 677L568 676L568 676L571 676L575 676Z"/><path fill="#166767" d="M274 655L282 655L289 656L296 657L303 658L309 660L314 662L319 664L324 667L328 669L332 672L336 675L339 678L341 682L344 684L345 687L346 689L346 690L346 691L346 692L345 693L344 693L342 692L339 690L335 687L329 683L324 680L317 677L310 674L302 672L294 670L285 669L275 669L264 669L255 670L247 671L240 672L235 673L230 675L226 676L223 678L221 680L219 681L217 682L215 683L213 683L212 682L211 681L211 679L211 677L211 675L211 673L212 672L213 671L216 670L220 668L225 665L232 662L238 660L244 658L249 657L254 656L257 656L260 655L261 655L261 655L263 655L267 655ZM359 732L360 732L361 732L361 734L362 737L362 740L361 743L360 745L359 746L357 746L355 745L355 743L355 741L355 737L356 735L357 733L357 732L357 732L358 732L358 732Z"/><path fill="#166667" d="M683 647L684 647L686 648L689 652L692 657L697 665L701 670L706 672L711 672L715 670L720 668L725 667L730 666L735 665L739 665L741 665L743 666L743 667L741 668L738 669L734 671L728 672L722 674L716 677L710 680L705 683L700 686L697 688L694 689L693 689L691 687L689 682L687 674L685 663L683 655L682 650L682 647L682 647L682 647L682 647ZM675 726L676 726L677 727L679 729L680 732L682 737L683 740L684 743L685 745L685 746L684 747L682 747L680 747L677 746L675 745L673 742L673 738L673 734L673 730L673 728L674 726L674 726L674 726L674 726Z"/></g>
+      <g class="lp-tete">
+        <g class="lp-oreille lp-oreille--g"><path fill="#186f71" d="M246 215L252 215L257 215L262 215L267 216L271 217L275 219L281 222L288 226L296 231L302 235L305 239L307 242L307 244L305 248L302 253L298 260L292 268L286 276L281 284L277 293L273 301L270 309L267 317L264 325L261 334L259 343L257 352L255 362L254 372L252 380L250 385L249 388L247 389L244 389L241 389L237 388L232 388L227 386L221 384L214 381L207 377L200 373L194 369L189 364L184 358L181 354L178 349L175 345L174 342L172 338L171 334L170 329L169 324L168 318L168 311L169 303L169 293L171 285L173 276L176 268L180 260L184 253L189 246L195 240L201 234L207 228L214 224L220 221L227 219L232 217L235 216L237 215L237 215L239 215L242 215Z"/></g>
+        <g class="lp-oreille lp-oreille--d"><path fill="#176f71" d="M574 110L583 111L592 112L599 113L605 115L610 117L615 119L619 121L623 123L626 126L630 129L634 134L639 140L643 146L647 152L650 158L652 162L653 166L654 170L654 173L654 177L654 180L652 182L647 183L641 182L633 180L626 178L621 176L617 174L614 173L612 172L609 171L606 171L603 171L601 171L599 170L597 169L597 168L594 166L591 165L586 163L579 161L573 159L568 157L563 155L559 153L555 151L552 150L549 149L546 149L544 148L543 148L543 147L543 146L542 145L541 143L539 142L537 140L535 137L533 134L532 131L531 127L531 124L533 121L536 118L540 116L543 114L547 113L550 112L554 111L556 111L558 110L559 110L559 110L562 110L567 110Z"/><path fill="#176666" d="M532 123L533 123L534 124L535 125L536 127L536 129L537 131L538 133L540 136L542 138L544 139L545 141L546 142L546 144L547 145L549 145L551 146L553 146L556 147L560 148L564 150L568 152L575 155L587 160L602 165L620 171L635 176L645 179L651 180L652 179L653 180L654 183L654 187L654 193L653 197L653 200L652 202L650 202L647 200L642 197L635 193L627 188L618 183L610 179L602 175L594 172L585 169L575 166L565 163L555 161L545 158L536 157L528 156L522 155L516 155L513 154L511 154L510 154L510 153L510 152L510 150L510 147L511 145L512 143L513 142L514 141L516 140L517 138L517 137L518 135L519 133L520 131L523 129L525 127L527 125L529 124L530 123L530 123L530 123L531 123Z"/></g>
+        <path fill="#cfcfcf" d="M291 264L292 264L293 264L293 265L294 266L294 268L293 271L292 277L290 284L287 293L285 304L283 316L282 330L281 346L280 360L280 373L281 385L281 395L282 404L284 414L286 424L288 433L290 443L293 452L296 462L299 472L303 481L307 490L311 499L316 507L321 515L327 523L333 531L341 539L347 545L353 551L359 556L363 559L370 563L378 567L387 572L398 577L410 581L422 585L434 588L447 591L459 593L471 594L483 595L493 595L506 594L521 592L538 590L557 586L575 583L591 579L607 574L621 570L635 564L649 558L663 552L677 545L690 538L701 531L712 524L722 516L731 509L740 501L749 493L757 485L763 477L769 470L774 464L778 459L781 455L783 452L785 451L786 451L787 451L787 452L788 453L788 454L787 457L786 461L784 466L781 472L778 478L775 485L770 492L766 500L761 507L757 514L752 519L748 525L742 531L734 539L725 549L713 559L703 569L692 577L683 584L673 589L663 595L651 601L638 607L624 614L609 620L594 626L578 631L561 636L544 640L527 644L510 647L492 650L476 652L460 653L446 653L432 652L420 651L407 650L395 648L384 645L373 642L362 639L352 635L342 630L332 625L324 620L316 615L308 609L301 602L294 594L287 585L281 576L275 566L269 556L264 546L260 535L256 524L253 512L250 500L248 487L246 474L245 460L245 445L245 430L245 415L246 399L248 383L251 367L253 352L256 339L259 328L262 318L265 309L268 301L271 294L274 288L277 282L280 277L282 273L285 270L287 267L288 265L289 264L289 264L290 264L290 264Z"/><path fill="#eaeaea" d="M492 153L504 153L514 153L523 153L531 154L538 155L544 156L551 158L558 159L566 161L574 163L583 166L593 170L604 174L614 179L624 183L633 188L641 192L654 203L672 218L696 239L725 265L748 286L764 303L775 314L779 320L782 326L785 333L788 339L790 346L792 352L794 358L795 363L796 369L797 375L797 383L798 391L798 401L797 410L796 419L795 427L794 434L792 441L790 447L787 453L785 457L781 462L778 468L773 473L769 479L762 486L754 494L745 503L733 513L721 522L708 532L693 541L677 549L661 557L645 564L630 571L614 576L597 581L579 586L561 589L542 593L525 595L509 597L494 598L482 598L469 597L456 596L443 594L430 591L419 589L409 586L401 584L395 581L389 578L382 575L375 572L369 568L362 564L354 558L347 552L339 544L332 538L326 531L322 525L318 519L314 513L310 507L306 500L303 492L300 485L297 478L294 470L291 463L289 455L287 446L285 437L283 428L281 418L279 408L278 399L278 389L277 378L277 367L277 356L277 344L278 332L279 319L281 306L284 292L287 279L290 268L294 259L299 251L303 244L307 238L311 233L314 229L320 223L327 217L336 210L346 201L356 194L364 189L370 184L375 182L381 179L388 175L397 172L406 168L415 165L423 162L430 160L436 159L442 157L448 156L455 155L462 155L467 154L471 154L473 153L473 153L476 153L482 153Z"/><path fill="#c8d5d3" d="M588 295L595 295L600 295L603 295L605 296L605 297L603 298L600 300L595 301L588 303L583 304L580 306L578 307L577 307L576 308L573 310L569 311L565 313L560 315L555 318L551 320L546 324L543 326L540 328L537 329L536 329L535 329L534 328L534 327L534 325L535 323L535 321L536 320L537 318L539 316L542 314L546 310L551 306L556 302L561 300L566 298L570 297L574 296L577 296L578 295L578 295L580 295L583 295Z"/><path fill="#dddddd" d="M676 427L677 427L678 428L678 430L678 434L678 438L677 443L676 447L675 451L673 455L670 459L667 462L664 465L661 469L657 471L654 474L650 475L647 477L643 478L639 478L634 479L630 479L625 478L620 477L615 476L610 474L606 472L604 470L603 469L603 468L604 467L607 467L611 466L617 466L622 465L627 464L632 463L637 461L641 459L644 458L647 456L649 455L652 452L656 448L661 443L666 437L670 432L673 429L675 427L675 427L675 427L675 427Z"/>
+        <g class="lp-expr lp-joues" fill="#ec7f7a"><ellipse cx="415" cy="462" rx="40" ry="20"/><ellipse cx="718" cy="392" rx="26" ry="15"/></g>
+        <path fill="#1a7172" d="M454 249L462 249L469 249L475 251L481 253L487 256L492 259L497 263L501 268L504 272L507 277L510 282L513 287L515 292L516 299L517 307L518 316L519 328L519 337L519 345L518 351L517 355L516 359L514 364L512 370L509 376L506 383L502 391L497 399L491 409L484 417L478 425L471 431L464 437L458 442L452 445L446 448L442 449L437 450L431 451L425 452L419 452L413 451L406 450L400 448L394 445L388 442L383 439L379 436L376 432L373 428L370 423L367 418L364 412L362 407L361 402L360 397L359 392L359 387L359 382L359 375L360 369L361 361L364 352L367 341L372 330L376 321L379 314L382 309L384 306L385 304L387 301L389 297L390 294L393 290L396 285L400 280L404 275L409 270L414 265L419 261L424 258L428 255L432 253L436 251L438 251L441 250L442 250L443 249L443 249L445 249L449 249Z"/><path fill="#1c7273" d="M618 209L622 209L626 209L631 210L637 212L643 215L652 220L664 229L678 240L696 255L709 267L719 276L725 283L728 287L730 291L731 294L732 297L733 299L733 302L733 305L734 308L734 311L733 315L732 319L731 323L729 327L726 331L723 334L720 337L717 339L713 340L710 341L707 341L703 341L700 341L697 341L694 342L691 342L688 341L684 339L681 335L677 329L673 324L670 320L667 317L665 315L662 313L658 311L654 309L649 307L643 305L637 303L630 302L622 301L616 300L611 299L608 297L607 296L605 293L602 288L598 283L593 275L590 268L587 261L585 254L585 246L585 240L585 234L586 229L588 225L590 221L593 218L595 216L599 214L602 212L604 211L606 210L608 210L609 210L610 209L611 209L611 209L612 209L614 209Z"/>
+        
+        <g class="lp-oeil">
+          <clipPath :id="`${uid}-g`"><circle cx="457" cy="322" r="37.5"/></clipPath>
+          <clipPath :id="`${uid}-g-paupiere`"><circle cx="457" cy="322" r="40.5"/></clipPath>
+          <circle cx="457" cy="322" r="37.5" fill="#fdfdfd"/>
+          <g :clip-path="`url(#${uid}-g)`"><g class="lp-pupille"><circle cx="461.5" cy="305.6" r="27.5" fill="#1a7070"/><circle cx="467" cy="292" r="7" fill="#fdfdfd"/></g></g>
+          <g :clip-path="`url(#${uid}-g-paupiere)`"><rect class="lp-paupiere" x="415.5" y="280.5" width="83" height="83" fill="#1a7172"/></g>
+        </g>
+        
+        <g class="lp-oeil">
+          <clipPath :id="`${uid}-d`"><circle cx="639" cy="265" r="30"/></clipPath>
+          <clipPath :id="`${uid}-d-paupiere`"><circle cx="639" cy="265" r="33"/></clipPath>
+          <circle cx="639" cy="265" r="30" fill="#fdfdfd"/>
+          <g :clip-path="`url(#${uid}-d)`"><g class="lp-pupille"><circle cx="632" cy="255" r="20.7" fill="#1a7070"/><circle cx="637" cy="241.5" r="5.5" fill="#fdfdfd"/></g></g>
+          <g :clip-path="`url(#${uid}-d-paupiere)`"><rect class="lp-paupiere" x="605" y="231" width="68" height="68" fill="#1c7273"/></g>
+        </g>
+        <g class="lp-expr lp-yeux-rieurs" fill="none" stroke="#fdfdfd" stroke-width="11" stroke-linecap="round"><path d="M422 336Q457 288 492 336"/><path d="M611 278Q639 240 667 278"/></g>
+        <g class="lp-bouche-ouverte">
+          <clipPath :id="`${uid}-bouche`"><path d="M610 391Q640 384 670 391Q664 438 640 441Q616 438 610 391Z"/></clipPath>
+          <path d="M610 391Q640 384 670 391Q664 438 640 441Q616 438 610 391Z" fill="#0e4a4b"/>
+          <ellipse cx="640" cy="436" rx="20" ry="11" fill="#ec7f7a" :clip-path="`url(#${uid}-bouche)`"/>
+        </g>
+        <g class="lp-expr lp-bouche-rire">
+          <clipPath :id="`${uid}-rire`"><path d="M598 391Q642 402 688 380Q682 446 640 454Q602 448 598 391Z"/></clipPath>
+          <path d="M598 391Q642 402 688 380Q682 446 640 454Q602 448 598 391Z" fill="#0e4a4b"/>
+          <ellipse cx="642" cy="450" rx="26" ry="14" fill="#ec7f7a" :clip-path="`url(#${uid}-rire)`"/>
+        </g>
+        <path fill="#207374" d="M637 310L641 310L645 311L648 312L650 314L651 316L652 318L653 321L653 325L652 330L651 335L648 340L645 346L641 352L638 357L636 361L635 364L635 366L634 367L630 367L625 367L619 366L614 365L610 364L609 363L609 362L609 361L611 360L613 360L617 359L618 358L618 357L616 356L612 354L607 353L601 352L595 351L588 350L582 349L578 347L576 345L574 342L574 339L574 337L574 335L575 333L577 331L579 329L581 327L584 325L588 323L593 321L599 319L605 316L611 314L616 313L621 312L624 311L627 311L629 310L630 310L630 310L631 310L634 310Z"/><path fill="#166567" d="M574 335L576 335L577 336L577 337L578 338L578 340L578 341L578 343L579 344L580 345L583 346L587 347L592 347L599 348L605 349L611 350L615 351L619 352L622 354L624 356L626 358L627 360L626 361L624 362L620 363L615 363L609 363L602 363L595 362L587 362L581 361L576 360L573 359L571 358L570 357L569 355L568 354L567 352L567 350L567 348L567 346L567 344L568 342L568 340L569 339L570 337L571 336L571 336L572 335L572 335L573 335L573 335Z"/>
+        <g fill="none" stroke="#1a7070" stroke-width="5.5" stroke-linecap="round">
+          <path d="M633 360C635 370 638 380 640 388"/>
+          <path class="lp-sourire" d="M640 388C628 412 600 424 582 421C570 419 562 412 557 405M640 388C652 394 668 392 676 384C680 378 682 373 681 369"/>
+          <path class="lp-expr lp-moue" d="M640 388C624 398 604 408 590 420M640 388C656 396 670 404 682 416"/>
+        </g>
+      </g>
+      <!-- Pattes devant la tête : en saluant, la patte droite passe devant le menton ; l'avant-bras (invisible au repos) la relie au corps -->
+      <g class="lp-patte lp-patte--g"><path fill="#176f71" d="M283 665L287 665L292 666L298 667L304 668L310 669L315 671L320 673L325 675L329 677L333 679L337 682L341 685L345 688L348 692L351 695L354 699L356 702L357 706L359 709L360 713L360 717L361 721L361 724L361 727L361 731L360 734L359 738L357 743L354 748L351 753L346 758L341 763L335 767L330 771L326 774L323 775L321 775L319 775L317 775L316 774L314 773L311 773L309 773L307 775L305 777L303 778L300 780L297 781L295 782L292 783L288 783L285 783L281 783L277 782L274 781L270 780L266 778L263 776L260 776L258 777L256 778L253 779L251 780L249 780L246 780L243 779L239 778L234 776L229 773L224 771L219 768L215 764L211 761L207 757L204 754L202 750L200 747L198 743L196 740L195 736L195 732L194 729L194 725L194 722L194 718L195 715L196 711L198 706L201 701L204 696L207 692L211 688L215 685L219 682L223 679L227 677L231 675L235 673L240 671L246 669L252 668L257 667L262 666L266 666L269 666L272 665L274 665L275 665L275 665L277 665L279 665Z"/><path fill="#166767" d="M289 666L299 668L307 670L316 672L324 676L331 680L338 684L343 689L348 695L352 701L355 707L357 714L359 720L359 726L360 731L360 736L359 739L358 742L357 744L356 745L354 746L353 746L352 746L351 745L351 743L351 741L351 738L351 736L350 733L348 730L347 727L347 724L347 722L347 719L346 717L345 715L344 713L342 712L341 710L339 708L338 706L337 703L335 700L331 696L326 692L319 686L313 682L308 678L302 676L298 674L293 672L288 671L283 670L278 670L274 669L272 669L271 668L271 667L271 666L271 666L272 666L273 666L274 665L274 665L275 665L275 665L278 665L282 666Z"/><path fill="#176667" d="M309 719L311 719L312 721L314 723L315 725L317 729L318 732L319 736L319 740L320 745L320 748L321 751L322 753L322 753L323 754L325 755L326 756L328 756L330 757L332 757L335 756L338 755L341 754L343 752L345 750L347 747L348 745L350 744L351 744L352 744L353 744L353 745L354 746L354 748L353 750L351 753L349 755L347 759L344 762L340 765L337 767L333 770L330 772L327 773L324 774L322 775L320 775L318 775L317 774L316 773L315 772L314 772L313 772L311 772L310 772L307 774L304 776L300 778L296 780L292 782L287 783L283 783L278 782L274 781L270 780L267 778L264 776L261 776L259 776L257 778L255 779L253 779L252 780L250 780L246 780L242 778L237 776L230 774L224 771L219 768L215 764L211 761L207 758L205 755L203 753L201 751L200 747L200 743L200 737L200 729L200 724L200 720L201 719L203 719L205 721L208 726L211 734L216 744L220 751L225 757L229 761L233 762L237 763L241 764L245 765L249 765L252 764L254 764L256 763L256 763L257 761L257 758L258 754L258 749L257 744L256 740L255 736L253 732L252 729L251 727L251 725L251 724L251 723L252 723L253 723L254 723L256 723L258 725L260 727L262 730L264 734L266 738L267 743L268 749L270 754L272 758L276 761L280 763L283 764L287 764L291 764L294 764L298 763L301 761L304 759L306 757L308 754L310 751L310 747L310 743L309 739L309 734L308 730L306 725L306 722L305 719L305 718L305 718L306 718L307 718Z"/></g>
+      <g class="lp-patte lp-patte--d"><path class="lp-bras" d="M650 725L752 712" stroke="#176f71" stroke-width="60" stroke-linecap="round"/><path fill="#176f71" d="M766 663L769 663L771 664L773 664L774 665L775 665L777 666L781 668L787 669L795 671L802 673L807 675L812 677L816 679L819 681L823 683L826 685L828 688L831 691L834 695L837 699L839 704L842 709L844 713L845 718L846 722L847 725L847 729L848 733L848 737L847 740L847 743L846 746L844 749L843 751L841 754L838 757L835 759L832 762L828 765L824 767L819 770L815 772L811 774L807 775L803 777L800 777L796 778L793 777L789 777L786 776L783 777L780 778L778 779L775 780L772 781L769 782L766 782L763 782L760 782L757 782L753 782L750 781L747 780L744 778L740 775L737 774L735 773L732 773L730 774L727 775L725 775L722 775L719 774L716 773L712 772L709 771L705 769L702 766L699 763L697 760L695 756L692 753L690 751L687 749L684 747L681 746L679 743L678 741L676 737L675 734L675 731L675 727L675 723L675 720L675 717L676 715L677 713L678 711L678 709L679 707L679 705L679 702L680 700L681 698L682 696L684 694L686 691L689 688L692 686L695 683L699 680L703 678L708 675L713 673L718 671L724 669L730 667L736 666L742 665L747 664L753 664L757 664L759 663L761 663L761 663L762 663L764 663Z"/><path fill="#166667" d="M747 665L751 665L755 665L758 665L760 665L760 665L761 666L761 666L762 667L762 668L760 669L758 670L754 670L750 671L745 672L740 673L735 674L730 676L725 678L720 681L715 684L711 688L707 692L704 695L701 698L700 702L699 705L698 709L698 713L698 717L698 721L698 726L699 730L701 734L702 738L704 742L707 745L710 749L713 751L717 753L722 754L726 755L730 754L734 751L737 747L739 742L740 737L741 732L742 727L742 723L743 720L743 718L744 717L745 717L746 717L747 718L748 719L748 721L749 724L749 729L749 736L748 744L749 751L751 756L754 760L759 763L763 765L767 766L770 767L773 767L776 766L778 766L780 765L782 765L784 763L785 761L786 759L788 756L789 752L790 748L791 742L792 736L793 731L794 728L796 727L797 727L799 727L800 728L800 729L801 731L801 734L801 738L801 744L800 751L801 757L802 761L803 763L806 764L808 765L811 765L814 766L816 766L818 766L820 766L821 767L821 768L819 769L816 771L812 773L806 775L801 777L797 778L795 779L793 779L791 778L789 778L787 777L786 776L784 776L782 776L779 777L776 779L772 780L768 781L763 782L758 782L753 781L748 780L744 778L741 775L738 774L735 773L734 773L732 773L731 774L728 774L726 775L722 775L719 774L716 773L712 772L708 770L705 768L701 765L698 761L696 757L693 753L690 751L687 749L684 747L681 746L679 743L678 741L676 737L675 734L675 732L675 729L675 727L675 724L676 720L677 715L678 710L680 705L682 700L684 696L687 692L690 688L694 685L699 681L704 678L710 675L716 672L722 670L729 668L734 667L737 666L739 665L739 665L741 665L743 665Z"/></g>
+    </g>
+  
+    <!-- Accessoires d'expression (hors du cadre de l'image : le SVG laisse déborder) -->
+    <g class="lp-expr lp-goutte"><path fill="#90bad1" d="M792 205C806 225 812 237 812 245A20 20 0 0 1 772 245C772 237 778 225 792 205Z"/><ellipse cx="785" cy="246" rx="5" ry="8" fill="#fdfdfd"/></g>
+    <g class="lp-expr lp-etincelles"><g transform="translate(255 160) scale(1.1)"><path class="lp-etincelle" fill="#ffdb25" d="M0-30Q4-4 30 0Q4 4 0 30Q-4 4-30 0Q-4-4 0-30Z"/></g><g transform="translate(800 215) scale(0.8)"><path class="lp-etincelle" fill="#ec7f7a" d="M0-30Q4-4 30 0Q4 4 0 30Q-4 4-30 0Q-4-4 0-30Z"/></g><g transform="translate(170 430) scale(0.75)"><path class="lp-etincelle" fill="#ec7f7a" d="M0-30Q4-4 30 0Q4 4 0 30Q-4 4-30 0Q-4-4 0-30Z"/></g><g transform="translate(870 330) scale(1)"><path class="lp-etincelle" fill="#ffdb25" d="M0-30Q4-4 30 0Q4 4 0 30Q-4 4-30 0Q-4-4 0-30Z"/></g></g>
+    <g class="lp-ampoule">
+      <circle cx="845" cy="30" r="88" fill="#ffdb25" opacity=".22"/>
+      <g class="lp-rayons" stroke="#ffdb25" stroke-width="11" stroke-linecap="round">
+        <path d="M845-90V-66"/><path d="M930-55L913-38"/><path d="M965 30H941"/><path d="M760-55L777-38"/><path d="M725 30H749"/>
+      </g>
+      <circle cx="845" cy="22" r="52" fill="#ffdb25"/>
+      <path d="M826 0Q845-16 864 0" fill="none" stroke="#fdfdfd" stroke-width="8" stroke-linecap="round" opacity=".8"/>
+      <rect x="823" y="66" width="44" height="26" rx="7" fill="#90bad1"/><rect x="829" y="94" width="32" height="10" rx="5" fill="#90bad1"/>
+    </g>
+    <g class="lp-nuage">
+      <g fill="#fff">
+        <circle cx="728" cy="150" r="15"/><circle cx="768" cy="104" r="23"/>
+        <circle cx="800" cy="12" r="62"/><circle cx="862" cy="-48" r="78"/><circle cx="952" cy="-42" r="70"/><circle cx="1012" cy="14" r="58"/>
+        <circle cx="900" cy="42" r="70"/><circle cx="822" cy="54" r="45"/><circle cx="982" cy="58" r="45"/>
+      </g>
+      <g class="lp-points" fill="#156f71"><circle cx="850" cy="4" r="15"/><circle cx="905" cy="4" r="15"/><circle cx="960" cy="4" r="15"/></g>
+      <g class="lp-pictos"><image class="lp-picto" href="/images/landing/med-sophrologie.svg" x="850" y="-50" width="110" height="100"/><image class="lp-picto" href="/images/landing/med-naturopathie.svg" x="850" y="-50" width="110" height="100"/><image class="lp-picto" href="/images/landing/med-hypnotherapie.svg" x="850" y="-50" width="110" height="100"/></g>
+    </g>
+  </svg>
+</template>
+
+<script setup>
+import { ref, useId, onBeforeUnmount } from 'vue'
+
+// etat : repos | ecoute | reflexion | recherche | trouve | reponse | content | oups
+// miroir : le panda regarde vers la gauche (les pictogrammes du nuage restent à l'endroit)
+defineProps({
+  etat: { type: String, default: 'repos' },
+  miroir: { type: Boolean, default: false },
+})
+
+const SALUT_MS = 2000
+// Identifiants de découpe propres à chaque panda affiché
+const uid = `lp-${useId()}`
+const salue = ref(false)
+let salutTimer = null
+
+/** Fait saluer le panda (ignoré s'il salue déjà). */
+function saluer() {
+  if (salue.value) return
+  salue.value = true
+  salutTimer = setTimeout(() => { salue.value = false }, SALUT_MS)
+}
+onBeforeUnmount(() => clearTimeout(salutTimer))
+defineExpose({ saluer })
+</script>
+
+<style scoped>
+/* Panda Léya en SVG : chaque partie s'anime séparément. Coordonnées en unités du viewBox (1000 × 866).
+   États (data-etat) : repos, ecoute, reflexion, recherche, trouve, reponse, content, oups ; classe .lp--salut pour saluer. */
+.lp { animation: none; display: block; width: 100%; height: auto; overflow: visible; }
+.lp--miroir { transform: scaleX(-1); }
+.lp * { transform-box: view-box; }
+
+.lp-perso { transform-origin: 500px 760px; }
+.lp-tete { transform-origin: 500px 620px; }
+.lp-corps { transform-origin: 500px 745px; }
+.lp-oreille--g { transform-origin: 260px 330px; }
+.lp-oreille--d { transform-origin: 590px 200px; }
+.lp-patte--g { transform-origin: 270px 690px; }
+.lp-patte--d { transform-origin: 650px 725px; }
+.lp-paupiere { transform-box: fill-box; transform-origin: 50% 0; transform: scaleY(0); }
+.lp-bouche-ouverte { transform-origin: 640px 390px; transform: scaleY(0); }
+.lp-bras { opacity: 0; }
+
+/* Expressions et accessoires : cachés au repos, ils apparaissent en fondu selon l'état */
+.lp-expr, .lp-points, .lp-pictos { opacity: 0; transition: opacity 0.25s ease; }
+.lp-oeil, .lp-sourire { transition: opacity 0.2s ease; }
+.lp-nuage, .lp-ampoule { opacity: 0; transform: scale(0.4); transition: opacity 0.25s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.lp-nuage { transform-origin: 728px 150px; filter: drop-shadow(0 10px 14px rgba(1, 40, 40, 0.14)); }
+.lp-ampoule { transform-origin: 845px 100px; }
+.lp-picto { opacity: 0; transform-box: fill-box; transform-origin: center; }
+.lp--miroir .lp-picto { transform: scaleX(-1); } /* les pictogrammes restent à l'endroit */
+.lp-etincelle { transform-box: fill-box; transform-origin: center; }
+
+/* Repos : respiration, clignement, oreille qui frémit */
+.lp-corps { animation: lp-respire-corps 4.5s ease-in-out infinite; }
+.lp-tete { animation: lp-respire-tete 4.5s ease-in-out infinite; }
+.lp-paupiere { animation: lp-cligne 5s infinite; }
+.lp-oreille--d { animation: lp-oreille 7s ease-in-out infinite; }
+
+/* Salut (arrivée, survol) : le bras se lève et la patte s'agite */
+.lp--salut .lp-patte--d { animation: lp-salut 2s ease-in-out both; }
+.lp--salut .lp-bras { animation: lp-bras 2s ease-in-out both; }
+
+/* Écoute (l'utilisateur tape) : penché vers la saisie, regard vers le bas, oreilles dressées */
+.lp[data-etat='ecoute'] .lp-tete { animation: lp-ecoute 1.6s ease-in-out infinite; }
+.lp[data-etat='ecoute'] .lp-pupille { transform: translate(-4px, 10px); transition: transform 0.3s ease; }
+.lp[data-etat='ecoute'] .lp-oreille--g, .lp[data-etat='ecoute'] .lp-oreille--d { animation: lp-oreille-dressee 1.6s ease-in-out infinite; }
+
+/* Réflexion : nuage de pensée, tête penchée, regard en l'air, paupières mi-closes, doigts qui pianotent */
+.lp[data-etat='reflexion'] .lp-nuage, .lp[data-etat='recherche'] .lp-nuage { opacity: 1; transform: scale(1); }
+.lp[data-etat='reflexion'] .lp-points { opacity: 1; }
+.lp[data-etat='reflexion'] .lp-points circle { animation: lp-point 1.2s ease-in-out infinite; }
+.lp[data-etat='reflexion'] .lp-points circle:nth-child(2) { animation-delay: 0.2s; }
+.lp[data-etat='reflexion'] .lp-points circle:nth-child(3) { animation-delay: 0.4s; }
+.lp[data-etat='reflexion'] .lp-tete { animation: lp-penche 3s ease-in-out infinite; }
+.lp[data-etat='reflexion'] .lp-pupille { animation: lp-regard-haut 3s ease-in-out infinite; }
+.lp[data-etat='reflexion'] .lp-paupiere { animation: lp-mi-clos 3s ease-in-out infinite; }
+.lp[data-etat='reflexion'] .lp-patte--g { animation: lp-pianote 0.9s ease-in-out infinite; }
+
+/* Recherche : les médecines défilent dans le nuage, le regard balaie, les oreilles se dressent tour à tour */
+.lp[data-etat='recherche'] .lp-pictos { opacity: 1; }
+.lp[data-etat='recherche'] .lp-picto { animation: lp-picto 3.6s ease-in-out infinite; }
+.lp[data-etat='recherche'] .lp-picto:nth-child(2) { animation-delay: 1.2s; }
+.lp[data-etat='recherche'] .lp-picto:nth-child(3) { animation-delay: 2.4s; }
+.lp[data-etat='recherche'] .lp-pupille { animation: lp-balaie 1.8s ease-in-out infinite; }
+.lp[data-etat='recherche'] .lp-tete { animation: lp-scrute 1.8s ease-in-out infinite; }
+.lp[data-etat='recherche'] .lp-oreille--g { animation: lp-oreille-vite 0.9s ease-in-out infinite; }
+.lp[data-etat='recherche'] .lp-oreille--d { animation: lp-oreille-vite 0.9s ease-in-out 0.45s infinite; }
+
+/* Trouvé : petit bond, ampoule, yeux rieurs, grand sourire, joues roses, étincelles */
+.lp[data-etat='trouve'] .lp-perso { animation: lp-saut 0.7s cubic-bezier(0.3, 1.6, 0.5, 1); }
+.lp[data-etat='trouve'] .lp-ampoule { opacity: 1; transform: scale(1); }
+.lp[data-etat='trouve'] .lp-rayons { animation: lp-rayons 1.2s ease-in-out infinite; transform-origin: 845px 22px; }
+.lp[data-etat='trouve'] .lp-bouche-rire,
+.lp[data-etat='trouve'] .lp-yeux-rieurs, .lp[data-etat='content'] .lp-yeux-rieurs,
+.lp[data-etat='trouve'] .lp-etincelles, .lp[data-etat='content'] .lp-etincelles { opacity: 1; }
+.lp[data-etat='trouve'] .lp-joues, .lp[data-etat='content'] .lp-joues { opacity: 0.55; }
+.lp[data-etat='trouve'] .lp-oeil, .lp[data-etat='content'] .lp-oeil,
+.lp[data-etat='trouve'] .lp-sourire, .lp[data-etat='oups'] .lp-sourire { opacity: 0; }
+.lp[data-etat='trouve'] .lp-etincelle, .lp[data-etat='content'] .lp-etincelle { animation: lp-scintille 1.4s ease-in-out infinite; }
+.lp-etincelles g:nth-child(2) .lp-etincelle { animation-delay: 0.35s; }
+.lp-etincelles g:nth-child(3) .lp-etincelle { animation-delay: 0.7s; }
+.lp-etincelles g:nth-child(4) .lp-etincelle { animation-delay: 1.05s; }
+
+/* Réponse : la bouche parle, la tête acquiesce, les joues restent roses */
+.lp[data-etat='reponse'] .lp-bouche-ouverte { animation: lp-parle 0.9s ease-in-out infinite; }
+.lp[data-etat='reponse'] .lp-tete { animation: lp-acquiesce 1.8s ease-in-out infinite; }
+.lp[data-etat='reponse'] .lp-joues { opacity: 0.35; }
+.lp[data-etat='reponse'] .lp-paupiere { animation: none; transform: scaleY(0.2); }
+
+/* Content (réponse terminée) : yeux rieurs, joues roses, il salue */
+.lp[data-etat='content'] .lp-patte--d { animation: lp-salut 2s ease-in-out both; }
+.lp[data-etat='content'] .lp-bras { animation: lp-bras 2s ease-in-out both; }
+.lp[data-etat='content'] .lp-tete { animation: lp-balance 2.4s ease-in-out infinite; }
+
+/* Oups (erreur) : moue, goutte de sueur, oreilles basses, regard vers le bas */
+.lp[data-etat='oups'] .lp-moue, .lp[data-etat='oups'] .lp-goutte { opacity: 1; }
+.lp[data-etat='oups'] .lp-goutte { animation: lp-goutte 2.2s ease-in infinite; }
+.lp[data-etat='oups'] .lp-oreille--g { animation: none; transform: rotate(-14deg); transition: transform 0.4s ease; }
+.lp[data-etat='oups'] .lp-oreille--d { animation: none; transform: rotate(14deg); transition: transform 0.4s ease; }
+.lp[data-etat='oups'] .lp-pupille { transform: translate(-6px, 12px); transition: transform 0.4s ease; }
+.lp[data-etat='oups'] .lp-paupiere { animation: none; transform: scaleY(0.3); }
+.lp[data-etat='oups'] .lp-tete { animation: none; transform: rotate(-4deg) translateY(8px); transition: transform 0.4s ease; }
+
+@keyframes lp-respire-corps { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.01, 1.025); } }
+@keyframes lp-respire-tete { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes lp-cligne { 0%, 93%, 100% { transform: scaleY(0); } 96% { transform: scaleY(1); } }
+@keyframes lp-oreille { 0%, 80%, 100% { transform: rotate(0); } 84% { transform: rotate(-10deg); } 88% { transform: rotate(4deg); } 92% { transform: rotate(0); } }
+@keyframes lp-salut {
+  0%, 100% { transform: rotate(0); }
+  16% { transform: rotate(-72deg); }
+  30% { transform: rotate(-52deg); }
+  44% { transform: rotate(-72deg); }
+  58% { transform: rotate(-52deg); }
+  72% { transform: rotate(-66deg); }
+}
+@keyframes lp-bras { 0%, 100% { opacity: 0; } 5%, 88% { opacity: 1; } }
+@keyframes lp-ecoute { 0%, 100% { transform: rotate(3deg) translateY(6px); } 50% { transform: rotate(4deg) translateY(10px); } }
+@keyframes lp-oreille-dressee { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-6deg); } }
+@keyframes lp-point { 0%, 100% { opacity: 0.35; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-14px); } }
+@keyframes lp-penche { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(-3deg) translateY(-4px); } }
+@keyframes lp-regard-haut { 0%, 100% { transform: translate(-7px, -5px); } 50% { transform: translate(-3px, -7px); } }
+@keyframes lp-mi-clos { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(0.25); } }
+@keyframes lp-pianote { 0%, 100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-14px) rotate(-4deg); } 60% { transform: translateY(0) rotate(0); } }
+@keyframes lp-picto { 0% { opacity: 0; scale: 0.6; } 8%, 28% { opacity: 1; scale: 1; } 36%, 100% { opacity: 0; scale: 0.6; } }
+@keyframes lp-balaie { 0%, 100% { transform: translate(-10px, 4px); } 50% { transform: translate(10px, 4px); } }
+@keyframes lp-scrute { 0%, 100% { transform: rotate(-3deg) translateX(-6px); } 50% { transform: rotate(3deg) translateX(6px); } }
+@keyframes lp-oreille-vite { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-9deg); } }
+@keyframes lp-saut { 0%, 100% { transform: translateY(0); } 35% { transform: translateY(-34px); } 65% { transform: translateY(0); } 82% { transform: translateY(-8px); } }
+@keyframes lp-rayons { 0%, 100% { opacity: 0.6; transform: scale(0.92); } 50% { opacity: 1; transform: scale(1.08); } }
+@keyframes lp-scintille { 0%, 100% { opacity: 0.2; transform: scale(0.5) rotate(0); } 50% { opacity: 1; transform: scale(1.1) rotate(20deg); } }
+@keyframes lp-parle { 0%, 100% { transform: scaleY(0.15); } 20% { transform: scaleY(1); } 40% { transform: scaleY(0.4); } 60% { transform: scaleY(0.9); } 80% { transform: scaleY(0.3); } }
+@keyframes lp-acquiesce { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(2deg) translateY(3px); } 50% { transform: rotate(0); } 75% { transform: rotate(-1deg) translateY(2px); } }
+@keyframes lp-balance { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+@keyframes lp-goutte { 0% { opacity: 0; transform: translateY(-10px); } 20%, 70% { opacity: 1; } 100% { opacity: 0; transform: translateY(30px); } }
+
+/* Mouvement réduit : rien ne bouge, mais chaque état garde une pose et ses accessoires (nuage, ampoule, goutte…) */
+@media (prefers-reduced-motion: reduce) {
+  .lp *, .lp--salut .lp-patte--d, .lp--salut .lp-bras { animation: none !important; transition: none !important; }
+  .lp[data-etat='reflexion'] .lp-tete { transform: rotate(-5deg); }
+  .lp[data-etat='reflexion'] .lp-pupille { transform: translate(-7px, -5px); }
+  .lp[data-etat='reflexion'] .lp-paupiere { transform: scaleY(0.35); }
+  .lp[data-etat='recherche'] .lp-pupille { transform: translate(10px, 4px); }
+  .lp[data-etat='recherche'] .lp-picto:first-child { opacity: 1; }
+  .lp[data-etat='reponse'] .lp-bouche-ouverte { transform: scaleY(0.8); }
+}
+</style>

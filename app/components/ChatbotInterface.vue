@@ -140,10 +140,10 @@
         <div v-if="canSuggestPractitioners" class="mb-4 flex flex-wrap gap-2.5">
           <NuxtLink :to="otherPractitionersLink" class="inline-flex bg-white text-vert-900 text-[16px] font-medium rounded-full px-4 py-[9px] leading-[normal] hover:bg-bleu-50 transition-colors">{{ otherPractitionersLink === '/trouver-un-praticien' ? 'Trouver un praticien' : 'Voir d’autres praticiens' }}</NuxtLink>
         </div>
-        <div class="relative" @mouseenter="pandaRef?.saluer()">
+        <div class="relative">
           <!-- Mascotte : ses expressions suivent l'échange (écoute, réflexion, recherche, trouvé, réponse, content, oups) -->
           <div class="hidden md:block absolute right-0 lg:right-[-4px] bottom-[calc(100%-28px)] w-[150px] lg:w-[223px] pointer-events-none select-none">
-            <LeyaPanda ref="pandaRef" :etat="pandaState" miroir />
+            <LeyaPanda :etat="pandaState" miroir />
           </div>
           <div class="relative p-[3px] rounded-[20px] isolate">
             <div class="absolute inset-0 rounded-[20px] -z-10" style="background: linear-gradient(90deg, #EC7F7A 0%, #FFFFFF 47%, #90BAD1 100%)"></div>
@@ -199,7 +199,6 @@ const copiedIndex = ref(-1)
 const SEARCH_DELAY_MS = 2500
 const FOUND_MS = 1200
 const PLEASED_MS = 2600
-const pandaRef = ref(null)
 const isSearching = ref(false)
 const celebration = ref('') // 'trouve' | 'content' | ''
 let searchTimer = null

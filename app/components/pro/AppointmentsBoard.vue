@@ -120,7 +120,9 @@ import { ChevronDown, ArrowUpRight } from 'lucide-vue-next'
 const { praticienId } = useSession()
 const { data: raw, status, error, refresh } = useAsyncData('pro-appointments', () => $fetch('/api/backend/praticiens/me/appointments'), { server: false, lazy: true, default: () => [] })
 // Demandes reçues quand la fiche n'était pas réservable (clé partagée avec le tableau de bord)
-const { data: rawRequests, error: requestsError, refresh: refreshRequests } = useAsyncData('pro-booking-requests', () => $fetch('/api/backend/praticiens/me/booking-requests'), { server: false, lazy: true, default: () => [] })
+// Désactivées (backend pas encore en production) : aucune requête, donc aucune alerte d'erreur
+const requestsEnabled = useRuntimeConfig().public.bookingRequests
+const { data: rawRequests, error: requestsError, refresh: refreshRequests } = useAsyncData('pro-booking-requests', () => (requestsEnabled ? $fetch('/api/backend/praticiens/me/booking-requests') : []), { server: false, lazy: true, default: () => [] })
 const bookingRequests = computed(() => (Array.isArray(rawRequests.value) ? rawRequests.value : []))
 // Session expirée (401) : le middleware de l'espace pro gère déjà la déconnexion
 const requestsLoadError = computed(() => (requestsError.value && apiStatus(requestsError.value) !== 401 ? apiErrorMessage(requestsError.value, 'Impossible de charger les demandes reçues avant votre inscription.') : ''))

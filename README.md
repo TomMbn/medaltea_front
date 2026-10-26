@@ -79,6 +79,7 @@ Sans clé Gemini, tout le site fonctionne sauf les réponses de l'assistant. San
 | `NUXT_GEMINI_MODEL` | Modèle Gemini | Non |
 | `NUXT_API_BASE` | Adresse de l'API (par défaut le serveur de production) | Non |
 | `NUXT_PUBLIC_GUEST_BOOKING` | Active la réservation sans compte en production (`true`) | Non |
+| `NUXT_PUBLIC_BOOKING_REQUESTS` | Active en production (`true`) les demandes de rendez-vous sur les fiches non réservables. À poser **seulement après** le déploiement du backend (routes `booking-requests`) et l'application de sa migration en production | Non |
 | `NUXT_PUBLIC_TURNSTILE_SITE_KEY` | Clé **publique** Cloudflare Turnstile (anti-robot) | Réservation sans compte |
 | `NUXT_PUBLIC_UMAMI_HOST`, `NUXT_PUBLIC_UMAMI_WEBSITE_ID`, `NUXT_PUBLIC_UMAMI_DOMAINS` | Mesure d'audience | Non |
 

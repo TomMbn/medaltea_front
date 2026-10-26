@@ -93,6 +93,10 @@ export default defineNuxtConfig({
       // Réservation sans compte : désactivée tant que le backend (lot 2) n'est pas en production.
       // NUXT_PUBLIC_GUEST_BOOKING=true l'active en production (toujours active en développement).
       guestBooking: process.env.NUXT_PUBLIC_GUEST_BOOKING === 'true' || process.env.NODE_ENV !== 'production',
+      // Demandes de rendez-vous sur les fiches non réservables : désactivées tant que le backend (routes booking-requests
+      // et migration) n'est pas en production, sinon chaque envoi échoue. NUXT_PUBLIC_BOOKING_REQUESTS=true les active
+      // en production (toujours actives en développement). Désactivées : la fiche garde « Réservation indisponible ».
+      bookingRequests: process.env.NUXT_PUBLIC_BOOKING_REQUESTS === 'true' || process.env.NODE_ENV !== 'production',
       // Clé PUBLIQUE Cloudflare Turnstile (NUXT_PUBLIC_TURNSTILE_SITE_KEY) ; la clé secrète reste sur le backend.
       turnstileSiteKey: process.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY || '',
       // Mesure d'audience (NUXT_PUBLIC_UMAMI_HOST, NUXT_PUBLIC_UMAMI_WEBSITE_ID, NUXT_PUBLIC_UMAMI_DOMAINS).

@@ -76,12 +76,14 @@
             <AppointmentBooking :praticien="praticien" :types="types" :from-price="fromPrice" />
           </section>
           <section v-else class="bg-white rounded-[32px] shadow-[0_12px_16px_rgba(1,40,40,0.08)] p-6 sm:p-7" aria-labelledby="request-title">
-            <h2 id="request-title" class="font-unbounded font-normal text-[20px] text-vert-900">Demander un rendez-vous</h2>
-            <div class="mt-4">
-              <BookingRequestForm :praticien="praticien" />
-            </div>
-            <div class="mt-6 h-px bg-bleu-100" aria-hidden="true"></div>
-            <div id="revendication" class="mt-6 scroll-mt-28">
+            <h2 id="request-title" class="font-unbounded font-normal text-[20px] text-vert-900">{{ bookingRequests ? 'Demander un rendez-vous' : 'Réservation indisponible' }}</h2>
+            <template v-if="bookingRequests">
+              <div class="mt-4">
+                <BookingRequestForm :praticien="praticien" />
+              </div>
+              <div class="mt-6 h-px bg-bleu-100" aria-hidden="true"></div>
+            </template>
+            <div id="revendication" class="scroll-mt-28" :class="bookingRequests ? 'mt-6' : 'mt-4'">
               <ClaimListing :praticien="praticien" />
             </div>
             <a v-if="praticien.phoneNumber" :href="`tel:${praticien.phoneNumber}`" class="mt-5 inline-flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 hover:shadow-douce transition-shadow">
@@ -314,6 +316,8 @@ const id = praticien.value.id
 
 // Les fiches non revendiquées n'ont ni prestations ni créneaux : on ne les interroge pas.
 const bookable = computed(() => praticien.value.bookable !== false)
+// Formulaire de demande seulement si le backend les accepte (voir runtimeConfig.public.bookingRequests)
+const bookingRequests = useRuntimeConfig().public.bookingRequests
 
 const { data: rawTypes } = await useAsyncData(`praticien-${id}-types`, () =>
   bookable.value ? $fetch(`/api/backend/praticiens/${id}/consultation-types`).catch(() => []) : [],

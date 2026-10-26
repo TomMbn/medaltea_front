@@ -145,7 +145,8 @@ const { fiche, percent, missing, types, hours } = useProCompletion()
 const { data: me } = useAsyncData('pro-me', () => $fetch('/api/backend/users/me'), { server: false, lazy: true, default: () => null })
 const { data: raw, refresh } = useAsyncData('pro-appointments', () => $fetch('/api/backend/praticiens/me/appointments'), { server: false, lazy: true, default: () => [] })
 // Demandes reçues quand la fiche n'était pas réservable (clé partagée avec la page Rendez-vous)
-const { data: rawRequests } = useAsyncData('pro-booking-requests', () => $fetch('/api/backend/praticiens/me/booking-requests'), { server: false, lazy: true, default: () => [] })
+const requestsEnabled = useRuntimeConfig().public.bookingRequests
+const { data: rawRequests } = useAsyncData('pro-booking-requests', () => (requestsEnabled ? $fetch('/api/backend/praticiens/me/booking-requests') : []), { server: false, lazy: true, default: () => [] })
 const { data: stats } = useAsyncData('pro-stats', () => $fetch('/api/backend/praticiens/me/stats').catch(() => null), { server: false, lazy: true, default: () => null })
 
 // La date dépend du fuseau du navigateur : elle n'est calculée qu'une fois la page affichée (pas de décalage à l'hydratation)

@@ -48,7 +48,7 @@
       </li>
     </ul>
 
-    <section class="mt-12" aria-labelledby="uncontacted-title">
+    <section v-if="requestsEnabled" class="mt-12" aria-labelledby="uncontacted-title">
       <h2 id="uncontacted-title" class="font-unbounded font-normal text-[22px] lg:text-[26px] leading-[normal]">Demandes sans contact</h2>
       <p class="mt-2 text-[16px] text-neutre-600 max-w-[720px]">Des patients ont demandé un rendez-vous sur ces fiches répertoriées depuis plus d’une heure, mais aucun e-mail n’a pu prévenir le praticien. Appelez le cabinet ; si vous obtenez son e-mail professionnel, renseignez-le sur la fiche.</p>
 
@@ -111,6 +111,8 @@ const REASONS = {
   not_configured: 'Envoi d’e-mails non configuré',
   failed: 'Envoi en échec',
 }
+// Section masquée tant que les demandes de rendez-vous sont désactivées (runtimeConfig.public.bookingRequests)
+const requestsEnabled = useRuntimeConfig().public.bookingRequests
 const uncontacted = ref([])
 const uncontactedLoading = ref(true)
 const uncontactedError = ref('')
@@ -130,7 +132,7 @@ async function load() {
     loading.value = false
   }
 }
-onMounted(() => { load(); loadUncontacted() })
+onMounted(() => { load(); if (requestsEnabled) loadUncontacted() })
 watch(status, () => { message.value = ''; load() })
 
 async function loadUncontacted() {

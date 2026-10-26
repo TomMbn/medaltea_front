@@ -8,7 +8,7 @@
         <PatientSidebar active="rdv" :me="me" />
 
         <div class="flex-1 min-w-0 flex flex-col gap-5">
-          <PatientBookingRequests />
+          <PatientBookingRequests v-if="$config.public.bookingRequests" />
 
           <!-- Onglets -->
           <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrer les rendez-vous">

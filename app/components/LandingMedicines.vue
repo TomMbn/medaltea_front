@@ -74,7 +74,8 @@ const pictograms = {
   hypnotherapie: '/images/landing/med-hypnotherapie.svg',
   massage: '/images/landing/med-massage.svg',
 }
-const order = ['osteopathie', 'sophrologie', 'naturopathie', 'acupuncture', 'hypnotherapie', 'massage', 'reflexologie', 'kinesiologie', 'shiatsu', 'chiropraxie', 'etiopathie', 'medecine-traditionnelle-chinoise']
+// Six médecines sur l'accueil (comme la maquette) ; les autres sont sur /medecines, via le bouton « Voir les N médecines »
+const order = ['osteopathie', 'sophrologie', 'naturopathie', 'acupuncture', 'hypnotherapie', 'massage']
 // Médecine mise en avant : celle sur laquelle on a cliqué (sophrologie au départ, comme la maquette)
 const selected = ref('sophrologie')
 
@@ -83,7 +84,7 @@ const list = computed(() => order
   .filter(Boolean)
   .map(m => ({ ...m, pictogram: pictograms[m.slug] ?? m.icon, featured: m.slug === selected.value })))
 const featuredMed = computed(() => list.value.find(m => m.featured) ?? list.value[0])
-// Nombre de médecines qui ont une page sur le site
+// Nombre total de médecines qui ont une page sur le site (affiché sur le bouton)
 const total = medecines.length
 const photo = computed(() => (featuredMed.value.slug === 'sophrologie' ? '/images/landing/medecine-photo.webp' : featuredMed.value.heroImage))
 </script>

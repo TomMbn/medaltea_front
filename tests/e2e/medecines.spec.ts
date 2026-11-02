@@ -61,12 +61,15 @@ test('le titre et le compteur d\'une médecine au nom long tiennent sur un petit
   }
 })
 
-test('l\'accueil et le pied de page mènent aux nouvelles médecines', async ({ page }) => {
+test('l\'accueil montre six médecines et un bouton vers les 12 ; le pied de page mène aux nouvelles', async ({ page }) => {
   await page.goto('/')
-  await expect(page.getByRole('link', { name: 'Voir les 12 médecines' })).toBeVisible()
+  await expect(page.locator('.landing-medicines').getByRole('button')).toHaveCount(6)
+  const all = page.getByRole('link', { name: 'Voir les 12 médecines' })
+  await expect(all).toBeVisible()
+  await expect(all).toHaveAttribute('href', '/medecines')
   const footer = page.getByRole('navigation', { name: 'Nos médecines' })
   for (const [slug, name] of NOUVELLES) {
-    await expect(page.locator('.landing-medicines').getByRole('button', { name })).toBeVisible()
+    await expect(page.locator('.landing-medicines').getByRole('button', { name })).toHaveCount(0)
     await expect(footer.getByRole('link', { name })).toHaveAttribute('href', `/medecines/${slug}`)
   }
 })

@@ -140,11 +140,12 @@
       <p class="text-[14px] font-medium uppercase tracking-[0.08em] text-vert-600 mb-4">La séance</p>
       <h2 id="med-steps" class="font-unbounded font-normal text-[26px] sm:text-[32px] lg:text-[40px] leading-[1.2] text-vert-900">Comment se passe une séance ?</h2>
 
-      <ol class="mt-10 lg:mt-14 grid grid-cols-1 md:grid-cols-4 gap-x-8 gap-y-10">
+      <ol class="relative mt-10 lg:mt-14 grid grid-cols-1 md:grid-cols-4 gap-x-8 gap-y-10">
+        <!-- Trait continu derrière les cercles (maquette) : du centre du 01 jusqu'un peu après le 04 -->
+        <li class="hidden md:block absolute z-0 h-[2px] bg-corail-500/50 top-[36px] left-[36px] w-[calc(75%+112px)] lg:top-[44px] lg:left-[44px] lg:w-[calc(75%+120px)]" aria-hidden="true"></li>
         <li v-for="(step, i) in medicine.steps" :key="step.title" class="relative">
           <div class="flex items-center">
-            <span class="w-[72px] h-[72px] lg:w-[88px] lg:h-[88px] shrink-0 rounded-full bg-white shadow-douce flex items-center justify-center font-unbounded text-[18px] lg:text-[20px] text-corail-500">{{ String(i + 1).padStart(2, '0') }}</span>
-            <span v-if="i < medicine.steps.length - 1" class="hidden md:block h-[2px] flex-1 bg-corail-500/30" aria-hidden="true"></span>
+            <span class="relative z-10 w-[72px] h-[72px] lg:w-[88px] lg:h-[88px] shrink-0 rounded-full bg-white shadow-douce flex items-center justify-center font-unbounded text-[18px] lg:text-[20px] text-corail-500">{{ String(i + 1).padStart(2, '0') }}</span>
           </div>
           <h3 class="mt-6 font-unbounded font-normal text-[18px] lg:text-[20px] text-vert-900">{{ step.title }}</h3>
           <p class="mt-3 text-[16px] lg:text-[18px] leading-snug text-neutre-600 max-w-[290px]">{{ step.description }}</p>

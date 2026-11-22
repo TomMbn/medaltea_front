@@ -86,3 +86,38 @@ export function stackBars(rows: Record<string, unknown>[], keys: string[], heigh
     })
   })
 }
+
+const WEEK_MS = 7 * 86_400_000
+// Garde-fou : jamais plus de semaines que n'en couvre la plus longue période proposée, même sur des données incohérentes
+const MAX_FILLED_WEEKS = 60
+
+/**
+ * L'API ne renvoie que les semaines où il s'est passé quelque chose. Pour que le graphique ne colle pas deux semaines
+ * éloignées, on ajoute les semaines manquantes entre la première et la dernière, avec zéro dans chaque série.
+ * Liste rendue telle quelle si une date n'est pas lisible.
+ */
+export function fillWeeks<T extends { week: string }>(rows: T[], keys: string[]): T[] {
+  if (rows.length < 2) return rows
+  const time = (week: string) => (DAY.test(week) ? Date.parse(`${week}T00:00:00Z`) : Number.NaN)
+  const first = time(rows[0]!.week)
+  const last = time(rows[rows.length - 1]!.week)
+  const weeks = (last - first) / WEEK_MS
+  if (!Number.isInteger(weeks) || weeks < 1 || weeks > MAX_FILLED_WEEKS || rows.some(row => Number.isNaN(time(row.week)))) return rows
+  const known = new Map(rows.map(row => [row.week, row]))
+  const empty = Object.fromEntries(keys.map(key => [key, 0]))
+  return Array.from({ length: weeks + 1 }, (_, i) => {
+    const week = new Date(first + i * WEEK_MS).toISOString().slice(0, 10)
+    return known.get(week) ?? ({ week, ...empty } as T)
+  })
+}
+
+/** « 1 inscrit », « 2 inscrits » : en français, le pluriel commence à 2 */
+export function countLabel(count: number, singular: string, plural: string): string {
+  return `${formatCount(count)} ${count >= 2 ? plural : singular}`
+}
+
+/** Lien de configuration vers un outil externe : gardé seulement s'il est en https, sinon chaîne vide */
+export function safeExternalLink(url: unknown): string {
+  return typeof url === 'string' && url.startsWith('https://') ? url : ''
+}
+

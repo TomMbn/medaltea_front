@@ -99,16 +99,34 @@ test.describe('cockpit admin : vue d\'ensemble', () => {
     await expect(page.getByTestId('to-handle')).toContainText('Rien à traiter')
   })
 
-  test('changer de période relance la requête avec days=7', async ({ page }) => {
-    await stats(page, 'overview', OVERVIEW)
+  test('changer de période : indicateur de mise à jour, puis nouveaux chiffres et nouvelles dates', async ({ page }) => {
+    const WEEK = {
+      ...OVERVIEW,
+      period: { days: 7, from: '2026-11-16', to: '2026-11-22' },
+      tiles: { ...OVERVIEW.tiles, appointmentsBooked: { value: 4, previous: 8 } },
+    }
+    await page.route('**/api/backend/admin/stats/overview**', async (route) => {
+      const week = new URL(route.request().url()).searchParams.get('days') === '7'
+      // La réponse des 7 jours tarde : les chiffres des 30 jours restent visibles pendant ce temps
+      if (week) await new Promise(resolve => setTimeout(resolve, 800))
+      await route.fulfill({ json: week ? WEEK : OVERVIEW })
+    })
     await page.goto('/admin')
+    const content = page.getByTestId('stats-content')
     await expect(page.getByTestId('tile-appointmentsBooked')).toContainText('12')
+    await expect(content).toHaveAttribute('aria-busy', 'false')
+    await expect(content).toContainText('Du 24 octobre 2026 au 22 novembre 2026')
+
     const group = page.getByRole('group', { name: 'Période' })
     await expect(group.getByRole('button', { name: '30 jours' })).toHaveAttribute('aria-pressed', 'true')
-    const request = page.waitForRequest(r => r.url().includes('/api/backend/admin/stats/overview') && r.url().includes('days=7'))
     await group.getByRole('button', { name: '7 jours' }).click()
-    await request
     await expect(group.getByRole('button', { name: '7 jours' })).toHaveAttribute('aria-pressed', 'true')
+    await expect(content).toHaveAttribute('aria-busy', 'true')
+
+    await expect(page.getByTestId('tile-appointmentsBooked')).toContainText('4')
+    await expect(page.getByTestId('tile-appointmentsBooked')).toContainText('−50 %')
+    await expect(content).toContainText('Du 16 novembre 2026 au 22 novembre 2026')
+    await expect(content).toHaveAttribute('aria-busy', 'false')
   })
 
   test('erreur du serveur : message d\'alerte, pas de page blanche', async ({ page }) => {
@@ -161,7 +179,7 @@ const REQUESTS = {
   received: 3,
   approvalRate: 0.5,
   avgProcessingDays: 3,
-  weekly: [{ week: '2026-11-09', approved: 1, rejected: 1, pending: 1 }],
+  weekly: [{ week: '2026-11-02', approved: 1, rejected: 1, pending: 0 }, { week: '2026-11-16', approved: 0, rejected: 0, pending: 1 }],
 }
 
 const ECONOMY = {
@@ -189,6 +207,9 @@ test.describe('cockpit admin : pages d\'indicateurs', () => {
     await expect(tile(page, 'newPros')).toContainText('1')
     await expect(tile(page, 'patientActivation')).toContainText('33,3 %')
     await expect(tile(page, 'proActivation')).toContainText('0 %')
+    await expect(tile(page, 'proActivation')).toContainText('Sur 1 inscrit')
+    await expect(tile(page, 'proActivation')).not.toContainText('1 inscrits')
+    await expect(tile(page, 'patientActivation')).toContainText('Sur 3 inscrits')
     const retention = page.getByRole('table', { name: /Rétention/ })
     await expect(retention.getByRole('row')).toHaveCount(2)
     await expect(retention).toContainText('9 novembre 2026')
@@ -245,6 +266,11 @@ test.describe('cockpit admin : pages d\'indicateurs', () => {
     await expect(tile(page, 'avgProcessingDays')).toContainText('3 jours')
     await expect(page.getByRole('link', { name: 'Traiter les revendications' })).toHaveAttribute('href', '/admin/revendications')
     await expect(page.getByRole('link', { name: 'Vérifier les fiches' })).toHaveAttribute('href', '/admin/fiches')
+    // La semaine du 9 novembre, sans demande, apparaît à zéro entre les deux autres
+    const chart = page.getByRole('figure', { name: /Demandes de revendication par semaine/ })
+    await chart.getByText('Voir les données').click()
+    await expect(chart.getByRole('table').getByRole('row')).toHaveCount(4)
+    await expect(chart.getByRole('table')).toContainText('9 novembre 2026')
     await expectAccessible(page)
   })
 
@@ -260,6 +286,12 @@ test.describe('cockpit admin : pages d\'indicateurs', () => {
     await expect(tile(page, 'cac')).toContainText('–')
     await expect(tile(page, 'churn')).toContainText('10 %')
     await expectAccessible(page)
+  })
+
+  test('économie : erreur du serveur signalée', async ({ page }) => {
+    await stats(page, 'economy', { statusCode: 500, message: 'Erreur' }, 500)
+    await page.goto('/admin/economie')
+    await expect(page.getByRole('alert')).toContainText('Impossible de charger les indicateurs')
   })
 })
 

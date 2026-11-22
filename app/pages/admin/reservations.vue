@@ -10,7 +10,8 @@
 
     <p v-if="error" class="mt-6 rounded-[16px] bg-red-50 px-4 py-3 text-[16px] text-red-800" role="alert">Impossible de charger les indicateurs pour le moment.</p>
     <p v-else-if="!stats" class="mt-6 text-[16px] text-neutre-600">Chargement…</p>
-    <template v-else>
+    <div v-else data-testid="stats-content" class="transition-opacity" :class="{ 'opacity-50': pending }" :aria-busy="pending">
+      <p class="sr-only" role="status">{{ pending ? 'Mise à jour des indicateurs…' : '' }}</p>
       <ul class="mt-6 grid grid-cols-[minmax(0,1fr)] sm:grid-cols-2 lg:grid-cols-3 gap-5">
         <AdminStatTile v-for="t in tiles" :key="t.id" :testid="`tile-${t.id}`" :label="t.label" :value="t.value" :hint="t.hint" />
       </ul>
@@ -26,7 +27,7 @@
         <AdminDataTable title="Offre par spécialité" :columns="SPECIALITY_COLUMNS" :rows="bySpeciality" />
         <AdminDataTable title="Offre par ville" :columns="CITY_COLUMNS" :rows="byCity" />
       </div>
-    </template>
+    </div>
 
     <AdminAnalysisLinks />
   </div>
@@ -38,7 +39,7 @@ import { computed } from 'vue'
 definePageMeta({ layout: 'admin', middleware: ['admin'] })
 useSeoMeta({ title: 'Réservations — Administration Léya', robots: 'noindex, nofollow' })
 
-const { days, stats, error } = useAdminStats('bookings')
+const { days, stats, error, pending } = useAdminStats('bookings')
 
 // Quatre séries au plus par graphique : les six statuts de l'API sont regroupés
 const SERIES = [
@@ -63,7 +64,7 @@ const tiles = computed(() => {
     { id: 'cancellationRate', label: 'Taux d’annulation', value: formatRate(s.cancellationRate), hint: 'Par le patient ou le praticien' },
     { id: 'noShowRate', label: 'Taux d’absence', value: formatRate(s.noShowRate), hint: 'Parmi les RDV clôturés' },
     { id: 'leadTime', label: 'Délai entre réservation et RDV', value: formatDays(s.leadTime.medianDays), hint: s.leadTime.under48hRate == null ? 'Médiane' : `Médiane · ${formatRate(s.leadTime.under48hRate)} réservés moins de 48 h avant` },
-    { id: 'confirmationDelay', label: 'Délai de confirmation', value: formatHours(delay?.medianHours), hint: delay ? `Médiane sur ${formatCount(delay.confirmations)} confirmations` : 'Suivi des comptes indisponible' },
+    { id: 'confirmationDelay', label: 'Délai de confirmation', value: formatHours(delay?.medianHours), hint: delay ? `Médiane sur ${countLabel(delay.confirmations, 'confirmation', 'confirmations')}` : 'Suivi des comptes indisponible' },
   ]
 })
 const weekly = computed(() => (stats.value?.weekly ?? []).map(w => ({ week: w.week, honoured: w.completed, upcoming: w.confirmed + w.pending, noShow: w.noShow, cancelled: w.cancelledByUser + w.cancelledByPraticien })))

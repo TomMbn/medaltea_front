@@ -10,7 +10,8 @@
 
     <p v-if="error" class="mt-6 rounded-[16px] bg-red-50 px-4 py-3 text-[16px] text-red-800" role="alert">Impossible de charger les indicateurs pour le moment.</p>
     <p v-else-if="!stats" class="mt-6 text-[16px] text-neutre-600">Chargement…</p>
-    <template v-else>
+    <div v-else data-testid="stats-content" class="transition-opacity" :class="{ 'opacity-50': pending }" :aria-busy="pending">
+      <p class="sr-only" role="status">{{ pending ? 'Mise à jour des indicateurs…' : '' }}</p>
       <ul class="mt-6 flex flex-wrap gap-3">
         <li v-for="l in ACTIONS" :key="l.to"><NuxtLink :to="l.to" class="inline-flex items-center rounded-full bg-vert-900 px-6 min-h-[44px] text-[16px] font-semibold text-white hover:bg-vert-600 transition-colors">{{ l.label }}</NuxtLink></li>
       </ul>
@@ -19,7 +20,7 @@
       </ul>
       <p class="mt-4 text-[14px] text-neutre-600">Du {{ formatStatsDay(stats.period.from) }} au {{ formatStatsDay(stats.period.to) }}.</p>
       <AdminWeeklyBars class="mt-6" title="Demandes de revendication par semaine" :rows="stats.weekly" :series="SERIES" />
-    </template>
+    </div>
 
     <AdminAnalysisLinks />
   </div>
@@ -31,7 +32,7 @@ import { computed } from 'vue'
 definePageMeta({ layout: 'admin', middleware: ['admin'] })
 useSeoMeta({ title: 'Demandes — Administration Léya', robots: 'noindex, nofollow' })
 
-const { days, stats, error } = useAdminStats('requests')
+const { days, stats, error, pending } = useAdminStats('requests')
 
 const ACTIONS = [
   { to: '/admin/revendications', label: 'Traiter les revendications' },

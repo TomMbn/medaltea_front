@@ -10,14 +10,15 @@
 
     <p v-if="error" class="mt-6 rounded-[16px] bg-red-50 px-4 py-3 text-[16px] text-red-800" role="alert">{{ unavailable ? 'Les statistiques d’inscription sont indisponibles : la base de suivi ne répond pas.' : 'Impossible de charger les indicateurs pour le moment.' }}</p>
     <p v-else-if="!stats" class="mt-6 text-[16px] text-neutre-600">Chargement…</p>
-    <template v-else>
+    <div v-else data-testid="stats-content" class="transition-opacity" :class="{ 'opacity-50': pending }" :aria-busy="pending">
+      <p class="sr-only" role="status">{{ pending ? 'Mise à jour des indicateurs…' : '' }}</p>
       <ul class="mt-6 grid grid-cols-[minmax(0,1fr)] sm:grid-cols-2 lg:grid-cols-3 gap-5">
         <AdminStatTile v-for="t in tiles" :key="t.id" :testid="`tile-${t.id}`" :label="t.label" :value="t.value" :hint="t.hint" />
       </ul>
       <p class="mt-4 text-[14px] text-neutre-600">Du {{ formatStatsDay(stats.period.from) }} au {{ formatStatsDay(stats.period.to) }}.</p>
       <AdminWeeklyBars class="mt-6" title="Comptes créés par semaine" :rows="stats.weekly" :series="SERIES" />
       <AdminDataTable class="mt-6" title="Rétention par semaine d’inscription" note="Part des comptes revenus (au moins une action) 1, 2 et 4 semaines après leur semaine d’inscription. Une semaine pas encore écoulée vaut 0 %." :columns="RETENTION_COLUMNS" :rows="retention" />
-    </template>
+    </div>
 
     <AdminAnalysisLinks />
   </div>
@@ -29,7 +30,7 @@ import { computed } from 'vue'
 definePageMeta({ layout: 'admin', middleware: ['admin'] })
 useSeoMeta({ title: 'Inscriptions — Administration Léya', robots: 'noindex, nofollow' })
 
-const { days, stats, error } = useAdminStats('signups')
+const { days, stats, error, pending } = useAdminStats('signups')
 // 503 : la base de suivi (pg_tracking) est désactivée ou injoignable, aucune autre source ne donne ces chiffres
 const unavailable = computed(() => (error.value?.statusCode ?? error.value?.response?.status) === 503)
 
@@ -48,13 +49,13 @@ const RETENTION_COLUMNS = [
 const tiles = computed(() => {
   const s = stats.value
   if (!s) return []
-  const median = (days) => (days == null ? '' : ` · délai médian ${formatDays(days)}`)
+  const median = (value) => (value == null ? '' : ` · délai médian ${formatDays(value)}`)
   return [
     { id: 'newPatients', label: 'Nouveaux patients', value: formatCount(s.newAccounts.patients), hint: '' },
     { id: 'newPros', label: 'Nouveaux praticiens', value: formatCount(s.newAccounts.pros), hint: '' },
-    { id: 'activeUsers', label: 'Utilisateurs actifs', value: formatCount(s.activeUsers.all), hint: `${formatCount(s.activeUsers.patients)} patients, ${formatCount(s.activeUsers.pros)} praticiens` },
-    { id: 'patientActivation', label: 'Patients inscrits ayant réservé', value: formatRate(s.patientActivation.bookedRate), hint: `Sur ${formatCount(s.patientActivation.signedUp)} inscrits${median(s.patientActivation.medianDays)}` },
-    { id: 'proActivation', label: 'Praticiens inscrits devenus réservables', value: formatRate(s.proActivation.completeRate), hint: `Sur ${formatCount(s.proActivation.signedUp)} inscrits${median(s.proActivation.medianDays)}` },
+    { id: 'activeUsers', label: 'Utilisateurs actifs', value: formatCount(s.activeUsers.all), hint: `${countLabel(s.activeUsers.patients, 'patient', 'patients')}, ${countLabel(s.activeUsers.pros, 'praticien', 'praticiens')}` },
+    { id: 'patientActivation', label: 'Patients inscrits ayant réservé', value: formatRate(s.patientActivation.bookedRate), hint: `Sur ${countLabel(s.patientActivation.signedUp, 'inscrit', 'inscrits')}${median(s.patientActivation.medianDays)}` },
+    { id: 'proActivation', label: 'Praticiens inscrits devenus réservables', value: formatRate(s.proActivation.completeRate), hint: `Sur ${countLabel(s.proActivation.signedUp, 'inscrit', 'inscrits')}${median(s.proActivation.medianDays)}` },
     { id: 'accountsDeleted', label: 'Comptes supprimés', value: formatCount(s.accountsDeleted), hint: '' },
   ]
 })

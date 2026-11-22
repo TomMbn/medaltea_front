@@ -7,14 +7,16 @@ export const ADMIN_STATS_DEFAULT_DAYS = 30
 /**
  * @param route overview, signups, bookings, requests ou economy
  * @param withPeriod false pour une route sans paramètre de période (economy)
- * @returns `days` (à lier au sélecteur de période), `stats` (null pendant le chargement) et `error`
+ * @returns `days` (à lier au sélecteur de période), `stats` (null au premier chargement, puis les dernières valeurs
+ *   reçues), `pending` (une requête est en cours : les valeurs affichées peuvent dater de la période précédente) et `error`
  */
 export function useAdminStats(route: string, withPeriod = true) {
   const days = ref(ADMIN_STATS_DEFAULT_DAYS)
-  const { data: stats, error } = useAsyncData<any>(
+  const { data: stats, error, status } = useAsyncData<any>(
     `admin-stats-${route}`,
     () => $fetch(`/api/backend/admin/stats/${route}`, { query: withPeriod ? { days: days.value } : undefined }),
     { server: false, lazy: true, watch: withPeriod ? [days] : [], default: () => null },
   )
-  return { days, stats, error }
+  const pending = computed(() => status.value === 'pending')
+  return { days, stats, error, pending }
 }

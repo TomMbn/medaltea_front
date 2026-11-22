@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { EMPTY_VALUE, formatCount, formatRate, formatEuros, formatDays, formatHours, formatRatio, formatStatsDay, formatStatsShortDay, formatStatsMonth, trendLabel, stackBars } from '~/utils/adminStats'
+import { EMPTY_VALUE, formatCount, formatRate, formatEuros, formatDays, formatHours, formatRatio, formatStatsDay, formatStatsShortDay, formatStatsMonth, trendLabel, stackBars, fillWeeks, countLabel, safeExternalLink } from '~/utils/adminStats'
 
 // Intl sépare les milliers par une espace fine insécable : on la ramène à une espace simple pour comparer
 const plain = (s: string) => s.replace(/\s/g, ' ')
@@ -96,3 +96,44 @@ describe('cockpit admin : barres empilées', () => {
     expect(stackBars([], ['a'], 100)).toEqual([])
   })
 })
+
+describe('cockpit admin : semaines sans donnée', () => {
+  it('ajoute à zéro les semaines absentes entre la première et la dernière', () => {
+    const rows = fillWeeks([{ week: '2026-11-02', a: 1 }, { week: '2026-11-16', a: 2 }], ['a'])
+    expect(rows).toEqual([{ week: '2026-11-02', a: 1 }, { week: '2026-11-09', a: 0 }, { week: '2026-11-16', a: 2 }])
+  })
+
+  it('traverse un changement d\'heure et un changement d\'année sans décalage', () => {
+    expect(fillWeeks([{ week: '2026-10-19', a: 1 }, { week: '2026-11-02', a: 1 }], ['a']).map(r => r.week)).toEqual(['2026-10-19', '2026-10-26', '2026-11-02'])
+    expect(fillWeeks([{ week: '2026-12-28', a: 1 }, { week: '2027-01-11', a: 1 }], ['a']).map(r => r.week)).toEqual(['2026-12-28', '2027-01-04', '2027-01-11'])
+  })
+
+  it('laisse intactes une liste vide, une seule semaine ou des semaines déjà consécutives', () => {
+    expect(fillWeeks([], ['a'])).toEqual([])
+    expect(fillWeeks([{ week: '2026-11-02', a: 3 }], ['a'])).toEqual([{ week: '2026-11-02', a: 3 }])
+    const full = [{ week: '2026-11-02', a: 1 }, { week: '2026-11-09', a: 2 }]
+    expect(fillWeeks(full, ['a'])).toEqual(full)
+  })
+
+  it('ne boucle pas sur une date illisible', () => {
+    const rows = [{ week: 'bientôt', a: 1 }, { week: '2026-11-09', a: 2 }]
+    expect(fillWeeks(rows, ['a'])).toEqual(rows)
+  })
+})
+
+describe('cockpit admin : accords et liens', () => {
+  it('accorde le nom avec le nombre (singulier en dessous de 2)', () => {
+    expect(countLabel(0, 'inscrit', 'inscrits')).toBe('0 inscrit')
+    expect(countLabel(1, 'inscrit', 'inscrits')).toBe('1 inscrit')
+    expect(countLabel(2, 'inscrit', 'inscrits')).toBe('2 inscrits')
+    expect(plain(countLabel(1234, 'patient', 'patients'))).toBe('1 234 patients')
+  })
+
+  it('n\'accepte qu\'un lien externe en https', () => {
+    expect(safeExternalLink('https://data.exemple.fr/dashboard/')).toBe('https://data.exemple.fr/dashboard/')
+    for (const bad of ['http://data.exemple.fr', 'javascript:alert(1)', '//data.exemple.fr', 'data.exemple.fr', '', undefined, null, 42]) {
+      expect(safeExternalLink(bad), String(bad)).toBe('')
+    }
+  })
+})
+

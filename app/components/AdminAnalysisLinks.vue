@@ -12,7 +12,7 @@
 // Grafana et Umami restent les outils d'analyse détaillée : le cockpit n'en montre que la synthèse
 const { adminLinks } = useRuntimeConfig().public
 const links = [
-  { href: adminLinks?.grafana, label: 'tableaux de bord Grafana' },
-  { href: adminLinks?.umami, label: 'mesure d’audience Umami' },
+  { href: safeExternalLink(adminLinks?.grafana), label: 'tableaux de bord Grafana' },
+  { href: safeExternalLink(adminLinks?.umami), label: 'mesure d’audience Umami' },
 ].filter(l => l.href)
 </script>

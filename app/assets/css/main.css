@@ -115,6 +115,57 @@ h6,
 }
 
 /*
+  Mascotte (panda) — animations légères, en CSS uniquement.
+  On anime les propriétés individuelles `translate`, `rotate` et `scale` : elles s'ajoutent au `transform` déjà posé
+  par Tailwind (retournement -scale-x-100, rotate-[4deg]…) au lieu de l'écraser.
+  - .panda : apparition avec un petit salut, puis respiration lente
+  - .panda-zone : bloc qui porte le panda ; son survol déclenche un petit bond (le panda lui-même ignore la souris)
+  - .panda--sur-vert : contour clair et ombre, sur les fonds vert-600 qui ont la teinte exacte de son pelage ; panda immobile
+*/
+.panda {
+  --panda-base: panda-salut 1.4s ease-in-out 0.3s both, panda-respire 5s ease-in-out 1.7s infinite;
+  transform-origin: 50% 100%;
+  animation: var(--panda-base);
+}
+@media (hover: hover) {
+  .panda-zone:hover .panda {
+    animation: var(--panda-base), panda-coucou 0.8s ease-in-out;
+  }
+}
+/* Sans animation : l'apparition globale des images (imageFadeIn) anime `filter` et effacerait le contour */
+.panda--sur-vert {
+  animation: none;
+  filter:
+    drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff)
+    drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff)
+    drop-shadow(0 10px 14px rgba(1, 40, 40, 0.35));
+}
+@keyframes panda-salut {
+  0% { opacity: 0; translate: 0 8px; rotate: 0deg; }
+  25% { opacity: 1; translate: 0 0; rotate: 0deg; }
+  45% { rotate: -5deg; }
+  65% { rotate: 4deg; }
+  85% { rotate: -2deg; }
+  100% { opacity: 1; translate: 0 0; rotate: 0deg; }
+}
+@keyframes panda-respire {
+  0%, 100% { scale: 1 1; }
+  50% { scale: 1.015 1.03; }
+}
+@keyframes panda-coucou {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  30% { translate: 0 -8px; rotate: -4deg; }
+  55% { translate: 0 0; rotate: 3deg; }
+  75% { translate: 0 -3px; rotate: 0deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panda,
+  .panda-zone:hover .panda {
+    animation: none;
+  }
+}
+
+/*
   Écrans tactiles : zones à toucher d'au moins 44 px (boutons, listes déroulantes, champs de saisie).
   Les cases à cocher gardent leur taille mais sont étendues par leur étiquette.
 */

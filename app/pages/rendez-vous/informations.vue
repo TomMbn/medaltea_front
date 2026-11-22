@@ -19,8 +19,8 @@
 
       <div class="mt-10 lg:mt-[47px] xl:grid xl:grid-cols-[minmax(0,1fr)_480px] xl:gap-x-[72px]">
         <!-- Récapitulatif -->
-        <aside class="relative xl:order-2 mb-10 xl:mb-0 xl:mt-0 max-w-[560px] xl:max-w-none" aria-label="Récapitulatif du rendez-vous">
-          <img src="/images/landing/mascotte-panda.webp" alt="" aria-hidden="true" width="223" height="193" class="hidden xl:block absolute left-[249px] top-[-166px] w-[223px] h-auto -scale-x-100 pointer-events-none select-none" style="animation: none;" />
+        <aside class="panda-zone relative xl:order-2 mb-10 xl:mb-0 xl:mt-0 max-w-[560px] xl:max-w-none" aria-label="Récapitulatif du rendez-vous">
+          <img src="/images/landing/mascotte-panda.webp" alt="" aria-hidden="true" width="223" height="193" class="panda hidden xl:block absolute left-[249px] top-[-166px] w-[223px] h-auto -scale-x-100 pointer-events-none select-none" />
           <div class="relative bg-white rounded-[32px] shadow-[0_12px_32px_rgba(1,40,40,0.08)] p-6 sm:p-8 flex flex-col gap-[18px]">
             <p class="font-unbounded font-normal text-[20px] leading-[normal] text-vert-900">Récapitulatif</p>
             <div class="flex items-center gap-[14px]">

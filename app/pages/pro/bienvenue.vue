@@ -5,6 +5,8 @@
       Votre compte est bien créé, mais {{ warningLabel }} n'a pas pu être configuré{{ warnings.length > 1 ? 's' : '' }}. Vous pouvez le faire en un instant ci-dessous.
     </p>
 
+    <ProDuplicates />
+
     <!-- En-tête -->
     <section class="bg-vert-600 text-white rounded-[32px] p-6 sm:p-10 mb-5 mt-1" aria-labelledby="welcome-title">
       <h1 id="welcome-title" class="font-unbounded font-normal text-[26px] mb-2">

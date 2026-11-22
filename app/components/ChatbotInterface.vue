@@ -34,9 +34,9 @@
           <img src="/images/logo.svg" alt="Léya" class="h-12 lg:h-[65px] w-auto" />
           <h2 class="mt-8 lg:mt-[68px] font-unbounded font-normal text-[22px] sm:text-[28px] lg:text-[32px] leading-[normal] text-vert-900 text-center">Posez-moi votre question</h2>
 
-          <div class="relative w-full mt-12 lg:mt-[46px]">
+          <div class="panda-zone relative w-full mt-12 lg:mt-[46px]">
             <!-- Mascotte, posée sur le bord de la saisie -->
-            <img src="/images/chatbot-mascotte-accueil.webp" alt="" aria-hidden="true" width="148" height="175" class="hidden sm:block absolute right-6 lg:right-[-4px] bottom-[calc(100%-22px)] w-[110px] lg:w-[148px] xl:w-[110px] 2xl:w-[148px] h-auto pointer-events-none select-none" style="animation: none;" />
+            <img src="/images/chatbot-mascotte-accueil.webp" alt="" aria-hidden="true" width="148" height="175" class="panda hidden sm:block absolute right-6 lg:right-[-4px] bottom-[calc(100%-22px)] w-[110px] lg:w-[148px] xl:w-[110px] 2xl:w-[148px] h-auto pointer-events-none select-none" />
             <div class="relative p-[3px] rounded-[20px] isolate">
               <div class="absolute inset-0 rounded-[20px] -z-10" style="background: linear-gradient(90deg, #EC7F7A 0%, #FFFFFF 47%, #90BAD1 100%)"></div>
               <div class="focus-ring-within bg-white rounded-[17.5px] px-5 lg:pl-[23px] lg:pr-8 pt-5 pb-5 lg:pb-[23px] flex flex-col gap-6 lg:gap-[35px]">
@@ -125,7 +125,7 @@
             Léya
           </p>
           <p class="mt-4 flex items-center gap-2 text-[17px] text-neutre-600">
-            <span class="italic">Léya réfléchit…</span>
+            <span class="italic">{{ pandaState === 'recherche' ? 'Léya cherche des pistes…' : 'Léya réfléchit…' }}</span>
             <span class="flex gap-1" aria-hidden="true">
               <span class="w-1.5 h-1.5 bg-vert-600 rounded-full animate-bounce"></span>
               <span class="w-1.5 h-1.5 bg-vert-600 rounded-full animate-bounce [animation-delay:0.2s]"></span>
@@ -141,8 +141,9 @@
           <NuxtLink :to="otherPractitionersLink" class="inline-flex bg-white text-vert-900 text-[16px] font-medium rounded-full px-4 py-[9px] leading-[normal] hover:bg-bleu-50 transition-colors">{{ otherPractitionersLink === '/trouver-un-praticien' ? 'Trouver un praticien' : 'Voir d’autres praticiens' }}</NuxtLink>
         </div>
         <div class="relative">
-          <div class="hidden md:block absolute right-0 lg:right-[-4px] bottom-[calc(100%-28px)] w-[150px] lg:w-[223px] -scale-x-100 pointer-events-none select-none" aria-hidden="true">
-            <img src="/images/landing/mascotte-panda.webp" alt="" width="223" height="193" class="w-full h-auto" style="animation: none;" />
+          <!-- Mascotte : ses expressions suivent l'échange (écoute, réflexion, recherche, trouvé, réponse, content, oups) -->
+          <div class="hidden md:block absolute right-0 lg:right-[-4px] bottom-[calc(100%-28px)] w-[150px] lg:w-[223px] pointer-events-none select-none">
+            <LeyaPanda :etat="pandaState" miroir />
           </div>
           <div class="relative p-[3px] rounded-[20px] isolate">
             <div class="absolute inset-0 rounded-[20px] -z-10" style="background: linear-gradient(90deg, #EC7F7A 0%, #FFFFFF 47%, #90BAD1 100%)"></div>
@@ -174,10 +175,11 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted, computed } from 'vue'
+import { ref, nextTick, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 import { ArrowUp, Ban, Plus, Check, Copy, Info } from 'lucide-vue-next'
 import { useRoute } from 'vue-router'
 import { medecines, medecinePictogram } from '~/data/medecines'
+import { mentionedMedicineSlugs } from '~/utils/mentions'
 
 const route = useRoute()
 // La conversation vit en mémoire de l'application (pas sur le serveur, pas sur le disque) : elle survit à un changement de page
@@ -190,6 +192,41 @@ const isBusy = computed(() => isTyping.value || messages.value.some(m => m.isStr
 const userInput = ref('')
 const chatHistoryRef = ref(null)
 const copiedIndex = ref(-1)
+
+// Expressions du panda au fil de l'échange : « écoute » pendant la saisie, « réflexion » dès l'envoi, « recherche » si la réponse
+// tarde, « trouvé » quand elle arrive, « réponse » pendant l'écriture, « content » une fois finie, « oups » après une erreur.
+// La réponse arrive en texte brut, sans signal de recherche : le passage à « recherche » se fait au bout d'un délai.
+const SEARCH_DELAY_MS = 2500
+const FOUND_MS = 1200
+const PLEASED_MS = 2600
+const isSearching = ref(false)
+const celebration = ref('') // 'trouve' | 'content' | ''
+let searchTimer = null
+let celebrationTimer = null
+const isStreaming = computed(() => messages.value.some(m => m.isStreaming))
+watch(isTyping, (typing) => {
+  clearTimeout(searchTimer)
+  isSearching.value = false
+  if (typing) searchTimer = setTimeout(() => { isSearching.value = true }, SEARCH_DELAY_MS)
+}, { immediate: true })
+function celebrate(state, ms) {
+  clearTimeout(celebrationTimer)
+  celebration.value = state
+  celebrationTimer = setTimeout(() => { celebration.value = '' }, ms)
+}
+watch(isStreaming, (streaming, wasStreaming) => {
+  if (streaming) celebrate('trouve', FOUND_MS)
+  else if (wasStreaming) celebrate('content', PLEASED_MS)
+})
+onBeforeUnmount(() => { clearTimeout(searchTimer); clearTimeout(celebrationTimer) })
+const pandaState = computed(() => {
+  if (isTyping.value) return isSearching.value ? 'recherche' : 'reflexion'
+  if (celebration.value) return celebration.value
+  if (isStreaming.value) return 'reponse'
+  if (userInput.value.trim()) return 'ecoute'
+  if (lastModelMessage.value?.isError) return 'oups'
+  return 'repos'
+})
 
 
 // --- RATE LIMITING / USAGE (CLIENT SIDE) ---
@@ -245,22 +282,15 @@ function resetChat() {
   isTyping.value = false
   userInput.value = ''
   copiedIndex.value = -1
+  clearTimeout(celebrationTimer)
+  celebration.value = ''
 }
 
 // --- Médecines citées dans la réponse (reconnues dans le texte, rien n'est inventé)
-const MENTIONS = [
-  { slug: 'sophrologie', re: /sophrolog/i },
-  { slug: 'naturopathie', re: /naturopath/i },
-  { slug: 'osteopathie', re: /ost[ée]opath/i },
-  { slug: 'acupuncture', re: /acupunct/i },
-  { slug: 'hypnotherapie', re: /hypno/i },
-  { slug: 'massage', re: /massage/i },
-]
 const mentionedMedicines = (msg) => {
   const text = msg.parts?.[0]?.text || ''
-  return MENTIONS
-    .filter(m => m.re.test(text))
-    .map(m => medecines.find(x => x.slug === m.slug))
+  return mentionedMedicineSlugs(text)
+    .map(slug => medecines.find(x => x.slug === slug))
     .filter(Boolean)
     .slice(0, 3)
     .map(m => ({ slug: m.slug, name: m.name, pictogram: medecinePictogram(m) }))

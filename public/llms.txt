@@ -1,6 +1,6 @@
 # Léya
 
-> Léya est une plateforme française qui associe un assistant IA et un annuaire de praticiens en médecines douces (ostéopathie, naturopathie, sophrologie, hypnothérapie, acupuncture, massage). Les patients recherchent un praticien par spécialité et par ville, consultent sa fiche et réservent en ligne. Léya ne fournit ni diagnostic ni conseil médical et ne remplace pas un avis médical.
+> Léya est une plateforme française qui associe un assistant IA et un annuaire de praticiens en médecines douces (ostéopathie, naturopathie, sophrologie, hypnothérapie, acupuncture, massage, réflexologie, kinésiologie, shiatsu, chiropraxie, étiopathie, médecine traditionnelle chinoise). Les patients recherchent un praticien par spécialité et par ville, consultent sa fiche et réservent en ligne. Léya ne fournit ni diagnostic ni conseil médical et ne remplace pas un avis médical.
 
 ## Pages principales
 - [Accueil](https://leya-sante.fr/): présentation de Léya et de l'assistant IA
@@ -10,10 +10,16 @@
 
 ## Médecines
 - [Acupuncture](https://leya-sante.fr/medecines/acupuncture)
+- [Chiropraxie](https://leya-sante.fr/medecines/chiropraxie)
+- [Étiopathie](https://leya-sante.fr/medecines/etiopathie)
 - [Hypnothérapie](https://leya-sante.fr/medecines/hypnotherapie)
+- [Kinésiologie](https://leya-sante.fr/medecines/kinesiologie)
 - [Massage](https://leya-sante.fr/medecines/massage)
+- [Médecine traditionnelle chinoise](https://leya-sante.fr/medecines/medecine-traditionnelle-chinoise)
 - [Naturopathie](https://leya-sante.fr/medecines/naturopathie)
 - [Ostéopathie](https://leya-sante.fr/medecines/osteopathie)
+- [Réflexologie](https://leya-sante.fr/medecines/reflexologie)
+- [Shiatsu](https://leya-sante.fr/medecines/shiatsu)
 - [Sophrologie](https://leya-sante.fr/medecines/sophrologie)
 
 ## Informations légales

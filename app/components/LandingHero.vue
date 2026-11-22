@@ -17,19 +17,9 @@
 
         <!-- Search Bar Area Wrapper -->
         <div class="search-bar-wrapper">
-          <!-- Mascotte -->
+          <!-- Mascotte : écoute pendant la saisie, se réjouit à l'envoi -->
           <div class="absolute z-20 pointer-events-none right-4 lg:right-[11px] bottom-full mb-[-4px] lg:mb-[-27px] w-[80px] lg:w-[223px]" aria-hidden="true">
-            <div class="-scale-x-100">
-              <NuxtImg
-                src="/images/landing/mascotte-panda.webp"
-                alt=""
-                class="w-full h-auto"
-                width="223"
-                height="193"
-                loading="lazy"
-                placeholder
-              />
-            </div>
+            <LeyaPanda :etat="pandaState" miroir />
           </div>
 
           <!-- Main Search/Input Box Wrapper (Gradient Border) -->
@@ -121,11 +111,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { ArrowUp, Check } from 'lucide-vue-next'
 
 const userInput = ref('')
 const isSubmitting = ref(false)
+const pandaState = computed(() => (isSubmitting.value ? 'trouve' : userInput.value.trim() ? 'ecoute' : 'repos'))
 const suggestions = [
   { text: 'Soulager mon stress' },
   { text: 'Mieux dormir' },

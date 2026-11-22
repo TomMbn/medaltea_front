@@ -13,9 +13,9 @@
     <AuthAudienceSwitch class="absolute left-10 top-[100px] xl:left-16 xl:top-[108px] 2xl:left-auto 2xl:right-16 2xl:top-16" page="register" current="pro" />
 
     <!-- Mascotte : sur grand écran (maquette à 1728 px) position exacte ; en dessous, elle occupe la place libre entre le haut et le titre, sans jamais être coupée ni recouvrir le texte -->
-    <img src="/images/chatbot-mascotte-accueil.webp" alt="" aria-hidden="true" width="254" height="300" class="hidden 2xl:block absolute left-[371px] top-[140px] w-[186px] h-auto -rotate-6 pointer-events-none select-none" style="animation: none;" />
+    <img src="/images/chatbot-mascotte-accueil.webp" alt="" aria-hidden="true" width="254" height="300" class="panda--sur-vert hidden 2xl:block absolute left-[371px] top-[140px] w-[186px] h-auto -rotate-6 pointer-events-none select-none" style="animation: none;" />
     <div class="relative flex-1 min-h-0 flex justify-end items-start pt-[80px] xl:pt-16 pr-[4%] 2xl:hidden" aria-hidden="true">
-      <img src="/images/chatbot-mascotte-accueil.webp" alt="" width="254" height="300" class="h-full max-h-[200px] w-auto max-w-[45%] object-contain object-top -rotate-6 pointer-events-none select-none" style="animation: none;" />
+      <img src="/images/chatbot-mascotte-accueil.webp" alt="" width="254" height="300" class="panda--sur-vert h-full max-h-[200px] w-auto max-w-[45%] object-contain object-top -rotate-6 pointer-events-none select-none" style="animation: none;" />
     </div>
 
 

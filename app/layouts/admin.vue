@@ -7,7 +7,7 @@
           <span class="rounded-full bg-corail-500 px-3 py-[2px] text-[14px] font-semibold text-vert-900">Administration</span>
         </NuxtLink>
         <nav class="flex flex-1 flex-wrap items-center gap-2" aria-label="Administration">
-          <NuxtLink v-for="l in links" :key="l.to" :to="l.to" class="rounded-full px-4 py-2 text-[16px] font-medium hover:bg-white/15 transition-colors" active-class="bg-white !text-vert-900 hover:!bg-white">{{ l.label }}</NuxtLink>
+          <NuxtLink v-for="l in links" :key="l.to" :to="l.to" class="rounded-full px-4 py-2 text-[16px] font-medium hover:bg-white/15 transition-colors" :active-class="l.exact ? '' : ACTIVE" :exact-active-class="l.exact ? ACTIVE : ''">{{ l.label }}</NuxtLink>
         </nav>
         <NuxtLink to="/" class="text-[16px] underline-offset-2 hover:underline">Voir le site</NuxtLink>
         <button type="button" class="rounded-full border border-white/60 px-4 py-2 text-[16px] font-medium hover:bg-white/15 transition-colors" @click="leave">Déconnexion</button>
@@ -21,7 +21,14 @@
 
 <script setup>
 const { logout } = useSession()
+const ACTIVE = 'bg-white !text-vert-900 hover:!bg-white'
+// `exact` : /admin est le préfixe de toutes les pages, son lien n'est actif que sur la vue d'ensemble
 const links = [
+  { to: '/admin', label: 'Vue d’ensemble', exact: true },
+  { to: '/admin/inscriptions', label: 'Inscriptions' },
+  { to: '/admin/reservations', label: 'Réservations' },
+  { to: '/admin/demandes', label: 'Demandes' },
+  { to: '/admin/economie', label: 'Économie' },
   { to: '/admin/revendications', label: 'Revendications' },
   { to: '/admin/fiches', label: 'Fiches' },
 ]

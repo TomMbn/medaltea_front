@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 // Aucun défilement horizontal, du petit téléphone au grand écran.
 const SIZES = [[320, 568], [375, 812], [768, 1024], [1024, 768], [1366, 768], [1920, 1080]] as const
-const PAGES = ['/', '/medecines', '/medecines/sophrologie', '/trouver-un-praticien', '/praticiens-pro', '/login', '/register', '/praticiens/demo-claire-fictive']
+const PAGES = ['/', '/medecines', '/medecines/sophrologie', '/medecines/medecine-traditionnelle-chinoise', '/trouver-un-praticien', '/praticiens-pro', '/login', '/register', '/praticiens/demo-claire-fictive']
 
 for (const [w, h] of SIZES) {
   test(`pas de défilement horizontal à ${w} × ${h}`, async ({ page }) => {

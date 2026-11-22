@@ -23,8 +23,9 @@
 
           <h1 id="med-title" class="mt-8 lg:mt-[34px] font-unbounded font-normal text-vert-900 text-[30px] sm:text-[40px] lg:text-[clamp(36px,3.3vw,56px)] leading-[1.15] flex flex-col items-start gap-1 lg:gap-2 lg:max-w-[560px]">
             <span class="text-balance">{{ tagline.lead }}</span>
-            <!-- Article élidé (l’) : il reste collé au nom de la médecine, jamais seul en fin de ligne -->
-            <span class="flex items-center whitespace-nowrap">
+            <!-- Article élidé (l’) : il reste collé au nom de la médecine, jamais seul en fin de ligne.
+                 Sans article, un nom long (médecine traditionnelle chinoise) peut passer à la ligne sur mobile. -->
+            <span class="flex items-center" :class="{ 'whitespace-nowrap': tagline.elided }">
               <span v-if="tagline.elided" class="mr-1">{{ tagline.elided }}</span>
               <span class="bg-corail-100 text-corail-700 rounded-full px-5 lg:px-[22px] pt-0.5 pb-2 lg:pb-[10px]">{{ medicine.name.toLowerCase() }}</span>
             </span>
@@ -54,7 +55,7 @@
           </div>
           <div v-if="practitionerCount > 0" class="absolute left-0 lg:-left-12 bottom-6 lg:-bottom-10 -rotate-[5deg] bg-white rounded-[24px] shadow-douce px-6 lg:px-8 py-5 lg:py-6 flex flex-col gap-1">
             <span class="font-unbounded font-medium text-[44px] lg:text-[56px] leading-none text-vert-600">{{ practitionerCount }}</span>
-            <span class="text-[15px] lg:text-[16px] text-neutre-600 whitespace-nowrap">praticiens référencés en {{ medicine.name.toLowerCase() }}</span>
+            <span class="text-[15px] lg:text-[16px] text-neutre-600">praticiens référencés en {{ medicine.name.toLowerCase() }}</span>
           </div>
         </div>
       </div>
@@ -139,11 +140,12 @@
       <p class="text-[14px] font-medium uppercase tracking-[0.08em] text-vert-600 mb-4">La séance</p>
       <h2 id="med-steps" class="font-unbounded font-normal text-[26px] sm:text-[32px] lg:text-[40px] leading-[1.2] text-vert-900">Comment se passe une séance ?</h2>
 
-      <ol class="mt-10 lg:mt-14 grid grid-cols-1 md:grid-cols-4 gap-x-8 gap-y-10">
+      <ol class="relative mt-10 lg:mt-14 grid grid-cols-1 md:grid-cols-4 gap-x-8 gap-y-10">
+        <!-- Trait continu derrière les cercles (maquette) : du centre du 01 jusqu'un peu après le 04 -->
+        <li class="hidden md:block absolute z-0 h-[2px] bg-corail-500/50 top-[36px] left-[36px] w-[calc(75%+112px)] lg:top-[44px] lg:left-[44px] lg:w-[calc(75%+120px)]" aria-hidden="true"></li>
         <li v-for="(step, i) in medicine.steps" :key="step.title" class="relative">
           <div class="flex items-center">
-            <span class="w-[72px] h-[72px] lg:w-[88px] lg:h-[88px] shrink-0 rounded-full bg-white shadow-douce flex items-center justify-center font-unbounded text-[18px] lg:text-[20px] text-corail-500">{{ String(i + 1).padStart(2, '0') }}</span>
-            <span v-if="i < medicine.steps.length - 1" class="hidden md:block h-[2px] flex-1 bg-corail-500/30" aria-hidden="true"></span>
+            <span class="relative z-10 w-[72px] h-[72px] lg:w-[88px] lg:h-[88px] shrink-0 rounded-full bg-white shadow-douce flex items-center justify-center font-unbounded text-[18px] lg:text-[20px] text-corail-500">{{ String(i + 1).padStart(2, '0') }}</span>
           </div>
           <h3 class="mt-6 font-unbounded font-normal text-[18px] lg:text-[20px] text-vert-900">{{ step.title }}</h3>
           <p class="mt-3 text-[16px] lg:text-[18px] leading-snug text-neutre-600 max-w-[290px]">{{ step.description }}</p>
@@ -180,7 +182,7 @@
       <!-- Question à Léya -->
       <div class="relative mt-28 lg:mt-[130px] mx-auto max-w-[520px]">
         <div class="absolute z-0 w-[110px] sm:w-[150px] right-[8%] sm:right-[43px] -top-[84px] sm:-top-[112px] -scale-x-100 pointer-events-none" aria-hidden="true">
-          <img src="/images/landing/mascotte-panda.webp" alt="" width="223" height="193" class="w-full h-auto" />
+          <img src="/images/landing/mascotte-panda.webp" alt="" width="223" height="193" class="panda--sur-vert w-full h-auto" />
         </div>
         <div class="relative z-10 bg-vert-600 rounded-[32px] p-8 lg:p-10 text-white">
           <h2 class="font-unbounded font-normal text-[22px] lg:text-[26px] leading-tight">Une question sur {{ medicine.nameWithArticle }} ?</h2>

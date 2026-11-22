@@ -28,6 +28,14 @@
 
       <form v-else class="grid gap-3" @submit.prevent="submit">
         <p class="text-[16px] leading-snug text-neutre-600">Un administrateur vérifie chaque demande. Les identifiants facilitent la vérification.</p>
+        <!-- Le compte a déjà sa fiche : il ne doit en rester qu'une -->
+        <fieldset v-if="praticienId" class="grid gap-2">
+          <legend class="text-[16px] font-medium mb-1">Vous avez déjà une fiche sur Léya. Après vérification :</legend>
+          <label v-for="option in MODES" :key="option.value" class="flex items-start gap-3 rounded-2xl border border-bleu-100 px-4 py-3 text-[16px] cursor-pointer">
+            <input v-model="mode" type="radio" name="claim-mode" :value="option.value" class="mt-1 accent-[#156F71]" />
+            <span><span class="font-semibold">{{ option.label }}</span><br /><span class="text-[14px] text-neutre-600">{{ option.help }}</span></span>
+          </label>
+        </fieldset>
         <label class="grid gap-1 text-[16px] font-medium" for="claim-message">
           Message
           <textarea id="claim-message" v-model="message" rows="3" maxlength="500" class="field font-normal" placeholder="Je suis ce praticien, mon cabinet est situé…"></textarea>
@@ -72,6 +80,11 @@ const siret = ref('')
 const sending = ref(false)
 const done = ref(false)
 const errorMessage = ref('')
+const mode = ref('takeover')
+const MODES = [
+  { value: 'takeover', label: 'Reprendre cette fiche', help: 'Vous la modifiez ensuite ; vos prestations et horaires actuels y sont transférés, votre fiche actuelle est supprimée.' },
+  { value: 'replace', label: 'Garder ma fiche actuelle', help: 'Elle remplace celle-ci, qui est supprimée ; sa note Google et ses informations manquantes sont reprises.' },
+]
 
 const removalLink = computed(() => {
   const subject = `Demande de retrait ou de correction — fiche ${props.praticien.firstName} ${props.praticien.lastName} (n° ${props.praticien.id})`
@@ -86,7 +99,7 @@ async function submit() {
   try {
     await $fetch(`/api/backend/praticiens/${props.praticien.id}/claim-requests`, {
       method: 'POST',
-      body: { message: message.value.trim(), rpps: rpps.value, siret: siret.value },
+      body: { message: message.value.trim(), rpps: rpps.value, siret: siret.value, ...(praticienId.value ? { mode: mode.value } : {}) },
     })
     done.value = true
   } catch (e) {

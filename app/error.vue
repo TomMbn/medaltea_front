@@ -19,12 +19,12 @@
 
       <!-- 4 · panda · 4 -->
       <!-- Comme dans la maquette, la rangée coupe l'anneau en haut et en bas (grand écran) -->
-      <div class="relative flex items-center gap-2 lg:overflow-hidden" :aria-label="is404 ? 'Erreur 404' : `Erreur ${code}`" role="img">
+      <div class="panda-zone relative flex items-center gap-2 lg:overflow-hidden" :aria-label="is404 ? 'Erreur 404' : `Erreur ${code}`" role="img">
         <span v-if="is404" class="digit font-unbounded font-normal leading-[1.214]">4</span>
         <span class="disc relative inline-flex items-center justify-center shrink-0" aria-hidden="true">
           <img src="/images/erreur/anneau.svg" alt="" class="halo absolute max-w-none" width="460" height="460" style="animation: none;" />
           <span class="absolute inset-0 rounded-full bg-corail-500"></span>
-          <img src="/images/pro/mascotte-pro.webp" alt="" class="relative h-[88%] w-auto" width="254" height="300" style="animation: none;" />
+          <img src="/images/pro/mascotte-pro.webp" alt="" class="panda relative h-[88%] w-auto" width="254" height="300" />
           <span class="absolute left-1/2 -translate-x-1/2 -top-3 sm:left-[63%] sm:translate-x-0 sm:top-[2%] rounded-full bg-white px-[18px] py-[10px] text-[16px] font-medium leading-[normal] whitespace-nowrap shadow-douce">{{ is404 ? 'On cherche ensemble ?' : 'On réessaie ?' }}</span>
         </span>
         <span v-if="is404" class="digit font-unbounded font-normal leading-[1.214]">4</span>

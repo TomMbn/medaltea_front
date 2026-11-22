@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { RULES, stripPrivate, validateListQuery, validateAppointment, validatePraticienUpdate, validatePreferences, pick, validateBookingRequest, validateBookingAccept, validateBookingDecline, validateUnsubscribe } from '../../server/api/backend/[...path]'
+import { RULES, stripPrivate, validateListQuery, validateAppointment, validatePraticienUpdate, validatePreferences, validateClaim, validateStatsQuery, pick, validateBookingRequest, validateBookingAccept, validateBookingDecline, validateUnsubscribe } from '../../server/api/backend/[...path]'
 import unsubscribeOneClick from '../../server/api/desinscription-praticien.post'
 
 // Passerelle front → backend : seules les routes listées sont relayées. Ces tests protègent la liste blanche.
@@ -20,6 +20,7 @@ describe('passerelle : liste blanche des routes', () => {
       ['GET', 'praticiens/me'], ['GET', 'praticiens/me/appointments'], ['GET', 'praticiens/me/stats'],
       ['POST', 'push/subscriptions'], ['POST', 'praticiens/me/calendar-token'],
       ['GET', 'admin/praticiens'], ['GET', 'admin/claim-requests'], ['PATCH', 'admin/claim-requests/3'], ['PATCH', 'praticiens/4/verification'],
+      ['GET', 'praticiens/me/duplicates'], ['POST', 'praticiens/me/duplicates/dismiss'], ['POST', 'praticiens/4/claim-requests'],
     ]
     for (const [method, path] of protectedRoutes) expect(find(method, path)?.auth, `${method} ${path}`).toBe(true)
   })
@@ -206,6 +207,56 @@ describe('passerelle : demandes de rendez-vous (praticien non réservable)', () 
     expect(validateUnsubscribe({ praticienId: '12', token })).toEqual({ praticienId: 12, token })
     for (const bad of [{ praticienId: 'x', token }, { praticienId: 12 }, { praticienId: 12, token: 'a b' }, { praticienId: 12, token: 'a'.repeat(65) }]) {
       expect(() => validateUnsubscribe(bad), JSON.stringify(bad)).toThrow()
+    }
+  })
+})
+
+describe('passerelle : doublons de fiches', () => {
+  it('relaie le choix reprendre / remplacer de la revendication, et rien d’autre', () => {
+    expect(find('POST', 'praticiens/4/claim-requests')!.body).toContain('mode')
+    expect(validateClaim({ mode: 'takeover' })).toEqual({ mode: 'takeover' })
+    expect(validateClaim({ mode: 'replace', message: 'm' })).toEqual({ mode: 'replace', message: 'm' })
+    expect(validateClaim({})).toEqual({})
+    expect(() => validateClaim({ mode: 'delete' })).toThrow()
+  })
+})
+
+describe('passerelle : statistiques d\'administration', () => {
+  const STATS = ['admin/stats/overview', 'admin/stats/signups', 'admin/stats/bookings', 'admin/stats/requests', 'admin/stats/economy']
+
+  it('relaie les cinq routes en lecture, avec authentification, sans cache partagé ni champs privés', () => {
+    for (const path of STATS) {
+      const rule = find('GET', path)
+      expect(rule?.auth, path).toBe(true)
+      expect(rule?.cacheable, path).toBeFalsy()
+      expect(rule?.own, path).toBeFalsy()
+      expect(rule?.body, path).toBeUndefined()
+    }
+  })
+
+  it('ne transmet que la période, et aucun paramètre pour economy', () => {
+    for (const path of STATS.slice(0, 4)) expect(find('GET', path)?.query, path).toEqual(['days'])
+    expect(find('GET', 'admin/stats/economy')?.query).toBeUndefined()
+  })
+
+  it('refuse les autres chemins et les autres méthodes', () => {
+    for (const path of ['admin/stats', 'admin/stats/', 'admin/stats/users', 'admin/stats/overview/x', 'admin/stats/../praticiens', 'admin/stats/Overview']) {
+      expect(find('GET', path), path).toBeUndefined()
+    }
+    for (const method of ['POST', 'PUT', 'PATCH', 'DELETE']) expect(find(method, 'admin/stats/overview'), method).toBeUndefined()
+  })
+
+  it('accepte 7, 30 ou 90 jours, ou aucune période', () => {
+    for (const query of [{ days: '7' }, { days: '30' }, { days: '90' }, {}, undefined]) {
+      expect(() => validateStatsQuery(query), JSON.stringify(query)).not.toThrow()
+    }
+  })
+
+  it('refuse toute autre période avec une erreur 400', () => {
+    for (const days of ['15', '7abc', '', '-7', '7.0', ['7', '30'], 7.5, null]) {
+      let error: any
+      try { validateStatsQuery({ days }) } catch (e) { error = e }
+      expect(error?.statusCode, JSON.stringify(days)).toBe(400)
     }
   })
 })

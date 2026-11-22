@@ -10,7 +10,7 @@ Production : <https://leya-sante.fr> — Ce dépôt contient le **site** (Nuxt 4
 |---|---|
 | Visiteur / patient | Assistant IA (réponses structurées, médecines suggérées, praticiens proches), pages de médecines, recherche par ville (rayon de 15 km), nom, médecine et filtres, **carte** (Leaflet + OpenStreetMap), fiche praticien, réservation (avec compte ou sans compte), export iCal, « Mes rendez-vous », préférences de recherche, export et suppression des données |
 | Praticien | Tableau de bord, agenda (jour, semaine, mois), rendez-vous (confirmer, refuser, proposer un autre créneau), fiche avec aperçu en direct, horaires, absences, prestations, statistiques de vues, lien d'abonnement à l'agenda (iCal), notifications push |
-| Administration | Demandes de revendication de fiches (approuver, refuser), badge « Profil vérifié » |
+| Administration | Cockpit de supervision (inscriptions, réservations, demandes, estimations économiques), demandes de revendication de fiches (approuver, refuser), badge « Profil vérifié » |
 | Transverse | PWA installable et notifications web push, **démo praticien** (`/demo`, données fictives, entièrement dans le navigateur), SEO (sitemap, données structurées), mesure d'audience respectueuse (Umami, sans cookie), pages légales |
 
 ## Architecture
@@ -81,6 +81,7 @@ Sans clé Gemini, tout le site fonctionne sauf les réponses de l'assistant. San
 | `NUXT_PUBLIC_GUEST_BOOKING` | Active la réservation sans compte en production (`true`) | Non |
 | `NUXT_PUBLIC_TURNSTILE_SITE_KEY` | Clé **publique** Cloudflare Turnstile (anti-robot) | Réservation sans compte |
 | `NUXT_PUBLIC_UMAMI_HOST`, `NUXT_PUBLIC_UMAMI_WEBSITE_ID`, `NUXT_PUBLIC_UMAMI_DOMAINS` | Mesure d'audience | Non |
+| `NUXT_PUBLIC_ADMIN_LINKS_GRAFANA`, `NUXT_PUBLIC_ADMIN_LINKS_UMAMI` | Adresses de Grafana et d'Umami, affichées en lien dans le cockpit `/admin` (vide ou autre que `https://` : pas de lien). Comme toute variable `NUXT_PUBLIC_*`, la valeur est lisible dans le code source des pages publiques : à ne renseigner qu'avec l'accord du responsable de l'infrastructure | Non |
 
 Les secrets ne sont jamais commités (`.env` est ignoré par git ; seul `.env.example` est versionné).
 

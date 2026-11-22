@@ -46,6 +46,7 @@ flowchart LR
 | 11 | Statistiques d'usage | Améliorer le service | Utilisateurs connectés | Type d'action, date, rôle, identifiant pseudonymisé | Intérêt légitime | Équipe | 13 mois | Droit d'opposition dans « Mon compte » |
 | 12 | Carte | Afficher la carte | Visiteurs | Adresse IP, zone affichée | Intérêt légitime | OpenStreetMap | Selon OpenStreetMap | Mentionné dans la politique ; carte non chargée hors vue Carte et fiche |
 | 13 | Hébergement | Servir le site | Tous | Journaux techniques (IP, URL) | Intérêt légitime | Vercel | Selon l'hébergeur | Voir « points à traiter » |
+| 14 | Supervision interne (cockpit `/admin`) | Piloter l'activité de la plateforme | Patients, praticiens | Indicateurs agrégés issus des traitements 1, 2, 5, 6 et 11 (compteurs, taux, délais) ; aucune donnée nominative | Intérêt légitime (à valider, voir « points à traiter ») | Équipe d'administration | Non conservés : calculés à la demande | Routes réservées au rôle administrateur ; lecture seule ; aucune liste de patients ; offre par ville et par spécialité limitée aux fiches publiques |
 
 ## Points à traiter
 
@@ -55,3 +56,4 @@ flowchart LR
 4. **Analyse d'impact (AIPD)** : le traitement 4 (messages pouvant révéler de la santé, sous-traitant hors UE) justifie d'en faire une, même légère : voir [aipd.md](aipd.md).
 5. **Données de santé** : le motif d'un rendez-vous peut en contenir ; le consentement doit être recueilli au moment de la saisie (c'est le cas pour la réservation sans compte via `consentHealthData`).
 6. **Fiches non revendiquées** : droit d'opposition et de retrait déjà prévus ; vérifier la procédure interne (délai d'un mois).
+7. **Supervision interne (traitement 14)** : base légale à valider. Les découpages fins (ville avec une seule fiche, semaine avec très peu d'inscrits) ne sont pas masqués par un seuil minimal ; le journal des accès administrateur n'existe pas encore.

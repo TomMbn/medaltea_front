@@ -36,7 +36,7 @@ async function expectAccessible(page: Page) {
 
 test.describe('cockpit admin : accès', () => {
   test('sans session, les pages du cockpit renvoient vers la connexion', async ({ page }) => {
-    for (const path of ['/admin']) {
+    for (const path of ['/admin', '/admin/inscriptions', '/admin/reservations', '/admin/demandes', '/admin/economie']) {
       await page.goto(path)
       await expect(page, path).toHaveURL(/login/)
     }
@@ -118,3 +118,148 @@ test.describe('cockpit admin : vue d\'ensemble', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Vue d’ensemble' })).toBeVisible()
   })
 })
+
+const PERIOD = { days: 30, from: '2026-10-24', to: '2026-11-22' }
+
+const SIGNUPS = {
+  period: PERIOD,
+  newAccounts: { patients: 3, pros: 1 },
+  accountsDeleted: 1,
+  activeUsers: { all: 40, patients: 34, pros: 6 },
+  weekly: [{ week: '2026-11-09', patients: 1, pros: 0 }, { week: '2026-11-16', patients: 2, pros: 1 }],
+  patientActivation: { signedUp: 3, bookedRate: 0.3333, medianDays: 2 },
+  proActivation: { signedUp: 1, completeRate: 0, medianDays: null },
+  retention: [{ week: '2026-11-09', accounts: 12, week1: 0.5, week2: 0.25, week4: 0 }],
+}
+
+const BOOKINGS = {
+  period: PERIOD,
+  booked: 6,
+  honoured: 2,
+  cancellationRate: 0.3333,
+  noShowRate: 0.25,
+  praticiensWithBooking: 1,
+  leadTime: { medianDays: 4.5, under48hRate: 0.2 },
+  confirmationDelay: { medianHours: 6, confirmations: 4 },
+  weekly: [
+    { week: '2026-11-09', completed: 2, confirmed: 0, pending: 0, noShow: 1, cancelledByUser: 1, cancelledByPraticien: 0 },
+    { week: '2026-11-16', completed: 0, confirmed: 1, pending: 0, noShow: 0, cancelledByUser: 0, cancelledByPraticien: 1 },
+  ],
+  fillRateWeekly: [{ week: '2026-11-09', rate: 0.12 }, { week: '2026-11-16', rate: null }],
+  supply: {
+    managed: 35,
+    bookable: 20,
+    unclaimed: 1400,
+    bySpeciality: [{ name: 'Naturopathie', visible: 42, bookable: 6 }],
+    byCity: [{ city: 'Angers', visible: 120, bookable: 9 }],
+  },
+}
+
+const REQUESTS = {
+  period: PERIOD,
+  pending: 1,
+  received: 3,
+  approvalRate: 0.5,
+  avgProcessingDays: 3,
+  weekly: [{ week: '2026-11-09', approved: 1, rejected: 1, pending: 1 }],
+}
+
+const ECONOMY = {
+  windowWeeks: 26,
+  assumptions: { subscriptionPrice: 99, monthlyMarketingBudget: null },
+  managedListings: 35,
+  theoreticalMonthlyRevenue: 3465,
+  newClients: 12,
+  monthlyChurn: 0.1,
+  churnByMonth: [{ month: '2026-10', rate: 0.1 }],
+  cac: null,
+  ltv: 990,
+  roas: null,
+}
+
+test.describe('cockpit admin : pages d\'indicateurs', () => {
+  test.beforeEach(async ({ page, baseURL }) => { await asAdmin(page, baseURL) })
+  const tile = (page: Page, id: string) => page.getByTestId(`tile-${id}`)
+
+  test('inscriptions : comptes créés, activation et tableau de rétention', async ({ page }) => {
+    await stats(page, 'signups', SIGNUPS)
+    await page.goto('/admin/inscriptions')
+    await expect(page.getByRole('heading', { level: 1, name: 'Inscriptions' })).toBeVisible()
+    await expect(tile(page, 'newPatients')).toContainText('3')
+    await expect(tile(page, 'newPros')).toContainText('1')
+    await expect(tile(page, 'patientActivation')).toContainText('33,3 %')
+    await expect(tile(page, 'proActivation')).toContainText('0 %')
+    const retention = page.getByRole('table', { name: /Rétention/ })
+    await expect(retention.getByRole('row')).toHaveCount(2)
+    await expect(retention).toContainText('9 novembre 2026')
+    await expect(retention).toContainText('50 %')
+    await expect(page.getByRole('figure', { name: /Comptes créés par semaine/ })).toBeVisible()
+    await expectAccessible(page)
+  })
+
+  test('inscriptions : message clair quand la base de tracking est indisponible (503)', async ({ page }) => {
+    await stats(page, 'signups', { statusCode: 503, message: 'Statistiques indisponibles' }, 503)
+    await page.goto('/admin/inscriptions')
+    await expect(page.getByRole('alert')).toContainText('Les statistiques d’inscription sont indisponibles')
+  })
+
+  test('réservations : taux, graphique hebdomadaire avec ses données, offre', async ({ page }) => {
+    await stats(page, 'bookings', BOOKINGS)
+    await page.goto('/admin/reservations')
+    await expect(page.getByRole('heading', { level: 1, name: 'Réservations' })).toBeVisible()
+    await expect(tile(page, 'booked')).toContainText('6')
+    await expect(tile(page, 'cancellationRate')).toContainText('33,3 %')
+    await expect(tile(page, 'confirmationDelay')).toContainText('6 h')
+    const chart = page.getByRole('figure', { name: /RDV pris par semaine/ })
+    await expect(chart).toBeVisible()
+    await chart.getByText('Voir les données').click()
+    await expect(chart.getByRole('table')).toContainText('Annulés')
+    await expect(chart.getByRole('table').getByRole('row')).toHaveCount(3)
+    await expect(page.getByRole('table', { name: /Offre par spécialité/ })).toContainText('Naturopathie')
+    await expect(page.getByRole('table', { name: /Offre par ville/ })).toContainText('Angers')
+    await expectAccessible(page)
+  })
+
+  test('réservations : séries vides et valeurs absentes sans erreur', async ({ page }) => {
+    await stats(page, 'bookings', {
+      ...BOOKINGS,
+      booked: 0,
+      cancellationRate: null,
+      confirmationDelay: null,
+      weekly: [],
+      fillRateWeekly: [],
+      supply: { managed: 0, bookable: 0, unclaimed: 0, bySpeciality: [], byCity: [] },
+    })
+    await page.goto('/admin/reservations')
+    await expect(tile(page, 'cancellationRate')).toContainText('–')
+    await expect(tile(page, 'confirmationDelay')).toContainText('–')
+    await expect(page.getByRole('figure', { name: /RDV pris par semaine/ })).toContainText('Aucune donnée sur la période')
+  })
+
+  test('demandes : indicateurs et liens vers les pages de traitement', async ({ page }) => {
+    await stats(page, 'requests', REQUESTS)
+    await page.goto('/admin/demandes')
+    await expect(page.getByRole('heading', { level: 1, name: 'Demandes des praticiens' })).toBeVisible()
+    await expect(tile(page, 'pending')).toContainText('1')
+    await expect(tile(page, 'approvalRate')).toContainText('50 %')
+    await expect(tile(page, 'avgProcessingDays')).toContainText('3 jours')
+    await expect(page.getByRole('link', { name: 'Traiter les revendications' })).toHaveAttribute('href', '/admin/revendications')
+    await expect(page.getByRole('link', { name: 'Vérifier les fiches' })).toHaveAttribute('href', '/admin/fiches')
+    await expectAccessible(page)
+  })
+
+  test('économie : estimations affichées avec leurs hypothèses, tiret sans budget', async ({ page }) => {
+    await stats(page, 'economy', ECONOMY)
+    await page.goto('/admin/economie')
+    await expect(page.getByRole('heading', { level: 1, name: 'Économie' })).toBeVisible()
+    await expect(page.getByTestId('assumptions')).toContainText('Estimations')
+    await expect(page.getByTestId('assumptions')).toContainText('99 €')
+    await expect(page.getByTestId('assumptions')).toContainText('non renseigné')
+    await expect(tile(page, 'revenue')).toContainText(/3\s465 €/)
+    await expect(tile(page, 'ltv')).toContainText('990 €')
+    await expect(tile(page, 'cac')).toContainText('–')
+    await expect(tile(page, 'churn')).toContainText('10 %')
+    await expectAccessible(page)
+  })
+})
+

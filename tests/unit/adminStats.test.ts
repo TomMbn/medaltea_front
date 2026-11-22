@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest'
-import { EMPTY_VALUE, formatCount, formatRate, formatEuros, formatDays, formatHours, trendLabel, stackBars } from '~/utils/adminStats'
+import { EMPTY_VALUE, formatCount, formatRate, formatEuros, formatDays, formatHours, formatRatio, formatStatsDay, formatStatsShortDay, formatStatsMonth, trendLabel, stackBars } from '~/utils/adminStats'
 
 // Intl sépare les milliers par une espace fine insécable : on la ramène à une espace simple pour comparer
 const plain = (s: string) => s.replace(/\s/g, ' ')
 
 describe('cockpit admin : formatage des indicateurs (utils/adminStats)', () => {
   it('affiche un tiret quand la valeur est absente, jamais « null » ni « NaN »', () => {
-    for (const format of [formatCount, formatRate, formatEuros, formatDays, formatHours]) {
+    for (const format of [formatCount, formatRate, formatEuros, formatDays, formatHours, formatRatio]) {
       expect(format(null)).toBe(EMPTY_VALUE)
       expect(format(undefined)).toBe(EMPTY_VALUE)
       expect(format(Number.NaN)).toBe(EMPTY_VALUE)
@@ -37,6 +37,25 @@ describe('cockpit admin : formatage des indicateurs (utils/adminStats)', () => {
     expect(plain(formatDays(1.5))).toBe('1,5 jour')
     expect(plain(formatDays(0))).toBe('0 jour')
     expect(plain(formatHours(6))).toBe('6 h')
+  })
+})
+
+describe('cockpit admin : ratios et dates', () => {
+  it('formate un ratio avec deux décimales au plus', () => {
+    expect(formatRatio(0.55)).toBe('0,55')
+    expect(formatRatio(2)).toBe('2')
+  })
+
+  it('formate les jours et les mois renvoyés par l\'API (YYYY-MM-DD, YYYY-MM), sans décalage de fuseau', () => {
+    expect(formatStatsDay('2026-11-09')).toBe('9 novembre 2026')
+    expect(formatStatsDay('2026-01-01')).toBe('1 janvier 2026')
+    expect(formatStatsShortDay('2026-11-09')).toBe('9 nov.')
+    expect(formatStatsMonth('2026-10')).toBe('octobre 2026')
+  })
+
+  it('rend le texte reçu tel quel si ce n\'est pas une date', () => {
+    expect(formatStatsDay('bientôt')).toBe('bientôt')
+    expect(formatStatsMonth('')).toBe('')
   })
 })
 

@@ -24,7 +24,7 @@
       <ul class="mt-6 grid grid-cols-[minmax(0,1fr)] sm:grid-cols-2 lg:grid-cols-3 gap-5" data-testid="tiles">
         <AdminStatTile v-for="t in tiles" :key="t.id" :testid="`tile-${t.id}`" :label="t.label" :value="t.value" :trend="t.trend" :hint="t.hint" />
       </ul>
-      <p class="mt-4 text-[14px] text-neutre-600">Du {{ formatDay(stats.period.from) }} au {{ formatDay(stats.period.to) }}. Évolution par rapport aux {{ stats.period.days }} jours précédents.</p>
+      <p class="mt-4 text-[14px] text-neutre-600">Du {{ formatStatsDay(stats.period.from) }} au {{ formatStatsDay(stats.period.to) }}. Évolution par rapport aux {{ stats.period.days }} jours précédents.</p>
     </template>
 
     <AdminAnalysisLinks />
@@ -32,17 +32,12 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 
 definePageMeta({ layout: 'admin', middleware: ['admin'] })
 useSeoMeta({ title: 'Vue d’ensemble — Administration Léya', robots: 'noindex, nofollow' })
 
-const DEFAULT_DAYS = 30
-const days = ref(DEFAULT_DAYS)
-// Chargé dans le navigateur : la passerelle ajoute le jeton, le backend vérifie le rôle admin
-const { data: stats, error } = useAsyncData('admin-stats-overview', () => $fetch('/api/backend/admin/stats/overview', { query: { days: days.value } }), { server: false, lazy: true, watch: [days], default: () => null })
-
-const formatDay = (day) => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${day}T00:00:00Z`))
+const { days, stats, error } = useAdminStats('overview')
 
 const TILES = [
   { id: 'newPatients', label: 'Nouveaux patients' },

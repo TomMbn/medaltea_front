@@ -116,6 +116,18 @@ test.describe('admin : onglet Prospection', () => {
     await expect(jeanne).not.toContainText('À traiter')
   })
 
+  test('statut refusé par le serveur (409) : le sélecteur revient au statut enregistré, message affiché', async ({ page }) => {
+    await mockApi(page)
+    await page.route('**/api/backend/admin/prospects/12', route => (route.request().method() === 'PATCH'
+      ? route.fulfill({ status: 409, json: { statusCode: 409, message: 'Désinscrit' } })
+      : route.fallback()))
+    await page.goto('/admin/prospection')
+    const jeanne = card(page, 'Jeanne Martin')
+    await jeanne.getByLabel('Statut').selectOption('contacted')
+    await expect(jeanne.getByRole('alert')).toContainText('ne doit plus être sollicité')
+    await expect(jeanne.getByLabel('Statut')).toHaveValue('to_contact')
+  })
+
   test('noter un appel avec une note, puis l’historique', async ({ page }) => {
     const calls = await mockApi(page)
     await page.goto('/admin/prospection')

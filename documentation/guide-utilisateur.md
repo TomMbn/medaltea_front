@@ -83,9 +83,9 @@ Le rôle est attribué côté serveur (aucune inscription publique). L'équipe s
 | Inscrit | Posé automatiquement quand le praticien revendique sa fiche |
 | Collaboration signée | Accord conclu |
 | Pas intéressé, Injoignable | Suivi clos ; une nouvelle demande de patient le rouvre en « À contacter » |
-| Ne pas contacter | Posé automatiquement si le praticien se désinscrit des e-mails de Léya ; le statut ne peut alors plus être changé et seule une note interne reste possible |
+| Ne pas contacter | Posé automatiquement si le praticien se désinscrit des e-mails de Léya, ou choisi par l'équipe quand il s'oppose à être sollicité (au téléphone, par exemple). Dans les deux cas, Léya ne lui envoie plus aucun e-mail, le statut ne peut plus être changé et seule une note interne reste possible |
 
-Les suivis sans activité depuis 3 ans sont supprimés, sauf collaboration signée ou opposition. Aucune donnée de patient n'apparaît dans cet onglet.
+Les suivis sans activité depuis 3 ans (aucun contact, aucune nouvelle demande de patient, aucune modification) sont supprimés, sauf collaboration signée ou opposition. Aucune donnée de patient n'apparaît dans cet onglet.
 
 Définition des indicateurs :
 

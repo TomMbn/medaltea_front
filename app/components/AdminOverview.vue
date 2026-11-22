@@ -62,6 +62,8 @@ const todo = computed(() => {
     const oldest = h.oldestPendingClaimDays == null ? '' : `, la plus ancienne depuis ${h.oldestPendingClaimDays < 1 ? 'moins d’un jour' : formatDays(h.oldestPendingClaimDays)}`
     items.push({ text: `${countLabel(h.pendingClaims, 'demande', 'demandes')} de revendication en attente${oldest}`, to: '/admin/revendications', action: 'Traiter les demandes' })
   }
+  if (h.prospectsToContact > 0) items.push({ text: `${countLabel(h.prospectsToContact, 'praticien demandé par des patients', 'praticiens demandés par des patients')} à contacter`, to: '/admin/prospection', action: 'Ouvrir la prospection' })
+  if (h.prospectFollowUpsDue > 0) items.push({ text: `${countLabel(h.prospectFollowUpsDue, 'relance de prospection due', 'relances de prospection dues')}`, to: '/admin/prospection', action: 'Ouvrir la prospection' })
   if (h.chatQuotaReached > 0) items.push({ text: `Quota de l’assistant atteint ${formatCount(h.chatQuotaReached)} fois sur la période` })
   return items
 })

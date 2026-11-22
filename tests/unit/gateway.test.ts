@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { RULES, stripPrivate, validateListQuery, validateAppointment, validatePraticienUpdate, validatePreferences, validateClaim, validateStatsQuery, pick, validateBookingRequest, validateBookingAccept, validateBookingDecline, validateUnsubscribe } from '../../server/api/backend/[...path]'
+import { RULES, stripPrivate, validateListQuery, validateAppointment, validatePraticienUpdate, validatePreferences, validateClaim, validateStatsQuery, validateProspectQuery, validateProspectUpdate, validateProspectEvent, pick, validateBookingRequest, validateBookingAccept, validateBookingDecline, validateUnsubscribe } from '../../server/api/backend/[...path]'
 import unsubscribeOneClick from '../../server/api/desinscription-praticien.post'
 
 // Passerelle front → backend : seules les routes listées sont relayées. Ces tests protègent la liste blanche.
@@ -297,3 +297,69 @@ describe('désinscription en un clic (RFC 8058)', () => {
     error.mockRestore()
   })
 })
+
+describe('passerelle : prospection des praticiens (administration)', () => {
+  const status = (fn: () => unknown) => {
+    try { fn(); return 200 } catch (error: any) { return error.statusCode }
+  }
+
+  it('relaie les cinq routes avec authentification, sans cache, et seulement les champs prévus', () => {
+    const routes: [string, string, string[] | undefined][] = [
+      ['GET', 'admin/prospects', undefined],
+      ['GET', 'admin/prospects/summary', undefined],
+      ['GET', 'admin/prospects/12/events', undefined],
+      ['PATCH', 'admin/prospects/12', ['status', 'nextActionAt', 'note']],
+      ['POST', 'admin/prospects/12/events', ['kind', 'note']],
+    ]
+    for (const [method, path, body] of routes) {
+      const rule = find(method, path)
+      expect(rule?.auth, `${method} ${path}`).toBe(true)
+      expect(rule?.cacheable, `${method} ${path}`).toBeFalsy()
+      expect(rule?.body, `${method} ${path}`).toEqual(body)
+    }
+    expect(find('GET', 'admin/prospects')?.query).toEqual(['status', 'q'])
+    // L'e-mail de la fiche est utile à l'équipe : la liste et la mise à jour gardent les champs privés
+    expect(find('GET', 'admin/prospects')?.own).toBe(true)
+    expect(find('PATCH', 'admin/prospects/12')?.own).toBe(true)
+    // Effacer la prochaine relance : la valeur null doit être transmise
+    expect(find('PATCH', 'admin/prospects/12')?.keepEmpty).toBe(true)
+  })
+
+  it('refuse les autres verbes et chemins', () => {
+    for (const [method, path] of [
+      ['POST', 'admin/prospects'], ['DELETE', 'admin/prospects/12'], ['PUT', 'admin/prospects/12'],
+      ['GET', 'admin/prospects/12'], ['PATCH', 'admin/prospects/abc'], ['GET', 'admin/prospects/12/events/3'],
+      ['DELETE', 'admin/prospects/12/events'], ['GET', 'admin/prospects/summary/x'],
+    ]) expect(find(method, path), `${method} ${path}`).toBeUndefined()
+  })
+
+  it('liste : filtre parmi les valeurs connues, recherche de 100 caractères au plus', () => {
+    for (const query of [{}, undefined, { status: 'open' }, { status: 'alerts' }, { status: 'do_not_contact' }, { q: 'martin' }]) {
+      expect(status(() => validateProspectQuery(query)), JSON.stringify(query)).toBe(200)
+    }
+    for (const query of [{ status: 'gagné' }, { status: ['open', 'closed'] }, { q: 'x'.repeat(101) }, { q: ['a', 'b'] }]) {
+      expect(status(() => validateProspectQuery(query)), JSON.stringify(query)).toBe(400)
+    }
+  })
+
+  it('mise à jour : statut connu, relance ISO ou null, note de 1 000 caractères au plus, au moins un champ', () => {
+    expect(validateProspectUpdate({ status: 'contacted', nextActionAt: '2026-11-25T09:00:00.000Z', note: 'Rappeler' }))
+      .toEqual({ status: 'contacted', nextActionAt: '2026-11-25T09:00:00.000Z', note: 'Rappeler' })
+    expect(validateProspectUpdate({ nextActionAt: null })).toEqual({ nextActionAt: null })
+    expect(validateProspectUpdate({ note: 'x'.repeat(1000) })).toEqual({ note: 'x'.repeat(1000) })
+    for (const body of [{}, { status: 'gagné' }, { nextActionAt: 'mardi' }, { nextActionAt: 12 }, { note: 'x'.repeat(1001) }, { note: 3 }]) {
+      expect(status(() => validateProspectUpdate(body)), JSON.stringify(body)).toBe(400)
+    }
+  })
+
+  it('journal : appel, e-mail, rendez-vous ou note, rien d’autre', () => {
+    for (const kind of ['call', 'email', 'meeting', 'note']) {
+      expect(validateProspectEvent({ kind, note: 'ok' })).toEqual({ kind, note: 'ok' })
+    }
+    expect(validateProspectEvent({ kind: 'call' })).toEqual({ kind: 'call' })
+    for (const body of [{}, { kind: 'request' }, { kind: 'status' }, { kind: 'sms' }, { kind: 'note', note: 'x'.repeat(1001) }]) {
+      expect(status(() => validateProspectEvent(body)), JSON.stringify(body)).toBe(400)
+    }
+  })
+})
+

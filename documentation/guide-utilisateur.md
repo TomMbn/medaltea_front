@@ -61,6 +61,7 @@ Le rôle est attribué côté serveur (aucune inscription publique). L'équipe s
 | **Réservations** | RDV pris et honorés, taux d'annulation et d'absence, délais, taux de remplissage, et offre de l'annuaire par spécialité et par ville. |
 | **Demandes** | Demandes de revendication : en attente, reçues, taux d'approbation, délai moyen de traitement. Deux boutons mènent aux pages Revendications et Fiches. |
 | **Économie** | Estimations sur 26 semaines : revenu mensuel théorique, churn, CAC, LTV, ROAS. Les hypothèses (prix de l'abonnement, budget marketing) sont affichées au-dessus des chiffres. |
+| **Prospection** | Praticiens pas encore inscrits qu'un patient a voulu réserver. Pour chacun : demandes de patients (nombre seulement), téléphone, e-mail, statut, prochaine relance, notes et historique des contacts. La pastille de l'onglet compte les praticiens à contacter et les relances dues. |
 
 À savoir pour lire ces chiffres :
 - Un tiret « – » signifie que l'indicateur n'est pas calculable (pas de donnée, ou source indisponible), jamais zéro.
@@ -70,6 +71,21 @@ Le rôle est attribué côté serveur (aucune inscription publique). L'équipe s
 - Pendant un changement de période, les chiffres s'estompent jusqu'à l'arrivée des nouvelles valeurs.
 - Dans un graphique, une semaine sans activité apparaît à zéro.
 - Les indicateurs ont les mêmes définitions que les tableaux de bord Grafana, accessibles par le lien « Analyse détaillée » en bas de page quand il est configuré.
+
+**Prospection : statuts et règles automatiques**
+
+| Statut | Quand l'utiliser |
+|---|---|
+| À contacter | Posé automatiquement à la première demande d'un patient sur la fiche |
+| Contacté | Premier appel ou e-mail passé, en attente de réponse |
+| Intéressé | Le praticien veut en savoir plus |
+| Présentation planifiée | Rendez-vous de présentation de Léya fixé |
+| Inscrit | Posé automatiquement quand le praticien revendique sa fiche |
+| Collaboration signée | Accord conclu |
+| Pas intéressé, Injoignable | Suivi clos ; une nouvelle demande de patient le rouvre en « À contacter » |
+| Ne pas contacter | Posé automatiquement si le praticien se désinscrit des e-mails de Léya ; le statut ne peut alors plus être changé et seule une note interne reste possible |
+
+Les suivis sans activité depuis 3 ans sont supprimés, sauf collaboration signée ou opposition. Aucune donnée de patient n'apparaît dans cet onglet.
 
 Définition des indicateurs :
 

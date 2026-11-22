@@ -47,6 +47,7 @@ flowchart LR
 | 12 | Carte | Afficher la carte | Visiteurs | Adresse IP, zone affichée | Intérêt légitime | OpenStreetMap | Selon OpenStreetMap | Mentionné dans la politique ; carte non chargée hors vue Carte et fiche |
 | 13 | Hébergement | Servir le site | Tous | Journaux techniques (IP, URL) | Intérêt légitime | Vercel | Selon l'hébergeur | Voir « points à traiter » |
 | 14 | Supervision interne (cockpit `/admin`) | Piloter l'activité de la plateforme | Patients, praticiens | Indicateurs agrégés issus des traitements 1, 2, 5, 6 et 11 (compteurs, taux, délais) ; aucune donnée nominative | Intérêt légitime (à valider, voir « points à traiter ») | Équipe d'administration | Non conservés : calculés à la demande | Routes réservées au rôle administrateur ; lecture seule ; aucune liste de patients ; offre par ville et par spécialité limitée aux fiches publiques |
+| 15 | Prospection des praticiens (onglet `/admin/prospection`) | Proposer à un praticien demandé par des patients de travailler avec Léya, suivre les échanges | Praticiens non inscrits | Coordonnées professionnelles de la fiche, statut du suivi, dates et notes des contacts, prénom du membre de l'équipe ; nombre de demandes de patients, sans aucune donnée patient | Intérêt légitime (prospection auprès de professionnels, en lien avec leur activité) | Équipe d'administration | 3 ans après le dernier contact ; conservé tant qu'une collaboration est signée ; opposition conservée pour être respectée | Désinscription en un clic dans chaque e-mail, qui bloque toute sollicitation ; routes réservées au rôle administrateur |
 
 ## Points à traiter
 
@@ -57,3 +58,4 @@ flowchart LR
 5. **Données de santé** : le motif d'un rendez-vous peut en contenir ; le consentement doit être recueilli au moment de la saisie (c'est le cas pour la réservation sans compte via `consentHealthData`).
 6. **Fiches non revendiquées** : droit d'opposition et de retrait déjà prévus ; vérifier la procédure interne (délai d'un mois).
 7. **Supervision interne (traitement 14)** : base légale à valider. Les découpages fins (ville avec une seule fiche, semaine avec très peu d'inscrits) ne sont pas masqués par un seuil minimal ; le journal des accès administrateur n'existe pas encore.
+8. **Prospection (traitement 15)** : informer le praticien de l'origine de ses coordonnées dès le premier contact (fiche publique de l'annuaire) et de son droit d'opposition ; vérifier les notes de l'équipe (aucune appréciation personnelle).

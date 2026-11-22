@@ -52,6 +52,23 @@ Le rôle est attribué côté serveur (aucune inscription publique). Après conn
 - **Revendications** : approuver ou refuser les demandes de rattachement d'un praticien à une fiche. Chaque demande indique ce que fera l'approbation : reprise de la fiche, ou remplacement par la fiche du demandeur.
 - **Fiches** : consulter les fiches et le badge « Profil vérifié ».
 
+`/admin` ouvre sur le **cockpit de supervision**. Chaque page affiche des indicateurs agrégés (aucun patient n'est listé), sur 7, 30 ou 90 jours :
+
+| Page | Ce qu'elle montre |
+|---|---|
+| **Vue d'ensemble** | Six tuiles comparées à la période précédente de même durée (nouveaux patients, nouveaux praticiens, RDV pris, praticiens ayant reçu un RDV, messages à l'assistant, demandes en attente) et les éléments à traiter. |
+| **Inscriptions** | Comptes créés par semaine, utilisateurs actifs, part des inscrits qui passent à l'action (patient qui réserve, praticien devenu réservable), rétention par semaine d'inscription. |
+| **Réservations** | RDV pris et honorés, taux d'annulation et d'absence, délais, taux de remplissage, et offre de l'annuaire par spécialité et par ville. |
+| **Demandes** | Demandes de revendication : en attente, reçues, taux d'approbation, délai moyen de traitement. Deux boutons mènent aux pages Revendications et Fiches. |
+| **Économie** | Estimations sur 26 semaines : revenu mensuel théorique, churn, CAC, LTV, ROAS. Les hypothèses (prix de l'abonnement, budget marketing) sont affichées au-dessus des chiffres. |
+
+À savoir pour lire ces chiffres :
+- Un tiret « – » signifie que l'indicateur n'est pas calculable (pas de donnée, ou source indisponible), jamais zéro.
+- Un taux porte sur la période affichée ; « État actuel » désigne une valeur indépendante de la période.
+- Les inscriptions et l'usage de l'assistant viennent du suivi pseudonymisé des comptes. S'il est indisponible, la vue d'ensemble l'indique et la page Inscriptions affiche un message.
+- Chaque graphique a un lien « Voir les données » qui affiche le tableau des valeurs.
+- Les indicateurs ont les mêmes définitions que les tableaux de bord Grafana, accessibles par le lien « Analyse détaillée » en bas de page quand il est configuré.
+
 ## 4. Installer l'application (PWA)
 - **Android / Chrome** : menu → « Installer l'application ».
 - **iPhone / Safari** : Partager → « Sur l'écran d'accueil ».

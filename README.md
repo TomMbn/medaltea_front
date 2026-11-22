@@ -81,6 +81,7 @@ Sans clé Gemini, tout le site fonctionne sauf les réponses de l'assistant. San
 | `NUXT_PUBLIC_GUEST_BOOKING` | Active la réservation sans compte en production (`true`) | Non |
 | `NUXT_PUBLIC_TURNSTILE_SITE_KEY` | Clé **publique** Cloudflare Turnstile (anti-robot) | Réservation sans compte |
 | `NUXT_PUBLIC_UMAMI_HOST`, `NUXT_PUBLIC_UMAMI_WEBSITE_ID`, `NUXT_PUBLIC_UMAMI_DOMAINS` | Mesure d'audience | Non |
+| `NUXT_PUBLIC_ADMIN_LINKS_GRAFANA`, `NUXT_PUBLIC_ADMIN_LINKS_UMAMI` | Adresses de Grafana et d'Umami, affichées en lien dans le cockpit `/admin` (vide : pas de lien) | Non |
 
 Les secrets ne sont jamais commités (`.env` est ignoré par git ; seul `.env.example` est versionné).
 

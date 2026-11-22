@@ -48,7 +48,7 @@ Les deux premiers choix sont vérifiés par l'administration. Dans tous les cas,
 
 ## 3. Administrateur
 
-Le rôle est attribué côté serveur (aucune inscription publique). Après connexion, `/admin` donne accès à :
+Le rôle est attribué côté serveur (aucune inscription publique). L'équipe se connecte sur `/admin`, qui a sa propre page de connexion, distincte de celle des patients et des praticiens : un compte qui n'est pas administrateur y est refusé et aussitôt déconnecté. Une page de l'administration ouverte sans session renvoie vers `/admin`, puis y revient après la connexion. Une fois connecté, `/admin` donne accès à :
 - **Revendications** : approuver ou refuser les demandes de rattachement d'un praticien à une fiche. Chaque demande indique ce que fera l'approbation : reprise de la fiche, ou remplacement par la fiche du demandeur.
 - **Fiches** : consulter les fiches et le badge « Profil vérifié ».
 

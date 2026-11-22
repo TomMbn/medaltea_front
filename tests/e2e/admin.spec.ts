@@ -35,13 +35,6 @@ async function expectAccessible(page: Page) {
 }
 
 test.describe('cockpit admin : accès', () => {
-  test('sans session, les pages du cockpit renvoient vers la connexion', async ({ page }) => {
-    for (const path of ['/admin', '/admin/inscriptions', '/admin/reservations', '/admin/demandes', '/admin/economie']) {
-      await page.goto(path)
-      await expect(page, path).toHaveURL(/login/)
-    }
-  })
-
   test('un compte patient est renvoyé vers l\'accueil', async ({ page, baseURL }) => {
     await page.context().addCookies([
       { name: 'leya_session', value: '1', url: baseURL! },
@@ -49,6 +42,93 @@ test.describe('cockpit admin : accès', () => {
     ])
     await page.goto('/admin')
     await expect(page).toHaveURL(/\/$/)
+  })
+})
+
+// Connexion simulée : la route /api/login du site est remplacée, les témoins de session sont posés comme le ferait le serveur
+async function simulerConnexion(page: Page, baseURL: string | undefined, role: 'admin' | 'patient' | 'pro' | null) {
+  await page.route('**/api/login', async (route) => {
+    if (!role) return route.fulfill({ status: 401, json: { statusCode: 401, message: 'Identifiants invalides' } })
+    await page.context().addCookies([
+      { name: 'leya_session', value: '1', url: baseURL! },
+      { name: 'leya_role', value: role, url: baseURL! },
+    ])
+    await route.fulfill({ json: { success: true, authenticated: true, role, praticienId: null } })
+  })
+}
+
+async function seConnecter(page: Page) {
+  // Attendre l'hydratation : avant, Vue remettrait les champs à zéro et le formulaire ne serait pas encore actif
+  await page.waitForFunction(() => Boolean((document.querySelector('#__nuxt') as any)?.__vue_app__))
+  await page.getByLabel('Adresse e-mail').fill('admin@exemple.fr')
+  await page.getByLabel('Mot de passe').fill('MotDePasse1')
+  await page.getByRole('button', { name: 'Se connecter' }).click()
+}
+
+test.describe('cockpit admin : connexion dédiée sur /admin', () => {
+  test('sans session, /admin affiche la connexion administrateur, sans choix patient ou praticien', async ({ page }) => {
+    await page.goto('/admin')
+    await expect(page).toHaveURL(/\/admin$/)
+    await expect(page.getByRole('heading', { level: 1, name: 'Connexion à l’administration' })).toBeVisible()
+    await expect(page.getByLabel('Adresse e-mail')).toBeVisible()
+    await expect(page.getByLabel('Mot de passe')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Praticien' })).toHaveCount(0)
+    await expect(page.getByRole('navigation', { name: 'Administration' })).toHaveCount(0)
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/)
+    await expectAccessible(page)
+  })
+
+  test('connexion réussie : le cockpit s\'affiche à la même adresse', async ({ page, baseURL }) => {
+    await simulerConnexion(page, baseURL, 'admin')
+    await stats(page, 'overview', OVERVIEW)
+    await page.goto('/admin')
+    await seConnecter(page)
+    await expect(page.getByRole('heading', { level: 1, name: 'Vue d’ensemble' })).toBeVisible()
+    await expect(page).toHaveURL(/\/admin$/)
+    await expect(page.getByRole('navigation', { name: 'Administration' })).toBeVisible()
+  })
+
+  test('une page du cockpit renvoie vers /admin, puis y revient après la connexion', async ({ page, baseURL }) => {
+    await page.goto('/admin/inscriptions')
+    await expect(page).toHaveURL(/\/admin\?redirect=(%2F|\/)admin(%2F|\/)inscriptions$/)
+    await simulerConnexion(page, baseURL, 'admin')
+    await stats(page, 'signups', SIGNUPS)
+    await seConnecter(page)
+    await expect(page).toHaveURL(/\/admin\/inscriptions$/)
+    await expect(page.getByRole('heading', { level: 1, name: 'Inscriptions' })).toBeVisible()
+  })
+
+  test('identifiants incorrects : message d\'erreur, pas de session', async ({ page, baseURL }) => {
+    await simulerConnexion(page, baseURL, null)
+    await page.goto('/admin')
+    await seConnecter(page)
+    await expect(page.getByRole('alert')).toContainText('Identifiants incorrects.')
+    const cookies = await page.context().cookies()
+    expect(cookies.find(c => c.name === 'leya_session')).toBeUndefined()
+  })
+
+  test('compte sans droit d\'administration : refusé et aussitôt déconnecté', async ({ page, baseURL }) => {
+    await simulerConnexion(page, baseURL, 'patient')
+    let loggedOut = false
+    await page.route('**/api/logout', async (route) => {
+      loggedOut = true
+      await route.fulfill({ json: { success: true } })
+    })
+    await page.goto('/admin')
+    await seConnecter(page)
+    await expect(page.getByRole('alert')).toContainText('Ce compte n’a pas accès à l’administration.')
+    expect(loggedOut).toBe(true)
+    await expect(page).toHaveURL(/\/admin$/)
+    await expect(page.getByRole('heading', { level: 1, name: 'Connexion à l’administration' })).toBeVisible()
+  })
+
+  test('une redirection vers un autre site est ignorée', async ({ page, baseURL }) => {
+    await simulerConnexion(page, baseURL, 'admin')
+    await stats(page, 'overview', OVERVIEW)
+    await page.goto('/admin?redirect=//exemple.org/piege')
+    await seConnecter(page)
+    await expect(page.getByRole('heading', { level: 1, name: 'Vue d’ensemble' })).toBeVisible()
+    expect(new URL(page.url()).host).toBe(new URL(baseURL!).host)
   })
 })
 

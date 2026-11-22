@@ -102,6 +102,12 @@ export default defineNuxtConfig({
         websiteId: process.env.NUXT_PUBLIC_UMAMI_WEBSITE_ID || '',
         domains: process.env.NUXT_PUBLIC_UMAMI_DOMAINS || 'leya-sante.fr,www.leya-sante.fr',
       },
+      // Cockpit d'administration : liens vers Grafana et l'interface d'Umami (NUXT_PUBLIC_ADMIN_LINKS_GRAFANA,
+      // NUXT_PUBLIC_ADMIN_LINKS_UMAMI). Vide : le lien n'est pas affiché.
+      adminLinks: {
+        grafana: process.env.NUXT_PUBLIC_ADMIN_LINKS_GRAFANA || '',
+        umami: process.env.NUXT_PUBLIC_ADMIN_LINKS_UMAMI || '',
+      },
     },
   },
   nitro: {

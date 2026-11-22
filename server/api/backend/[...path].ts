@@ -5,6 +5,7 @@
  * - champs privés (email, userId, identifiants professionnels) retirés des fiches publiques.
  */
 import { demoPublic } from '../../../app/utils/demoData'
+import { MAX_PREFERRED_SLOTS, PERIODS } from '../../../app/utils/bookingRequests'
 
 export type Rule = {
     method: string
@@ -24,6 +25,17 @@ export const RULES: Rule[] = [
     { method: 'GET', pattern: /^specialites$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^disciplines$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens$/, auth: false, cacheable: true, query: ['specialityId', 'city', 'q', 'name', 'language', 'publicType', 'claimed', 'bookable', 'sort', 'limit', 'offset', 'lat', 'lng', 'radiusKm', 'mode', 'availableWithinDays', 'minRating', 'wheelchairAccessible', 'bbox'] },
+    // Demandes de rendez-vous auprès d'un praticien non réservable (placées avant les règles génériques praticiens/<id>)
+    { method: 'POST', pattern: /^booking-requests$/, auth: true, body: ['praticienId', 'preferredSlots', 'userNote', 'consentHealthData'] },
+    { method: 'GET', pattern: /^booking-requests\/me$/, auth: true },
+    { method: 'POST', pattern: /^booking-requests\/\d+\/cancel$/, auth: true },
+    { method: 'GET', pattern: /^praticiens\/me\/booking-requests$/, auth: true },
+    { method: 'POST', pattern: /^praticiens\/me\/booking-requests\/\d+\/accept$/, auth: true, body: ['startAt', 'durationMin', 'consultationTypeId'] },
+    { method: 'POST', pattern: /^praticiens\/me\/booking-requests\/\d+\/decline$/, auth: true, body: ['reason'] },
+    // Lien « Ne plus recevoir ces e-mails » (page de confirmation) : public, le backend vérifie le jeton signé
+    { method: 'POST', pattern: /^listing-outreach\/unsubscribe$/, auth: false, body: ['praticienId', 'token'] },
+    // Fiches à relancer (admin) : le téléphone public de la fiche doit rester visible
+    { method: 'GET', pattern: /^admin\/booking-requests\/uncontacted$/, auth: true, own: true },
     { method: 'GET', pattern: /^praticiens\/\d+$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens\/slug\/[a-z0-9-]{1,120}$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens\/\d+\/next-slot$/, auth: false, query: ['consultationTypeId'] },
@@ -80,7 +92,8 @@ export const RULES: Rule[] = [
 
     // Ma fiche (propriétaire uniquement : le backend vérifie le compte)
     { method: 'GET', pattern: /^praticiens\/me$/, auth: true, own: true },
-    { method: 'PUT', pattern: /^praticiens\/\d+$/, auth: true, keepEmpty: true, body: ['firstName', 'lastName', 'specialityIds', 'bio', 'address', 'addressComplement', 'postalCode', 'city', 'latitude', 'longitude', 'phoneNumber', 'website', 'socialLinks', 'rpps', 'adeli', 'siret', 'tagline', 'accessInfo', 'practicingSince', 'languages', 'wheelchairAccessible', 'paymentMethods', 'reimbursementInfo', 'publicTypes', 'isActive'] },
+    // mail : e-mail de la fiche, renseigné par l'admin (« Demandes sans contact ») ; le backend réserve la route à l'admin et au propriétaire
+    { method: 'PUT', pattern: /^praticiens\/\d+$/, auth: true, keepEmpty: true, body: ['firstName', 'lastName', 'specialityIds', 'bio', 'address', 'addressComplement', 'postalCode', 'city', 'latitude', 'longitude', 'phoneNumber', 'website', 'socialLinks', 'rpps', 'adeli', 'siret', 'tagline', 'accessInfo', 'practicingSince', 'languages', 'wheelchairAccessible', 'paymentMethods', 'reimbursementInfo', 'publicTypes', 'isActive', 'mail'] },
     { method: 'POST', pattern: /^praticiens\/me\/diplomas$/, auth: true, body: ['title', 'organization', 'year'] },
     { method: 'DELETE', pattern: /^praticiens\/me\/diplomas\/\d+$/, auth: true },
 
@@ -162,7 +175,7 @@ const PAYMENT_METHODS = ['card', 'cash', 'check', 'transfer']
 const SOCIAL_KEYS = ['facebook', 'instagram', 'linkedin', 'youtube', 'tiktok']
 const TEXT_LIMITS: Record<string, number> = {
     firstName: 80, lastName: 80, bio: 2000, tagline: 160, accessInfo: 300, address: 200, addressComplement: 200, postalCode: 5, city: 100,
-    phoneNumber: 20, website: 200, rpps: 11, adeli: 9, siret: 14, reimbursementInfo: 500,
+    phoneNumber: 20, website: 200, rpps: 11, adeli: 9, siret: 14, reimbursementInfo: 500, mail: 255,
 }
 
 /** Modification de la fiche : types, longueurs et formats vérifiés avant d'atteindre le backend. */
@@ -215,6 +228,7 @@ export function validatePraticienUpdate(body: Record<string, any>) {
     if (out.adeli && !/^[0-9A-Za-z]{9}$/.test(out.adeli)) throw bad('ADELI invalide (9 caractères).')
     if (out.website && !/^https?:\/\/\S+$/.test(out.website)) throw bad('Site web invalide (http ou https).')
     if (out.phoneNumber && !/^\+?\d{10,15}$/.test(out.phoneNumber.replace(/[\s.]/g, ''))) throw bad('Téléphone invalide.')
+    if (out.mail && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(out.mail)) throw bad('Adresse e-mail invalide.')
     return out
 }
 
@@ -335,6 +349,62 @@ export function validateDecision(body: Record<string, any>) {
     return body
 }
 
+const PERIOD_VALUES: string[] = PERIODS.map(p => p.value)
+const ACCEPT_DURATION_MIN = 15
+const ACCEPT_DURATION_MAX = 240
+const DECLINE_REASON_MAX = 255
+// Jeton de désinscription : HMAC-SHA256 en base64url (43 caractères) ; le backend refuse au-delà de 64
+const UNSUBSCRIBE_TOKEN = /^[A-Za-z0-9_-]{1,64}$/
+
+/** Demande de rendez-vous : 1 à 3 disponibilités (jour et moment), motif de 500 caractères au plus. */
+export function validateBookingRequest(body: Record<string, any>) {
+    const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
+    const praticienId = Number(body.praticienId)
+    if (!Number.isInteger(praticienId) || praticienId < 1) throw bad('Demande de rendez-vous invalide.')
+    const slots = body.preferredSlots
+    if (!Array.isArray(slots) || slots.length < 1 || slots.length > MAX_PREFERRED_SLOTS) throw bad('Indiquez de 1 à 3 disponibilités.')
+    const preferredSlots = slots.map((slot: any) => {
+        if (typeof slot?.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(slot.date) || !PERIOD_VALUES.includes(slot.period)) throw bad('Disponibilité invalide.')
+        return { date: slot.date, period: slot.period }
+    })
+    if (body.userNote !== undefined && (typeof body.userNote !== 'string' || body.userNote.length > 500)) throw bad('Le motif ne doit pas dépasser 500 caractères.')
+    if (body.consentHealthData !== undefined && typeof body.consentHealthData !== 'boolean') throw bad('Consentement invalide.')
+    return {
+        praticienId, preferredSlots,
+        ...(body.userNote !== undefined ? { userNote: body.userNote } : {}),
+        ...(body.consentHealthData !== undefined ? { consentHealthData: body.consentHealthData } : {}),
+    }
+}
+
+/** Acceptation par le praticien : instant du rendez-vous, durée (15 à 240 min), prestation facultative. */
+export function validateBookingAccept(body: Record<string, any>) {
+    const bad = (message: string) => createError({ statusCode: 400, statusMessage: message })
+    if (typeof body.startAt !== 'string' || Number.isNaN(Date.parse(body.startAt))) throw bad('Créneau invalide.')
+    if (!Number.isInteger(body.durationMin) || body.durationMin < ACCEPT_DURATION_MIN || body.durationMin > ACCEPT_DURATION_MAX) throw bad('Durée invalide (15 à 240 minutes).')
+    const out: Record<string, any> = { startAt: body.startAt, durationMin: body.durationMin }
+    if (body.consultationTypeId !== undefined) {
+        const consultationTypeId = Number(body.consultationTypeId)
+        if (!Number.isInteger(consultationTypeId) || consultationTypeId < 1) throw bad('Prestation invalide.')
+        out.consultationTypeId = consultationTypeId
+    }
+    return out
+}
+
+export function validateBookingDecline(body: Record<string, any>) {
+    if (body.reason !== undefined && (typeof body.reason !== 'string' || body.reason.length > DECLINE_REASON_MAX)) {
+        throw createError({ statusCode: 400, statusMessage: 'Le motif ne doit pas dépasser 255 caractères.' })
+    }
+    return body.reason !== undefined ? { reason: body.reason } : {}
+}
+
+export function validateUnsubscribe(body: Record<string, any>) {
+    const praticienId = Number(body.praticienId)
+    if (!Number.isInteger(praticienId) || praticienId < 1 || typeof body.token !== 'string' || !UNSUBSCRIBE_TOKEN.test(body.token)) {
+        throw createError({ statusCode: 400, statusMessage: 'Lien de désinscription invalide.' })
+    }
+    return { praticienId, token: body.token }
+}
+
 export function validateClaim(body: Record<string, any>) {
     if (body.mode !== undefined && !['takeover', 'replace'].includes(body.mode)) throw createError({ statusCode: 400, statusMessage: 'Choix invalide.' })
     return body
@@ -399,6 +469,10 @@ export default defineEventHandler(async (event) => {
         const raw = (await readBody(event)) ?? {}
         body = rule.keepEmpty ? pickKeepEmpty(raw, rule.body) : pick(raw, rule.body)
         if (path === 'appointments') body = validateAppointment(body)
+        if (path === 'booking-requests') body = validateBookingRequest(body)
+        if (/^praticiens\/me\/booking-requests\/\d+\/accept$/.test(path)) body = validateBookingAccept(body)
+        if (/^praticiens\/me\/booking-requests\/\d+\/decline$/.test(path)) body = validateBookingDecline(body)
+        if (path === 'listing-outreach/unsubscribe') body = validateUnsubscribe(body)
         if (method === 'PUT' && /^praticiens\/\d+$/.test(path)) body = validatePraticienUpdate(body)
         if (path === 'praticiens/me/diplomas') body = validateDiploma(body)
         if (method === 'PATCH' && /^praticiens\/\d+\/verification$/.test(path) && typeof body.isVerified !== 'boolean') throw createError({ statusCode: 400, statusMessage: 'Valeur invalide.' })

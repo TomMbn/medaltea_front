@@ -85,16 +85,27 @@
           <h2 id="req-title" class="font-unbounded font-normal text-[20px] leading-[normal]">Demandes à confirmer</h2>
           <p v-if="!requests.length" class="text-[16px] text-bleu-100">Aucune demande en attente.</p>
           <ul v-else class="flex flex-col gap-3">
-            <li v-for="a in requests" :key="a.id" class="flex items-center gap-3 rounded-[18px] bg-white text-vert-900 p-3">
-              <span class="w-11 h-11 shrink-0 rounded-full bg-bleu-100 flex items-center justify-center font-medium" aria-hidden="true">{{ initialsOf(a.patientName) }}</span>
-              <span class="flex-1 min-w-0 leading-[normal] text-[16px]">
-                <span class="block font-medium truncate">{{ a.patientName || 'Patient' }}</span>
-                <span class="block text-neutre-600 truncate">{{ shortWhen(a.startAt) }}<template v-if="a.typeName"> · {{ a.typeName }}</template></span>
-              </span>
-              <button type="button" class="w-[34px] h-[34px] shrink-0 rounded-full bg-vert-600 text-white flex items-center justify-center disabled:opacity-50" :disabled="busyId === a.id" :aria-label="`Confirmer le rendez-vous de ${a.patientName || 'ce patient'}`" @click="confirm(a)"><Check :size="14" aria-hidden="true" /></button>
+            <li v-for="item in requests" :key="item.key" class="flex items-center gap-3 rounded-[18px] bg-white text-vert-900 p-3">
+              <!-- Demande reçue avant l'inscription : l'horaire se choisit sur la page Rendez-vous -->
+              <template v-if="item.request">
+                <span class="w-11 h-11 shrink-0 rounded-full bg-bleu-100 flex items-center justify-center font-medium" aria-hidden="true">{{ initialsOf(requestName(item.request)) }}</span>
+                <span class="flex-1 min-w-0 leading-[normal] text-[16px]">
+                  <span class="block font-medium truncate">{{ requestName(item.request) }}</span>
+                  <span class="block text-neutre-600 truncate">Demande<template v-if="item.request.preferredSlots?.length"> · {{ capital(slotLabel(item.request.preferredSlots[0])) }}</template></span>
+                </span>
+                <NuxtLink to="/pro/rendez-vous?onglet=demandes" class="w-[34px] h-[34px] shrink-0 rounded-full bg-vert-600 text-white flex items-center justify-center" :aria-label="`Répondre à la demande de ${requestName(item.request)}`"><ArrowUpRight :size="14" aria-hidden="true" /></NuxtLink>
+              </template>
+              <template v-else>
+                <span class="w-11 h-11 shrink-0 rounded-full bg-bleu-100 flex items-center justify-center font-medium" aria-hidden="true">{{ initialsOf(item.appt.patientName) }}</span>
+                <span class="flex-1 min-w-0 leading-[normal] text-[16px]">
+                  <span class="block font-medium truncate">{{ item.appt.patientName || 'Patient' }}</span>
+                  <span class="block text-neutre-600 truncate">{{ shortWhen(item.appt.startAt) }}<template v-if="item.appt.typeName"> · {{ item.appt.typeName }}</template></span>
+                </span>
+                <button type="button" class="w-[34px] h-[34px] shrink-0 rounded-full bg-vert-600 text-white flex items-center justify-center disabled:opacity-50" :disabled="busyId === item.appt.id" :aria-label="`Confirmer le rendez-vous de ${item.appt.patientName || 'ce patient'}`" @click="confirm(item.appt)"><Check :size="14" aria-hidden="true" /></button>
+              </template>
             </li>
           </ul>
-          <NuxtLink v-if="pendingAll.length > requests.length" to="/pro/rendez-vous" class="text-[16px] underline">Voir les {{ pendingAll.length }} demandes</NuxtLink>
+          <NuxtLink v-if="requestCount > requests.length" to="/pro/rendez-vous" class="text-[16px] underline">Voir les {{ requestCount }} demandes</NuxtLink>
           <p v-if="actionError" class="text-[14px] text-corail-100" role="alert">{{ actionError }}</p>
         </section>
 
@@ -135,6 +146,9 @@ const { praticienId } = useSession()
 const { fiche, percent, missing, types, hours } = useProCompletion()
 const { data: me } = useAsyncData('pro-me', () => $fetch('/api/backend/users/me'), { server: false, lazy: true, default: () => null })
 const { data: raw, refresh } = useAsyncData('pro-appointments', () => $fetch('/api/backend/praticiens/me/appointments'), { server: false, lazy: true, default: () => [] })
+// Demandes reçues quand la fiche n'était pas réservable (clé partagée avec la page Rendez-vous)
+const requestsEnabled = useRuntimeConfig().public.bookingRequests
+const { data: rawRequests } = useAsyncData('pro-booking-requests', () => (requestsEnabled ? $fetch('/api/backend/praticiens/me/booking-requests') : []), { server: false, lazy: true, default: () => [] })
 const { data: stats } = useAsyncData('pro-stats', () => $fetch('/api/backend/praticiens/me/stats').catch(() => null), { server: false, lazy: true, default: () => null })
 
 // La date dépend du fuseau du navigateur : elle n'est calculée qu'une fois la page affichée (pas de décalage à l'hydratation)
@@ -151,7 +165,13 @@ const upcoming = (a) => new Date(a.endAt ?? a.startAt).getTime() >= (now.value?.
 
 const today = computed(() => live.value.filter(isToday))
 const pendingAll = computed(() => live.value.filter(a => a.status === 'pending' && upcoming(a)))
-const requests = computed(() => pendingAll.value.slice(0, 3))
+const bookingRequests = computed(() => (Array.isArray(rawRequests.value) ? rawRequests.value : []))
+const requestCount = computed(() => bookingRequests.value.length + pendingAll.value.length)
+// Carte « Demandes à confirmer » : les demandes reçues avant l'inscription d'abord, puis les rendez-vous en attente
+const requests = computed(() => [
+  ...bookingRequests.value.map(r => ({ key: `demande-${r.id}`, request: r })),
+  ...pendingAll.value.map(a => ({ key: `rdv-${a.id}`, appt: a })),
+].slice(0, 3))
 const next = computed(() => live.value.find(a => a.status === 'confirmed' && new Date(a.startAt).getTime() >= (now.value?.getTime() ?? Infinity)) ?? null)
 
 const capital = (s) => s.charAt(0).toUpperCase() + s.slice(1)
@@ -166,18 +186,19 @@ function plural(n) { return `${n === 0 ? 'Aucun' : n} rendez-vous` }
 const todayTitle = computed(() => (now.value ? `${plural(today.value.length)} aujourd’hui` : 'Aujourd’hui'))
 const todaySub = computed(() => {
   if (!now.value) return ''
-  const n = pendingAll.value.length
+  const n = requestCount.value
   return n ? `${n} demande${n > 1 ? 's' : ''} à confirmer.` : 'Votre agenda est à jour.'
 })
 
 // Indicateurs : uniquement des chiffres réels (demandes, rendez-vous à venir, vues de la fiche)
 const in7days = computed(() => live.value.filter(a => a.status === 'confirmed' && upcoming(a) && new Date(a.startAt).getTime() <= (now.value?.getTime() ?? 0) + 7 * 86400000))
 const kpis = computed(() => [
-  { label: 'Nouvelles demandes', value: pendingAll.value.length, tag: pendingAll.value.length ? 'À confirmer' : 'Rien à traiter' },
+  { label: 'Nouvelles demandes', value: requestCount.value, tag: requestCount.value ? 'À confirmer' : 'Rien à traiter' },
   { label: 'Rendez-vous à venir', value: in7days.value.length, tag: '7 prochains jours' },
   { label: 'Vues de la fiche', value: stats.value?.total ?? '–', tag: '30 derniers jours' },
 ])
 
+const requestName = (r) => [r.patient?.firstName, r.patient?.lastName].filter(Boolean).join(' ') || 'Patient'
 const initialsOf = (name) => (name || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase()
 const hhmm = (iso) => new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
 const shortWhen = (iso) => `${capital(new Date(iso).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' }))} · ${hhmm(iso)}`

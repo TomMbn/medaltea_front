@@ -39,10 +39,20 @@
             <span v-if="p.siret" class="text-neutre-600">SIRET {{ p.siret }}</span>
             <NuxtLink v-if="p.slug" :to="`/praticiens/${p.slug}`" target="_blank" class="underline text-vert-900 hover:text-vert-600">Fiche publique</NuxtLink>
           </p>
+          <p v-if="!p.claimed" class="mt-1 break-all text-[14px] leading-[normal] text-neutre-600">{{ p.mail ? `E-mail : ${p.mail}` : 'Aucun e-mail connu' }}</p>
         </div>
         <button v-if="p.claimed" type="button" class="w-full sm:w-auto min-h-[44px] rounded-full border-[1.5px] px-5 text-[16px] font-semibold transition-colors disabled:opacity-50" :class="p.isVerified ? 'border-red-700 text-red-800 hover:bg-red-50' : 'border-vert-900 text-vert-900 hover:bg-vert-900 hover:text-white'" :disabled="busy === p.id" @click="toggle(p)">
           {{ busy === p.id ? 'Un instant…' : p.isVerified ? 'Retirer le badge' : 'Accorder le badge' }}
         </button>
+        <button v-else-if="editing !== p.id" type="button" class="w-full sm:w-auto min-h-[44px] rounded-full border-[1.5px] border-vert-900 px-5 text-[16px] font-semibold text-vert-900 hover:bg-vert-900 hover:text-white transition-colors" @click="openMail(p)">{{ p.mail ? 'Modifier l’e-mail' : 'Renseigner l’e-mail' }}</button>
+        <form v-if="editing === p.id" class="basis-full flex flex-wrap items-end gap-3" @submit.prevent="saveMail(p)">
+          <div class="flex flex-col gap-1 w-full sm:w-auto">
+            <label :for="`mail-${p.id}`" class="text-[16px] font-medium">E-mail professionnel de la fiche</label>
+            <input :id="`mail-${p.id}`" v-model="mailDraft" type="email" required maxlength="255" autocomplete="off" class="min-h-[44px] w-full sm:w-[320px] rounded-full border border-neutre-300 bg-white px-5 text-[16px]" />
+          </div>
+          <button type="submit" class="min-h-[44px] rounded-full bg-vert-900 px-6 text-[16px] font-semibold text-white hover:bg-vert-600 transition-colors disabled:opacity-50" :disabled="busy === p.id">{{ busy === p.id ? 'Un instant…' : 'Enregistrer' }}</button>
+          <button type="button" class="min-h-[44px] text-[16px] font-medium underline" @click="editing = null">Annuler</button>
+        </form>
       </li>
     </ul>
 
@@ -61,7 +71,9 @@ definePageMeta({ layout: 'admin', middleware: ['admin'] })
 useSeoMeta({ title: 'Fiches — Administration Léya', robots: 'noindex, nofollow' })
 
 const PAGE = 50
-const q = ref('')
+// Recherche pré-remplie par les liens « Demandes sans contact » (/admin/fiches?q=<nom>)
+const route = useRoute()
+const q = ref(typeof route.query.q === 'string' ? route.query.q : '')
 const claimed = ref('')
 const verified = ref('')
 const page = ref(1)
@@ -104,6 +116,35 @@ async function toggle(p) {
     message.value = next ? `Badge « Profil vérifié » accordé à ${p.firstName} ${p.lastName}.` : `Badge retiré à ${p.firstName} ${p.lastName}.`
   } catch {
     error.value = 'Le badge n’a pas pu être modifié. Réessayez dans un instant.'
+  } finally {
+    busy.value = null
+  }
+}
+
+// E-mail d'une fiche répertoriée : sans lui, le praticien n'est pas prévenu des demandes de rendez-vous
+// (liste « Demandes sans contact »). Enregistré par l'édition existante de la fiche (PUT, réservée à l'admin et au propriétaire).
+const editing = ref(null)
+const mailDraft = ref('')
+
+function openMail(p) {
+  editing.value = p.id
+  mailDraft.value = p.mail ?? ''
+  message.value = ''
+  error.value = ''
+}
+
+async function saveMail(p) {
+  busy.value = p.id
+  message.value = ''
+  error.value = ''
+  const mail = mailDraft.value.trim()
+  try {
+    await $fetch(`/api/backend/praticiens/${p.id}`, { method: 'PUT', body: { mail } })
+    p.mail = mail
+    editing.value = null
+    message.value = `E-mail enregistré pour ${p.firstName} ${p.lastName}.`
+  } catch (e) {
+    error.value = (e?.statusCode ?? e?.response?.status) === 400 ? 'Adresse e-mail invalide.' : 'L’e-mail n’a pas pu être enregistré. Réessayez dans un instant.'
   } finally {
     busy.value = null
   }

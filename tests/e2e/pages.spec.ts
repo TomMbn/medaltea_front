@@ -68,3 +68,8 @@ test('en-têtes de sécurité', async ({ request }) => {
   // Bloquante sur le site construit, en « rapport seul » sous le serveur de développement
   expect(h['content-security-policy'] ?? h['content-security-policy-report-only']).toContain("object-src 'none'")
 })
+
+test('politique de confidentialité : demandes de rendez-vous auprès de praticiens non inscrits', async ({ page }) => {
+  await page.goto('/politique-de-confidentialite')
+  await expect(page.getByRole('heading', { name: /praticiens non inscrits/ })).toBeVisible()
+})

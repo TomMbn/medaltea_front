@@ -27,7 +27,6 @@
               <div class="h-px bg-[#b5b5b5] mb-[11px]" aria-hidden="true"></div>
               <div class="flex items-center justify-between gap-3 mt-auto">
                 <span v-if="priceOf(p) && p.bookable !== false" class="text-[16px] text-black"><span class="font-medium text-corail-500">dès {{ priceOf(p) }} €</span></span>
-                <span v-else-if="p.bookable === false" class="text-[14px] text-neutre-600">Réservation indisponible</span>
                 <span v-else></span>
                 <span class="inline-flex items-center gap-2.5 bg-vert-900 text-white text-[16px] h-10 px-5 rounded-leya-xl whitespace-nowrap group-hover:bg-vert-600 transition-colors">Découvrir <ArrowUpRight :size="16" aria-hidden="true" /></span>
               </div>

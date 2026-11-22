@@ -48,6 +48,35 @@
         </div>
       </li>
     </ul>
+
+    <section v-if="requestsEnabled" class="mt-12" aria-labelledby="uncontacted-title">
+      <h2 id="uncontacted-title" class="font-unbounded font-normal text-[22px] lg:text-[26px] leading-[normal]">Demandes sans contact</h2>
+      <p class="mt-2 text-[16px] text-neutre-600 max-w-[720px]">Des patients ont demandé un rendez-vous sur ces fiches répertoriées depuis plus d’une heure, mais aucun e-mail n’a pu prévenir le praticien. Appelez le cabinet ; si vous obtenez son e-mail professionnel, renseignez-le sur la fiche.</p>
+
+      <p v-if="uncontactedError" class="mt-5 rounded-[16px] bg-red-50 px-4 py-3 text-[16px] text-red-800" role="alert">{{ uncontactedError }}</p>
+      <p v-if="uncontactedLoading" class="mt-6 text-[16px] text-neutre-600">Chargement…</p>
+      <p v-else-if="!uncontacted.length && !uncontactedError" class="mt-6 rounded-[24px] bg-white p-6 text-[16px] text-neutre-600">Aucune demande sans contact.</p>
+
+      <ul class="mt-6 grid gap-4">
+        <li v-for="u in uncontacted" :key="u.praticien.id" class="rounded-[24px] bg-white p-5 sm:p-6">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div class="min-w-0">
+              <p class="text-[20px] font-semibold leading-[normal]">{{ u.praticien.firstName }} {{ u.praticien.lastName }}<span v-if="u.praticien.city" class="font-normal text-neutre-600"> · {{ u.praticien.city }}</span></p>
+              <NuxtLink v-if="u.praticien.slug" :to="`/praticiens/${u.praticien.slug}`" target="_blank" class="text-[16px] underline hover:text-vert-600">Voir la fiche publique</NuxtLink>
+            </div>
+            <span class="rounded-full bg-amber-100 px-3 py-1 text-[14px] font-semibold text-amber-900">{{ REASONS[u.reason] ?? u.reason }}</span>
+          </div>
+
+          <dl class="mt-4 grid gap-x-8 gap-y-2 text-[16px] leading-[normal] sm:grid-cols-3">
+            <div><dt class="text-neutre-600">Téléphone</dt><dd><a v-if="u.praticien.phoneNumber" :href="`tel:${u.praticien.phoneNumber.replace(/[^\d+]/g, '')}`" class="underline">{{ u.praticien.phoneNumber }}</a><template v-else>—</template></dd></div>
+            <div><dt class="text-neutre-600">Demandes en attente</dt><dd>{{ u.pendingCount }}</dd></div>
+            <div><dt class="text-neutre-600">Date limite</dt><dd>{{ formatDate(u.oldestExpiresAt) }}</dd></div>
+          </dl>
+
+          <NuxtLink :to="{ path: '/admin/fiches', query: { q: `${u.praticien.firstName ?? ''} ${u.praticien.lastName ?? ''}`.trim() } }" class="mt-5 inline-flex items-center min-h-[44px] rounded-full border border-vert-900 px-6 text-[16px] font-semibold text-vert-900 hover:bg-vert-900 hover:text-white transition-colors">Retrouver la fiche pour renseigner l’e-mail</NuxtLink>
+        </li>
+      </ul>
+    </section>
   </div>
 </template>
 
@@ -76,6 +105,19 @@ const busy = ref(null)
 const open = reactive({})
 const reasons = reactive({})
 
+// Pourquoi aucun e-mail n'a prévenu le praticien (motif calculé par le backend)
+const REASONS = {
+  no_email: 'Pas d’e-mail connu',
+  opted_out: 'Désinscrit des e-mails',
+  not_configured: 'Envoi d’e-mails non configuré',
+  failed: 'Envoi en échec',
+}
+// Section masquée tant que les demandes de rendez-vous sont désactivées (runtimeConfig.public.bookingRequests)
+const requestsEnabled = useRuntimeConfig().public.bookingRequests
+const uncontacted = ref([])
+const uncontactedLoading = ref(true)
+const uncontactedError = ref('')
+
 const formatDate = (iso) => (iso ? new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(iso)) : '—')
 
 async function load() {
@@ -91,8 +133,22 @@ async function load() {
     loading.value = false
   }
 }
-onMounted(load)
+onMounted(() => { load(); if (requestsEnabled) loadUncontacted() })
 watch(status, () => { message.value = ''; load() })
+
+async function loadUncontacted() {
+  uncontactedLoading.value = true
+  uncontactedError.value = ''
+  try {
+    const list = await $fetch('/api/backend/admin/booking-requests/uncontacted')
+    uncontacted.value = Array.isArray(list) ? list : []
+  } catch {
+    uncontacted.value = []
+    uncontactedError.value = 'Impossible de charger les demandes sans contact pour le moment.'
+  } finally {
+    uncontactedLoading.value = false
+  }
+}
 
 async function decide(r, decision) {
   busy.value = r.id

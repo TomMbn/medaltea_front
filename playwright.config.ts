@@ -25,6 +25,7 @@ export default defineConfig({
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
-    env: { PORT: String(PORT), NITRO_PORT: String(PORT) },
+    // Demandes de rendez-vous actives aussi sur le site construit (désactivées par défaut en production)
+    env: { PORT: String(PORT), NITRO_PORT: String(PORT), NUXT_PUBLIC_BOOKING_REQUESTS: 'true' },
   },
 })

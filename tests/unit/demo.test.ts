@@ -60,6 +60,37 @@ describe('démonstration praticien (faux serveur)', () => {
     expect(demoRequest('appointments/guest', 'POST', {}, {})).toBeUndefined()
   })
 
+  it('la démo liste une demande', () => {
+    const requests = call('praticiens/me/booking-requests')
+    expect(requests).toHaveLength(1)
+    expect(requests[0]).toMatchObject({ status: 'pending', patient: { firstName: expect.any(String), lastName: expect.any(String) } })
+    expect(requests[0].preferredSlots.length).toBeGreaterThan(0)
+    expect(Date.parse(requests[0].expiresAt)).toBeGreaterThan(Date.now())
+  })
+
+  it('accepter en démo la retire et ajoute un RDV confirmé', () => {
+    const [request] = call('praticiens/me/booking-requests')
+    const startAt = new Date(Date.now() + 20 * 864e5).toISOString()
+    const appt = call(`praticiens/me/booking-requests/${request.id}/accept`, 'POST', { startAt, durationMin: 30, consultationTypeId: 9002 })
+    expect(call('praticiens/me/booking-requests')).toHaveLength(0)
+    const created = call('praticiens/me/appointments').find((a: any) => a.id === appt.id)
+    expect(created).toMatchObject({ status: 'confirmed', startAt, patient: request.patient, consultationType: { id: 9002 } })
+    expect(Date.parse(created.endAt) - Date.parse(startAt)).toBe(30 * 60000)
+  })
+
+  it('accepter en démo sur un créneau occupé répond 409 et garde la demande', () => {
+    const [request] = call('praticiens/me/booking-requests')
+    const busy = call('praticiens/me/appointments').find((a: any) => a.status === 'confirmed' && Date.parse(a.startAt) > Date.now())
+    expect(() => call(`praticiens/me/booking-requests/${request.id}/accept`, 'POST', { startAt: busy.startAt, durationMin: 60 })).toThrow(DemoError)
+    expect(call('praticiens/me/booking-requests')).toHaveLength(1)
+  })
+
+  it('refuser en démo la retire', () => {
+    const [request] = call('praticiens/me/booking-requests')
+    call(`praticiens/me/booking-requests/${request.id}/decline`, 'POST', { reason: 'Je ne prends plus de nouveaux patients' })
+    expect(call('praticiens/me/booking-requests')).toHaveLength(0)
+  })
+
   it('génère un lien d\'agenda fictif et non fonctionnel', () => {
     expect(call('praticiens/me/calendar-token', 'POST').url).toMatch(/^https:\/\/example\.org\/.+\.ics$/)
   })

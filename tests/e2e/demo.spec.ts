@@ -37,6 +37,23 @@ test.describe('démo praticien', () => {
     await expect.poll(count).toBe(initial)
   })
 
+  test('accepter une demande reçue avant l\'inscription crée un rendez-vous confirmé', async ({ page }) => {
+    await page.goto('/pro')
+    await page.getByRole('link', { name: /Répondre à la demande de Camille Fontaine/ }).click()
+    await expect(page).toHaveURL(/onglet=demandes/)
+    await expect(page.getByRole('heading', { name: 'Demandes reçues avant votre inscription' })).toBeVisible()
+    const upcoming = page.getByRole('tab', { name: /^À venir \(/ })
+    const before = Number((await upcoming.textContent())!.match(/\((\d+)\)/)![1])
+    await page.getByRole('button', { name: 'Accepter', exact: true }).click()
+    const day = new Date(Date.now() + 20 * 864e5).toISOString().slice(0, 10) // au-delà des rendez-vous fictifs : pas de chevauchement
+    await page.getByLabel('Date').fill(day)
+    await page.getByLabel('Heure').fill('08:00')
+    await page.getByRole('button', { name: 'Confirmer le rendez-vous' }).click()
+    await expect(page.getByRole('status').filter({ hasText: 'Rendez-vous confirmé avec Camille Fontaine' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Demandes reçues avant votre inscription' })).toHaveCount(0)
+    await expect(upcoming).toContainText(`(${before + 1})`)
+  })
+
   test('une modification de la fiche est enregistrée pendant la visite', async ({ page }) => {
     await page.goto('/pro/fiche')
     // La présentation est dans un volet repliable : on l'ouvre d'abord

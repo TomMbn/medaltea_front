@@ -45,7 +45,6 @@
           <span class="text-[18px] font-semibold text-vert-600 whitespace-nowrap">dès {{ price }} €</span>
           <span v-if="withinBudget" class="rounded-full bg-bleu-50 px-3 py-1 text-[14px] font-medium text-vert-600 whitespace-nowrap">Dans votre budget</span>
         </span>
-        <span v-else-if="!bookable" class="text-[16px] text-neutre-600">Réservation indisponible</span>
         <span v-else></span>
         <span class="inline-flex items-center gap-[14px] min-h-[48px] bg-vert-900 text-white font-semibold text-[18px] rounded-full pl-6 pr-1 py-1 whitespace-nowrap group-hover:bg-vert-600 transition-colors">
           {{ bookable ? 'Prendre RDV' : 'Voir la fiche' }}

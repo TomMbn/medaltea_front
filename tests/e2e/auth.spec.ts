@@ -37,8 +37,9 @@ test.describe('comptes : formulaires', () => {
   })
 
   test('l\'administration est inaccessible sans compte administrateur', async ({ page }) => {
+    // Connexion dédiée de l'administration : /admin, avec retour à la page demandée
     await page.goto('/admin/revendications')
-    await expect(page).toHaveURL(/login/)
+    await expect(page).toHaveURL(/\/admin\?redirect=/)
   })
 
   test('la passerelle refuse les routes non prévues', async ({ request }) => {

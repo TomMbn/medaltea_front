@@ -107,6 +107,9 @@ export const RULES: Rule[] = [
     { method: 'GET', pattern: /^admin\/praticiens$/, auth: true, query: ['q', 'claimed', 'isVerified', 'limit', 'offset'], own: true },
     { method: 'GET', pattern: /^admin\/claim-requests$/, auth: true, query: ['status'], own: true },
     { method: 'PATCH', pattern: /^admin\/claim-requests\/\d+$/, auth: true, body: ['decision', 'reason'], own: true },
+    // Cockpit d'administration : agrégats en lecture seule, sans `own` (aucun champ privé attendu, le filtre reste actif)
+    { method: 'GET', pattern: /^admin\/stats\/(overview|signups|bookings|requests)$/, auth: true, query: ['days'] },
+    { method: 'GET', pattern: /^admin\/stats\/economy$/, auth: true },
 ]
 
 const PRIVATE_FIELDS = ['mail', 'userId', 'rpps', 'siret', 'adeli', 'googlePlaceId', 'googlePlaceIdRefreshedAt']
@@ -337,6 +340,13 @@ export function validateClaim(body: Record<string, any>) {
     return body
 }
 
+const STATS_PERIODS = ['7', '30', '90']
+
+/** Période des statistiques d'administration : 7, 30 ou 90 jours, en une seule valeur. Absente : le backend prend 30 jours. */
+export function validateStatsQuery(query?: Record<string, any>) {
+    if (query && 'days' in query && !STATS_PERIODS.includes(query.days)) throw createError({ statusCode: 400, statusMessage: 'Période invalide.' })
+}
+
 export function pickKeepEmpty(source: Record<string, any>, keys: string[]) {
     const out: Record<string, any> = {}
     for (const key of keys) if (source?.[key] !== undefined) out[key] = source[key]
@@ -426,6 +436,7 @@ export default defineEventHandler(async (event) => {
     if (query && (query.q === '' || query.city === '' || query.name === '')) { for (const k of ['q', 'city', 'name']) if (query[k] === '') delete query[k] }
     if (query?.language !== undefined) query.language = String(query.language).slice(0, 10)
     validateListQuery(query)
+    if (path.startsWith('admin/stats/')) validateStatsQuery(query)
 
     const { apiBase } = useRuntimeConfig()
     let response

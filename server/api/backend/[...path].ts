@@ -36,6 +36,12 @@ export const RULES: Rule[] = [
     { method: 'POST', pattern: /^listing-outreach\/unsubscribe$/, auth: false, body: ['praticienId', 'token'] },
     // Fiches à relancer (admin) : le téléphone public de la fiche doit rester visible
     { method: 'GET', pattern: /^admin\/booking-requests\/uncontacted$/, auth: true, own: true },
+    // Prospection des praticiens : e-mail de la fiche conservé (own) pour l'équipe ; null efface la relance (keepEmpty)
+    { method: 'GET', pattern: /^admin\/prospects$/, auth: true, query: ['status', 'q'], own: true },
+    { method: 'GET', pattern: /^admin\/prospects\/summary$/, auth: true },
+    { method: 'GET', pattern: /^admin\/prospects\/\d+\/events$/, auth: true },
+    { method: 'PATCH', pattern: /^admin\/prospects\/\d+$/, auth: true, body: ['status', 'nextActionAt', 'note'], keepEmpty: true, own: true },
+    { method: 'POST', pattern: /^admin\/prospects\/\d+\/events$/, auth: true, body: ['kind', 'note'] },
     { method: 'GET', pattern: /^praticiens\/\d+$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens\/slug\/[a-z0-9-]{1,120}$/, auth: false, cacheable: true },
     { method: 'GET', pattern: /^praticiens\/\d+\/next-slot$/, auth: false, query: ['consultationTypeId'] },
@@ -410,6 +416,39 @@ export function validateClaim(body: Record<string, any>) {
     return body
 }
 
+// Prospection des praticiens : mêmes listes que le backend (src/domains/prospects/prospect.constants.ts)
+const PROSPECT_STATUSES = ['to_contact', 'contacted', 'interested', 'meeting_planned', 'registered', 'signed', 'not_interested', 'unreachable', 'do_not_contact']
+const PROSPECT_FILTERS = ['open', 'closed', 'alerts', 'all', ...PROSPECT_STATUSES]
+const PROSPECT_EVENT_KINDS = ['call', 'email', 'meeting', 'note']
+const PROSPECT_NOTE_MAX = 1000
+const PROSPECT_SEARCH_MAX = 100
+const prospectNoteOk = (note: unknown) => note === undefined || (typeof note === 'string' && note.length <= PROSPECT_NOTE_MAX)
+
+export function validateProspectQuery(query?: Record<string, any>) {
+    if (!query) return
+    const invalid = (query.status !== undefined && !PROSPECT_FILTERS.includes(query.status))
+        || (query.q !== undefined && (typeof query.q !== 'string' || query.q.length > PROSPECT_SEARCH_MAX))
+    if (invalid) throw createError({ statusCode: 400, statusMessage: 'Filtre invalide.' })
+}
+
+/** Mise à jour d'un suivi : statut connu, relance ISO 8601 ou null (effacée), note ; au moins un champ. */
+export function validateProspectUpdate(body: Record<string, any>) {
+    const bad = () => createError({ statusCode: 400, statusMessage: 'Mise à jour invalide.' })
+    if (!['status', 'nextActionAt', 'note'].some(key => key in body)) throw bad()
+    if (body.status !== undefined && !PROSPECT_STATUSES.includes(body.status)) throw bad()
+    if (body.nextActionAt !== undefined && body.nextActionAt !== null
+        && (typeof body.nextActionAt !== 'string' || body.nextActionAt.length > 40 || Number.isNaN(Date.parse(body.nextActionAt)))) throw bad()
+    if (!prospectNoteOk(body.note)) throw bad()
+    return body
+}
+
+export function validateProspectEvent(body: Record<string, any>) {
+    if (!PROSPECT_EVENT_KINDS.includes(body.kind) || !prospectNoteOk(body.note)) {
+        throw createError({ statusCode: 400, statusMessage: 'Action invalide.' })
+    }
+    return body
+}
+
 const STATS_PERIODS = ['7', '30', '90']
 
 /** Période des statistiques d'administration : 7, 30 ou 90 jours, en une seule valeur. Absente : le backend prend 30 jours. */
@@ -484,6 +523,8 @@ export default defineEventHandler(async (event) => {
         if (method === 'PATCH' && /^praticiens\/me\/consultation-types\/\d+$/.test(path) && 'isActive' in body && typeof body.isActive !== 'boolean') throw createError({ statusCode: 400, statusMessage: 'Valeur invalide.' })
         if (/^appointments\/\d+\/proposal$/.test(path)) body = validateProposal(body)
         if (/^admin\/claim-requests\/\d+$/.test(path)) body = validateDecision(body)
+        if (method === 'PATCH' && /^admin\/prospects\/\d+$/.test(path)) body = validateProspectUpdate(body)
+        if (/^admin\/prospects\/\d+\/events$/.test(path)) body = validateProspectEvent(body)
         if (/^praticiens\/\d+\/claim-requests$/.test(path)) body = validateClaim(body)
         if (method === 'PATCH' && path === 'users/me') body = validateProfileUpdate(body)
         if (method === 'DELETE' && path === 'users/me') {
@@ -511,6 +552,7 @@ export default defineEventHandler(async (event) => {
     if (query?.language !== undefined) query.language = String(query.language).slice(0, 10)
     validateListQuery(query)
     if (path.startsWith('admin/stats/')) validateStatsQuery(query)
+    if (path === 'admin/prospects') validateProspectQuery(query)
 
     const { apiBase } = useRuntimeConfig()
     let response

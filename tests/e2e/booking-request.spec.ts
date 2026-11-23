@@ -92,6 +92,8 @@ test.describe('administration (API simulée dans le navigateur)', () => {
       const url = new URL(request.url())
       const call = `${request.method()} ${url.pathname.replace('/api/backend/', '')}`
       if (call === 'GET admin/claim-requests') return route.fulfill({ json: [] })
+      // Pastille de l'onglet Prospection, demandée par le menu de l'admin à chaque page
+      if (call === 'GET admin/prospects/summary') return route.fulfill({ json: { alerts: 0 } })
       if (call === 'GET admin/booking-requests/uncontacted') {
         return route.fulfill({ json: [{ praticien: fiche, pendingCount: 2, oldestExpiresAt: '2026-11-01T09:00:00.000Z', reason: 'no_email' }] })
       }
